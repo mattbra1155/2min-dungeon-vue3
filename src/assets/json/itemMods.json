@@ -1,0 +1,230 @@
+{
+    "weapon": {
+        "type": [
+            {
+                "name": "one handed",
+                "modifiers": {
+                    "initiative": 0,
+                    "melee": 0
+                }
+            },
+            {
+                "name": "two handed",
+                "modifiers": {
+                    "initiative": -10,
+                    "melee": 0
+                }
+            },
+            {
+                "name": "knife",
+                "modifiers": {
+                    "initiative": 10,
+                    "melee": 0
+                }
+            },
+            {
+                "name": "spear",
+                "modifiers": {
+                    "initiative": 10,
+                    "melee": 0
+                }
+            },
+            {
+                "name": "staff",
+                "modifiers": {
+                    "initiative": 0,
+                    "melee": 0
+                }
+            }
+        ],
+        "item": [
+            {
+                "name": "sword",
+                "damage": 0,
+                "type": ["one handed", "two handed"]
+            },
+            {
+                "name": "axe",
+                "damage": 0,
+                "type": ["one handed", "two handed"]
+            },
+            {
+                "name": "zweihander",
+                "damage": 2,
+                "type": "two handed"
+            },
+            {
+                "name": "dagger",
+                "damage": -2,
+                "type": "knife"
+            },
+            {
+                "name": "short spear",
+                "damage": 0,
+                "type": "spear"
+            },
+            {
+                "name": "staff",
+                "damage": 0,
+                "type": "staff"
+            }
+        ],
+        "prefix": [
+            {
+                "name": "old",
+                "modifier": -1
+            },
+            {
+                "name": "used",
+                "modifier": 0
+            },
+            {
+                "name": "new",
+                "modifier": 1
+            },
+            {
+                "name": "good quality",
+                "modifier": 2
+            }
+        ]
+    },
+    "armor": {
+        "type": [
+            {
+                "name": "leather",
+                "armorPoints": 1
+            },
+            {
+                "name": "chainmail",
+                "armorPoints": 2
+            },
+            {
+                "name": "plate",
+                "armorPoints": 3
+            }
+        ],
+        "item": [
+            {
+                "name": "cap",
+                "bodyPart": "head",
+                "modifiers": []
+            },
+            {
+                "name": "glove",
+                "bodyPart": ["right arm", "left arm"],
+                "modifiers": []
+            },
+            {
+                "name": "tunic",
+                "bodyPart": "torso",
+                "modifiers": []
+            },
+            {
+                "name": "leather boot",
+                "bodyPart": ["right leg", "left leg"],
+                "modifiers": []
+            },
+            {
+                "name": "basinet",
+                "bodyPart": "head",
+                "modifiers": []
+            },
+            {
+                "name": "boot",
+                "bodyPart": ["right leg", "left leg"],
+                "modifiers": []
+            },
+            {
+                "name": "helmet",
+                "bodyPart": "head",
+                "modifiers": []
+            },
+            {
+                "name": "breastplate",
+                "bodyPart": "torso",
+                "modifiers": []
+            }
+        ],
+        "prefix": [
+            {
+                "name": "old",
+                "modifier": -1
+            },
+            {
+                "name": "used",
+                "modifier": 0
+            },
+            {
+                "name": "new",
+                "modifier": 1
+            },
+            {
+                "name": "good quality",
+                "modifier": 2
+            }
+        ]
+    },
+    "potion": {
+        "type": [
+            {
+                "name": "healing"
+            }
+        ],
+        "item": [
+            {
+                "name": "potion",
+                "baseValue": 1
+            }
+        ],
+        "prefix": [
+            {
+                "name": "weak",
+                "modifier": -1
+            },
+            {
+                "name": "regular",
+                "modifier": 0
+            },
+            {
+                "name": "strong",
+                "modifier": 2
+            }
+        ]
+    },
+    "utility": {
+        "type": [
+            {
+                "name": "light source"
+            },
+            {
+                "name": "lockpick"
+            }
+        ],
+        "item": [
+            {
+                "name": "torch",
+                "baseValue": 0,
+                "type": "light source"
+            },
+            {
+                "name": "lockpick",
+                "baseValue": 0,
+                "type": "lockpick"
+            }
+        ],
+        "prefix": [
+            {
+                "name": "used",
+                "modifier": -1
+            },
+            {
+                "name": "regular",
+                "modifier": 0
+            },
+            {
+                "name": "good quality",
+                "modifier": 2
+            }
+        ]
+    }
+}

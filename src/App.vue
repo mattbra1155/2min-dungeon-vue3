@@ -1,30 +1,33 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
-  <router-view />
+    <div id="app">
+        <nav class="nav">
+            <router-link to="/">Main</router-link>
+            <router-link to="/character-creation/">Create</router-link>
+        </nav>
+        <router-view />
+    </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script lang="ts">
+import { SceneManager } from '@/assets/scripts/sceneManager'
+import useGameEngine from '@/composables/useGameEngine'
+import { defineComponent } from 'vue'
+export default defineComponent({
+    computed: {},
+    methods: {},
+    created() {
+        console.log('create')
 
-#nav {
-  padding: 30px;
+        console.log(this.$store.getters['player/getPlayer'])
+    },
+    mounted() {
+        const gameEngine = new useGameEngine()
+        gameEngine.init()
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
-</style>
+        const sceneManager = new SceneManager()
+        this.$store.dispatch('player/fetchPlayer').then(() => {
+            sceneManager.createScene()
+        })
+    },
+})
+</script>
