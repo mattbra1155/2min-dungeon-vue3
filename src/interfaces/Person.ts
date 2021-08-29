@@ -1,4 +1,5 @@
-import { Weapon } from './Weapon'
+import { BodyParts } from '@/interfaces/BodyParts'
+import { Weapon } from '@/interfaces/Item'
 
 export interface Person {
     name: string
@@ -16,4 +17,7 @@ export interface Person {
     charisma: number
     weapon: Weapon
     description: string
+    inventory: Array<Weapon>
+    bodyParts: BodyParts
+    isAlive: Boolean
 }

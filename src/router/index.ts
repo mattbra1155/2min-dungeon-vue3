@@ -8,12 +8,12 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/character-creation',
-    name: 'Character Creation',
+    name: 'characterCreation',
     component: () => import('../views/CharacterCreation.vue')
   },
   {
       path: '/Inventory',
-      name: 'Inventory',
+      name: 'inventory',
       component: () => import('../views/CharacterCreation.vue')
   }
 ];

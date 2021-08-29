@@ -1,7 +1,7 @@
 <template>
     <div id="top-bar">
-        <h2 id="levelName" class="level__name">{{ scene.name }}</h2>
-        <h3 id="turnNumber" class="text--center">{{ turn }}</h3>
+        <h2 id="levelName" class="level__name"></h2>
+        <h3 id="turnNumber" class="text--center"></h3>
         <div class="health__display">
             <div class="player-hp">
                 <h2>{{ player.name }}</h2>
@@ -19,25 +19,26 @@
     </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import useEnemy from '@/composables/useEnemy'
+import usePlayer from '@/composables/usePlayer'
+import { defineComponent, computed } from 'vue'
+export default defineComponent({
     name: 'TopBar',
-    computed: {
-        player() {
-            return this.$store.getters['player/getPlayer']
-        },
-        enemy() {
-            return this.$store.getters['enemy/getEnemy']
-        },
-        scene() {
-            return this.$store.getters['sceneManager/activeScene']
-        },
-        turn() {
-            return this.$store.getters.getTurn
+    setup() {
+        const { getPlayer } = usePlayer()
+        const { getEnemy } = useEnemy()
+
+        const player = computed(() => getPlayer)
+        const enemy = () => computed(() => getEnemy)
+        // const turn = () => computed(() => getScene)
+        // const scene = () => computed(() => getScene)
+        return {
+            player,
+            enemy,
         }
     },
-    mounted() {}
-}
+})
 </script>
 
 <style lang="sass">

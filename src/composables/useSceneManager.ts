@@ -1,5 +1,5 @@
-import { SceneGenerator } from '@/assets/generators/sceneGenerator'
-import { MonsterGenerator } from '@/assets/generators/monsterGenerator'
+// import { SceneGenerator } from '@/assets/generators/sceneGenerator'
+// import { MonsterGenerator } from '@/assets/generators/monsterGenerator'
 import { reactive } from 'vue'
 import { Scene } from '@/interfaces/Scene'
 import useEnemy from '@/composables/useEnemy'
@@ -13,7 +13,7 @@ export default function useSceneManager() {
         return monster
     }
     const getPlayer = () => {
-        return store.getters['player/getPlayer']
+        // return store.getters['player/getPlayer']
     }
     const createScene = () => {
         createMonster()
@@ -21,15 +21,15 @@ export default function useSceneManager() {
         const enemy = getEnemy()
         const sceneGenerator = new SceneGenerator()
         const scene = sceneGenerator.create(player, enemy)
-        store.dispatch('sceneManager/saveScene', scene)
+        // store.dispatch('sceneManager/saveScene', scene)
         setActiveScene(scene)
         return scene
     }
     const setActiveScene = (scene: Scene) => {
-        store.dispatch('sceneManager/setActiveScene', scene)
+        // store.dispatch('sceneManager/setActiveScene', scene)
     }
     const archiveScene = (sceneId: number) => {
-        store.dispatch('sceneManager/archiveScene', sceneId)
+        // store.dispatch('sceneManager/archiveScene', sceneId)
     }
 }
 

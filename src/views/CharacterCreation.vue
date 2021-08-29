@@ -1,3 +1,4 @@
+import { defineComponent } from 'vue';
 <template>
     <div
         @submit.prevent="createPlayer"
@@ -10,7 +11,7 @@
             </h2>
             <div class="m-form__row o-characterGenerator__row">
                 <div class="m-form__column">
-                    <label for="playerName" class="header ">Name</label>
+                    <label for="playerName" class="header">Name</label>
                     <input
                         type="text"
                         name="playerName"
@@ -120,7 +121,7 @@
                     </div>
                 </div>
             </div>
-            <div class="m-form__row o-characterGenerator__row ">
+            <div class="m-form__row o-characterGenerator__row">
                 <div class="m-form__column">
                     <h2 class="o-characterGenerator__header">Inventory</h2>
                     <div id="charInventory" class="inventory"></div>
@@ -147,26 +148,40 @@
     </div>
 </template>
 
-<script>
-import { Player } from '@/assets/models/playerModel'
+<script lang="ts">
+import { Player } from '@/interfaces/Player'
+import usePlayer from '@/composables/usePlayer'
 import { diceRollK2, diceRollK3, diceRollK10 } from '@/assets/scripts/diceRoll'
-export default {
-    data() {
-        return {
-            isActive: false,
-            character: {
-                stats: {},
-            }
-        }
-    },
-    computed: {
-        playerData() {
-            return this.$store.getters['player/getPlayer']
-        }
+import { defineComponent, ref, computed, reactive } from 'vue'
+import { Weapon } from '@/interfaces/Item'
+
+export default defineComponent({
+    setup() {
+        const isActive = ref<Boolean>(false)
+        const character = reactive<Player>({
+            name: '',
+            race: '',
+            hp: 0,
+            melee: 0,
+            ranged: 0,
+            dexterity: 0,
+            strength: 0,
+            thoughtness: 0,
+            speed: 0,
+            initiative: 0,
+            attacks: 0,
+            inteligence: 0,
+            charisma: 0,
+            weapon: <Weapon>{},
+            description: '',
+        })
+
+        const playerData = computed(() => usePlayer)
+
+        return
     },
     methods: {
         createPlayer() {
-            
             const playerClass = new Player()
             const player = Object.assign(playerClass, this.character)
             // TO DO generate weapon
@@ -189,7 +204,7 @@ export default {
                     attacks: 1,
                     inteligence: diceRollK10() * 2 + 20,
                     'will power': diceRollK10() * 2 + 20,
-                    charisma: diceRollK10() * 2 + 20
+                    charisma: diceRollK10() * 2 + 20,
                 }
             }
             if (race === 'dwarf') {
@@ -205,15 +220,24 @@ export default {
                     attacks: 1,
                     inteligence: diceRollK10() * 2 + 20,
                     'will power': diceRollK10() * 2 + 40,
-                    charisma: diceRollK10() * 2 + 10
+                    charisma: diceRollK10() * 2 + 10,
                 }
             }
-        }
+        },
     },
     mounted() {
         if (this.playerData) {
             this.character = this.playerData
         }
-    }
-}
+    },
+    setup() {
+        return {
+            Player,
+            diceRollK2,
+            diceRollK3,
+            diceRollK10,
+            defineComponent,
+        }
+    },
+})
 </script>

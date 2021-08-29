@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div class="o-interface">
         <button
             id="attackButtonOne"
@@ -14,7 +14,7 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
     name: 'Interface',
     computed: {
@@ -36,3 +36,4 @@ export default {
 </script>
 
 <style></style>
+ -->
