@@ -1,9 +1,9 @@
 import { defineComponent } from 'vue';
 <template>
     <div
-        @submit.prevent="createPlayer"
         id="characterGenerator"
         class="o-characterGenerator"
+        @submit.prevent="savePlayer"
     >
         <form class="m-form o-characterGenerator__sheet">
             <h2 class="o-characterGenerator__header">
@@ -29,7 +29,7 @@ import { defineComponent } from 'vue';
                             name="playerRace"
                             value="human"
                             class="item__input"
-                            :checked="true"
+                            checked="true"
                             v-model="character.race"
                         />
                     </div>
@@ -64,7 +64,7 @@ import { defineComponent } from 'vue';
                                 name="class"
                                 value="warrior"
                                 class="item__input"
-                                v-model="character.class"
+                                v-model="character.profession"
                             />
                         </label>
                     </div>
@@ -76,7 +76,7 @@ import { defineComponent } from 'vue';
                                 name="class"
                                 value="mage"
                                 class="item__input"
-                                v-model="character.class"
+                                v-model="character.profession"
                             />
                         </label>
                     </div>
@@ -150,94 +150,136 @@ import { defineComponent } from 'vue';
 
 <script lang="ts">
 import { Player } from '@/interfaces/Player'
+import { PlayerModel } from '@/assets/models/playerModel'
 import usePlayer from '@/composables/usePlayer'
 import { diceRollK2, diceRollK3, diceRollK10 } from '@/assets/scripts/diceRoll'
-import { defineComponent, ref, computed, reactive } from 'vue'
 import { Weapon } from '@/interfaces/Item'
+import { BodyParts } from '@/interfaces/BodyParts'
+
+import { defineComponent, ref, computed, reactive, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
     setup() {
-        const isActive = ref<Boolean>(false)
-        const character = reactive<Player>({
+        const router = useRouter()
+        const isActive = ref(false)
+        const { createPlayer, getPlayer } = usePlayer()
+        let character = reactive<Player>({
             name: '',
-            race: '',
-            hp: 0,
-            melee: 0,
-            ranged: 0,
-            dexterity: 0,
-            strength: 0,
-            thoughtness: 0,
-            speed: 0,
-            initiative: 0,
-            attacks: 0,
-            inteligence: 0,
-            charisma: 0,
-            weapon: <Weapon>{},
+            race: 'human',
+            profession: '',
+            stats: {
+                hp: 0,
+                melee: 0,
+                ranged: 0,
+                dexterity: 0,
+                strength: 0,
+                thoughtness: 0,
+                speed: 0,
+                initiative: 0,
+                attacks: 0,
+                inteligence: 0,
+                willPower: 0,
+                charisma: 0,
+            },
+            weapon: null,
             description: '',
+            inventory: [],
+            bodyParts: {
+                head: {
+                    name: 'Head',
+                    armor: {
+                        armorPoints: 0,
+                        item: null,
+                    },
+                },
+                rightArm: {
+                    name: 'Right arm',
+                    armor: {
+                        armorPoints: 0,
+                        item: null,
+                    },
+                },
+                leftArm: {
+                    name: 'Left arm',
+                    armor: {
+                        armorPoints: 0,
+                        item: null,
+                    },
+                },
+                torso: {
+                    name: 'Torso',
+                    armor: {
+                        armorPoints: 0,
+                        item: null,
+                    },
+                },
+                rightLeg: {
+                    name: 'Right leg',
+                    armor: {
+                        armorPoints: 0,
+                        item: null,
+                    },
+                },
+                leftLeg: {
+                    name: 'Left leg',
+                    armor: {
+                        armorPoints: 0,
+                        item: null,
+                    },
+                },
+            },
+            player: true,
+            isAlive: true,
         })
 
-        const playerData = computed(() => usePlayer)
+        const emptyPlayer = computed(() => getPlayer)
 
-        return
-    },
-    methods: {
-        createPlayer() {
-            const playerClass = new Player()
-            const player = Object.assign(playerClass, this.character)
-            // TO DO generate weapon
-            player.weapon = null
-            this.$store.dispatch('player/createPlayer', player).then(() => {
-                this.$router.push({ name: 'Home' })
-            })
-        },
-        rollStats(race) {
-            if (race === 'human') {
-                this.character.stats = {
-                    hp: diceRollK3() + 4,
-                    melee: diceRollK10() * 2 + 20,
-                    ranged: diceRollK10() * 2 + 20,
-                    dexterity: diceRollK10() + 20,
-                    strength: diceRollK3() + 1,
-                    thoughtness: diceRollK3() + 1,
-                    speed: diceRollK3() + 2,
-                    initiative: diceRollK10() * 2 + 20,
-                    attacks: 1,
-                    inteligence: diceRollK10() * 2 + 20,
-                    'will power': diceRollK10() * 2 + 20,
-                    charisma: diceRollK10() * 2 + 20,
-                }
-            }
-            if (race === 'dwarf') {
-                this.character.stats = {
-                    hp: diceRollK3() + 5,
-                    melee: diceRollK10() * 2 + 30,
-                    ranged: diceRollK10() * 2 + 10,
-                    dexterity: diceRollK10() + 10,
-                    strength: diceRollK3() + 1,
-                    thoughtness: diceRollK3() + 2,
-                    speed: diceRollK2() + 2,
-                    initiative: diceRollK10() * 2 + 10,
-                    attacks: 1,
-                    inteligence: diceRollK10() * 2 + 20,
-                    'will power': diceRollK10() * 2 + 40,
-                    charisma: diceRollK10() * 2 + 10,
-                }
-            }
-        },
-    },
-    mounted() {
-        if (this.playerData) {
-            this.character = this.playerData
+        const savePlayer = () => {
+            createPlayer(character)
         }
-    },
-    setup() {
+
+        const rollStats = (race: string) => {
+            if (character.race === 'human') {
+                character.stats.hp = diceRollK3() + 4
+                character.stats.melee = diceRollK10() * 2 + 20
+                character.stats.ranged = diceRollK10() * 2 + 20
+                character.stats.dexterity = diceRollK10() + 20
+                character.stats.strength = diceRollK3() + 1
+                character.stats.thoughtness = diceRollK3() + 1
+                character.stats.speed = diceRollK3() + 2
+                character.stats.initiative = diceRollK10() * 2 + 20
+                character.stats.attacks = 1
+                character.stats.inteligence = diceRollK10() * 2 + 20
+                character.stats.willPower = diceRollK10() * 2 + 20
+                character.stats.charisma = diceRollK10() * 2 + 2
+            }
+
+            if (character.race === 'dwarf') {
+                character.stats.hp = diceRollK3() + 5
+                character.stats.melee = diceRollK10() * 2 + 30
+                character.stats.ranged = diceRollK10() * 2 + 10
+                character.stats.dexterity = diceRollK10() + 10
+                character.stats.strength = diceRollK3() + 1
+                character.stats.thoughtness = diceRollK3() + 2
+                character.stats.speed = diceRollK2() + 2
+                character.stats.initiative = diceRollK10() * 2 + 10
+                character.stats.attacks = 1
+                character.stats.inteligence = diceRollK10() * 2 + 20
+                character.stats.willPower = diceRollK10() * 2 + 40
+                character.stats.charisma = diceRollK10() * 2 + 1
+            }
+        }
         return {
-            Player,
+            character,
+            rollStats,
+            savePlayer,
             diceRollK2,
             diceRollK3,
             diceRollK10,
             defineComponent,
         }
     },
+    methods: {},
 })
 </script>

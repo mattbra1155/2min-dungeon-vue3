@@ -10,7 +10,7 @@ export default function useEnemy() {
     }
 
     const takeDamage = (damage: number) => {
-        state.enemy.hp -= damage
+        state.enemy.stats.hp -= damage
     }
     const getEnemy = () => state.enemy
     return {

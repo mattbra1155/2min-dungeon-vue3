@@ -11,23 +11,15 @@
 <script lang="ts">
 // import { SceneManager } from '@/assets/scripts/sceneManager'
 import useGameEngine from '@/composables/useGameEngine'
-import { defineComponent } from 'vue'
+import { defineComponent, reactive } from 'vue'
+import { Player } from '@/interfaces/Player'
+import { Weapon } from '@/interfaces/Item'
+import { BodyParts } from '@/interfaces/BodyParts'
+import usePlayer from '@/composables/usePlayer'
+import { PlayerModel } from '@/assets/models/playerModel'
 export default defineComponent({
-    computed: {},
-    methods: {},
-    created() {
-        console.log('create')
-
-        // console.log(this.$store.getters['player/getPlayer'])
-    },
-    mounted() {
-        // const gameEngine = new useGameEngine()
-        // gameEngine.init()
-
-        // const sceneManager = new SceneManager()
-        // this.$store.dispatch('player/fetchPlayer').then(() => {
-        //     sceneManager.createScene()
-        // })
+    setup() {
+        return {}
     },
 })
 </script>

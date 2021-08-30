@@ -8,14 +8,14 @@ export interface BodyParts {
             item: Item | null
         }
     }
-    'right arm': {
+    rightArm: {
         name: 'Right arm'
         armor: {
             armorPoints: number
             item: Item | null
         }
     }
-    'left arm': {
+    leftArm: {
         name: 'Left arm'
         armor: {
             armorPoints: number
@@ -29,14 +29,14 @@ export interface BodyParts {
             item: Item | null
         }
     }
-    'right leg': {
+    rightLeg: {
         name: 'Right leg'
         armor: {
             armorPoints: number
             item: Item | null
         }
     }
-    'left leg': {
+    leftLeg: {
         name: 'Left leg'
         armor: {
             armorPoints: number

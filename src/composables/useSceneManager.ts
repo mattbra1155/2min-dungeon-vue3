@@ -1,5 +1,5 @@
-// import { SceneGenerator } from '@/assets/generators/sceneGenerator'
-// import { MonsterGenerator } from '@/assets/generators/monsterGenerator'
+import { SceneGenerator } from '@/assets/generators/sceneGenerator.js'
+import { MonsterGenerator } from '@/assets/generators/monsterGenerator.js'
 import { reactive } from 'vue'
 import { Scene } from '@/interfaces/Scene'
 import useEnemy from '@/composables/useEnemy'
