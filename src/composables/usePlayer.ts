@@ -1,10 +1,77 @@
-import { reactive, readonly } from 'vue'
+import { reactive, toRefs } from 'vue'
 import localforage from 'localforage'
 import { iPlayer } from '@/interfaces/iPlayer'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { iMonster } from '@/interfaces/iMonster'
 const state = reactive({
-    player: <iPlayer>{},
+    player: new PlayerModel(
+        'Charname',
+        'dwarf',
+        '',
+        {
+            hp: 0,
+            melee: 0,
+            ranged: 0,
+            strength: 0,
+            speed: 0,
+            dexterity: 0,
+            inteligence: 0,
+            initiative: 0,
+            attacks: 0,
+            willPower: 0,
+            charisma: 0,
+            thoughtness: 0,
+        },
+        {
+            head: {
+                name: 'Head',
+                armor: {
+                    armorPoints: 0,
+                    item: null,
+                },
+            },
+            rightArm: {
+                name: 'Right arm',
+                armor: {
+                    armorPoints: 0,
+                    item: null,
+                },
+            },
+            leftArm: {
+                name: 'Left arm',
+                armor: {
+                    armorPoints: 0,
+                    item: null,
+                },
+            },
+            torso: {
+                name: 'Torso',
+                armor: {
+                    armorPoints: 0,
+                    item: null,
+                },
+            },
+            rightLeg: {
+                name: 'Right leg',
+                armor: {
+                    armorPoints: 0,
+                    item: null,
+                },
+            },
+            leftLeg: {
+                name: 'Left leg',
+                armor: {
+                    armorPoints: 0,
+                    item: null,
+                },
+            },
+        },
+        null,
+        '',
+        [],
+        true,
+        true
+    ),
 })
 
 export default function usePlayer() {
@@ -13,7 +80,7 @@ export default function usePlayer() {
         console.log(state.player)
     }
     const attack = (enemy: iMonster) => {
-        console.log(enemy)
+        return state.player.attack(enemy)
     }
 
     const takeDamage = (damage: number) => {
@@ -41,7 +108,7 @@ export default function usePlayer() {
     const getPlayer = () => state.player
 
     return {
-        state: readonly(state),
+        ...toRefs(state),
         setPlayer,
         getPlayer,
         createPlayer,

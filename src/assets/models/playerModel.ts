@@ -22,10 +22,10 @@ class PlayerModel extends PersonModel implements iPlayer {
             willPower: number
             charisma: number
         },
-        public weapon: iWeapon,
+        public bodyParts: iBodyParts,
+        public weapon: iWeapon | null,
         public description: string,
         public inventory: Array<iWeapon>,
-        public bodyParts: iBodyParts,
         public isAlive: boolean,
         public player: boolean
     ) {
@@ -33,20 +33,12 @@ class PlayerModel extends PersonModel implements iPlayer {
             name,
             race,
             stats,
+            bodyParts,
             weapon,
             description,
             inventory,
-            bodyParts,
             isAlive
         )
-        this.name = name
-        this.race = race
-        this.stats = stats
-        this.weapon = weapon
-        this.inventory = inventory
-        this.description = description
-        this.isAlive = true
-        this.player = true
     }
 
     // equipItem(item: Item) {

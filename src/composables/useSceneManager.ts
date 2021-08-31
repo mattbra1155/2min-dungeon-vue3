@@ -1,7 +1,7 @@
 import { SceneGenerator } from '@/assets/generators/sceneGenerator.js'
 import { MonsterGenerator } from '@/assets/generators/monsterGenerator.js'
 import { reactive } from 'vue'
-import { Scene } from '@/interfaces/Scene'
+import { iScene } from '@/interfaces/iScene'
 import useEnemy from '@/composables/useEnemy'
 
 export default function useSceneManager() {
@@ -25,7 +25,7 @@ export default function useSceneManager() {
         setActiveScene(scene)
         return scene
     }
-    const setActiveScene = (scene: Scene) => {
+    const setActiveScene = (scene: iScene) => {
         // store.dispatch('sceneManager/setActiveScene', scene)
     }
     const archiveScene = (sceneId: number) => {

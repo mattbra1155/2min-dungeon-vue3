@@ -5,6 +5,7 @@ import { iWeapon } from '@/interfaces/iItem'
 import { iBodyParts } from '@/interfaces/iBodyParts'
 import { iMonster } from '@/interfaces/iMonster'
 import { iPlayer } from '@/interfaces/iPlayer'
+import { iItem } from '@/interfaces/iItem'
 class PersonModel implements iPerson {
     constructor(
         public name: string,
@@ -23,18 +24,76 @@ class PersonModel implements iPerson {
             willPower: number
             charisma: number
         },
-        public weapon: iWeapon,
+        public bodyParts: iBodyParts,
+        public weapon: iWeapon | null,
         public description: string,
         public inventory: Array<iWeapon>,
-        public bodyParts: iBodyParts,
         public isAlive: boolean
     ) {
-        this.name = name
-        this.race = race
-        this.weapon = weapon
-        this.inventory = inventory
-        this.description = description
-        this.isAlive = true
+        this.name = ''
+        this.race = ''
+        this.stats = {
+            hp: 0,
+            melee: 0,
+            ranged: 0,
+            strength: 0,
+            speed: 0,
+            dexterity: 0,
+            inteligence: 0,
+            initiative: 0,
+            attacks: 0,
+            willPower: 0,
+            charisma: 0,
+            thoughtness: 0,
+        }
+        this.bodyParts = {
+            head: {
+                name: 'Head',
+                armor: {
+                    armorPoints: 0,
+                    item: null,
+                },
+            },
+            rightArm: {
+                name: 'Right arm',
+                armor: {
+                    armorPoints: 0,
+                    item: null,
+                },
+            },
+            leftArm: {
+                name: 'Left arm',
+                armor: {
+                    armorPoints: 0,
+                    item: null,
+                },
+            },
+            torso: {
+                name: 'Torso',
+                armor: {
+                    armorPoints: 0,
+                    item: null,
+                },
+            },
+            rightLeg: {
+                name: 'Right leg',
+                armor: {
+                    armorPoints: 0,
+                    item: null,
+                },
+            },
+            leftLeg: {
+                name: 'Left leg',
+                armor: {
+                    armorPoints: 0,
+                    item: null,
+                },
+            },
+        }
+        this.weapon = null
+        this.inventory = []
+        this.description = ''
+        this.isAlive = false
     }
 
     attack(enemy: iMonster | iPlayer) {

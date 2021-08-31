@@ -1,46 +1,46 @@
-import { iItem } from '@/interfaces/iItem'
+import { iArmor, iItem } from '@/interfaces/iItem'
 
 export interface iBodyParts {
     head: {
         name: 'Head'
         armor: {
             armorPoints: number
-            item: iItem | null
+            item: iArmor | null
         }
     }
     rightArm: {
         name: 'Right arm'
         armor: {
             armorPoints: number
-            item: iItem | null
+            item: iArmor | null
         }
     }
     leftArm: {
         name: 'Left arm'
         armor: {
             armorPoints: number
-            item: iItem | null
+            item: iArmor | null
         }
     }
     torso: {
         name: 'Torso'
         armor: {
             armorPoints: number
-            item: iItem | null
+            item: iArmor | null
         }
     }
     rightLeg: {
         name: 'Right leg'
         armor: {
             armorPoints: number
-            item: iItem | null
+            item: iArmor | null
         }
     }
     leftLeg: {
         name: 'Left leg'
         armor: {
             armorPoints: number
-            item: iItem | null
+            item: iArmor | null
         }
     }
 }
