@@ -1,18 +1,18 @@
 import { reactive, readonly } from 'vue'
 import localforage from 'localforage'
-import { Player } from '@/interfaces/Player'
+import { iPlayer } from '@/interfaces/iPlayer'
 import { PlayerModel } from '@/assets/models/playerModel'
-import { Monster } from '@/interfaces/Monster'
+import { iMonster } from '@/interfaces/iMonster'
 const state = reactive({
-    player: <Player>{},
+    player: <iPlayer>{},
 })
 
 export default function usePlayer() {
-    const setPlayer = (payload: Player) => {
+    const setPlayer = (payload: iPlayer) => {
         Object.assign(state.player, payload)
         console.log(state.player)
     }
-    const attack = (enemy: Monster) => {
+    const attack = (enemy: iMonster) => {
         console.log(enemy)
     }
 
@@ -20,7 +20,7 @@ export default function usePlayer() {
         state.player.stats.hp -= damage
     }
 
-    const createPlayer = (payload: Player) => {
+    const createPlayer = (payload: iPlayer) => {
         setPlayer(payload)
         localforage.setItem('player', JSON.stringify(payload))
         fetchPlayer()
@@ -30,7 +30,7 @@ export default function usePlayer() {
         try {
             const result: string | null = await localforage.getItem('player')
             if (result !== null) {
-                const player: Player = JSON.parse(result)
+                const player: iPlayer = JSON.parse(result)
                 return player
             }
         } catch (err) {

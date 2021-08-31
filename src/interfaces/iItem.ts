@@ -1,4 +1,4 @@
-export interface Item {
+export interface iItem {
     name: string
     description: string
     type: string
@@ -6,14 +6,14 @@ export interface Item {
     category: string
 }
 
-export interface Weapon extends Item {
+export interface iWeapon extends iItem {
     damage: number
     type: string
     prefix: string
     modifier: string
 }
 
-export interface Armor extends Item {
+export interface iArmor extends iItem {
     modifier: string
     bodyPart: string
     type: string
@@ -21,9 +21,9 @@ export interface Armor extends Item {
     prefix: string
 }
 
-export interface Potion extends Item {
+export interface iPotion extends iItem {
     item: string
     prefix: string
 }
 
-export interface Utility extends Item {}
+export interface iUtility extends iItem {}

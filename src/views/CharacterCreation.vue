@@ -149,12 +149,12 @@ import { defineComponent } from 'vue';
 </template>
 
 <script lang="ts">
-import { Player } from '@/interfaces/Player'
+import { iPlayer } from '@/interfaces/iPlayer'
 import { PlayerModel } from '@/assets/models/playerModel'
 import usePlayer from '@/composables/usePlayer'
 import { diceRollK2, diceRollK3, diceRollK10 } from '@/assets/scripts/diceRoll'
-import { Weapon } from '@/interfaces/Item'
-import { BodyParts } from '@/interfaces/BodyParts'
+import { iWeapon } from '@/interfaces/iItem'
+import { iBodyParts } from '@/interfaces/iBodyParts'
 
 import { defineComponent, ref, computed, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
@@ -164,7 +164,7 @@ export default defineComponent({
         const router = useRouter()
         const isActive = ref(false)
         const { createPlayer, getPlayer } = usePlayer()
-        let character = reactive<Player>({
+        let character = reactive<iPlayer>({
             name: '',
             race: 'human',
             profession: '',

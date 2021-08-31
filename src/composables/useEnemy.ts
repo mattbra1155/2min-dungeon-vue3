@@ -1,11 +1,11 @@
 import { reactive, readonly } from 'vue'
-import { Monster } from '@/interfaces/Monster'
+import { iMonster } from '@/interfaces/iMonster'
 const state = reactive({
-    enemy: <Monster>{},
+    enemy: <iMonster>{},
 })
 
 export default function useEnemy() {
-    const setEnemy = (payload: Monster) => {
+    const setEnemy = (payload: iMonster) => {
         state.enemy = payload
     }
 

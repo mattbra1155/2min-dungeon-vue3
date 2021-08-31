@@ -1,9 +1,9 @@
 import { PersonModel } from '@/assets/models/personModel'
-import { BodyParts } from '@/interfaces/BodyParts'
-import { Item, Weapon } from '@/interfaces/Item'
-import { Player } from '@/interfaces/Player'
+import { iBodyParts } from '@/interfaces/iBodyParts'
+import { iItem, iWeapon } from '@/interfaces/iItem'
+import { iPlayer } from '@/interfaces/iPlayer'
 
-class PlayerModel extends PersonModel implements Player {
+class PlayerModel extends PersonModel implements iPlayer {
     constructor(
         public name: string,
         public race: string,
@@ -22,10 +22,10 @@ class PlayerModel extends PersonModel implements Player {
             willPower: number
             charisma: number
         },
-        public weapon: Weapon,
+        public weapon: iWeapon,
         public description: string,
-        public inventory: Array<Weapon>,
-        public bodyParts: BodyParts,
+        public inventory: Array<iWeapon>,
+        public bodyParts: iBodyParts,
         public isAlive: boolean,
         public player: boolean
     ) {

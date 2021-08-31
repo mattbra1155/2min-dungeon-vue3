@@ -12,9 +12,9 @@
 // import { SceneManager } from '@/assets/scripts/sceneManager'
 import useGameEngine from '@/composables/useGameEngine'
 import { defineComponent, reactive } from 'vue'
-import { Player } from '@/interfaces/Player'
-import { Weapon } from '@/interfaces/Item'
-import { BodyParts } from '@/interfaces/BodyParts'
+import { iPlayer } from '@/interfaces/iPlayer'
+import { iWeapon } from '@/interfaces/iItem'
+import { iBodyParts } from '@/interfaces/iBodyParts'
 import usePlayer from '@/composables/usePlayer'
 import { PlayerModel } from '@/assets/models/playerModel'
 export default defineComponent({

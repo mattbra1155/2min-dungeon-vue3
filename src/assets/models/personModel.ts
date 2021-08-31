@@ -1,11 +1,11 @@
 // import { sceneEngine, global, turn } from '../scripts/index.js'
 import { diceRollK100, diceRollK6 } from '@/assets/scripts/diceRoll'
-import { Person } from '@/interfaces/Person'
-import { Weapon } from '@/interfaces/Item'
-import { BodyParts } from '@/interfaces/BodyParts'
-import { Monster } from '@/interfaces/Monster'
-import { Player } from '@/interfaces/Player'
-class PersonModel implements Person {
+import { iPerson } from '@/interfaces/iPerson'
+import { iWeapon } from '@/interfaces/iItem'
+import { iBodyParts } from '@/interfaces/iBodyParts'
+import { iMonster } from '@/interfaces/iMonster'
+import { iPlayer } from '@/interfaces/iPlayer'
+class PersonModel implements iPerson {
     constructor(
         public name: string,
         public race: string,
@@ -23,10 +23,10 @@ class PersonModel implements Person {
             willPower: number
             charisma: number
         },
-        public weapon: Weapon,
+        public weapon: iWeapon,
         public description: string,
-        public inventory: Array<Weapon>,
-        public bodyParts: BodyParts,
+        public inventory: Array<iWeapon>,
+        public bodyParts: iBodyParts,
         public isAlive: boolean
     ) {
         this.name = name
@@ -37,7 +37,7 @@ class PersonModel implements Person {
         this.isAlive = true
     }
 
-    attack(enemy: Monster | Player) {
+    attack(enemy: iMonster | iPlayer) {
         // dice roll
         const diceRollHitResult = diceRollK100()
         console.log(`Dice roll: ${diceRollHitResult}`)
