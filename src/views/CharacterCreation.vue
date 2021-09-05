@@ -148,12 +148,12 @@
 </template>
 
 <script lang="ts">
-import { iPlayer } from '@/interfaces/iPlayer'
+import { iPlayer } from '@/interfaces/Player'
 import { PlayerModel } from '@/assets/models/playerModel'
 import usePlayer from '@/composables/usePlayer'
 import { diceRollK2, diceRollK3, diceRollK10 } from '@/assets/scripts/diceRoll'
-import { iWeapon } from '@/interfaces/iItem'
-import { iBodyParts } from '@/interfaces/iBodyParts'
+import { iWeapon } from '@/interfaces/Item'
+import { iBodyParts } from '@/interfaces/BodyParts'
 
 import { defineComponent, ref, computed, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'

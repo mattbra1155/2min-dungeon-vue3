@@ -1,5 +1,5 @@
-import { iMonster } from './iMonster'
-import { iPlayer } from './iPlayer'
+import { iMonster } from './Monster'
+import { iPlayer } from './Player'
 
 export interface iScene {
     id: number

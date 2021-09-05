@@ -1,8 +1,8 @@
 import { reactive, toRefs } from 'vue'
 import localforage from 'localforage'
-import { iPlayer } from '@/interfaces/iPlayer'
+import { iPlayer } from '@/interfaces/Player'
 import { PlayerModel } from '@/assets/models/playerModel'
-import { iMonster } from '@/interfaces/iMonster'
+import { iMonster } from '@/interfaces/Monster'
 const state = reactive({
     player: new PlayerModel(
         'Charname',
@@ -77,6 +77,7 @@ const state = reactive({
 export default function usePlayer() {
     const setPlayer = (payload: iPlayer) => {
         Object.assign(state.player, payload)
+        localforage.setItem('player', JSON.stringify(payload))
         console.log(state.player)
     }
     const attack = (enemy: iMonster) => {
@@ -88,9 +89,7 @@ export default function usePlayer() {
     }
 
     const createPlayer = (payload: iPlayer) => {
-        setPlayer(payload)
         localforage.setItem('player', JSON.stringify(payload))
-        fetchPlayer()
     }
 
     const fetchPlayer = async () => {

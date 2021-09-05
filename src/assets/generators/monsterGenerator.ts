@@ -1,10 +1,8 @@
-import { bestiary } from './bestiary'
+import { bestiary } from '@/assets/generators/bestiary'
 import { Monster } from '@/assets/models/monsterModel'
 
 class MonsterGenerator {
-    constructor(type, level) {
-        type, level
-    }
+    constructor(type: string, level: string) {}
 
     create() {
         const bestiaryCopy = [...bestiary]

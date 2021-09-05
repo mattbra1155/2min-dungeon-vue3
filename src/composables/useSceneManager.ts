@@ -1,7 +1,7 @@
 import { SceneGenerator } from '@/assets/generators/sceneGenerator.js'
 import { MonsterGenerator } from '@/assets/generators/monsterGenerator.js'
 import { reactive } from 'vue'
-import { iScene } from '@/interfaces/iScene'
+import { iScene } from '@/interfaces/Scene'
 import useEnemy from '@/composables/useEnemy'
 
 export default function useSceneManager() {

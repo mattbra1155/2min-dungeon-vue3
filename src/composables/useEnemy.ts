@@ -1,5 +1,5 @@
-import { reactive, readonly } from 'vue'
-import { iMonster } from '@/interfaces/iMonster'
+import { reactive, toRefs } from 'vue'
+import { iMonster } from '@/interfaces/Monster'
 const state = reactive({
     enemy: <iMonster>{},
 })
@@ -14,7 +14,7 @@ export default function useEnemy() {
     }
     const getEnemy = () => state.enemy
     return {
-        state: readonly(state),
+        ...toRefs(state),
         setEnemy,
         getEnemy,
         takeDamage,

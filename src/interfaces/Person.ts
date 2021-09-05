@@ -1,5 +1,5 @@
-import { iBodyParts } from '@/interfaces/iBodyParts'
-import { iWeapon } from '@/interfaces/iItem'
+import { iBodyParts } from '@/interfaces/BodyParts'
+import { iArmor, iPotion, iUtility, iWeapon } from '@/interfaces/Item'
 
 export interface iPerson {
     name: string
@@ -20,7 +20,7 @@ export interface iPerson {
     }
     weapon: iWeapon | null
     description: string
-    inventory: Array<iWeapon>
+    inventory: Array<iWeapon | iArmor | iPotion | iUtility>
     bodyParts: iBodyParts
     isAlive: Boolean
 }

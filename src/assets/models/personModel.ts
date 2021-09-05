@@ -1,15 +1,34 @@
 // import { sceneEngine, global, turn } from '../scripts/index.js'
 import { diceRollK100, diceRollK6 } from '@/assets/scripts/diceRoll'
-import { iPerson } from '@/interfaces/iPerson'
-import { iWeapon } from '@/interfaces/iItem'
-import { iBodyParts } from '@/interfaces/iBodyParts'
-import { iMonster } from '@/interfaces/iMonster'
-import { iPlayer } from '@/interfaces/iPlayer'
-import { iItem } from '@/interfaces/iItem'
+import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
+import { stats } from '@/assets/models/statsModel'
+
+import { iPerson } from '@/interfaces/Person'
+import { iArmor, iPotion, iUtility, iWeapon } from '@/interfaces/Item'
+import { iBodyParts } from '@/interfaces/BodyParts'
+import { iMonster } from '@/interfaces/Monster'
+import { iPlayer } from '@/interfaces/Player'
+
+const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
+const {
+    hp,
+    melee,
+    ranged,
+    dexterity,
+    strength,
+    thoughtness,
+    speed,
+    initiative,
+    attacks,
+    inteligence,
+    willPower,
+    charisma,
+} = stats
+
 class PersonModel implements iPerson {
     constructor(
-        public name: string,
-        public race: string,
+        public name: string = '',
+        public race: string = '',
         public stats: {
             hp: number
             melee: number
@@ -23,78 +42,33 @@ class PersonModel implements iPerson {
             inteligence: number
             willPower: number
             charisma: number
+        } = {
+            hp,
+            melee,
+            ranged,
+            dexterity,
+            strength,
+            thoughtness,
+            speed,
+            initiative,
+            attacks,
+            inteligence,
+            willPower,
+            charisma,
         },
-        public bodyParts: iBodyParts,
-        public weapon: iWeapon | null,
-        public description: string,
-        public inventory: Array<iWeapon>,
-        public isAlive: boolean
-    ) {
-        this.name = ''
-        this.race = ''
-        this.stats = {
-            hp: 0,
-            melee: 0,
-            ranged: 0,
-            strength: 0,
-            speed: 0,
-            dexterity: 0,
-            inteligence: 0,
-            initiative: 0,
-            attacks: 0,
-            willPower: 0,
-            charisma: 0,
-            thoughtness: 0,
-        }
-        this.bodyParts = {
-            head: {
-                name: 'Head',
-                armor: {
-                    armorPoints: 0,
-                    item: null,
-                },
-            },
-            rightArm: {
-                name: 'Right arm',
-                armor: {
-                    armorPoints: 0,
-                    item: null,
-                },
-            },
-            leftArm: {
-                name: 'Left arm',
-                armor: {
-                    armorPoints: 0,
-                    item: null,
-                },
-            },
-            torso: {
-                name: 'Torso',
-                armor: {
-                    armorPoints: 0,
-                    item: null,
-                },
-            },
-            rightLeg: {
-                name: 'Right leg',
-                armor: {
-                    armorPoints: 0,
-                    item: null,
-                },
-            },
-            leftLeg: {
-                name: 'Left leg',
-                armor: {
-                    armorPoints: 0,
-                    item: null,
-                },
-            },
-        }
-        this.weapon = null
-        this.inventory = []
-        this.description = ''
-        this.isAlive = false
-    }
+        public bodyParts: iBodyParts = {
+            head,
+            leftArm,
+            rightArm,
+            torso,
+            leftLeg,
+            rightLeg,
+        },
+        public weapon: iWeapon | null = null,
+        public description: string = '',
+        public inventory: Array<iWeapon | iArmor | iPotion | iUtility> = [],
+        public isAlive: boolean = true
+    ) {}
 
     attack(enemy: iMonster | iPlayer) {
         // dice roll
@@ -200,5 +174,6 @@ class PersonModel implements iPerson {
         }
     }
 }
+console.log(new PersonModel())
 
 export { PersonModel }

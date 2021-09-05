@@ -1,13 +1,32 @@
 import { PersonModel } from '@/assets/models/personModel'
-import { iBodyParts } from '@/interfaces/iBodyParts'
-import { iItem, iWeapon } from '@/interfaces/iItem'
-import { iPlayer } from '@/interfaces/iPlayer'
+import { stats } from '@/assets/models/statsModel'
+import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
+
+import { iBodyParts } from '@/interfaces/BodyParts'
+import { iArmor, iItem, iPotion, iUtility, iWeapon } from '@/interfaces/Item'
+import { iPlayer } from '@/interfaces/Player'
+
+const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
+const {
+    hp,
+    melee,
+    ranged,
+    dexterity,
+    strength,
+    thoughtness,
+    speed,
+    initiative,
+    attacks,
+    inteligence,
+    willPower,
+    charisma,
+} = stats
 
 class PlayerModel extends PersonModel implements iPlayer {
     constructor(
-        public name: string,
-        public race: string,
-        public profession: string,
+        public name: string = '',
+        public race: string = '',
+        public profession: string = '',
         public stats: {
             hp: number
             melee: number
@@ -21,13 +40,33 @@ class PlayerModel extends PersonModel implements iPlayer {
             inteligence: number
             willPower: number
             charisma: number
+        } = {
+            hp,
+            melee,
+            ranged,
+            dexterity,
+            strength,
+            thoughtness,
+            speed,
+            initiative,
+            attacks,
+            inteligence,
+            willPower,
+            charisma,
         },
-        public bodyParts: iBodyParts,
-        public weapon: iWeapon | null,
-        public description: string,
-        public inventory: Array<iWeapon>,
-        public isAlive: boolean,
-        public player: boolean
+        public bodyParts: iBodyParts = {
+            head,
+            leftArm,
+            rightArm,
+            torso,
+            leftLeg,
+            rightLeg,
+        },
+        public weapon: iWeapon | null = null,
+        public description: string = '',
+        public inventory: Array<iWeapon | iArmor | iPotion | iUtility> = [],
+        public isAlive: boolean = true,
+        public player: boolean = true
     ) {
         super(
             name,
@@ -76,5 +115,6 @@ class PlayerModel extends PersonModel implements iPlayer {
     //     this.inventory.push(item)
     // }
 }
+console.log(new PlayerModel())
 
 export { PlayerModel }

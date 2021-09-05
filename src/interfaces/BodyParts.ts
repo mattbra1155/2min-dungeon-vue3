@@ -1,4 +1,4 @@
-import { iArmor, iItem } from '@/interfaces/iItem'
+import { iArmor, iItem } from '@/interfaces/Item'
 
 export interface iBodyParts {
     head: {
