@@ -1,3 +1,5 @@
+import { iBodyParts } from './BodyParts'
+
 export interface iItem {
     name: string
     description: string
@@ -10,12 +12,12 @@ export interface iWeapon extends iItem {
     damage: number
     type: string
     prefix: string
-    modifier: string
+    modifier: number
 }
 
 export interface iArmor extends iItem {
     modifier: string
-    bodyPart: string
+    bodyPart: iBodyParts
     type: string
     item: string
     prefix: string
@@ -27,3 +29,8 @@ export interface iPotion extends iItem {
 }
 
 export interface iUtility extends iItem {}
+
+export interface iPrefix {
+    name: string
+    modifier: number
+}

@@ -1,10 +1,10 @@
-import { Weapon, Armor, Potion, Utility } from '@/assets/models/itemsModel'
-import itemMods from '@/assets/json/itemMods'
-import store from '@/store/index'
+import { Weapon, Armor, Potion } from '@/assets/models/itemsModel'
+import itemMods from '@/assets/json/itemMods.json'
+import { iArmor, iItem, iPotion, iPrefix, iWeapon } from '@/interfaces/Item'
 class ItemGenerator {
     constructor() {}
 
-    createItemBase(category) {
+    createItemBase(category: string) {
         let itemObject
         switch (category) {
             case 'weapon':
@@ -16,10 +16,8 @@ class ItemGenerator {
             case 'potion':
                 itemObject = new Potion()
                 break
-            case 'utility':
-                itemObject = new Utility()
-                break
         }
+        // @ts-ignore
         const itemCategory = itemMods[category]
 
         const randomItem =
@@ -37,16 +35,17 @@ class ItemGenerator {
             }
         }
         const itemType = {
-            type: randomType()
+            type: randomType(),
         }
         const finalItem = Object.assign(itemObject, randomItem, itemType, {
-            category
+            category,
         })
 
         return finalItem
     }
 
-    createPrefix(baseItem) {
+    createPrefix(baseItem: iWeapon | iArmor | iPotion) {
+        // @ts-ignore
         const itemCategory = itemMods[baseItem.category]
         const prefix =
             itemCategory.prefix[
@@ -55,8 +54,11 @@ class ItemGenerator {
         return { prefix }
     }
 
-    createDescription(baseItem, prefix) {
-        let description
+    createDescription(
+        baseItem: iWeapon | iArmor | iPotion,
+        prefix: iPrefix
+    ): string {
+        let description: string
         if (prefix.name === 'used') {
             description = `This is a ${baseItem.name}. Nothing out of the ordinary`
         } else {
@@ -71,7 +73,7 @@ class ItemGenerator {
         return { id }
     }
 
-    createItem(category) {
+    createItem(category: string) {
         const itemBase = this.createItemBase(category)
         const prefix = this.createPrefix(itemBase)
         const description = this.createDescription(itemBase, prefix)

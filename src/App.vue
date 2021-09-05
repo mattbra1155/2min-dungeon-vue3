@@ -20,10 +20,11 @@ import { PlayerModel } from '@/assets/models/playerModel'
 import { PersonModel } from './assets/models/personModel'
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { MonsterGenerator } from './assets/generators/monsterGenerator'
+import { ItemGenerator } from './assets/generators/itemGenerator'
 export default defineComponent({
     setup() {
-        const player = new MonsterGenerator()
-        console.log(player.create())
+        const player = new ItemGenerator()
+        console.log(player.createItemBase('weapon'))
 
         return {}
     },
