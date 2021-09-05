@@ -1,11 +1,11 @@
 import { Weapon, Armor, Potion } from '@/assets/models/itemsModel'
 import itemMods from '@/assets/json/itemMods.json'
-import { iArmor, iItem, iPotion, iPrefix, iWeapon } from '@/interfaces/Item'
+import { iWeapon, iArmor, iPotion, iPrefix } from '@/interfaces/Item'
+import useItemGenerator from '@/composables/useItemGenerator'
 class ItemGenerator {
-    constructor() {}
-
     createItemBase(category: string) {
         let itemObject
+        let itemCat: string = category
         switch (category) {
             case 'weapon':
                 itemObject = new Weapon()
@@ -17,7 +17,7 @@ class ItemGenerator {
                 itemObject = new Potion()
                 break
         }
-        // @ts-ignore
+
         const itemCategory = itemMods[category]
 
         const randomItem =
@@ -44,14 +44,14 @@ class ItemGenerator {
         return finalItem
     }
 
-    createPrefix(baseItem: iWeapon | iArmor | iPotion) {
+    createPrefix(baseItem: iWeapon | iArmor | iPotion): iPrefix {
         // @ts-ignore
         const itemCategory = itemMods[baseItem.category]
         const prefix =
             itemCategory.prefix[
                 Math.floor(Math.random() * itemCategory.prefix.length)
             ]
-        return { prefix }
+        return prefix
     }
 
     createDescription(
@@ -64,20 +64,22 @@ class ItemGenerator {
         } else {
             description = `This is a ${baseItem.name}. It's' ${prefix.name}`
         }
-        return { description }
+        return description
     }
 
-    addId() {
-        store.dispatch('itemGenerator/increment_id')
-        const id = store.getters['itemGenerator/itemId']
-        return { id }
+    addId(category: string): number {
+        const { incrementItemId } = useItemGenerator()
+
+        incrementItemId(category)
+
+        return 123
     }
 
     createItem(category: string) {
         const itemBase = this.createItemBase(category)
         const prefix = this.createPrefix(itemBase)
         const description = this.createDescription(itemBase, prefix)
-        const id = this.addId()
+        const id = this.addId(category)
         const item = Object.assign(itemBase, prefix, description, id)
         return item
     }
