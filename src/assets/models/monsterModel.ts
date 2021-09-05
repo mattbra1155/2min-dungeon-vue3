@@ -1,11 +1,15 @@
 import { PersonModel } from '@/assets/models/personModel'
 import { iBodyParts } from '@/interfaces/BodyParts'
 import { iArmor, iPotion, iUtility, iWeapon } from '@/interfaces/Item'
+import { iMonster } from '@/interfaces/Monster'
+import { bodyPartsModel } from './bodyPartsModel'
 
-class Monster extends PersonModel implements Monster {
+const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
+
+class MonsterModel extends PersonModel implements iMonster {
     constructor(
-        public name: string,
-        public race: string,
+        public name: string = '',
+        public race: string = '',
         public stats: {
             hp: number
             melee: number
@@ -19,26 +23,7 @@ class Monster extends PersonModel implements Monster {
             inteligence: number
             charisma: number
             willPower: number
-        },
-        public weapon: iWeapon | null,
-        public bodyParts: iBodyParts,
-        public inventory: Array<iWeapon | iArmor | iPotion | iUtility>,
-        public description: string,
-        public isAlive: boolean
-    ) {
-        super(
-            name,
-            race,
-            stats,
-            bodyParts,
-            weapon,
-            description,
-            inventory,
-            isAlive
-        )
-        this.name = ''
-        this.race = ''
-        this.stats = {
+        } = {
             hp: 0,
             melee: 0,
             ranged: 0,
@@ -51,56 +36,31 @@ class Monster extends PersonModel implements Monster {
             inteligence: 0,
             charisma: 0,
             willPower: 0,
-        }
-        this.bodyParts = {
-            head: {
-                name: 'Head',
-                armor: {
-                    armorPoints: 0,
-                    item: null,
-                },
-            },
-            rightArm: {
-                name: 'Right arm',
-                armor: {
-                    armorPoints: 0,
-                    item: null,
-                },
-            },
-            leftArm: {
-                name: 'Left arm',
-                armor: {
-                    armorPoints: 0,
-                    item: null,
-                },
-            },
-            torso: {
-                name: 'Torso',
-                armor: {
-                    armorPoints: 0,
-                    item: null,
-                },
-            },
-            rightLeg: {
-                name: 'Right leg',
-                armor: {
-                    armorPoints: 0,
-                    item: null,
-                },
-            },
-            leftLeg: {
-                name: 'Left leg',
-                armor: {
-                    armorPoints: 0,
-                    item: null,
-                },
-            },
-        }
-        this.weapon = null
-        this.inventory = []
-        this.description = ''
-        this.isAlive = true
+        },
+        public weapon: iWeapon | null = null,
+        public bodyParts: iBodyParts = {
+            head,
+            leftArm,
+            rightArm,
+            torso,
+            leftLeg,
+            rightLeg,
+        },
+        public inventory: Array<iWeapon | iArmor | iPotion | iUtility> = [],
+        public description: string = '',
+        public isAlive: boolean = true
+    ) {
+        super(
+            name,
+            race,
+            stats,
+            bodyParts,
+            weapon,
+            description,
+            inventory,
+            isAlive
+        )
     }
 }
 
-export { Monster }
+export { MonsterModel }

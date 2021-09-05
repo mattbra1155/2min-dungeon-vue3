@@ -18,10 +18,12 @@ import { iBodyParts } from '@/interfaces/BodyParts'
 import usePlayer from '@/composables/usePlayer'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { PersonModel } from './assets/models/personModel'
+import { MonsterModel } from '@/assets/models/monsterModel'
+import { MonsterGenerator } from './assets/generators/monsterGenerator'
 export default defineComponent({
     setup() {
-        const player = new PersonModel()
-        console.log(player)
+        const player = new MonsterGenerator()
+        console.log(player.create())
 
         return {}
     },
