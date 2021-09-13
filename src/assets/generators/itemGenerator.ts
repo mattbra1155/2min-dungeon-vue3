@@ -2,22 +2,27 @@ import { Weapon, Armor, Potion } from '@/assets/models/itemsModel'
 import itemMods from '@/assets/json/itemMods.json'
 import { iWeapon, iArmor, iPotion, iPrefix } from '@/interfaces/Item'
 import useItemGenerator from '@/composables/useItemGenerator'
+
+enum Category {
+    Weapon = 'weapon',
+    Armor = 'armor',
+    Potion = 'potion'
+}
+
 class ItemGenerator {
-    createItemBase(category: string) {
+    createItemBase(category: Category) {
         let itemObject
-        let itemCat: string = category
         switch (category) {
-            case 'weapon':
+            case Category.Weapon:
                 itemObject = new Weapon()
                 break
-            case 'armor':
+            case Category.Armor:
                 itemObject = new Armor()
                 break
-            case 'potion':
+            case Category.Potion:
                 itemObject = new Potion()
                 break
         }
-
         const itemCategory = itemMods[category]
 
         const randomItem =
