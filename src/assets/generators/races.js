@@ -14,7 +14,7 @@ const races = [
             attacks: 1,
             inteligence: global.diceRollK10() * 2,
             willPower: global.diceRollK10() * 2,
-            charisma: global.diceRollK10() * 2
+            charisma: global.diceRollK10() * 2,
         },
         statModifiers: {
             hp: 4,
@@ -28,9 +28,9 @@ const races = [
             attacks: 0,
             inteligence: 20,
             'will power': 20,
-            charisma: 20
+            charisma: 20,
         },
-        description: 'human description'
+        description: 'human description',
     },
     {
         name: 'dwarf',
@@ -46,7 +46,7 @@ const races = [
             attacks: 1,
             inteligence: global.diceRollK10() * 2,
             willPower: global.diceRollK10() * 2,
-            charisma: global.diceRollK10() * 2
+            charisma: global.diceRollK10() * 2,
         },
         statModifiers: {
             hp: 5,
@@ -60,10 +60,10 @@ const races = [
             attacks: 0,
             inteligence: 20,
             'will power': 40,
-            charisma: 20
+            charisma: 20,
         },
-        description: 'dwarf description'
-    }
+        description: 'dwarf description',
+    },
 ]
 
 export { races }

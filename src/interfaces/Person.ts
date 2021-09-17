@@ -22,5 +22,5 @@ export interface iPerson {
     description: string
     inventory: Array<iWeapon | iArmor | iPotion | iUtility>
     bodyParts: iBodyParts
-    isAlive: Boolean
+    isAlive: boolean
 }

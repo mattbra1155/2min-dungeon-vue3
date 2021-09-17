@@ -7,7 +7,7 @@ class Turn {
     }
 
     checkRoom(monster) {
-        if ((monster.isAlive === true)) {
+        if (monster.isAlive === true) {
             global.combat = true
         }
     }
@@ -19,9 +19,8 @@ class Turn {
     }
 
     initiativeRoll() {
-      /*   const monsterResult = global.diceRoll(1, 100)
+        /*   const monsterResult = global.diceRoll(1, 100)
         const playerResult = global.diceRoll(1, 100) */
-        
     }
 
     playerTurn() {

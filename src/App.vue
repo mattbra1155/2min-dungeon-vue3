@@ -24,7 +24,7 @@ import { ItemGenerator } from './assets/generators/itemGenerator'
 export default defineComponent({
     setup() {
         const player = new ItemGenerator()
-        console.log(player.createItem('weapon'))
+        // console.log(player.createItem('weapon'))
 
         return {}
     },

@@ -1,21 +1,11 @@
 <template>
-    <div
-        id="characterGenerator"
-        class="o-characterGenerator"
-        @submit.prevent="savePlayer"
-    >
+    <div id="characterGenerator" class="o-characterGenerator" @submit.prevent="savePlayer">
         <form class="m-form o-characterGenerator__sheet">
-            <h2 class="o-characterGenerator__header">
-                Character creation sheet
-            </h2>
+            <h2 class="o-characterGenerator__header">Character creation sheet</h2>
             <div class="m-form__row o-characterGenerator__row">
                 <div class="m-form__column">
                     <label for="playerName" class="header">Name</label>
-                    <input
-                        type="text"
-                        name="playerName"
-                        v-model="player.name"
-                    />
+                    <input type="text" name="playerName" v-model="player.name" />
                 </div>
             </div>
             <div class="m-form__row o-characterGenerator__row">
@@ -34,21 +24,14 @@
                     </div>
                     <div class="o-characterGenerator__item">
                         <label for="dwarf">Dwarf</label>
-                        <input
-                            type="radio"
-                            name="playerRace"
-                            value="dwarf"
-                            class="item__input"
-                            v-model="player.race"
-                        />
+                        <input type="radio" name="playerRace" value="dwarf" class="item__input" v-model="player.race" />
                     </div>
                 </div>
                 <div class="m-form__column">
                     <p class="a-text">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Quisquam labore debitis nam. Cupiditate alias ad
-                        voluptatum quos aut, magnam ea totam culpa vero fuga.
-                        Adipisci asperiores quae sint dicta. Repellendus?
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam labore debitis nam. Cupiditate
+                        alias ad voluptatum quos aut, magnam ea totam culpa vero fuga. Adipisci asperiores quae sint
+                        dicta. Repellendus?
                     </p>
                 </div>
             </div>
@@ -83,27 +66,14 @@
             </div>
             <div class="m-form__row o-characterGenerator__row">
                 <div class="m-form__column">
-                    <label for="bio" class="o-characterGenerator__header"
-                        >Bio</label
-                    >
-                    <textarea
-                        type="text"
-                        name="bio"
-                        id="characterBio"
-                        rows="5"
-                        v-model="player.description"
-                    ></textarea>
+                    <label for="bio" class="o-characterGenerator__header">Bio</label>
+                    <textarea type="text" name="bio" id="characterBio" rows="5" v-model="player.description"></textarea>
                 </div>
             </div>
             <div class="m-form__row o-characterGenerator__row">
                 <div class="m-form__column">
                     <h2 class="o-characterGenerator__header">Stats</h2>
-                    <button
-                        type="button"
-                        @click="rollStats"
-                        id="generateStatsButton"
-                        class="button action__button"
-                    >
+                    <button type="button" @click="rollStats" id="generateStatsButton" class="button action__button">
                         Roll dice
                     </button>
                     <div id="statList" class="o-characterGenerator__statList">
@@ -134,13 +104,7 @@
             </div>
             <div class="m-form__row o-characterGenerator__row">
                 <div class="m-form__column">
-                    <button
-                        type="submit"
-                        id="createPlayerButton"
-                        class="button action__button"
-                    >
-                        Create
-                    </button>
+                    <button type="submit" id="createPlayerButton" class="button action__button">Create</button>
                 </div>
             </div>
         </form>

@@ -28,7 +28,7 @@ export interface iPotion extends iItem {
     prefix: string
 }
 
-export interface iUtility extends iItem {}
+export type iUtility = iItem
 
 export interface iPrefix {
     name: string

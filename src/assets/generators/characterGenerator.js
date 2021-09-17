@@ -51,26 +51,20 @@ class CharacterGenerator extends Player {
             stats: '',
             weapon: '',
             inventory: [],
-            description: ''
+            description: '',
         }
         // make the page visible
         document.querySelector('#characterGenerator').style.display = 'flex'
 
-        const characterCreationScreen = document.querySelector(
-            '#characterGenerator'
-        )
+        const characterCreationScreen = document.querySelector('#characterGenerator')
         const charName = document.querySelector('#characterName')
-        const charRace = document.querySelectorAll(
-            '.item__input[name="playerRace"]'
-        )
+        const charRace = document.querySelectorAll('.item__input[name="playerRace"]')
         const charBio = document.querySelector('#characterBio')
         // const charClass = document.querySelector('#charcterClass')
         const charStats = document.querySelector('#statList')
         // const charInventory = document.querySelector('#charInventory')
         // const charWeapon = document.querySelector('#charWeapon')
-        const GenerateStatsButton = document.querySelector(
-            '#generateStatsButton'
-        )
+        const GenerateStatsButton = document.querySelector('#generateStatsButton')
         // const ConfirmNameButton = document.querySelector('#confirmNameButton')
         const createPlayerButton = document.querySelector('#createPlayerButton')
 
@@ -81,13 +75,13 @@ class CharacterGenerator extends Player {
 
         // RACE
         const getRace = () => {
-            const result = races.find(elem => elem.name === event.target.value)
+            const result = races.find((elem) => elem.name === event.target.value)
             return result
         }
 
         const charRaceArray = Array.from(charRace)
 
-        charRaceArray.forEach(elem =>
+        charRaceArray.forEach((elem) =>
             elem.addEventListener('change', () => {
                 const savedRace = getRace()
 
@@ -111,7 +105,7 @@ class CharacterGenerator extends Player {
                         attacks: 1,
                         inteligence: global.diceRollK10() * 2,
                         'will power': global.diceRollK10() * 2,
-                        charisma: global.diceRollK10() * 2
+                        charisma: global.diceRollK10() * 2,
                     }
 
                     return stats
@@ -128,7 +122,7 @@ class CharacterGenerator extends Player {
                         attacks: 1,
                         inteligence: global.diceRollK10() * 2,
                         'will power': global.diceRollK10() * 2,
-                        charisma: global.diceRollK10() * 2
+                        charisma: global.diceRollK10() * 2,
                     }
 
                     return stats
@@ -149,7 +143,7 @@ class CharacterGenerator extends Player {
             const populateStatFileds = () => {
                 // if statItem's exists - remove from DOM
                 const statItem = document.querySelectorAll('.stat__item')
-                statItem.forEach(elem => elem.remove())
+                statItem.forEach((elem) => elem.remove())
 
                 // create statItem's and append to DOM
                 Object.entries(computeStats).forEach(([key, value]) => {

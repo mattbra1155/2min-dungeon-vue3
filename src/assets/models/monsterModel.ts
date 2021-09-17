@@ -50,16 +50,7 @@ class MonsterModel extends PersonModel implements iMonster {
         public description: string = '',
         public isAlive: boolean = true
     ) {
-        super(
-            name,
-            race,
-            stats,
-            bodyParts,
-            weapon,
-            description,
-            inventory,
-            isAlive
-        )
+        super(name, race, stats, bodyParts, weapon, description, inventory, isAlive)
     }
 }
 
