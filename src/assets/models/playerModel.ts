@@ -106,6 +106,4 @@ class PlayerModel extends PersonModel implements iPlayer {
     //     this.inventory.push(item)
     // }
 }
-console.log(new PlayerModel())
-
 export { PlayerModel }

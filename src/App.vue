@@ -21,10 +21,11 @@ import { PersonModel } from './assets/models/personModel'
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { MonsterGenerator } from './assets/generators/monsterGenerator'
 import { ItemGenerator } from './assets/generators/itemGenerator'
+import { EItemCategory } from '@/enums/ItemCategory'
 export default defineComponent({
     setup() {
-        const player = new ItemGenerator()
-        // console.log(player.createItem('weapon'))
+        const item = new ItemGenerator()
+        console.log(item.createItem(EItemCategory.Weapon))
 
         return {}
     },

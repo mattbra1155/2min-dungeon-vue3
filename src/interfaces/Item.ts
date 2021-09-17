@@ -11,7 +11,7 @@ export interface iItem {
 export interface iWeapon extends iItem {
     damage: number
     type: string
-    prefix: string
+    prefix: iItemPrefix
     modifier: number
 }
 
@@ -20,17 +20,17 @@ export interface iArmor extends iItem {
     bodyPart: iBodyParts
     type: string
     item: string
-    prefix: string
+    prefix: iItemPrefix
 }
 
 export interface iPotion extends iItem {
     item: string
-    prefix: string
+    prefix: iItemPrefix
 }
 
 export type iUtility = iItem
 
-export interface iPrefix {
+export interface iItemPrefix {
     name: string
     modifier: number
 }

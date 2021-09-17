@@ -1,5 +1,6 @@
+import { EItemCategory } from '@/enums/ItemCategory'
 import { iBodyParts } from '@/interfaces/BodyParts'
-import { iArmor, iItem, iPotion, iWeapon } from '@/interfaces/Item'
+import { iArmor, iItem, iItemPrefix, iPotion, iWeapon } from '@/interfaces/Item'
 import { bodyPartsModel } from './bodyPartsModel'
 const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 
@@ -27,7 +28,7 @@ class Weapon extends Item implements iWeapon {
         public damage: number = 0,
         public category: string = '',
         public type: string = '',
-        public prefix: string = 'string',
+        public prefix: iItemPrefix = { name: '', modifier: 0 },
         public modifier: number = 0
     ) {
         super(id, name, description, type, category)
@@ -69,7 +70,7 @@ class Armor extends Item implements iArmor {
         public type: string = '',
         public item: string = '',
         public category: string = '',
-        public prefix: string = ''
+        public prefix: iItemPrefix = { name: '', modifier: 0 }
     ) {
         super(id, name, description, type, category)
         this.id = id
@@ -90,7 +91,7 @@ class Potion extends Item implements iPotion {
         public type: string = '',
         public category: string = '',
         public item: string = '',
-        public prefix: string = ''
+        public prefix: iItemPrefix = { name: '', modifier: 0 }
     ) {
         super(id, name, description, type, category)
         this.id = id

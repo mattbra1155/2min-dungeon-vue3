@@ -147,6 +147,4 @@ class PersonModel implements iPerson {
         }
     }
 }
-console.log(new PersonModel())
-
 export { PersonModel }
