@@ -19,44 +19,46 @@ class ItemGenerator {
                 break
         }
 
+        interface iRandomItem {
+            name: string
+            damage?: number
+            type?: string | string[]
+        }
         const itemCategory = itemMods[category]
-        const randomItem = itemCategory.item[Math.floor(Math.random() * itemCategory.item.length)]
-        const randomType = () => {
-            if (Array.isArray(itemCategory.type)) {
-                return itemCategory.type[Math.floor(Math.random() * itemCategory.type.length)]
+        const randomItem: iRandomItem = itemCategory.item[Math.floor(Math.random() * itemCategory.item.length)]
+        const itemType = (item: iRandomItem) => {
+            if (Array.isArray(item.type)) {
+                return item.type[Math.floor(Math.random() * item.type.length)]
             } else {
-                return itemCategory.type
+                return item.type
             }
         }
-        const itemType = {
-            type: randomType(),
-        }
-        const finalItem = Object.assign(itemObject, randomItem, itemType, {
-            category,
+
+        const finalItem: iWeapon | iArmor | iPotion = Object.assign(itemObject, randomItem, {
+            type: itemType(randomItem),
         })
+
+        console.log(finalItem)
+
         return finalItem
     }
 
     createPrefix(category: EItemCategory, baseItem: iWeapon | iArmor | iPotion) {
         const itemCategory = itemMods[category]
         const prefix = itemCategory.prefix[Math.floor(Math.random() * itemCategory.prefix.length)]
-        console.log(prefix)
         return prefix
     }
 
-    createDescription(baseItem: iWeapon | iArmor | iPotion, prefix: iItemPrefix): string {
-        let description
+    createDescription(baseItem: iWeapon | iArmor | iPotion, prefix: iItemPrefix) {
         if (prefix.name === 'used') {
-            description = `This is a ${baseItem.name}. Nothing out of the ordinary`
+            return `This is a ${baseItem.name}. Nothing out of the ordinary`
         } else {
-            description = `This is a ${baseItem.name}. It's' ${prefix.name}`
+            return `This is a ${baseItem.name}. It's ${prefix.name}`
         }
-        return description
     }
 
-    addId(category: string): number {
+    addId(category: string) {
         const { incrementItemId } = useItemGenerator()
-
         incrementItemId(category)
 
         return 123
@@ -67,8 +69,13 @@ class ItemGenerator {
         const prefix = this.createPrefix(category, itemBase)
         const description = this.createDescription(itemBase, prefix)
         const id = this.addId(category)
-        const item: iWeapon | iArmor | iPotion = Object.assign(itemBase, { prefix }, { id }, { description })
-
+        const item: iWeapon | iArmor | iPotion = Object.assign(itemBase, {
+            name: `${prefix.name} ${itemBase.name}`,
+            prefix: prefix,
+            id: id,
+            description: description,
+            damage: prefix.modifier + itemBase.modifier,
+        })
         return item
     }
 }

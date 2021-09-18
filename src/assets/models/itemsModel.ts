@@ -33,6 +33,7 @@ class Weapon extends Item implements iWeapon {
     ) {
         super(id, name, description, type, category)
         this.id = id
+        this.name = `${prefix.name} ${name}`
         this.damage = damage
         this.type = type
         this.prefix = prefix
@@ -58,7 +59,7 @@ class Armor extends Item implements iArmor {
         public id: number = 0,
         public name: string = '',
         public description: string = '',
-        public modifier: string = '',
+        public modifier: number = 0,
         public bodyPart: iBodyParts = {
             head,
             leftArm,
@@ -74,7 +75,7 @@ class Armor extends Item implements iArmor {
     ) {
         super(id, name, description, type, category)
         this.id = id
-        this.name = name
+        this.name = `${prefix.name} ${name}`
         this.modifier = modifier
         this.type = type
         this.item = item
@@ -97,6 +98,7 @@ class Potion extends Item implements iPotion {
         this.id = id
         this.item = item
         this.prefix = prefix
+        this.modifier = modifier
     }
 }
 
