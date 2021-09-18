@@ -21,6 +21,7 @@ export interface iArmor extends iItem {
     item: string
     prefix: iItemPrefix
     modifier: number
+    armorPoints: number
 }
 
 export interface iPotion extends iItem {

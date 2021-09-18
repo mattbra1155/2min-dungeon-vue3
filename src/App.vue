@@ -25,7 +25,9 @@ import { EItemCategory } from '@/enums/ItemCategory'
 export default defineComponent({
     setup() {
         const item = new ItemGenerator()
+        console.log(item.createItem(EItemCategory.Armor))
         console.log(item.createItem(EItemCategory.Weapon))
+        console.log(item.createItem(EItemCategory.Potion))
 
         return {}
     },

@@ -1,30 +1,56 @@
+import { EItemCategory } from '@/enums/ItemCategory'
 import { reactive, toRefs } from 'vue'
+import localforage, { setItem } from 'localforage'
 
-const state = reactive({
-    weaponId: 0,
-    armorId: 0,
-    potionId: 0,
+interface iStateUseItemGenerator {
+    ids: {
+        weapon: number
+        armor: number
+        potion: number
+    }
+}
+const state: iStateUseItemGenerator = reactive({
+    ids: {
+        weapon: 0,
+        armor: 0,
+        potion: 0,
+    },
 })
 
-export default function useItemGenerator() {
-    const incrementItemId = (category: string) => {
+export const useItemGenerator = () => {
+    const incrementItemId = (category: EItemCategory) => {
+        setItemIdState()
         switch (category) {
-            case 'weapon':
-                state.weaponId++
-                return state.weaponId
+            case EItemCategory.Weapon:
+                state.ids.weapon++
                 break
-            case 'armor':
-                state.armorId++
-                return state.armorId
+            case EItemCategory.Armor:
+                state.ids.armor++
                 break
-            case 'potion':
-                state.potionId++
-                return state.potionId
+            case EItemCategory.Potion:
+                state.ids.potion++
                 break
         }
+        saveItemIdState()
+        return state.ids[category]
+    }
+    const saveItemIdState = () => {
+        localforage.setItem('itemIdState', JSON.stringify(state.ids))
+    }
+    const getItemIdState = async () => {
+        const response: string | null = await localforage.getItem('itemIdState')
+        if (response) {
+            const result = JSON.parse(response)
+            return result
+        }
+    }
+    const setItemIdState = async () => {
+        state.ids = await getItemIdState()
     }
     return {
         ...toRefs(state),
+        saveItemIdState,
+        getItemIdState,
         incrementItemId,
     }
 }

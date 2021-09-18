@@ -71,6 +71,7 @@ class Armor extends Item implements iArmor {
         public type: string = '',
         public item: string = '',
         public category: string = '',
+        public armorPoints: number = 0,
         public prefix: iItemPrefix = { name: '', modifier: 0 }
     ) {
         super(id, name, description, type, category)

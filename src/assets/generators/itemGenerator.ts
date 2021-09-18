@@ -1,12 +1,12 @@
 import { Weapon, Armor, Potion } from '@/assets/models/itemsModel'
 import itemMods from '@/assets/json/itemMods.json'
 import { iWeapon, iArmor, iPotion, iItemPrefix } from '@/interfaces/Item'
-import useItemGenerator from '@/composables/useItemGenerator'
+import { useItemGenerator } from '@/composables/useItemGenerator'
 import { EItemCategory } from '@/enums/ItemCategory'
 
 class ItemGenerator {
     createItemBase(category: EItemCategory) {
-        let itemObject
+        let itemObject: iWeapon | iArmor | iPotion
         switch (category) {
             case EItemCategory.Weapon:
                 itemObject = new Weapon()
@@ -18,10 +18,8 @@ class ItemGenerator {
                 itemObject = new Potion()
                 break
         }
-
         interface iRandomItem {
             name: string
-            damage?: number
             type?: string | string[]
         }
         const itemCategory = itemMods[category]
@@ -33,17 +31,14 @@ class ItemGenerator {
                 return item.type
             }
         }
-
         const finalItem: iWeapon | iArmor | iPotion = Object.assign(itemObject, randomItem, {
+            category: itemCategory,
             type: itemType(randomItem),
         })
-
-        console.log(finalItem)
-
         return finalItem
     }
 
-    createPrefix(category: EItemCategory, baseItem: iWeapon | iArmor | iPotion) {
+    createPrefix(category: EItemCategory) {
         const itemCategory = itemMods[category]
         const prefix = itemCategory.prefix[Math.floor(Math.random() * itemCategory.prefix.length)]
         return prefix
@@ -57,25 +52,52 @@ class ItemGenerator {
         }
     }
 
-    addId(category: string) {
+    addId(category: EItemCategory) {
         const { incrementItemId } = useItemGenerator()
-        incrementItemId(category)
+        const id = incrementItemId(category)
 
-        return 123
+        return id
     }
 
     createItem(category: EItemCategory) {
         const itemBase = this.createItemBase(category)
-        const prefix = this.createPrefix(category, itemBase)
+        const prefix = this.createPrefix(category)
         const description = this.createDescription(itemBase, prefix)
         const id = this.addId(category)
-        const item: iWeapon | iArmor | iPotion = Object.assign(itemBase, {
-            name: `${prefix.name} ${itemBase.name}`,
-            prefix: prefix,
-            id: id,
-            description: description,
-            damage: prefix.modifier + itemBase.modifier,
-        })
+        let item = itemBase
+        switch (category) {
+            case EItemCategory.Weapon:
+                item = Object.assign(itemBase, {
+                    name: `${prefix.name} ${itemBase.name}`,
+                    prefix,
+                    id,
+                    description,
+                    category,
+                    damage: prefix.modifier + itemBase.modifier,
+                })
+                break
+            case EItemCategory.Armor:
+                item = Object.assign(itemBase, {
+                    name: `${prefix.name} ${itemBase.name}`,
+                    prefix,
+                    id,
+                    description,
+                    category,
+                    armorPoints: prefix.modifier + itemBase.modifier,
+                })
+                break
+            case EItemCategory.Potion:
+                item = Object.assign(itemBase, {
+                    name: `${prefix.name} ${itemBase.name}`,
+                    prefix,
+                    id,
+                    description,
+                    category,
+                    baseValue: prefix.modifier + itemBase.modifier,
+                })
+                break
+        }
+
         return item
     }
 }

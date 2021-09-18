@@ -1,14 +1,16 @@
 import { bestiary } from '@/assets/generators/bestiary'
 import { MonsterModel } from '@/assets/models/monsterModel'
+import { ItemGenerator } from '@/assets/generators/itemGenerator'
+import { EItemCategory } from '@/enums/ItemCategory'
 
 class MonsterGenerator {
     create() {
         const bestiaryCopy = [...bestiary]
         const monsterRandom = bestiaryCopy[Math.floor(Math.random() * bestiaryCopy.length)]
-        // monster.weapon = new ItemGenerator().createItem('weapon')
+        const generatedWeapon = new ItemGenerator().createItem(EItemCategory.Weapon)
         const monsterClass = new MonsterModel()
         const monster = Object.assign(monsterClass, monsterRandom)
-        console.log(monster)
+        // monster.weapon = generatedWeapon
         return monster
     }
 }
