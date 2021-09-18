@@ -4,7 +4,7 @@ const state = reactive({
     enemy: <iMonster>{},
 })
 
-export default function useEnemy() {
+export const useEnemy = () => {
     const setEnemy = (payload: iMonster) => {
         state.enemy = payload
     }

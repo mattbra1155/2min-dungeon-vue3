@@ -1,35 +1,50 @@
-import { SceneGenerator } from '@/assets/generators/sceneGenerator.js'
-import { MonsterGenerator } from '@/assets/generators/monsterGenerator.js'
+// import { SceneGenerator } from '@/assets/generators/sceneGenerator.js'
 import { reactive } from 'vue'
+import { MonsterGenerator } from '@/assets/generators/monsterGenerator.js'
 import { iScene } from '@/interfaces/Scene'
-import useEnemy from '@/composables/useEnemy'
+import { useEnemy } from '@/composables/useEnemy'
+import { usePlayer } from '@/composables/usePlayer'
+import { Scene } from '@/assets/models/sceneModel'
+import { PlayerModel } from '@/assets/models/playerModel'
 
-export default function useSceneManager() {
-    const { getEnemy, setEnemy } = useEnemy()
+interface iStateUseSceneManager {
+    sceneList: iScene[]
+    scene: iScene
+}
+
+const state: iStateUseSceneManager = reactive({
+    scene: new Scene(0, 'placeholder level name', []),
+    sceneList: [],
+})
+
+export const useSceneManager = () => {
+    const { enemy, setEnemy } = useEnemy()
+    const { player } = usePlayer()
+
     const createMonster = () => {
         const monsterGenerator = new MonsterGenerator()
         const monster = monsterGenerator.create()
-        setEnemy(monster)
         return monster
     }
-    const getPlayer = () => {
-        // return store.getters['player/getPlayer']
+    const createScene = (levelName: string) => {
+        const id = state.scene.id++
+        const name = levelName || 'name level placeholder'
+        const enemy = createMonster()
+        const enemyList = []
+        enemyList.push(enemy)
+        const scene = {
+            id: state.scene.id++,
+            name: 'placeholder level name',
+            enemy: enemyList,
+        }
+        setScene(scene)
     }
-    const createScene = () => {
-        createMonster()
-        const player = getPlayer()
-        const enemy = getEnemy()
-        const sceneGenerator = new SceneGenerator()
-        const scene = sceneGenerator.create(player, enemy)
-        // store.dispatch('sceneManager/saveScene', scene)
-        setActiveScene(scene)
-        return scene
+    const setScene = (scene: iScene) => {
+        state.scene = scene
     }
-    const setActiveScene = (scene: iScene) => {
-        // store.dispatch('sceneManager/setActiveScene', scene)
-    }
-    const archiveScene = (sceneId: number) => {
-        // store.dispatch('sceneManager/archiveScene', sceneId)
+
+    return {
+        createScene,
     }
 }
 
@@ -67,5 +82,3 @@ export default function useSceneManager() {
 //         }
 //     }
 // }
-
-export { SceneManager }

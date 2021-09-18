@@ -74,7 +74,7 @@ const state = reactive({
     ),
 })
 
-export default function usePlayer() {
+export const usePlayer = () => {
     const setPlayer = (payload: iPlayer) => {
         Object.assign(state.player, payload)
         localforage.setItem('player', JSON.stringify(payload))

@@ -1,9 +1,7 @@
-import { iMonster } from './Monster'
-import { iPlayer } from './Player'
+import { iMonster } from '@/interfaces/Monster'
 
 export interface iScene {
     id: number
     name: string
-    player: iPlayer
-    enemy: iMonster
+    enemy: iMonster[]
 }

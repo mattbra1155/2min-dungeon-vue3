@@ -10,7 +10,7 @@
                 </p>
             </div>
             <div class="monster-hp">
-                <h2 id="monsterName">{{ enemy.name }}</h2>
+                <h2 id="monsterName">{{ enemy.name ? enemy.name : 'placeholder enemy' }}</h2>
                 <p id="monsterHp" class="health--monster">
                     {{ enemy.stats ? enemy.stats.hp : 0 }}
                 </p>
@@ -20,19 +20,15 @@
 </template>
 
 <script lang="ts">
-import useEnemy from '@/composables/useEnemy'
-import usePlayer from '@/composables/usePlayer'
+import { useEnemy } from '@/composables/useEnemy'
+import { usePlayer } from '@/composables/usePlayer'
 import { defineComponent, computed } from 'vue'
 export default defineComponent({
     name: 'TopBar',
     setup() {
-        const { getPlayer } = usePlayer()
-        const { getEnemy } = useEnemy()
+        const { player } = usePlayer()
+        const { enemy } = useEnemy()
 
-        const player = computed(() => getPlayer)
-        const enemy = () => computed(() => getEnemy)
-        // const turn = () => computed(() => getScene)
-        // const scene = () => computed(() => getScene)
         return {
             player,
             enemy,

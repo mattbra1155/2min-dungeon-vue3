@@ -114,7 +114,7 @@
 <script lang="ts">
 import { iPlayer } from '@/interfaces/Player'
 import { PlayerModel } from '@/assets/models/playerModel'
-import usePlayer from '@/composables/usePlayer'
+import { usePlayer } from '@/composables/usePlayer'
 import { diceRollK2, diceRollK3, diceRollK10 } from '@/assets/scripts/diceRoll'
 import { iWeapon } from '@/interfaces/Item'
 import { iBodyParts } from '@/interfaces/BodyParts'
@@ -160,6 +160,7 @@ export default defineComponent({
         }
         const savePlayer = () => {
             createPlayer(player.value)
+            router.push({ name: 'home' })
         }
         return {
             player,
