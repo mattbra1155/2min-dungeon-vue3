@@ -9,25 +9,16 @@
 </template>
 
 <script lang="ts">
-// import { SceneManager } from '@/assets/scripts/sceneManager'
-import useGameEngine from '@/composables/useGameEngine'
 import { defineComponent, reactive } from 'vue'
-import { iPlayer } from '@/interfaces/Player'
-import { iWeapon } from '@/interfaces/Item'
-import { iBodyParts } from '@/interfaces/BodyParts'
-import { usePlayer } from '@/composables/usePlayer'
-import { PlayerModel } from '@/assets/models/playerModel'
-import { PersonModel } from './assets/models/personModel'
-import { MonsterModel } from '@/assets/models/monsterModel'
-import { MonsterGenerator } from './assets/generators/monsterGenerator'
 import { ItemGenerator } from './assets/generators/itemGenerator'
-import { EItemCategory } from '@/enums/ItemCategory'
+import { useSceneManager } from '@/composables/useSceneManager'
 export default defineComponent({
     setup() {
         const item = new ItemGenerator()
-        console.log(item.createItem(EItemCategory.Armor))
-        console.log(item.createItem(EItemCategory.Weapon))
-        console.log(item.createItem(EItemCategory.Potion))
+
+        const { createScene } = useSceneManager()
+
+        createScene('level 1')
 
         return {}
     },

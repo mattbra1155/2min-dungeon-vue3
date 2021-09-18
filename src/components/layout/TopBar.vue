@@ -1,6 +1,6 @@
 <template>
     <div id="top-bar">
-        <h2 id="levelName" class="level__name"></h2>
+        <h2 id="levelName" class="level__name">{{ scene.name }}</h2>
         <h3 id="turnNumber" class="text--center"></h3>
         <div class="health__display">
             <div class="player-hp">
@@ -9,7 +9,7 @@
                     {{ player.stats ? player.stats.hp : 0 }}
                 </p>
             </div>
-            <div class="monster-hp">
+            <div v-for="enemy in enemyList" class="monster-hp" :key="enemy.id">
                 <h2 id="monsterName">{{ enemy.name ? enemy.name : 'placeholder enemy' }}</h2>
                 <p id="monsterHp" class="health--monster">
                     {{ enemy.stats ? enemy.stats.hp : 0 }}
@@ -22,16 +22,21 @@
 <script lang="ts">
 import { useEnemy } from '@/composables/useEnemy'
 import { usePlayer } from '@/composables/usePlayer'
-import { defineComponent, computed } from 'vue'
+import { useSceneManager } from '@/composables/useSceneManager'
+import { defineComponent, toRefs } from 'vue'
 export default defineComponent({
     name: 'TopBar',
     setup() {
         const { player } = usePlayer()
-        const { enemy } = useEnemy()
+        // const { enemy } = useEnemy()
+        const { scene } = useSceneManager()
+
+        const enemyList = scene.value.enemy
 
         return {
             player,
-            enemy,
+            enemyList,
+            scene,
         }
     },
 })

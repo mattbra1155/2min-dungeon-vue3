@@ -1,6 +1,6 @@
 // import { SceneGenerator } from '@/assets/generators/sceneGenerator.js'
-import { reactive } from 'vue'
-import { MonsterGenerator } from '@/assets/generators/monsterGenerator.js'
+import { reactive, toRefs } from 'vue'
+import { MonsterGenerator } from '@/assets/generators/monsterGenerator'
 import { iScene } from '@/interfaces/Scene'
 import { useEnemy } from '@/composables/useEnemy'
 import { usePlayer } from '@/composables/usePlayer'
@@ -34,16 +34,17 @@ export const useSceneManager = () => {
         enemyList.push(enemy)
         const scene = {
             id: state.scene.id++,
-            name: 'placeholder level name',
+            name,
             enemy: enemyList,
         }
         setScene(scene)
     }
     const setScene = (scene: iScene) => {
-        state.scene = scene
+        Object.assign(state.scene, scene)
     }
 
     return {
+        ...toRefs(state),
         createScene,
     }
 }
