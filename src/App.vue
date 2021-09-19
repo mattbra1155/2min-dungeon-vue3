@@ -14,11 +14,9 @@ import { ItemGenerator } from './assets/generators/itemGenerator'
 import { useSceneManager } from '@/composables/useSceneManager'
 export default defineComponent({
     setup() {
-        const item = new ItemGenerator()
-
         const { createScene } = useSceneManager()
 
-        createScene('level 1')
+        createScene('level 1', 3)
 
         return {}
     },

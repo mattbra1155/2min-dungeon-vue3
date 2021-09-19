@@ -1,11 +1,9 @@
 // import { SceneGenerator } from '@/assets/generators/sceneGenerator.js'
 import { reactive, toRefs } from 'vue'
-import { MonsterGenerator } from '@/assets/generators/monsterGenerator'
+import { monsterGenerator } from '@/assets/generators/monsterGenerator'
 import { iScene } from '@/interfaces/Scene'
-import { useEnemy } from '@/composables/useEnemy'
-import { usePlayer } from '@/composables/usePlayer'
 import { Scene } from '@/assets/models/sceneModel'
-import { PlayerModel } from '@/assets/models/playerModel'
+import { iMonster } from '@/interfaces/Monster'
 
 interface iStateUseSceneManager {
     sceneList: iScene[]
@@ -18,22 +16,26 @@ const state: iStateUseSceneManager = reactive({
 })
 
 export const useSceneManager = () => {
-    const { enemy, setEnemy } = useEnemy()
-    const { player } = usePlayer()
-
     const createMonster = () => {
-        const monsterGenerator = new MonsterGenerator()
         const monster = monsterGenerator.create()
         return monster
     }
-    const createScene = (levelName: string) => {
+
+    const createScene = (levelName: string, numberOfEnemies = 1) => {
         const id = state.scene.id++
         const name = levelName || 'name level placeholder'
-        const enemy = createMonster()
-        const enemyList = []
-        enemyList.push(enemy)
+        const enemyList: iMonster[] = []
+        const createEnemyList = (enemiesToCreate = numberOfEnemies) => {
+            let createdEnemies = 0
+            while (createdEnemies < enemiesToCreate) {
+                createdEnemies++
+                const enemy = createMonster()
+                enemyList.push(enemy)
+            }
+        }
+        createEnemyList()
         const scene = {
-            id: state.scene.id++,
+            id,
             name,
             enemy: enemyList,
         }

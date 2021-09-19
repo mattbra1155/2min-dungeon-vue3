@@ -37,7 +37,19 @@ class MonsterModel extends PersonModel implements iMonster {
             charisma: 0,
             willPower: 0,
         },
-        public weapon: iWeapon | null = null,
+        public weapon: null | iWeapon = {
+            name: '',
+            category: '',
+            damage: 0,
+            type: '',
+            modifier: 0,
+            prefix: {
+                name: '',
+                modifier: 0,
+            },
+            description: '',
+            id: 0,
+        },
         public bodyParts: iBodyParts = {
             head,
             leftArm,
