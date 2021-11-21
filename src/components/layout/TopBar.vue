@@ -9,7 +9,7 @@
                     {{ player.stats ? player.stats.hp : 0 }}
                 </p>
             </div>
-            <div v-for="enemy in enemyList" class="monster-hp" :key="enemy.id">
+            <div v-for="enemy in enemyList" class="monster-hp" :key="enemy.name">
                 <h2 id="monsterName">{{ enemy.name ? enemy.name : 'placeholder enemy' }}</h2>
                 <p id="monsterHp" class="health--monster">
                     {{ enemy.stats ? enemy.stats.hp : 0 }}
@@ -20,7 +20,6 @@
 </template>
 
 <script lang="ts">
-import { useEnemy } from '@/composables/useEnemy'
 import { usePlayer } from '@/composables/usePlayer'
 import { useSceneManager } from '@/composables/useSceneManager'
 import { defineComponent, toRefs } from 'vue'
@@ -28,7 +27,6 @@ export default defineComponent({
     name: 'TopBar',
     setup() {
         const { player } = usePlayer()
-        // const { enemy } = useEnemy()
         const { scene } = useSceneManager()
 
         const enemyList = scene.value.enemy

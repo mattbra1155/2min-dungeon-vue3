@@ -34,15 +34,16 @@ export const useSceneManager = () => {
             }
         }
         createEnemyList()
-        const scene = {
+        const scene: iScene = {
             id,
             name,
             enemy: enemyList,
         }
         setScene(scene)
+        console.log(scene)
     }
     const setScene = (scene: iScene) => {
-        Object.assign(state.scene, scene)
+        state.scene = scene
     }
 
     return {

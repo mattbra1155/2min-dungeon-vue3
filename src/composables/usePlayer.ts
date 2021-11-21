@@ -84,7 +84,7 @@ export const usePlayer = () => {
         return state.player.attack(enemy)
     }
 
-    const takeDamage = (damage: number) => {
+    const playerTakeDamage = (damage: number) => {
         state.player.stats.hp -= damage
     }
 
@@ -113,6 +113,6 @@ export const usePlayer = () => {
         createPlayer,
         fetchPlayer,
         attack,
-        takeDamage,
+        playerTakeDamage,
     }
 }
