@@ -11,7 +11,6 @@ import { iPlayer } from '@/interfaces/Player'
 import { usePlayer } from '@/composables/usePlayer'
 import { useEnemy } from '@/composables/useEnemy'
 
-// const { playerTakeDamage } = usePlayer()
 // const { takeDamage } = useEnemy()
 const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 const {
@@ -114,7 +113,6 @@ class PersonModel implements iPerson {
             // Calculate damage
             const damage = () => {
                 const damageDiceRoll = diceRollK6()
-                console.log(damageDiceRoll)
                 let damagePoints =
                     this.stats.strength -
                     enemy.stats.thoughtness -
@@ -137,14 +135,21 @@ class PersonModel implements iPerson {
 
             // reduce health
             // playerTakeDamage(damage())
-            // return damage()
-        } else {
-            // add action to the turn array
-            /* turn.turns.unshift({
-                person: this,
-                action: `${this.name} rolls: ${diceRollHitResult} and misses.`
-            }) */
+            const finalDamage = damage()
+
+            if (finalDamage) {
+                console.log(`${enemy.name} took ${finalDamage} damage`)
+                enemy.stats.hp -= finalDamage
+                return finalDamage | 0
+            }
         }
+        // } else {
+        //     // add action to the turn array
+        //     /* turn.turns.unshift({
+        //         person: this,
+        //         action: `${this.name} rolls: ${diceRollHitResult} and misses.`
+        //     }) */
+        // }
     }
 }
 export { PersonModel }

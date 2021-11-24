@@ -20,37 +20,31 @@ const state: iTurn = reactive({
 
 export const useTurn = () => {
     const { scene } = useSceneManager()
+    const { player } = usePlayer()
 
     const changeTurnState = (newState: ETurnState) => {
         state.turnState = newState
     }
 
-    const sortTurnOrder = (sortedList: Array<iMonster | iPlayer>) => {
-        state.turnOrder = scene.value.enemy
-        state.turnOrder = sortedList
+    const sortTurnOrder = () => {
+        const sorted = scene.value.enemy.sort((a, b) => b.stats.initiative - a.stats.initiative)
+        state.turnOrder = sorted
+        return sorted
     }
 
-    const calculateInitiative = () => {
-        const sorted = state.turnOrder.sort((a, b) => b.stats.initiative - a.stats.initiative)
-        return sorted
+    const calculateDamage = (woundedPerson: iPlayer | iMonster, damage: number) => {
+        return woundedPerson.stats.hp - damage
     }
 
     const turnStateMachine = () => {
         switch (state.turnState) {
             case ETurnState.Init:
                 console.log(ETurnState.Init)
-                changeTurnState(ETurnState.Init)
-                changeTurnState(ETurnState.CalculateInitiative)
-                break
-            case ETurnState.CalculateInitiative:
-                console.log(ETurnState.CalculateInitiative)
-                changeTurnState(ETurnState.CalculateInitiative)
-                calculateInitiative()
                 changeTurnState(ETurnState.SortOrder)
                 break
             case ETurnState.SortOrder:
                 console.log(ETurnState.SortOrder)
-                sortTurnOrder(calculateInitiative())
+                sortTurnOrder()
                 changeTurnState(ETurnState.PlayerAttack)
                 break
             case ETurnState.PlayerAttack:
@@ -58,11 +52,15 @@ export const useTurn = () => {
                 break
             case ETurnState.EnemyAttack:
                 console.log(ETurnState.EnemyAttack)
-                changeTurnState(ETurnState.EnemyAttack)
+                console.log(state.turnOrder)
+                state.turnOrder.forEach((enemy) => {
+                    console.log(enemy)
+                    enemy.attack(player.value)
+                })
                 break
             case ETurnState.CalculateDamage:
                 console.log(ETurnState.CalculateDamage)
-                changeTurnState(ETurnState.CalculateDamage)
+
                 break
             case ETurnState.EndTurn:
                 console.log(ETurnState.EndTurn)
@@ -79,5 +77,6 @@ export const useTurn = () => {
         ...toRefs(state),
         sortTurnOrder,
         turnStateMachine,
+        changeTurnState,
     }
 }

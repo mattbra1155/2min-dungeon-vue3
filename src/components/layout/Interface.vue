@@ -19,17 +19,28 @@ import { useSceneManager } from '@/composables/useSceneManager'
 import { useTurn } from '@/composables/useTurn'
 
 import { ETurnState } from '@/enums/TurnState'
+import { iMonster } from '@/interfaces/Monster'
+import { iPlayer } from '@/interfaces/Player'
 
-import { defineComponent } from 'vue'
+import { defineComponent, reactive } from 'vue'
 export default defineComponent({
     setup() {
-        const { turnState } = useTurn()
+        const { turnState, changeTurnState } = useTurn()
         const { player } = usePlayer()
         const { scene } = useSceneManager()
+
+        const target = scene.value.enemy[0]
+
+        // const chooseTarget = () => {}
         const attack = () => {
-            player.value.attack(scene.value.enemy[0])
+            const damage: number | undefined = player.value.attack(target)
+            if (damage) {
+                changeTurnState(ETurnState.CalculateDamage)
+            } else {
+                console.log(turnState.value)
+                changeTurnState(ETurnState.EnemyAttack)
+            }
         }
-        console.log(turnState.value)
         return {
             attack,
             turnState,

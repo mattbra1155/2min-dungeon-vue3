@@ -1,5 +1,7 @@
 import { iBodyParts } from '@/interfaces/BodyParts'
 import { iArmor, iPotion, iUtility, iWeapon } from '@/interfaces/Item'
+import { iMonster } from './Monster'
+import { iPlayer } from './Player'
 
 export interface iPerson {
     name: string
@@ -23,4 +25,5 @@ export interface iPerson {
     inventory: Array<iWeapon | iArmor | iPotion | iUtility>
     bodyParts: iBodyParts
     isAlive: boolean
+    attack(enemy: iPlayer | iMonster): number | undefined
 }

@@ -5,7 +5,7 @@
             <div class="m-form__row o-characterGenerator__row">
                 <div class="m-form__column">
                     <label for="playerName" class="header">Name</label>
-                    <input type="text" name="playerName" v-model="player.name" />
+                    <input type="text" name="playerName" v-model="playerObject.name" />
                 </div>
             </div>
             <div class="m-form__row o-characterGenerator__row">
@@ -19,12 +19,18 @@
                             value="human"
                             class="item__input"
                             checked="true"
-                            v-model="player.race"
+                            v-model="playerObject.race"
                         />
                     </div>
                     <div class="o-characterGenerator__item">
                         <label for="dwarf">Dwarf</label>
-                        <input type="radio" name="playerRace" value="dwarf" class="item__input" v-model="player.race" />
+                        <input
+                            type="radio"
+                            name="playerRace"
+                            value="dwarf"
+                            class="item__input"
+                            v-model="playerObject.race"
+                        />
                     </div>
                 </div>
                 <div class="m-form__column">
@@ -46,7 +52,7 @@
                                 name="class"
                                 value="warrior"
                                 class="item__input"
-                                v-model="player.profession"
+                                v-model="playerObject.profession"
                             />
                         </label>
                     </div>
@@ -58,7 +64,7 @@
                                 name="class"
                                 value="mage"
                                 class="item__input"
-                                v-model="player.profession"
+                                v-model="playerObject.profession"
                             />
                         </label>
                     </div>
@@ -67,7 +73,13 @@
             <div class="m-form__row o-characterGenerator__row">
                 <div class="m-form__column">
                     <label for="bio" class="o-characterGenerator__header">Bio</label>
-                    <textarea type="text" name="bio" id="characterBio" rows="5" v-model="player.description"></textarea>
+                    <textarea
+                        type="text"
+                        name="bio"
+                        id="characterBio"
+                        rows="5"
+                        v-model="playerObject.description"
+                    ></textarea>
                 </div>
             </div>
             <div class="m-form__row o-characterGenerator__row">
@@ -78,7 +90,7 @@
                     </button>
                     <div id="statList" class="o-characterGenerator__statList">
                         <div
-                            v-for="(value, key, index) in player.stats"
+                            v-for="(value, key, index) in playerObject.stats"
                             class="o-characterGenerator__statItem"
                             :key="index"
                         >
@@ -125,45 +137,48 @@ import { useRouter } from 'vue-router'
 export default defineComponent({
     setup() {
         const router = useRouter()
-        const { createPlayer, player } = usePlayer()
+        const { createPlayer } = usePlayer()
+
+        const playerObject = reactive(new PlayerModel())
 
         const rollStats = () => {
-            if (player.value.race === 'human') {
-                player.value.stats.hp = diceRollK3() + 4
-                player.value.stats.melee = diceRollK10() * 2 + 20
-                player.value.stats.ranged = diceRollK10() * 2 + 20
-                player.value.stats.dexterity = diceRollK10() + 20
-                player.value.stats.strength = diceRollK3() + 1
-                player.value.stats.thoughtness = diceRollK3() + 1
-                player.value.stats.speed = diceRollK3() + 2
-                player.value.stats.initiative = diceRollK10() * 2 + 20
-                player.value.stats.attacks = 1
-                player.value.stats.inteligence = diceRollK10() * 2 + 20
-                player.value.stats.willPower = diceRollK10() * 2 + 20
-                player.value.stats.charisma = diceRollK10() * 2 + 2
+            console.log(playerObject)
+            if (playerObject.race === 'human') {
+                playerObject.stats.hp = diceRollK3() + 4
+                playerObject.stats.melee = diceRollK10() * 2 + 20
+                playerObject.stats.ranged = diceRollK10() * 2 + 20
+                playerObject.stats.dexterity = diceRollK10() + 20
+                playerObject.stats.strength = diceRollK3() + 1
+                playerObject.stats.thoughtness = diceRollK3() + 1
+                playerObject.stats.speed = diceRollK3() + 2
+                playerObject.stats.initiative = diceRollK10() * 2 + 20
+                playerObject.stats.attacks = 1
+                playerObject.stats.inteligence = diceRollK10() * 2 + 20
+                playerObject.stats.willPower = diceRollK10() * 2 + 20
+                playerObject.stats.charisma = diceRollK10() * 2 + 2
             }
 
-            if (player.value.race === 'dwarf') {
-                player.value.stats.hp = diceRollK3() + 5
-                player.value.stats.melee = diceRollK10() * 2 + 30
-                player.value.stats.ranged = diceRollK10() * 2 + 10
-                player.value.stats.dexterity = diceRollK10() + 10
-                player.value.stats.strength = diceRollK3() + 1
-                player.value.stats.thoughtness = diceRollK3() + 2
-                player.value.stats.speed = diceRollK2() + 2
-                player.value.stats.initiative = diceRollK10() * 2 + 10
-                player.value.stats.attacks = 1
-                player.value.stats.inteligence = diceRollK10() * 2 + 20
-                player.value.stats.willPower = diceRollK10() * 2 + 40
-                player.value.stats.charisma = diceRollK10() * 2 + 1
+            if (playerObject.race === 'dwarf') {
+                playerObject.stats.hp = diceRollK3() + 5
+                playerObject.stats.melee = diceRollK10() * 2 + 30
+                playerObject.stats.ranged = diceRollK10() * 2 + 10
+                playerObject.stats.dexterity = diceRollK10() + 10
+                playerObject.stats.strength = diceRollK3() + 1
+                playerObject.stats.thoughtness = diceRollK3() + 2
+                playerObject.stats.speed = diceRollK2() + 2
+                playerObject.stats.initiative = diceRollK10() * 2 + 10
+                playerObject.stats.attacks = 1
+                playerObject.stats.inteligence = diceRollK10() * 2 + 20
+                playerObject.stats.willPower = diceRollK10() * 2 + 40
+                playerObject.stats.charisma = diceRollK10() * 2 + 1
             }
         }
         const savePlayer = () => {
-            createPlayer(player.value)
+            createPlayer(playerObject)
             router.push({ name: 'home' })
         }
         return {
-            player,
+            playerObject,
             rollStats,
             savePlayer,
             diceRollK2,
@@ -172,6 +187,5 @@ export default defineComponent({
             defineComponent,
         }
     },
-    methods: {},
 })
 </script>
