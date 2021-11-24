@@ -10,7 +10,9 @@
                 </p>
             </div>
             <div v-for="enemy in enemyList" class="monster-hp" :key="enemy.name">
-                <h2 id="monsterName">{{ enemy.name ? enemy.name : 'placeholder enemy' }}</h2>
+                <h2 @click="setTargetToAttack(enemy)" id="monsterName">
+                    {{ enemy.name ? enemy.name : 'placeholder enemy' }}
+                </h2>
                 <p id="monsterHp" class="health--monster">
                     {{ enemy.stats ? enemy.stats.hp : 0 }}
                 </p>
@@ -22,11 +24,12 @@
 <script lang="ts">
 import { usePlayer } from '@/composables/usePlayer'
 import { useSceneManager } from '@/composables/useSceneManager'
-import { defineComponent, toRefs } from 'vue'
+import { iMonster } from '@/interfaces/Monster'
+import { defineComponent } from 'vue'
 export default defineComponent({
     name: 'TopBar',
     setup() {
-        const { player } = usePlayer()
+        const { player, setTargetToAttack } = usePlayer()
         const { scene } = useSceneManager()
 
         const enemyList = scene.value.enemy
@@ -35,6 +38,7 @@ export default defineComponent({
             player,
             enemyList,
             scene,
+            setTargetToAttack,
         }
     },
 })

@@ -26,14 +26,11 @@ import { defineComponent, reactive } from 'vue'
 export default defineComponent({
     setup() {
         const { turnState, changeTurnState } = useTurn()
-        const { player } = usePlayer()
+        const { player, targetToAttack } = usePlayer()
         const { scene } = useSceneManager()
 
-        const target = scene.value.enemy[0]
-
-        // const chooseTarget = () => {}
         const attack = () => {
-            const damage: number | undefined = player.value.attack(target)
+            const damage: number | undefined = player.value.attack(targetToAttack.value)
             if (damage) {
                 changeTurnState(ETurnState.CalculateDamage)
             } else {

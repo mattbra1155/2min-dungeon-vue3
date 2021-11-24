@@ -5,6 +5,7 @@ import { PlayerModel } from '@/assets/models/playerModel'
 import { iMonster } from '@/interfaces/Monster'
 const state = reactive({
     player: <iPlayer>{},
+    targetToAttack: <iMonster>{},
 })
 
 export const usePlayer = () => {
@@ -36,6 +37,10 @@ export const usePlayer = () => {
         }
     }
 
+    const setTargetToAttack = (enemy: iMonster) => {
+        state.targetToAttack = enemy
+    }
+
     const getPlayer = () => state.player
 
     return {
@@ -45,5 +50,6 @@ export const usePlayer = () => {
         createPlayer,
         fetchPlayer,
         takeDamage,
+        setTargetToAttack,
     }
 }
