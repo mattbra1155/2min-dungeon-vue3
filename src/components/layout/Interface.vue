@@ -27,7 +27,6 @@ export default defineComponent({
     setup() {
         const { turnState, changeTurnState } = useTurn()
         const { player, targetToAttack } = usePlayer()
-        const { scene } = useSceneManager()
 
         const attack = () => {
             const damage: number | undefined = player.value.attack(targetToAttack.value)
