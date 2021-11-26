@@ -32,8 +32,11 @@ export const useTurn = () => {
         return sorted
     }
 
-    const calculateDamage = (woundedPerson: iPlayer | iMonster, damage: number) => {
-        return woundedPerson.stats.hp - damage
+    const removeDeadFromOrder = (dead: iMonster | iPlayer) => {
+        const deadPerson = state.turnOrder.find((character) => character === dead)
+        const deadPersonIndex = state.turnOrder.findIndex((character) => character === deadPerson)
+        const updatedTurnOrder = state.turnOrder.splice(deadPersonIndex, 1)
+        return updatedTurnOrder
     }
 
     const turnStateMachine = () => {
@@ -60,7 +63,11 @@ export const useTurn = () => {
                 break
             case ETurnState.CalculateDamage:
                 console.log(ETurnState.CalculateDamage)
-
+                state.turnOrder.forEach((enemy) => {
+                    if (enemy.stats.hp <= 0) {
+                        removeDeadFromOrder(enemy)
+                    }
+                })
                 break
             case ETurnState.EndTurn:
                 console.log(ETurnState.EndTurn)
