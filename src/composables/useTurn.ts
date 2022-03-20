@@ -1,7 +1,6 @@
 import { iMonster } from '@/interfaces/Monster'
 import { iPlayer } from '@/interfaces/Player'
 import { usePlayer } from '@/composables/usePlayer'
-import { useEnemy } from '@/composables/useEnemy'
 import { reactive, toRefs } from 'vue'
 import { ETurnState } from '@/enums/TurnState'
 import { useSceneManager } from '@/composables/useSceneManager'
@@ -20,7 +19,7 @@ const state: iTurn = reactive({
 
 export const useTurn = () => {
     const { scene } = useSceneManager()
-    const { player } = usePlayer()
+    const { player, targetToAttack } = usePlayer()
 
     const changeTurnState = (newState: ETurnState) => {
         state.turnState = newState
@@ -39,6 +38,17 @@ export const useTurn = () => {
         return updatedTurnOrder
     }
 
+    const playerAttack = () => {
+        if (!player.value || !targetToAttack.value) {
+            return
+        }
+        const damage: number | undefined = player.value.attack(targetToAttack.value)
+        if (damage) {
+            changeTurnState(ETurnState.CalculateDamage)
+        }
+        changeTurnState(ETurnState.EnemyAttack)
+    }
+
     const turnStateMachine = () => {
         switch (state.turnState) {
             case ETurnState.Init:
@@ -52,13 +62,17 @@ export const useTurn = () => {
                 break
             case ETurnState.PlayerAttack:
                 console.log(ETurnState.PlayerAttack)
+                playerAttack()
                 break
             case ETurnState.EnemyAttack:
                 console.log(ETurnState.EnemyAttack)
-                console.log(state.turnOrder)
                 state.turnOrder.forEach((enemy) => {
                     console.log(enemy)
+                    if (!player.value) {
+                        return false
+                    }
                     enemy.attack(player.value)
+                    changeTurnState(ETurnState.CalculateDamage)
                 })
                 break
             case ETurnState.CalculateDamage:
@@ -66,6 +80,9 @@ export const useTurn = () => {
                 state.turnOrder.forEach((enemy) => {
                     if (enemy.stats.hp <= 0) {
                         removeDeadFromOrder(enemy)
+                    }
+                    if (player.value && player.value.stats.hp <= 0) {
+                        console.log('Player dead')
                     }
                 })
                 break

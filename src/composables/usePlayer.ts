@@ -1,11 +1,16 @@
 import { reactive, toRefs } from 'vue'
 import localforage from 'localforage'
 import { iPlayer } from '@/interfaces/Player'
-import { PlayerModel } from '@/assets/models/playerModel'
 import { iMonster } from '@/interfaces/Monster'
-const state = reactive({
-    player: <iPlayer>{},
-    targetToAttack: <iMonster>{},
+import router from '@/router'
+
+interface iPlayerState {
+    player: iPlayer | null
+    targetToAttack: iMonster | null
+}
+const state: iPlayerState = reactive({
+    player: null,
+    targetToAttack: null,
 })
 
 export const usePlayer = () => {
@@ -16,7 +21,9 @@ export const usePlayer = () => {
     }
 
     const takeDamage = (damage: number) => {
-        state.player.stats.hp -= damage
+        if (state.player) {
+            state.player.stats.hp -= damage
+        }
     }
 
     const createPlayer = (payload: iPlayer) => {
@@ -28,7 +35,9 @@ export const usePlayer = () => {
     const fetchPlayer = async () => {
         try {
             const result: string | null = await localforage.getItem('player')
-            if (result !== null) {
+            if (!result) {
+                return null
+            } else {
                 const player: iPlayer = JSON.parse(result)
                 return player
             }
@@ -38,7 +47,7 @@ export const usePlayer = () => {
     }
 
     const setTargetToAttack = (enemy: iMonster) => {
-        state.targetToAttack = enemy
+        state.targetToAttack = enemy || {}
     }
 
     const getPlayer = () => state.player

@@ -9,27 +9,41 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, watch } from 'vue'
+import { defineComponent, onMounted, reactive, watch } from 'vue'
 import { ItemGenerator } from '@/assets/generators/itemGenerator'
 import { useSceneManager } from '@/composables/useSceneManager'
 import { useTurn } from '@/composables/useTurn'
 import { usePlayer } from './composables/usePlayer'
+import { useRoute, useRouter } from 'vue-router'
 // import { useEnemy } from './composables/useEnemy'
 export default defineComponent({
     setup() {
         const { scene, createScene } = useSceneManager()
-        const { sortTurnOrder, turnStateMachine } = useTurn()
-        const { player } = usePlayer()
+        const { turnStateMachine } = useTurn()
+        const { player, fetchPlayer } = usePlayer()
         // const { enemy } = useEnemy()
         // const { enemy } = useTurn()
-        // console.log(player.value.attack(enemy.value))
+        const router = useRouter()
+        const route = useRoute()
 
-        createScene('level 1', 4)
-        watch(turnStateMachine, (oldState, newState) => {
-            console.log(oldState, newState)
+        onMounted(async () => {
+            try {
+                const player = await fetchPlayer()
+                console.log(player)
+                if (!player) {
+                    router.push({ name: 'characterCreation' })
+                }
+            } catch (error) {
+                console.log(error)
+                return
+            }
+
+            createScene('level 1', 4)
+            watch(turnStateMachine, (oldState, newState) => {
+                console.log(oldState, newState)
+            })
+            turnStateMachine()
         })
-        turnStateMachine()
-
         return {}
     },
 })
