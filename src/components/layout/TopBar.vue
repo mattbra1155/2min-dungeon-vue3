@@ -5,17 +5,13 @@
         <div class="health__display">
             <div class="player-hp">
                 <h2>{{ player?.name }}</h2>
-                <p id="playerHp" class="health--player">
-                    {{ player?.stats ? player.stats.hp : 0 }}
-                </p>
+                <p id="playerHp" class="health--player">{{ player?.stats ? player.stats.hp : 0 }}</p>
             </div>
             <div v-for="enemy in enemyList" class="monster-hp" :key="enemy.name">
                 <h2 @click="setTargetToAttack(enemy)" id="monsterName">
                     {{ enemy.name ? enemy.name : 'placeholder enemy' }}
                 </h2>
-                <p id="monsterHp" class="health--monster">
-                    {{ enemy.stats ? enemy.stats.hp : 0 }}
-                </p>
+                <p id="monsterHp" class="health--monster">{{ enemy.stats ? enemy.stats.hp : 0 }}</p>
             </div>
         </div>
     </div>
@@ -24,7 +20,6 @@
 <script lang="ts">
 import { usePlayer } from '@/composables/usePlayer'
 import { useSceneManager } from '@/composables/useSceneManager'
-import { iMonster } from '@/interfaces/Monster'
 import { defineComponent } from 'vue'
 export default defineComponent({
     name: 'TopBar',

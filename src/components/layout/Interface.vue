@@ -7,7 +7,7 @@
             @click="attack"
             :disbaled="turnState !== 'Player attack'"
         >
-            Attack1
+            Attack
         </button>
         <button id="inventoryButton" type="button" class="action__button">Inventory</button>
     </div>
@@ -16,13 +16,14 @@
 <script lang="ts">
 import { useTurn } from '@/composables/useTurn'
 import { ETurnState } from '@/enums/TurnState'
-import { defineComponent, reactive } from 'vue'
+import { defineComponent } from 'vue'
 export default defineComponent({
     setup() {
-        const { turnState, changeTurnState } = useTurn()
+        const { turnState, changeTurnState, playerAttack } = useTurn()
 
         const attack = async () => {
             changeTurnState(ETurnState.PlayerAttack)
+            playerAttack()
         }
         return {
             attack,

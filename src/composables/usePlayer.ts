@@ -2,7 +2,6 @@ import { reactive, toRefs } from 'vue'
 import localforage from 'localforage'
 import { iPlayer } from '@/interfaces/Player'
 import { iMonster } from '@/interfaces/Monster'
-import router from '@/router'
 
 interface iPlayerState {
     player: iPlayer | null
@@ -47,7 +46,7 @@ export const usePlayer = () => {
     }
 
     const setTargetToAttack = (enemy: iMonster) => {
-        state.targetToAttack = enemy || {}
+        state.targetToAttack = enemy || null
     }
 
     const getPlayer = () => state.player

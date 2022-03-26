@@ -39,14 +39,18 @@ export const useTurn = () => {
     }
 
     const playerAttack = () => {
-        if (!player.value || !targetToAttack.value) {
+        if (!player.value) {
             return
         }
-        const damage: number | undefined = player.value.attack(targetToAttack.value)
-        if (damage) {
-            changeTurnState(ETurnState.CalculateDamage)
+        if (!targetToAttack.value) {
+            console.log('choose target')
+        } else {
+            const damage: number | undefined = player.value.attack(targetToAttack.value)
+            if (damage) {
+                changeTurnState(ETurnState.CalculateDamage)
+            }
+            changeTurnState(ETurnState.EnemyAttack)
         }
-        changeTurnState(ETurnState.EnemyAttack)
     }
 
     const turnStateMachine = () => {
@@ -62,7 +66,7 @@ export const useTurn = () => {
                 break
             case ETurnState.PlayerAttack:
                 console.log(ETurnState.PlayerAttack)
-                playerAttack()
+                console.log(targetToAttack.value)
                 break
             case ETurnState.EnemyAttack:
                 console.log(ETurnState.EnemyAttack)
@@ -102,5 +106,6 @@ export const useTurn = () => {
         sortTurnOrder,
         turnStateMachine,
         changeTurnState,
+        playerAttack,
     }
 }
