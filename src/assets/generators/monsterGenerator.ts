@@ -5,12 +5,23 @@ import { EItemCategory } from '@/enums/ItemCategory'
 import { iMonster } from '@/interfaces/Monster'
 
 class MonsterGenerator {
+    id: number
+    constructor() {
+        this.id = 0
+    }
     create() {
+        const generateId = () => {
+            console.log(this)
+            return this.id++
+        }
         const bestiaryCopy = [...bestiary]
         const monsterRandom = bestiaryCopy[Math.floor(Math.random() * bestiaryCopy.length)]
         const generatedWeapon = new ItemGenerator().createItem(EItemCategory.Weapon)
         const monsterClass = new MonsterModel()
-        const monster: iMonster = Object.assign(monsterClass, monsterRandom, { weapon: generatedWeapon })
+        const monster: iMonster = Object.assign(monsterClass, monsterRandom, {
+            id: generateId(),
+            weapon: generatedWeapon,
+        })
         return monster
     }
 }

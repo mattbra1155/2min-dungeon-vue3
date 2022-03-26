@@ -7,7 +7,7 @@
                 <h2>{{ player?.name }}</h2>
                 <p id="playerHp" class="health--player">{{ player?.stats ? player.stats.hp : 0 }}</p>
             </div>
-            <div v-for="enemy in enemyList" class="monster-hp" :key="enemy.name">
+            <div v-for="enemy in enemyList" class="monster-hp" :key="enemy.id">
                 <h2 @click="setTargetToAttack(enemy)" id="monsterName">
                     {{ enemy.name ? enemy.name : 'placeholder enemy' }}
                 </h2>
