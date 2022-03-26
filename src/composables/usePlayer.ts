@@ -44,7 +44,7 @@ export const usePlayer = () => {
         }
     }
 
-    const setTargetToAttack = (enemy: iMonster) => {
+    const setTargetToAttack = (enemy: iMonster | null) => {
         state.targetToAttack = enemy || null
     }
 

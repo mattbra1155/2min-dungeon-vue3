@@ -19,7 +19,7 @@ const state: iTurn = reactive({
 
 export const useTurn = () => {
     const { scene } = useSceneManager()
-    const { player, targetToAttack } = usePlayer()
+    const { player, targetToAttack, setTargetToAttack } = usePlayer()
 
     const changeTurnState = (newState: ETurnState) => {
         state.turnState = newState
@@ -35,6 +35,7 @@ export const useTurn = () => {
         const deadPerson = state.turnOrder.find((character) => character === dead)
         const deadPersonIndex = state.turnOrder.findIndex((character) => character === deadPerson)
         const updatedTurnOrder = state.turnOrder.splice(deadPersonIndex, 1)
+        setTargetToAttack(null)
         return updatedTurnOrder
     }
 
@@ -45,7 +46,6 @@ export const useTurn = () => {
         if (!targetToAttack.value) {
             console.log('choose target')
         } else {
-            console.log(player.value)
             const damage: number | undefined = player.value.attack(targetToAttack.value)
             if (damage) {
                 changeTurnState(ETurnState.CalculateDamage)
@@ -77,7 +77,16 @@ export const useTurn = () => {
                         return false
                     }
                     enemy.attack(player.value)
-                    changeTurnState(ETurnState.CalculateDamage)
+                    console.log('ere')
+                    // changeTurnState(ETurnState.CalculateDamage)
+                    state.turnOrder.forEach((enemy) => {
+                        if (enemy.stats.hp <= 0) {
+                            removeDeadFromOrder(enemy)
+                        }
+                        if (player.value && player.value.stats.hp <= 0) {
+                            console.log('Player dead')
+                        }
+                    })
                 })
                 break
             case ETurnState.CalculateDamage:

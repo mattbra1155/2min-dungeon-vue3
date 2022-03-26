@@ -7,7 +7,12 @@
                 <h2>{{ player?.name }}</h2>
                 <p id="playerHp" class="health--player">{{ player?.stats ? player.stats.hp : 0 }}</p>
             </div>
-            <div v-for="enemy in enemyList" class="monster-hp" :key="enemy.id">
+            <div
+                v-for="enemy in enemyList"
+                class="monster-hp"
+                :class="{ 'monster-hp--active': targetToAttack === enemy }"
+                :key="enemy.id"
+            >
                 <h2 @click="setTargetToAttack(enemy)" id="monsterName">
                     {{ enemy.name ? enemy.name : 'placeholder enemy' }}
                 </h2>
@@ -24,7 +29,7 @@ import { computed, defineComponent } from 'vue'
 export default defineComponent({
     name: 'TopBar',
     setup() {
-        const { player, setTargetToAttack } = usePlayer()
+        const { player, targetToAttack, setTargetToAttack } = usePlayer()
         const { scene } = useSceneManager()
 
         const enemyList = computed(() => scene.value.enemy)
@@ -34,6 +39,7 @@ export default defineComponent({
             enemyList,
             scene,
             setTargetToAttack,
+            targetToAttack,
         }
     },
 })
@@ -50,4 +56,8 @@ export default defineComponent({
     color: blue
 .monster-hp
     color: red
+    cursor: pointer
+    &--active
+        font-weight: bold
+        color: black
 </style>
