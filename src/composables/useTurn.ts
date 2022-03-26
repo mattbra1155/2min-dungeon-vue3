@@ -45,6 +45,7 @@ export const useTurn = () => {
         if (!targetToAttack.value) {
             console.log('choose target')
         } else {
+            console.log(player.value)
             const damage: number | undefined = player.value.attack(targetToAttack.value)
             if (damage) {
                 changeTurnState(ETurnState.CalculateDamage)

@@ -13,10 +13,9 @@ const state: iPlayerState = reactive({
 })
 
 export const usePlayer = () => {
-    const setPlayer = (payload: iPlayer) => {
-        Object.assign(state.player, payload)
-        localforage.setItem('player', JSON.stringify(payload))
-        console.log(state.player)
+    const setPlayer = async (payload: iPlayer) => {
+        state.player = payload
+        await localforage.setItem('player', JSON.stringify(payload))
     }
 
     const takeDamage = (damage: number) => {
@@ -34,9 +33,7 @@ export const usePlayer = () => {
     const fetchPlayer = async () => {
         try {
             const result: string | null = await localforage.getItem('player')
-            if (!result) {
-                return null
-            } else {
+            if (result) {
                 const player: iPlayer = JSON.parse(result)
                 return player
             }

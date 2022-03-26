@@ -9,33 +9,32 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, watch } from 'vue'
-import { ItemGenerator } from '@/assets/generators/itemGenerator'
+import { defineComponent, onMounted, watch } from 'vue'
 import { useSceneManager } from '@/composables/useSceneManager'
 import { useTurn } from '@/composables/useTurn'
 import { usePlayer } from './composables/usePlayer'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
+import { iPlayer } from './interfaces/Player'
 // import { useEnemy } from './composables/useEnemy'
 export default defineComponent({
     setup() {
-        const { scene, createScene } = useSceneManager()
+        const { createScene } = useSceneManager()
         const { turnStateMachine } = useTurn()
-        const { player, fetchPlayer } = usePlayer()
+        const { fetchPlayer, setPlayer } = usePlayer()
         // const { enemy } = useEnemy()
         // const { enemy } = useTurn()
         const router = useRouter()
-        const route = useRoute()
 
         onMounted(async () => {
             try {
-                const player = await fetchPlayer()
-                console.log(player)
-                if (!player) {
+                const player: iPlayer | undefined = await fetchPlayer()
+                if (player) {
+                    await setPlayer(player)
+                } else {
                     router.push({ name: 'characterCreation' })
                 }
             } catch (error) {
                 console.log(error)
-                return
             }
 
             createScene('level 1', 4)
@@ -43,6 +42,7 @@ export default defineComponent({
                 console.log(oldState, newState)
             })
             turnStateMachine()
+            router.push({ name: 'home' })
         })
         return {}
     },

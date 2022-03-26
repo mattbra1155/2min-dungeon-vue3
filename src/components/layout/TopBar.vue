@@ -20,14 +20,14 @@
 <script lang="ts">
 import { usePlayer } from '@/composables/usePlayer'
 import { useSceneManager } from '@/composables/useSceneManager'
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 export default defineComponent({
     name: 'TopBar',
     setup() {
         const { player, setTargetToAttack } = usePlayer()
         const { scene } = useSceneManager()
 
-        const enemyList = scene.value.enemy
+        const enemyList = computed(() => scene.value.enemy)
 
         return {
             player,
