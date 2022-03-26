@@ -1,9 +1,8 @@
 import { PersonModel } from '@/assets/models/personModel'
-import { stats } from '@/assets/models/statsModel'
 import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
 
 import { iBodyParts } from '@/interfaces/BodyParts'
-import { iArmor, iItem, iPotion, iUtility, iWeapon } from '@/interfaces/Item'
+import { iArmor, iPotion, iUtility, iWeapon } from '@/interfaces/Item'
 import { iPlayer } from '@/interfaces/Player'
 
 const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel

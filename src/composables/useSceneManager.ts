@@ -30,7 +30,6 @@ export const useSceneManager = () => {
             while (createdEnemies < enemiesToCreate) {
                 createdEnemies++
                 const enemy = createMonster()
-                console.log(enemy)
                 enemyList.push(enemy)
             }
         }

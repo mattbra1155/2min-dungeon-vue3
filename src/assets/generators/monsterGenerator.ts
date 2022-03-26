@@ -11,7 +11,6 @@ class MonsterGenerator {
     }
     create() {
         const generateId = () => {
-            console.log(this)
             return this.id++
         }
         const bestiaryCopy = [...bestiary]
