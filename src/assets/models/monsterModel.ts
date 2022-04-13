@@ -8,7 +8,7 @@ const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 
 class MonsterModel extends PersonModel implements iMonster {
     constructor(
-        public id: number = 0,
+        public id: number = 1,
         public name: string = '',
         public race: string = '',
         public stats: {
@@ -63,7 +63,7 @@ class MonsterModel extends PersonModel implements iMonster {
         public description: string = '',
         public isAlive: boolean = true
     ) {
-        super(name, race, stats, bodyParts, weapon, description, inventory, isAlive)
+        super(id, name, race, stats, bodyParts, weapon, description, inventory, isAlive)
     }
 }
 

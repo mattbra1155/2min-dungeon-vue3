@@ -30,6 +30,7 @@ const {
 
 class PersonModel implements iPerson {
     constructor(
+        public id: number = 0,
         public name: string = '',
         public race: string = '',
         public stats: {

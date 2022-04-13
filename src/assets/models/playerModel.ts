@@ -9,6 +9,7 @@ const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 
 class PlayerModel extends PersonModel implements iPlayer {
     constructor(
+        public id: number = 0,
         public name: string = 'Charname',
         public race: string = 'dwarf',
         public profession: string = '',
@@ -53,7 +54,7 @@ class PlayerModel extends PersonModel implements iPlayer {
         public isAlive: boolean = true,
         public player: boolean = true
     ) {
-        super(name, race, stats, bodyParts, weapon, description, inventory, isAlive)
+        super(id, name, race, stats, bodyParts, weapon, description, inventory, isAlive)
     }
 
     // equipItem(item: Item) {
