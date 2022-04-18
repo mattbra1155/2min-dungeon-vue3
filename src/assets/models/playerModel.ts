@@ -3,11 +3,11 @@ import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
 
 import { iBodyParts } from '@/interfaces/BodyParts'
 import { iArmor, iPotion, iUtility, iWeapon } from '@/interfaces/Item'
-import { iPlayer } from '@/interfaces/Player'
+import { IPlayer } from '@/interfaces/IPlayer'
 
 const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 
-class PlayerModel extends PersonModel implements iPlayer {
+class PlayerModel extends PersonModel implements IPlayer {
     constructor(
         public name: string = 'Charname',
         public race: string = 'dwarf',

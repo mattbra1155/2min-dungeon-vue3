@@ -14,7 +14,7 @@ import { useSceneManager } from '@/composables/useSceneManager'
 import { useTurn } from '@/composables/useTurn'
 import { usePlayer } from './composables/usePlayer'
 import { useRouter } from 'vue-router'
-import { iPlayer } from './interfaces/Player'
+import { IPlayer } from './interfaces/IPlayer'
 // import { useEnemy } from './composables/useEnemy'
 export default defineComponent({
     setup() {
@@ -27,7 +27,7 @@ export default defineComponent({
 
         onMounted(async () => {
             try {
-                const player: iPlayer | undefined = await fetchPlayer()
+                const player: IPlayer | undefined = await fetchPlayer()
                 if (player) {
                     await setPlayer(player)
                 } else {

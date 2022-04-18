@@ -7,7 +7,7 @@ import { iPerson } from '@/interfaces/Person'
 import { iArmor, iPotion, iUtility, iWeapon } from '@/interfaces/Item'
 import { iBodyParts } from '@/interfaces/BodyParts'
 import { iMonster } from '@/interfaces/Monster'
-import { iPlayer } from '@/interfaces/Player'
+import { IPlayer } from '@/interfaces/IPlayer'
 import { usePlayer } from '@/composables/usePlayer'
 import { useEnemy } from '@/composables/useEnemy'
 
@@ -73,7 +73,7 @@ class PersonModel implements iPerson {
         public isAlive: boolean = true
     ) {}
 
-    attack(enemy: iMonster | iPlayer) {
+    attack(enemy: iMonster | IPlayer) {
         // dice roll
         const diceRollHitResult = diceRollK100()
         console.log(`Dice roll: ${diceRollHitResult}`)

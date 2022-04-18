@@ -1,5 +1,5 @@
 import { iMonster } from '@/interfaces/Monster'
-import { iPlayer } from '@/interfaces/Player'
+import { IPlayer } from '@/interfaces/IPlayer'
 import { usePlayer } from '@/composables/usePlayer'
 import { reactive, toRefs } from 'vue'
 import { ETurnState } from '@/enums/TurnState'
@@ -7,7 +7,7 @@ import { useSceneManager } from '@/composables/useSceneManager'
 
 interface iTurn {
     turn: number
-    turnOrder: Array<iMonster | iPlayer>
+    turnOrder: Array<iMonster | IPlayer>
     turnState: ETurnState
 }
 
@@ -31,7 +31,7 @@ export const useTurn = () => {
         return sorted
     }
 
-    const removeDeadFromOrder = (dead: iMonster | iPlayer) => {
+    const removeDeadFromOrder = (dead: iMonster | IPlayer) => {
         const deadPerson = state.turnOrder.find((character) => character === dead)
         const deadPersonIndex = state.turnOrder.findIndex((character) => character === deadPerson)
         const updatedTurnOrder = state.turnOrder.splice(deadPersonIndex, 1)
@@ -46,7 +46,7 @@ export const useTurn = () => {
         if (!targetToAttack.value) {
             console.log('choose target')
         } else {
-            const damage: number | undefined = player.value.attack(targetToAttack.value)
+            const damage: number | undefined = 0
             if (damage) {
                 changeTurnState(ETurnState.CalculateDamage)
             }
@@ -76,8 +76,8 @@ export const useTurn = () => {
                     if (!player.value) {
                         return false
                     }
-                    enemy.attack(player.value)
-                    console.log('ere')
+                    // enemy.attack(player.value)
+                    console.log('enemy attack')
                     // changeTurnState(ETurnState.CalculateDamage)
                     state.turnOrder.forEach((enemy) => {
                         if (enemy.stats.hp <= 0) {
