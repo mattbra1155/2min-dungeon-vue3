@@ -1,106 +1,39 @@
-// import { sceneEngine, global, turn } from '../scripts/index.js'
 import { diceRollK100, diceRollK6 } from '@/assets/scripts/diceRoll'
-import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
-import { stats } from '@/assets/models/statsModel'
-
-import { iPerson } from '@/interfaces/Person'
-import { iArmor, iPotion, iUtility, iWeapon } from '@/interfaces/Item'
-import { iBodyParts } from '@/interfaces/BodyParts'
 import { IMonster } from '@/interfaces/IMonster'
 import { IPlayer } from '@/interfaces/IPlayer'
-import { usePlayer } from '@/composables/usePlayer'
-import { useEnemy } from '@/composables/useEnemy'
+import { reactive, toRefs } from 'vue'
 
-// const { takeDamage } = useEnemy()
-const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
-const {
-    hp,
-    melee,
-    ranged,
-    dexterity,
-    strength,
-    thoughtness,
-    speed,
-    initiative,
-    attacks,
-    inteligence,
-    willPower,
-    charisma,
-} = stats
+const state = reactive({})
 
-class PersonModel implements iPerson {
-    constructor(
-        public name: string = '',
-        public race: string = '',
-        public stats: {
-            hp: number
-            melee: number
-            ranged: number
-            dexterity: number
-            strength: number
-            thoughtness: number
-            speed: number
-            initiative: number
-            attacks: number
-            inteligence: number
-            willPower: number
-            charisma: number
-        } = {
-            hp,
-            melee,
-            ranged,
-            dexterity,
-            strength,
-            thoughtness,
-            speed,
-            initiative,
-            attacks,
-            inteligence,
-            willPower,
-            charisma,
-        },
-        public bodyParts: iBodyParts = {
-            head,
-            leftArm,
-            rightArm,
-            torso,
-            leftLeg,
-            rightLeg,
-        },
-        public weapon: iWeapon | null = null,
-        public description: string = '',
-        public inventory: Array<iWeapon | iArmor | iPotion | iUtility> = [],
-        public isAlive: boolean = true
-    ) {}
-
-    attack(enemy: IMonster | IPlayer) {
-        // dice roll
+export const useAttack = () => {
+    const attack = (attacker: IMonster | IPlayer, enemy: IMonster | IPlayer) => {
         const diceRollHitResult = diceRollK100()
         console.log(`Dice roll: ${diceRollHitResult}`)
+        console.log(attacker)
         // check if attack hits
-        if (this.stats.melee > diceRollHitResult) {
+        if (attacker.stats.melee > diceRollHitResult) {
             const diceRollBodyPartResult = diceRollK100()
 
             console.log(`Body part hit result: ${diceRollBodyPartResult}`)
 
             const getBodyPart = () => {
                 if (diceRollBodyPartResult >= 1 && diceRollBodyPartResult <= 15) {
-                    console.log(`${this.name} hit ${enemy.name} in the Head`)
+                    console.log(`${attacker.name} hit ${enemy.name} in the Head`)
                     return enemy.bodyParts['head']
                 } else if (diceRollBodyPartResult >= 16 && diceRollBodyPartResult <= 35) {
-                    console.log(`${this.name} hit ${enemy.name} in the Right arm`)
+                    console.log(`${attacker.name} hit ${enemy.name} in the Right arm`)
                     return enemy.bodyParts.rightArm
                 } else if (diceRollBodyPartResult >= 36 && diceRollBodyPartResult <= 55) {
-                    console.log(`${this.name} hit ${enemy.name} in the Left arm`)
+                    console.log(`${attacker.name} hit ${enemy.name} in the Left arm`)
                     return enemy.bodyParts.leftArm
                 } else if (diceRollBodyPartResult >= 56 && diceRollBodyPartResult <= 80) {
-                    console.log(`${this.name} hit ${enemy.name} in the Torso`)
+                    console.log(`${attacker.name} hit ${enemy.name} in the Torso`)
                     return enemy.bodyParts['torso']
                 } else if (diceRollBodyPartResult >= 81 && diceRollBodyPartResult <= 90) {
-                    console.log(`${this.name} hit ${enemy.name} in the Right leg`)
+                    console.log(`${attacker.name} hit ${enemy.name} in the Right leg`)
                     return enemy.bodyParts.rightLeg
                 } else if (diceRollBodyPartResult >= 91 && diceRollBodyPartResult <= 100) {
-                    console.log(`${this.name} hit ${enemy.name} in the Left leg`)
+                    console.log(`${attacker.name} hit ${enemy.name} in the Left leg`)
                     return enemy.bodyParts.leftLeg
                 }
             }
@@ -114,10 +47,10 @@ class PersonModel implements iPerson {
             const damage = () => {
                 const damageDiceRoll = diceRollK6()
                 let damagePoints =
-                    this.stats.strength -
+                    attacker.stats.strength -
                     enemy.stats.thoughtness -
                     (enemyArmorPoints ? enemyArmorPoints : 0) +
-                    ((this.weapon === null ? 0 : this.weapon.damage) + damageDiceRoll)
+                    ((attacker.weapon === null ? 0 : attacker.weapon.damage) + damageDiceRoll)
                 if (damagePoints < 0) {
                     damagePoints = 0
                 }
@@ -151,5 +84,8 @@ class PersonModel implements iPerson {
         //     }) */
         // }
     }
+    return {
+        ...toRefs(state),
+        attack,
+    }
 }
-export { PersonModel }

@@ -1,15 +1,17 @@
 import { reactive, toRefs } from 'vue'
 import localforage from 'localforage'
 import { IPlayer } from '@/interfaces/IPlayer'
-import { iMonster } from '@/interfaces/Monster'
+import { IMonster } from '@/interfaces/IMonster'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
+import { useAttack } from './useAttack'
 
 const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
+const { attack } = useAttack()
 
 interface iPlayerState {
-    player: IPlayer | null
-    targetToAttack: iMonster | null
+    player: IPlayer
+    targetToAttack: IMonster | null
 }
 const state: iPlayerState = reactive({
     player: {
@@ -53,10 +55,12 @@ export const usePlayer = () => {
         await localforage.setItem('player', JSON.stringify(payload))
     }
 
-    const createPlayer = (payload: IPlayer) => {
-        state.player = Object.assign(payload)
-        console.log(state.player)
-        localforage.setItem('player', JSON.stringify(payload))
+    const createPlayer = (payload: IPlayer | null) => {
+        if (payload) {
+            state.player = Object.assign(payload)
+            console.log(state.player)
+            localforage.setItem('player', JSON.stringify(payload))
+        }
     }
 
     const fetchPlayer = async () => {
@@ -72,7 +76,11 @@ export const usePlayer = () => {
         }
     }
 
-    const setTargetToAttack = (enemy: iMonster | null) => {
+    const attackTarget = (enemy: IMonster) => {
+        attack(state.player, enemy)
+    }
+
+    const setTargetToAttack = (enemy: IMonster | null) => {
         state.targetToAttack = enemy || null
     }
 
@@ -82,5 +90,6 @@ export const usePlayer = () => {
         createPlayer,
         fetchPlayer,
         setTargetToAttack,
+        attackTarget,
     }
 }

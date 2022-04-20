@@ -1,11 +1,15 @@
 import { reactive, toRefs } from 'vue'
-import { iMonster } from '@/interfaces/Monster'
+import { IMonster } from '@/interfaces/IMonster'
+import { useAttack } from './useAttack'
+import { IPlayer } from '@/interfaces/IPlayer'
+
+const { attack } = useAttack()
 const state = reactive({
-    enemy: <iMonster>{},
+    enemy: <IMonster>{},
 })
 
 export const useEnemy = () => {
-    const setEnemy = (payload: iMonster) => {
+    const setEnemy = (payload: IMonster) => {
         state.enemy = payload
     }
 
@@ -13,10 +17,16 @@ export const useEnemy = () => {
         state.enemy.stats.hp -= damage
     }
     const getEnemy = () => state.enemy
+
+    const attackTarget = (attacker: IMonster, enemy: IPlayer | IMonster) => {
+        console.log(this)
+        attack(state.enemy, enemy)
+    }
     return {
         ...toRefs(state),
         setEnemy,
         getEnemy,
         takeDamage,
+        attackTarget,
     }
 }

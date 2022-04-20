@@ -19,7 +19,7 @@
                             value="human"
                             class="item__input"
                             checked="true"
-                            v-model="playerObject.race"
+                            v-model="race"
                         />
                     </div>
                     <div class="o-characterGenerator__item">
@@ -128,51 +128,59 @@ import { PlayerModel } from '@/assets/models/playerModel'
 import { usePlayer } from '@/composables/usePlayer'
 import { diceRollK2, diceRollK3, diceRollK10 } from '@/assets/scripts/diceRoll'
 
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { IPlayer } from '@/interfaces/IPlayer'
+import { stats } from '@/assets/models/statsModel'
 
 export default defineComponent({
     setup() {
         const router = useRouter()
-        const { createPlayer } = usePlayer()
+        const { player, createPlayer } = usePlayer()
 
-        const playerObject = reactive(new PlayerModel())
+        const playerObject = player
 
         const rollStats = () => {
             console.log(playerObject)
-            if (playerObject.race === 'human') {
-                playerObject.stats.hp = diceRollK3() + 4
-                playerObject.stats.melee = diceRollK10() * 2 + 20
-                playerObject.stats.ranged = diceRollK10() * 2 + 20
-                playerObject.stats.dexterity = diceRollK10() + 20
-                playerObject.stats.strength = diceRollK3() + 1
-                playerObject.stats.thoughtness = diceRollK3() + 1
-                playerObject.stats.speed = diceRollK3() + 2
-                playerObject.stats.initiative = diceRollK10() * 2 + 20
-                playerObject.stats.attacks = 1
-                playerObject.stats.inteligence = diceRollK10() * 2 + 20
-                playerObject.stats.willPower = diceRollK10() * 2 + 20
-                playerObject.stats.charisma = diceRollK10() * 2 + 2
+            if (playerObject && playerObject.value?.race === 'human') {
+                Object.assign(playerObject.value?.stats, {
+                    hp: diceRollK3() + 4,
+                    melee: diceRollK10() * 2 + 20,
+                    ranged: diceRollK10() * 2 + 20,
+                    dexterity: diceRollK10() + 20,
+                    strength: diceRollK3() + 1,
+                    thoughtness: diceRollK3() + 1,
+                    speed: diceRollK3() + 2,
+                    initiative: diceRollK10() * 2 + 20,
+                    attacks: 1,
+                    inteligence: diceRollK10() * 2 + 20,
+                    willPower: diceRollK10() * 2 + 20,
+                    charisma: diceRollK10() * 2 + 2,
+                })
             }
 
-            if (playerObject.race === 'dwarf') {
-                playerObject.stats.hp = diceRollK3() + 5
-                playerObject.stats.melee = diceRollK10() * 2 + 30
-                playerObject.stats.ranged = diceRollK10() * 2 + 10
-                playerObject.stats.dexterity = diceRollK10() + 10
-                playerObject.stats.strength = diceRollK3() + 1
-                playerObject.stats.thoughtness = diceRollK3() + 2
-                playerObject.stats.speed = diceRollK2() + 2
-                playerObject.stats.initiative = diceRollK10() * 2 + 10
-                playerObject.stats.attacks = 1
-                playerObject.stats.inteligence = diceRollK10() * 2 + 20
-                playerObject.stats.willPower = diceRollK10() * 2 + 40
-                playerObject.stats.charisma = diceRollK10() * 2 + 1
+            if (playerObject.value && playerObject.value.race === 'dwarf') {
+                Object.assign(playerObject.value.stats, {
+                    hp: diceRollK3() + 5,
+                    melee: diceRollK10() * 2 + 30,
+                    ranged: diceRollK10() * 2 + 10,
+                    dexterity: diceRollK10() + 10,
+                    strength: diceRollK3() + 1,
+                    thoughtness: diceRollK3() + 2,
+                    speed: diceRollK2() + 2,
+                    initiative: diceRollK10() * 2 + 10,
+                    attacks: 1,
+                    inteligence: diceRollK10() * 2 + 20,
+                    willPower: diceRollK10() * 2 + 40,
+                    charisma: diceRollK10() * 2 + 1,
+                })
             }
         }
         const savePlayer = () => {
-            createPlayer(playerObject)
-            router.push({ name: 'home' })
+            if (playerObject.value) {
+                createPlayer(playerObject.value)
+                router.push({ name: 'home' })
+            }
         }
         return {
             playerObject,

@@ -1,12 +1,12 @@
 import { PersonModel } from '@/assets/models/personModel'
 import { iBodyParts } from '@/interfaces/BodyParts'
 import { iArmor, iPotion, iUtility, iWeapon } from '@/interfaces/Item'
-import { iMonster } from '@/interfaces/Monster'
+import { IMonster } from '@/interfaces/IMonster'
 import { bodyPartsModel } from './bodyPartsModel'
 
 const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 
-class MonsterModel extends PersonModel implements iMonster {
+class MonsterModel extends PersonModel implements IMonster {
     constructor(
         public id: number = 0,
         public name: string = '',

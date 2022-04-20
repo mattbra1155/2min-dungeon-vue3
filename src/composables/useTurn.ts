@@ -1,13 +1,14 @@
-import { iMonster } from '@/interfaces/Monster'
+import { IMonster } from '@/interfaces/IMonster'
 import { IPlayer } from '@/interfaces/IPlayer'
 import { usePlayer } from '@/composables/usePlayer'
 import { reactive, toRefs } from 'vue'
 import { ETurnState } from '@/enums/TurnState'
 import { useSceneManager } from '@/composables/useSceneManager'
+import { useEnemy } from './useEnemy'
 
 interface iTurn {
     turn: number
-    turnOrder: Array<iMonster | IPlayer>
+    turnOrder: Array<IMonster | IPlayer>
     turnState: ETurnState
 }
 
@@ -20,6 +21,7 @@ const state: iTurn = reactive({
 export const useTurn = () => {
     const { scene } = useSceneManager()
     const { player, targetToAttack, setTargetToAttack } = usePlayer()
+    const { attackTarget } = useEnemy()
 
     const changeTurnState = (newState: ETurnState) => {
         state.turnState = newState
@@ -31,7 +33,7 @@ export const useTurn = () => {
         return sorted
     }
 
-    const removeDeadFromOrder = (dead: iMonster | IPlayer) => {
+    const removeDeadFromOrder = (dead: IMonster | IPlayer) => {
         const deadPerson = state.turnOrder.find((character) => character === dead)
         const deadPersonIndex = state.turnOrder.findIndex((character) => character === deadPerson)
         const updatedTurnOrder = state.turnOrder.splice(deadPersonIndex, 1)
@@ -76,7 +78,7 @@ export const useTurn = () => {
                     if (!player.value) {
                         return false
                     }
-                    // enemy.attack(player.value)
+                    attackTarget(player.value)
                     console.log('enemy attack')
                     // changeTurnState(ETurnState.CalculateDamage)
                     state.turnOrder.forEach((enemy) => {

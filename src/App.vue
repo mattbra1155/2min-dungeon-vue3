@@ -28,6 +28,7 @@ export default defineComponent({
         onMounted(async () => {
             try {
                 const player: IPlayer | undefined = await fetchPlayer()
+                console.log(player)
                 if (player) {
                     await setPlayer(player)
                 } else {

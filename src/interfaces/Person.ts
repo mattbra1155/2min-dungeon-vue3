@@ -1,6 +1,6 @@
 import { iBodyParts } from '@/interfaces/BodyParts'
 import { iArmor, iPotion, iUtility, iWeapon } from '@/interfaces/Item'
-import { iMonster } from './Monster'
+import { IMonster } from './IMonster'
 import { IPlayer } from './IPlayer'
 
 export interface iPerson {
