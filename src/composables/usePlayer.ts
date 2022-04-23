@@ -15,6 +15,7 @@ interface iPlayerState {
 }
 const state: iPlayerState = reactive({
     player: {
+        id: 0,
         name: 'Charname',
         race: 'dwarf',
         profession: '',
@@ -67,8 +68,7 @@ export const usePlayer = () => {
         try {
             const result: string | null = await localforage.getItem('player')
             if (result) {
-                let player: PlayerModel = JSON.parse(result)
-                player = Object.assign(new PlayerModel(), player)
+                const player: IPlayer = JSON.parse(result)
                 return player
             }
         } catch (error: any) {

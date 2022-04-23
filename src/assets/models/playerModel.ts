@@ -7,7 +7,7 @@ import { IPlayer } from '@/interfaces/IPlayer'
 
 const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 
-class PlayerModel extends PersonModel implements IPlayer {
+class PlayerModel {
     constructor(
         public name: string = 'Charname',
         public race: string = 'dwarf',
@@ -53,7 +53,7 @@ class PlayerModel extends PersonModel implements IPlayer {
         public isAlive: boolean = true,
         public player: boolean = true
     ) {
-        super(name, race, stats, bodyParts, weapon, description, inventory, isAlive)
+        // super(name, race, stats, bodyParts, weapon, description, inventory, isAlive)
     }
 
     // equipItem(item: Item) {

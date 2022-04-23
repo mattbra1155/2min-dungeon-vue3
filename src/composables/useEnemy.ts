@@ -19,8 +19,8 @@ export const useEnemy = () => {
     const getEnemy = () => state.enemy
 
     const attackTarget = (attacker: IMonster, enemy: IPlayer | IMonster) => {
-        console.log(this)
-        attack(state.enemy, enemy)
+        console.log(this, attacker)
+        attack(attacker, enemy)
     }
     return {
         ...toRefs(state),

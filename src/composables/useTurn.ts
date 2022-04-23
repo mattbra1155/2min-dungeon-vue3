@@ -78,7 +78,7 @@ export const useTurn = () => {
                     if (!player.value) {
                         return false
                     }
-                    attackTarget(player.value)
+                    attackTarget(enemy, player.value)
                     console.log('enemy attack')
                     // changeTurnState(ETurnState.CalculateDamage)
                     state.turnOrder.forEach((enemy) => {
