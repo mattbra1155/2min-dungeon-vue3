@@ -20,8 +20,8 @@ const state: iTurn = reactive({
 
 export const useTurn = () => {
     const { scene } = useSceneManager()
-    const { player, targetToAttack, setTargetToAttack } = usePlayer()
-    const { attackTarget } = useEnemy()
+    const { player, targetToAttack, playerAttackTarget, setTargetToAttack } = usePlayer()
+    const { enemyAttackTarget } = useEnemy()
 
     const changeTurnState = (newState: ETurnState) => {
         state.turnState = newState
@@ -39,21 +39,6 @@ export const useTurn = () => {
         const updatedTurnOrder = state.turnOrder.splice(deadPersonIndex, 1)
         setTargetToAttack(null)
         return updatedTurnOrder
-    }
-
-    const playerAttack = () => {
-        if (!player.value) {
-            return
-        }
-        if (!targetToAttack.value) {
-            console.log('choose target')
-        } else {
-            const damage: number | undefined = 0
-            if (damage) {
-                changeTurnState(ETurnState.CalculateDamage)
-            }
-            changeTurnState(ETurnState.EnemyAttack)
-        }
     }
 
     const turnStateMachine = () => {
@@ -78,7 +63,7 @@ export const useTurn = () => {
                     if (!player.value) {
                         return false
                     }
-                    attackTarget(enemy, player.value)
+                    enemyAttackTarget(enemy, player.value)
                     console.log('enemy attack')
                     // changeTurnState(ETurnState.CalculateDamage)
                     state.turnOrder.forEach((enemy) => {
@@ -118,6 +103,5 @@ export const useTurn = () => {
         sortTurnOrder,
         turnStateMachine,
         changeTurnState,
-        playerAttack,
     }
 }

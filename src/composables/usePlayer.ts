@@ -76,8 +76,15 @@ export const usePlayer = () => {
         }
     }
 
-    const attackTarget = (enemy: IMonster) => {
-        attack(state.player, enemy)
+    const playerAttackTarget = () => {
+        if (!state.player) {
+            return
+        }
+        if (!state.targetToAttack) {
+            console.log('choose target')
+        } else {
+            attack(state.player, state.targetToAttack)
+        }
     }
 
     const setTargetToAttack = (enemy: IMonster | null) => {
@@ -90,6 +97,6 @@ export const usePlayer = () => {
         createPlayer,
         fetchPlayer,
         setTargetToAttack,
-        attackTarget,
+        playerAttackTarget,
     }
 }
