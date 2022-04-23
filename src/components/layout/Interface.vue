@@ -14,16 +14,16 @@
 </template>
 
 <script lang="ts">
-import { usePlayer } from '@/composables/usePlayer'
+import { useAttack } from '@/composables/useAttack'
 import { useTurn } from '@/composables/useTurn'
 import { ETurnState } from '@/enums/TurnState'
 import { defineComponent } from 'vue'
 export default defineComponent({
     setup() {
         const { turnState, changeTurnState } = useTurn()
-        const { playerAttackTarget } = usePlayer()
+        const { playerAttackTarget } = useAttack()
 
-        const attack = async () => {
+        const attack = () => {
             changeTurnState(ETurnState.PlayerAttack)
             playerAttackTarget()
         }

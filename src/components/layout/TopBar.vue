@@ -23,13 +23,15 @@
 </template>
 
 <script lang="ts">
+import { useAttack } from '@/composables/useAttack'
 import { usePlayer } from '@/composables/usePlayer'
 import { useSceneManager } from '@/composables/useSceneManager'
 import { computed, defineComponent } from 'vue'
 export default defineComponent({
     name: 'TopBar',
     setup() {
-        const { player, targetToAttack, setTargetToAttack } = usePlayer()
+        const { targetToAttack, setTargetToAttack } = useAttack()
+        const { player } = usePlayer()
         const { scene } = useSceneManager()
 
         const enemyList = computed(() => scene.value.enemy)

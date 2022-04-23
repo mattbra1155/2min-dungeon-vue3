@@ -1,6 +1,6 @@
 import { EItemCategory } from '@/enums/ItemCategory'
 import { reactive, toRefs } from 'vue'
-import localforage, { setItem } from 'localforage'
+import localforage from 'localforage'
 
 interface iStateUseItemGenerator {
     ids: {

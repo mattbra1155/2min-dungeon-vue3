@@ -1,17 +1,11 @@
 import { reactive, toRefs } from 'vue'
 import localforage from 'localforage'
 import { IPlayer } from '@/interfaces/IPlayer'
-import { IMonster } from '@/interfaces/IMonster'
-import { PlayerModel } from '@/assets/models/playerModel'
 import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
-import { useAttack } from './useAttack'
-
 const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
-const { attack } = useAttack()
 
 interface iPlayerState {
     player: IPlayer
-    targetToAttack: IMonster | null
 }
 const state: iPlayerState = reactive({
     player: {
@@ -47,7 +41,6 @@ const state: iPlayerState = reactive({
         isAlive: true,
         player: true,
     },
-    targetToAttack: null,
 })
 
 export const usePlayer = () => {
@@ -76,27 +69,10 @@ export const usePlayer = () => {
         }
     }
 
-    const playerAttackTarget = () => {
-        if (!state.player) {
-            return
-        }
-        if (!state.targetToAttack) {
-            console.log('choose target')
-        } else {
-            attack(state.player, state.targetToAttack)
-        }
-    }
-
-    const setTargetToAttack = (enemy: IMonster | null) => {
-        state.targetToAttack = enemy || null
-    }
-
     return {
         ...toRefs(state),
         setPlayer,
         createPlayer,
         fetchPlayer,
-        setTargetToAttack,
-        playerAttackTarget,
     }
 }

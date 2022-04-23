@@ -2,14 +2,21 @@ import { diceRollK100, diceRollK6 } from '@/assets/scripts/diceRoll'
 import { IMonster } from '@/interfaces/IMonster'
 import { IPlayer } from '@/interfaces/IPlayer'
 import { reactive, toRefs } from 'vue'
+import { usePlayer } from '@/composables/usePlayer'
 
-const state = reactive({})
+const { player } = usePlayer()
+interface IAttackState {
+    targetToAttack: IMonster | null
+}
+
+const state: IAttackState = reactive({
+    targetToAttack: null,
+})
 
 export const useAttack = () => {
     const attack = (attacker: IMonster | IPlayer, enemy: IMonster | IPlayer) => {
         const diceRollHitResult = diceRollK100()
         console.log(`Dice roll: ${diceRollHitResult}`)
-        console.log(attacker)
         // check if attack hits
         if (attacker.stats.melee > diceRollHitResult) {
             const diceRollBodyPartResult = diceRollK100()
@@ -70,11 +77,9 @@ export const useAttack = () => {
             // playerTakeDamage(damage())
             const finalDamage = damage()
 
-            if (finalDamage) {
-                console.log(`${enemy.name} took ${finalDamage} damage`)
-                enemy.stats.hp -= finalDamage
-                return finalDamage | 0
-            }
+            console.log(`${enemy.name} took ${finalDamage} damage`)
+            enemy.stats.hp -= finalDamage
+            return finalDamage | 0
         }
         // } else {
         //     // add action to the turn array
@@ -84,8 +89,24 @@ export const useAttack = () => {
         //     }) */
         // }
     }
+    const playerAttackTarget = () => {
+        if (!player.value) {
+            return
+        }
+        if (!state.targetToAttack) {
+            console.log('choose target')
+        } else {
+            attack(player.value, state.targetToAttack)
+        }
+    }
+
+    const setTargetToAttack = (enemy: IMonster | null) => {
+        state.targetToAttack = enemy
+    }
     return {
         ...toRefs(state),
         attack,
+        setTargetToAttack,
+        playerAttackTarget,
     }
 }

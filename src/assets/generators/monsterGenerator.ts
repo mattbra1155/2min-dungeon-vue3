@@ -7,13 +7,13 @@ import { IMonster } from '@/interfaces/IMonster'
 class MonsterGenerator {
     id: number
     constructor() {
-        this.id = 0
+        this.id = 1
     }
     create() {
         const generateId = () => {
             return this.id++
         }
-        const bestiaryCopy = [...bestiary]
+        const bestiaryCopy = JSON.parse(JSON.stringify([...bestiary]))
         const monsterRandom = bestiaryCopy[Math.floor(Math.random() * bestiaryCopy.length)]
         const generatedWeapon = new ItemGenerator().createItem(EItemCategory.Weapon)
         const monsterClass = new MonsterModel()

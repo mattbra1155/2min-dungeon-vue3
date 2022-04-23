@@ -4,7 +4,8 @@ import { usePlayer } from '@/composables/usePlayer'
 import { reactive, toRefs } from 'vue'
 import { ETurnState } from '@/enums/TurnState'
 import { useSceneManager } from '@/composables/useSceneManager'
-import { useEnemy } from './useEnemy'
+import { useEnemy } from '@/composables/useEnemy'
+import { useAttack } from '@/composables/useAttack'
 
 interface iTurn {
     turn: number
@@ -20,7 +21,8 @@ const state: iTurn = reactive({
 
 export const useTurn = () => {
     const { scene } = useSceneManager()
-    const { player, targetToAttack, playerAttackTarget, setTargetToAttack } = usePlayer()
+    const { player } = usePlayer()
+    const { targetToAttack, setTargetToAttack } = useAttack()
     const { enemyAttackTarget } = useEnemy()
 
     const changeTurnState = (newState: ETurnState) => {
@@ -65,7 +67,7 @@ export const useTurn = () => {
                     }
                     enemyAttackTarget(enemy, player.value)
                     console.log('enemy attack')
-                    // changeTurnState(ETurnState.CalculateDamage)
+                    changeTurnState(ETurnState.CalculateDamage)
                     state.turnOrder.forEach((enemy) => {
                         if (enemy.stats.hp <= 0) {
                             removeDeadFromOrder(enemy)
@@ -79,6 +81,7 @@ export const useTurn = () => {
             case ETurnState.CalculateDamage:
                 console.log(ETurnState.CalculateDamage)
                 state.turnOrder.forEach((enemy) => {
+                    console.log('dead' + enemy.name)
                     if (enemy.stats.hp <= 0) {
                         removeDeadFromOrder(enemy)
                     }
