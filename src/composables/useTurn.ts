@@ -66,12 +66,9 @@ export const useTurn = () => {
                 console.log(state.turnState)
                 break
             case ETurnState.SortOrder:
-                console.log('ssss')
                 console.log(ETurnState.SortOrder)
                 sortTurnOrder()
                 changeTurnState(ETurnState.PlayerAttack)
-                console.log('ssss')
-
                 break
             case ETurnState.PlayerAttack:
                 console.log(ETurnState.PlayerAttack)
@@ -81,7 +78,7 @@ export const useTurn = () => {
                 checkIfDead()
                 console.log(ETurnState.EnemyAttack)
                 state.turnOrder.forEach((enemy) => {
-                    console.log(`${enemy.name} attacks `)
+                    console.log(`${enemy.name} attacks`)
                     enemyAttackTarget(enemy, player.value)
                     checkIfDead()
                 })
