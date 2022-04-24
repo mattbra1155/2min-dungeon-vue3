@@ -19,7 +19,6 @@ export const useEnemy = () => {
     const getEnemy = () => state.enemy
 
     const enemyAttackTarget = (attacker: IMonster, enemy: IPlayer | IMonster) => {
-        console.log('this:', this, attacker)
         attack(attacker, enemy)
     }
     return {

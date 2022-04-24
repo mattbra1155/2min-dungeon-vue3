@@ -27,6 +27,8 @@ export const useTurn = () => {
 
     const changeTurnState = (newState: ETurnState) => {
         state.turnState = newState
+        turnStateMachine()
+        return state.turnState
     }
 
     const sortTurnOrder = () => {
@@ -43,56 +45,55 @@ export const useTurn = () => {
         return updatedTurnOrder
     }
 
+    const checkIfDead = () => {
+        console.log('checking who is dead')
+        state.turnOrder.forEach((enemy) => {
+            if (enemy.stats.hp <= 0) {
+                console.log(`${enemy.name} is dead`)
+                removeDeadFromOrder(enemy)
+            }
+        })
+        if (player.value && player.value.stats.hp <= 0) {
+            console.log('Player dead')
+        }
+    }
+
     const turnStateMachine = () => {
         switch (state.turnState) {
             case ETurnState.Init:
                 console.log(ETurnState.Init)
                 changeTurnState(ETurnState.SortOrder)
+                console.log(state.turnState)
                 break
             case ETurnState.SortOrder:
+                console.log('ssss')
                 console.log(ETurnState.SortOrder)
                 sortTurnOrder()
                 changeTurnState(ETurnState.PlayerAttack)
+                console.log('ssss')
+
                 break
             case ETurnState.PlayerAttack:
                 console.log(ETurnState.PlayerAttack)
                 console.log(targetToAttack.value)
                 break
             case ETurnState.EnemyAttack:
+                checkIfDead()
                 console.log(ETurnState.EnemyAttack)
                 state.turnOrder.forEach((enemy) => {
-                    console.log(enemy)
-                    if (!player.value) {
-                        return false
-                    }
+                    console.log(`${enemy.name} attacks `)
                     enemyAttackTarget(enemy, player.value)
-                    console.log('enemy attack')
-                    changeTurnState(ETurnState.CalculateDamage)
-                    state.turnOrder.forEach((enemy) => {
-                        if (enemy.stats.hp <= 0) {
-                            removeDeadFromOrder(enemy)
-                        }
-                        if (player.value && player.value.stats.hp <= 0) {
-                            console.log('Player dead')
-                        }
-                    })
+                    checkIfDead()
                 })
+                changeTurnState(ETurnState.EndTurn)
                 break
             case ETurnState.CalculateDamage:
                 console.log(ETurnState.CalculateDamage)
-                state.turnOrder.forEach((enemy) => {
-                    console.log('dead' + enemy.name)
-                    if (enemy.stats.hp <= 0) {
-                        removeDeadFromOrder(enemy)
-                    }
-                    if (player.value && player.value.stats.hp <= 0) {
-                        console.log('Player dead')
-                    }
-                })
+
                 break
             case ETurnState.EndTurn:
                 console.log(ETurnState.EndTurn)
-                changeTurnState(ETurnState.EndTurn)
+                changeTurnState(ETurnState.PlayerAttack)
                 break
 
             default:
@@ -106,5 +107,6 @@ export const useTurn = () => {
         sortTurnOrder,
         turnStateMachine,
         changeTurnState,
+        checkIfDead,
     }
 }

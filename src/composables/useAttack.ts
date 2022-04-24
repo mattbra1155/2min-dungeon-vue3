@@ -1,10 +1,12 @@
+import { reactive, toRefs } from 'vue'
+
 import { diceRollK100, diceRollK6 } from '@/assets/scripts/diceRoll'
 import { IMonster } from '@/interfaces/IMonster'
 import { IPlayer } from '@/interfaces/IPlayer'
-import { reactive, toRefs } from 'vue'
 import { usePlayer } from '@/composables/usePlayer'
 
 const { player } = usePlayer()
+
 interface IAttackState {
     targetToAttack: IMonster | null
 }

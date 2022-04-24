@@ -1,6 +1,7 @@
 <template>
     <div id="top-bar">
         <h2 id="levelName" class="level__name">{{ scene.name }}</h2>
+        <p style="text-align: center">{{ turnState }}</p>
         <h3 id="turnNumber" class="text--center"></h3>
         <div class="health__display">
             <div class="player-hp">
@@ -26,6 +27,7 @@
 import { useAttack } from '@/composables/useAttack'
 import { usePlayer } from '@/composables/usePlayer'
 import { useSceneManager } from '@/composables/useSceneManager'
+import { useTurn } from '@/composables/useTurn'
 import { computed, defineComponent } from 'vue'
 export default defineComponent({
     name: 'TopBar',
@@ -33,6 +35,7 @@ export default defineComponent({
         const { targetToAttack, setTargetToAttack } = useAttack()
         const { player } = usePlayer()
         const { scene } = useSceneManager()
+        const { turnState } = useTurn()
 
         const enemyList = computed(() => scene.value.enemy)
 
@@ -42,6 +45,7 @@ export default defineComponent({
             scene,
             setTargetToAttack,
             targetToAttack,
+            turnState,
         }
     },
 })

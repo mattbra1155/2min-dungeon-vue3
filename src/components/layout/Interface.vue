@@ -26,6 +26,7 @@ export default defineComponent({
         const attack = () => {
             changeTurnState(ETurnState.PlayerAttack)
             playerAttackTarget()
+            changeTurnState(ETurnState.EnemyAttack)
         }
         return {
             attack,
