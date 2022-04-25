@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { useAttack } from '@/composables/useAttack'
-import { useTurn } from '@/composables/useTurn'
+import { useTurn } from '@/composables/index'
 import { ETurnState } from '@/enums/TurnState'
 import { defineComponent } from 'vue'
 export default defineComponent({

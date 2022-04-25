@@ -1,11 +1,15 @@
 import { IMonster } from '@/interfaces/IMonster'
 import { IPlayer } from '@/interfaces/IPlayer'
 import { usePlayer } from '@/composables/usePlayer'
-import { reactive, toRefs } from 'vue'
+import { inject, reactive, toRefs } from 'vue'
 import { ETurnState } from '@/enums/TurnState'
 import { useSceneManager } from '@/composables/useSceneManager'
 import { useEnemy } from '@/composables/useEnemy'
 import { useAttack } from '@/composables/useAttack'
+import { useStateManager } from '@/composables/useStateManager'
+
+const ttt = inject('test', useStateManager)
+console.log(ttt)
 
 interface iTurn {
     turn: number

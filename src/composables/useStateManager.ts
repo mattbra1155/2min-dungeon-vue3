@@ -1,9 +1,11 @@
 import { EGameState } from '@/enums/GameState'
 import { ETurnState } from '@/enums/TurnState'
 import { reactive, toRefs } from 'vue'
-import { useTurn } from '@/composables/useTurn'
+import { useTurn } from '@/composables/index'
 
-const { turnState, changeTurnState } = useTurn()
+console.log(useTurn())
+
+// const { turnState, changeTurnState } = test
 
 interface IGameStateState {
     activeGameState: EGameState
@@ -23,7 +25,7 @@ export const useStateManager = () => {
         switch (state.activeGameState) {
             case EGameState.Init:
                 console.log('GAME STATE: Init')
-                changeTurnState(ETurnState.Init)
+                // changeTurnState(ETurnState.Init)
                 break
             case EGameState.LevelCleared:
                 console.log('GAME STATE: Level cleared')

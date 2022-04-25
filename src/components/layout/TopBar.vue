@@ -27,7 +27,7 @@
 import { useAttack } from '@/composables/useAttack'
 import { usePlayer } from '@/composables/usePlayer'
 import { useSceneManager } from '@/composables/useSceneManager'
-import { useTurn } from '@/composables/useTurn'
+import { useTurn } from '@/composables/index'
 import { computed, defineComponent } from 'vue'
 export default defineComponent({
     name: 'TopBar',
