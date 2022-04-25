@@ -17,23 +17,23 @@ import { useRouter } from 'vue-router'
 import { IPlayer } from './interfaces/IPlayer'
 import { ETurnState } from './enums/TurnState'
 import { useStateManager } from './composables/useStateManager'
+import { EGameState } from './enums/EGameState'
 // import { useEnemy } from './composables/useEnemy'
 export default defineComponent({
     setup() {
-        const { createScene } = useSceneManager()
+        
         const { turnState, turnStateMachine } = useTurn()
         const { fetchPlayer, setPlayer } = usePlayer()
-        // const { enemy } = useEnemy()
-        // const { enemy } = useTurn()
-        const { updateGameState } = useStateManager()
+        const { activeGameState, updateGameState } = useStateManager()
         const router = useRouter()
 
-        createScene('level 1', 4)
-        turnStateMachine()
-        watch(turnState, (newState, oldState) => {
+        updateGameState(EGameState.Init)
+       
+        watch(activeGameState, (newState, oldState) => {
             console.log(`${oldState} => ${newState}`)
-            turnStateMachine()
+            updateGameState(newState)
         })
+
         onMounted(async () => {
             try {
                 const player: IPlayer | undefined = await fetchPlayer()

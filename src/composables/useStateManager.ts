@@ -1,11 +1,9 @@
-import { EGameState } from '@/enums/GameState'
+import { EGameState } from '@/enums/EGameState'
 import { ETurnState } from '@/enums/TurnState'
 import { reactive, toRefs } from 'vue'
-import { useTurn } from '@/composables/index'
+import { useSceneManager } from '@/composables/useSceneManager'
 
-console.log(useTurn())
-
-// const { turnState, changeTurnState } = test
+const { createScene } = useSceneManager()
 
 interface IGameStateState {
     activeGameState: EGameState
@@ -16,16 +14,15 @@ const state: IGameStateState = reactive({
 })
 
 export const useStateManager = () => {
-    const setGameState = (newState: EGameState) => {
-        state.activeGameState = newState
-        return state.activeGameState
-    }
+    const updateGameState = (newState: EGameState) => {
 
-    const updateGameState = () => {
+        state.activeGameState = newState
+
         switch (state.activeGameState) {
             case EGameState.Init:
                 console.log('GAME STATE: Init')
                 // changeTurnState(ETurnState.Init)
+                createScene('level 1', 4)
                 break
             case EGameState.LevelCleared:
                 console.log('GAME STATE: Level cleared')
@@ -43,7 +40,6 @@ export const useStateManager = () => {
     }
     return {
         ...toRefs(state),
-        setGameState,
         updateGameState,
     }
 }

@@ -63,7 +63,7 @@ export const usePlayer = () => {
             if (result) {
                 const player: IPlayer = JSON.parse(result)
                 return player
-            }
+            } 
         } catch (error: any) {
             throw Error(error)
         }
