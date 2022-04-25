@@ -50,20 +50,3 @@ export default defineComponent({
     },
 })
 </script>
-
-<style lang="sass">
-.level__name
-    text-align: center
-.health__display
-    display: flex
-    justify-content: space-evenly
-    text-align: center
-.player-hp
-    color: blue
-.monster-hp
-    color: red
-    cursor: pointer
-    &--active
-        font-weight: bold
-        color: black
-</style>
