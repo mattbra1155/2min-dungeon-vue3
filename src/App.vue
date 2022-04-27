@@ -15,39 +15,45 @@ import { useTurn } from '@/composables/index'
 import { usePlayer } from './composables/usePlayer'
 import { useRouter } from 'vue-router'
 import { IPlayer } from './interfaces/IPlayer'
-import { ETurnState } from './enums/TurnState'
-import { useStateManager } from './composables/useStateManager'
+import { useGameStateManager } from './composables/useGameStateManager'
 import { EGameState } from './enums/EGameState'
 // import { useEnemy } from './composables/useEnemy'
 export default defineComponent({
     setup() {
-        
-        const { turnState, turnStateMachine } = useTurn()
+
+        const { activeTurnState, } = useTurn()
         const { fetchPlayer, setPlayer } = usePlayer()
-        const { activeGameState, updateGameState } = useStateManager()
+        const { activeGameState, updateGameState } = useGameStateManager()
         const router = useRouter()
 
         updateGameState(EGameState.Init)
-       
-        watch(activeGameState, (newState, oldState) => {
-            console.log(`${oldState} => ${newState}`)
-            updateGameState(newState)
-        })
+
+        updateGameState(EGameState.Battle)
+
+        // watch(activeGameState, (newState, oldState) => {
+        //     console.log(`${oldState} => ${newState}`)
+        //     updateGameState(newState)
+        // })
 
         onMounted(async () => {
             try {
-                const player: IPlayer | undefined = await fetchPlayer()
-                console.log(player)
-                if (player) {
-                    await setPlayer(player)
-                } else {
-                    router.push({ name: 'characterCreation' })
+                if (activeGameState.value === EGameState.Init) {
+
+                    const player: IPlayer | undefined = await fetchPlayer()
+                    console.log(player)
+                    if (player) {
+                        await setPlayer(player)
+                    } else {
+                        router.push({ name: 'characterCreation' })
+                    }
                 }
+
             } catch (error) {
                 console.log(error)
             }
 
             router.push({ name: 'home' })
+
         })
 
         return {}

@@ -1,19 +1,15 @@
 <template>
     <div id="top-bar">
         <h2 id="levelName" class="level__name">{{ scene.name }}</h2>
-        <p style="text-align: center">{{ turnState }}</p>
+        <p style="text-align: center">{{ activeTurnState }}</p>
         <h3 id="turnNumber" class="text--center"></h3>
         <div class="health__display">
             <div class="player-hp">
                 <h2>{{ player?.name }}</h2>
                 <p id="playerHp" class="health--player">{{ player?.stats ? player.stats.hp : 0 }}</p>
             </div>
-            <div
-                v-for="enemy in enemyList"
-                class="monster-hp"
-                :class="{ 'monster-hp--active': targetToAttack === enemy }"
-                :key="enemy.id"
-            >
+            <div v-for="enemy in enemyList" class="monster-hp"
+                :class="{ 'monster-hp--active': targetToAttack === enemy }" :key="enemy.id">
                 <h2 @click="setTargetToAttack(enemy)" id="monsterName">
                     {{ enemy.name ? enemy.name : 'placeholder enemy' }}
                 </h2>
@@ -35,7 +31,7 @@ export default defineComponent({
         const { targetToAttack, setTargetToAttack } = useAttack()
         const { player } = usePlayer()
         const { scene } = useSceneManager()
-        const { turnState } = useTurn()
+        const { activeTurnState } = useTurn()
 
         const enemyList = computed(() => scene.value.enemy)
 
@@ -45,7 +41,7 @@ export default defineComponent({
             scene,
             setTargetToAttack,
             targetToAttack,
-            turnState,
+            activeTurnState,
         }
     },
 })

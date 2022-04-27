@@ -7,19 +7,32 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue'
 import Feed from '@/components/layout/Feed.vue'
 import TopBar from '@/components/layout/TopBar.vue'
 import Interface from '@/components/layout/Interface.vue'
-export default {
+import { useGameStateManager } from '@/composables/useGameStateManager'
+import { EGameState } from '@/enums/EGameState'
+import { useTurn } from '@/composables'
+import { ETurnState } from '@/enums/ETurnState'
+
+export default defineComponent({
     components: {
         Feed,
         TopBar,
         Interface,
     },
-    data() {
-        return {
-            name: 'Main',
+    setup() {
+        const { activeGameState } = useGameStateManager()
+        const { activeTurnState, changeActiveTurnState } = useTurn()
+
+        if (activeGameState.value === EGameState.Battle) {
+            changeActiveTurnState(ETurnState.Init)
         }
-    },
-}
+        return {}
+    }
+
+})
+
+
 </script>
