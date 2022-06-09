@@ -24,10 +24,10 @@ export default defineComponent({
     },
     setup() {
         const { activeGameState } = useGameStateManager()
-        const { activeTurnState, changeActiveTurnState } = useTurn()
+        const { activeTurnState, updateTurnStateMachine } = useTurn()
 
         if (activeGameState.value === EGameState.Battle) {
-            changeActiveTurnState(ETurnState.Init)
+            updateTurnStateMachine(ETurnState.Init)
         }
         return {}
     }

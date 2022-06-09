@@ -21,14 +21,11 @@ import { EGameState } from './enums/EGameState'
 export default defineComponent({
     setup() {
 
-        const { activeTurnState, } = useTurn()
         const { fetchPlayer, setPlayer } = usePlayer()
         const { activeGameState, updateGameState } = useGameStateManager()
         const router = useRouter()
 
-        updateGameState(EGameState.Init)
 
-        updateGameState(EGameState.Battle)
 
         // watch(activeGameState, (newState, oldState) => {
         //     console.log(`${oldState} => ${newState}`)
@@ -36,7 +33,10 @@ export default defineComponent({
         // })
 
         onMounted(async () => {
+            updateGameState(EGameState.Init)
+
             try {
+
                 if (activeGameState.value === EGameState.Init) {
 
                     const player: IPlayer | undefined = await fetchPlayer()
@@ -51,6 +51,7 @@ export default defineComponent({
             } catch (error) {
                 console.log(error)
             }
+            updateGameState(EGameState.Battle)
 
             router.push({ name: 'home' })
 

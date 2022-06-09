@@ -1,15 +1,16 @@
 <template>
     <div class="o-interface">
-        <button id="attackButtonOne" type="button" class="action__button" @click="attack"
-            :disbaled="activeTurnState !== 'Player attack'">
+        <button id="attackButtonOne" type="button" class="action__button" @click="playerAttack"
+            :disbaled="activeTurnState !== ETurnState.PlayerAttack">
             Attack
         </button>
-        <button id="inventoryButton" type="button" class="action__button">Inventory</button>
+        <button id=" inventoryButton" type="button" class="action__button">Inventory</button>
+        <button @click="updateTurnStateMachine(ETurnState.Init)"> start BATTLE</button>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, watch } from 'vue'
+import { computed, defineComponent, onMounted, watch } from 'vue'
 
 import { useAttack } from '@/composables/useAttack'
 import { useEnemy } from '@/composables/useEnemy'
@@ -18,97 +19,37 @@ import { ETurnState } from '@/enums/ETurnState'
 import { usePlayer } from '@/composables/usePlayer'
 import { IMonster } from '@/interfaces/IMonster'
 import { IPlayer } from '@/interfaces/IPlayer'
+import { useGameStateManager } from '@/composables/useGameStateManager'
+import { EGameState } from '@/enums/EGameState'
 
 export default defineComponent({
     setup() {
-        const { activeTurnState, turnOrder, changeActiveTurnState, sortTurnOrder } = useTurn()
-        const { playerAttackTarget, setTargetToAttack, targetToAttack } = useAttack()
+        const { activeTurnState, activeCharacter, turnOrder, updateTurnStateMachine } = useTurn()
+        const { playerAttackTarget, setTargetToAttack, targetToAttack, attack } = useAttack()
         const { enemyAttackTarget } = useEnemy()
         const { player } = usePlayer()
+        const { activeGameState, updateGameState } = useGameStateManager()
 
-        const attack = () => {
-            changeActiveTurnState(ETurnState.PlayerAttack)
-            playerAttackTarget()
-            changeActiveTurnState(ETurnState.EnemyAttack)
-        }
-
-        const EnemyAttack = () => {
-            console.log(turnOrder.value);
-
-            turnOrder.value.forEach((enemy) => {
-                console.log(`${enemy.name} attacks`)
-                enemyAttackTarget(enemy, player.value)
-                checkIfDead()
-            })
-        }
-
-        const turnStateMachine = () => {
-            switch (activeTurnState.value) {
-                case ETurnState.Init:
-                    console.log('TURN STATE:', ETurnState.Init)
-                    changeActiveTurnState(ETurnState.SortOrder)
-                    break
-                case ETurnState.SortOrder:
-                    console.log('TURN STATE:', ETurnState.SortOrder)
-                    sortTurnOrder()
-                    changeActiveTurnState(ETurnState.PlayerAttack)
-                    break
-                case ETurnState.PlayerAttack:
-                    console.log('TURN STATE:', ETurnState.PlayerAttack)
-                    console.log(targetToAttack.value)
-                    break
-                case ETurnState.EnemyAttack:
-                    console.log('TURN STATE:', ETurnState.EnemyAttack)
-                    EnemyAttack()
-                    changeActiveTurnState(ETurnState.EndTurn)
-
-                    break
-                case ETurnState.CalculateDamage:
-                    console.log('TURN STATE:', ETurnState.CalculateDamage)
-
-                    break
-                case ETurnState.EndTurn:
-                    console.log('TURN STATE:', ETurnState.EndTurn)
-                    changeActiveTurnState(ETurnState.PlayerAttack)
-                    break
-
-                default:
-                    console.log('no state')
-                    break
+        const playerAttack = () => {
+            if (targetToAttack.value) {
+                attack(activeCharacter.value, targetToAttack.value)
+                updateTurnStateMachine(ETurnState.EnemyAttack)
             }
         }
 
+        watch(activeGameState, (newState) => {
+            console.log(activeGameState, newState);
 
-        const checkIfDead = () => {
-            console.log('checking who is dead')
-            turnOrder.value.forEach((enemy) => {
-                if (enemy.stats.hp <= 0) {
-                    console.log(`${enemy.name} is dead`)
-                    removeDeadFromOrder(enemy)
-                }
-            })
-            if (player.value && player.value.stats.hp <= 0) {
-                console.log('Player dead')
-            }
-        }
-
-        const removeDeadFromOrder = (dead: IMonster | IPlayer) => {
-            const deadPerson = turnOrder.value.find((character) => character === dead)
-            const deadPersonIndex = turnOrder.value.findIndex((character) => character === deadPerson)
-            const updatedTurnOrder = turnOrder.value.splice(deadPersonIndex, 1)
-            setTargetToAttack(null)
-            return updatedTurnOrder
-        }
-
-        watch(activeTurnState, () => {
-            console.log(activeTurnState.value)
-            turnStateMachine()
+            updateTurnStateMachine(ETurnState.Init)
         })
 
 
         return {
             attack,
             activeTurnState,
+            playerAttack,
+            ETurnState,
+            updateTurnStateMachine
         }
     },
 })
