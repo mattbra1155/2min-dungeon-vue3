@@ -14,7 +14,7 @@ import { computed, defineComponent, onMounted, watch } from 'vue'
 
 import { useAttack } from '@/composables/useAttack'
 import { useEnemy } from '@/composables/useEnemy'
-import { useTurn } from '@/composables/index'
+import { useTurn } from '@/composables/useTurn'
 import { ETurnState } from '@/enums/ETurnState'
 import { usePlayer } from '@/composables/usePlayer'
 import { IMonster } from '@/interfaces/IMonster'

@@ -73,6 +73,7 @@ export const useTurn = () => {
                 break
             case ETurnState.EndTurn:
                 console.log('TURN STATE:', ETurnState.EndTurn)
+                state.turn++
                 updateTurnStateMachine(ETurnState.PlayerAttack)
                 break
 
@@ -83,7 +84,7 @@ export const useTurn = () => {
     }
 
     const checkIfDead = () => {
-        console.log('checking who is dead')
+        console.log('checking who is dead...')
         state.turnOrder.forEach((enemy) => {
             if (enemy.stats.hp <= 0) {
                 console.log(`${enemy.name} is dead`)

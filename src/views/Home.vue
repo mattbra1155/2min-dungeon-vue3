@@ -13,7 +13,7 @@ import TopBar from '@/components/layout/TopBar.vue'
 import Interface from '@/components/layout/Interface.vue'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { EGameState } from '@/enums/EGameState'
-import { useTurn } from '@/composables'
+import { useTurn } from '@/composables/useTurn'
 import { ETurnState } from '@/enums/ETurnState'
 
 export default defineComponent({
