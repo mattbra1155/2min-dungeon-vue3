@@ -16,6 +16,12 @@ const routes: Array<RouteRecordRaw> = [
         name: 'inventory',
         component: () => import('../views/CharacterCreation.vue'),
     },
+    {
+        path: '/player-dead',
+        name: 'playerDead',
+        component: () => import('../views/PlayerDead.vue'),
+    },
+
 ]
 
 const router = createRouter({

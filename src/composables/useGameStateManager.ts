@@ -13,6 +13,7 @@ const state: IGameStateState = reactive({
 })
 
 export const useGameStateManager = () => {
+
     const updateGameState = (newState: EGameState) => {
         state.activeGameState = newState
         switch (state.activeGameState) {
