@@ -11,7 +11,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, watch } from 'vue'
 import { useSceneManager } from '@/composables/useSceneManager'
-import { useTurn } from '@/composables/index'
+import { useTurn } from '@/composables/useTurn'
 import { usePlayer } from './composables/usePlayer'
 import { useRouter } from 'vue-router'
 import { IPlayer } from './interfaces/IPlayer'

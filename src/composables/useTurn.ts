@@ -7,12 +7,14 @@ import { useSceneManager } from '@/composables/useSceneManager'
 import { useEnemy } from '@/composables/useEnemy'
 import { useAttack } from '@/composables/useAttack'
 import { PlayerModel } from '@/assets/models/playerModel'
-
+import { useGameStateManager } from '@/composables/useGameStateManager'
+import { EGameState } from '@/enums/EGameState'
 const { scene } = useSceneManager()
 
 const { player } = usePlayer()
 const { enemyAttackTarget } = useEnemy()
 const { attack } = useAttack()
+const { updateGameState } = useGameStateManager()
 
 interface iTurn {
     turn: number
@@ -37,6 +39,9 @@ export const useTurn = () => {
     }
 
     const updateTurnStateMachine = (newTurnState: ETurnState) => {
+        if (!player.value.isAlive) {
+            return
+        }
         state.activeTurnState = newTurnState
         switch (state.activeTurnState) {
             case ETurnState.Init:
@@ -49,6 +54,8 @@ export const useTurn = () => {
                 updateTurnStateMachine(ETurnState.PlayerAttack)
                 break
             case ETurnState.PlayerAttack:
+                console.log('<====>');
+
                 console.log('TURN STATE:', ETurnState.PlayerAttack)
                 state.activeCharacter = player.value
                 break
@@ -56,12 +63,18 @@ export const useTurn = () => {
                 console.log('TURN STATE:', ETurnState.EnemyAttack)
                 const enemyAttack = () => {
                     console.log(state.turnOrder);
-
+                    console.log(player.value.isAlive);
                     state.turnOrder.forEach((enemy) => {
+                        if (player.value.isAlive === false) {
+                            console.log(player.value.isAlive);
+                            return
+                        }
                         state.activeCharacter = enemy
                         console.log(`${enemy.name} attacks`)
                         attack(state.activeCharacter, player.value)
                         checkIfDead()
+
+
                     })
                     updateTurnStateMachine(ETurnState.EndTurn)
                 }
@@ -93,6 +106,9 @@ export const useTurn = () => {
         })
         if (player.value && player.value.stats.hp <= 0) {
             console.log('Player dead')
+            player.value.isAlive = false
+            updateGameState(EGameState.PlayerDead)
+            return
         }
     }
 
