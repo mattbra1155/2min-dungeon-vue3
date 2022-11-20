@@ -73,8 +73,6 @@ export const useTurn = () => {
                         console.log(`${enemy.name} attacks`)
                         attack(state.activeCharacter, player.value)
                         checkIfDead()
-
-
                     })
                     updateTurnStateMachine(ETurnState.EndTurn)
                 }

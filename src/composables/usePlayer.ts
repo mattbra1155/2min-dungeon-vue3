@@ -5,7 +5,8 @@ import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
 const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 
 interface iPlayerState {
-    player: IPlayer
+    player: IPlayer,
+    initPlayer: IPlayer | null,
 }
 const state: iPlayerState = reactive({
     player: {
@@ -41,18 +42,22 @@ const state: iPlayerState = reactive({
         isAlive: true,
         player: true,
     },
+    initPlayer: null
 })
 
 export const usePlayer = () => {
     const setPlayer = async (payload: IPlayer) => {
         state.player = payload
         await localforage.setItem('player', JSON.stringify(payload))
+        return state.player
     }
 
     const createPlayer = (payload: IPlayer | null) => {
         if (payload) {
+            state.initPlayer = JSON.parse(JSON.stringify(state.player))
             state.player = Object.assign(payload)
             console.log(state.player)
+            state.player.isAlive = true
             localforage.setItem('player', JSON.stringify(payload))
         }
     }
@@ -69,10 +74,19 @@ export const usePlayer = () => {
         }
     }
 
+    const deadPlayer = () => {
+        state.player.isAlive = false
+        console.log(state);
+        if (state.initPlayer) {
+            state.player = state.initPlayer
+        }
+    }
+
     return {
         ...toRefs(state),
         setPlayer,
         createPlayer,
         fetchPlayer,
+        deadPlayer,
     }
 }

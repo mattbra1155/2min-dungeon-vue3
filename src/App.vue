@@ -33,6 +33,8 @@ export default defineComponent({
                     console.log(player)
                     if (player) {
                         await setPlayer(player)
+                        updateGameState(EGameState.Battle)
+                        router.push({ name: 'home' })
                     } else {
                         updateGameState(EGameState.Create)
                         router.push({ name: 'characterCreation' })
