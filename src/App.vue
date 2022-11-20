@@ -17,7 +17,6 @@ import { useRouter } from 'vue-router'
 import { IPlayer } from './interfaces/IPlayer'
 import { useGameStateManager } from './composables/useGameStateManager'
 import { EGameState } from './enums/EGameState'
-// import { useEnemy } from './composables/useEnemy'
 export default defineComponent({
     setup() {
 
@@ -25,18 +24,9 @@ export default defineComponent({
         const { activeGameState, updateGameState } = useGameStateManager()
         const router = useRouter()
 
-
-
-        // watch(activeGameState, (newState, oldState) => {
-        //     console.log(`${oldState} => ${newState}`)
-        //     updateGameState(newState)
-        // })
-
         onMounted(async () => {
             updateGameState(EGameState.Init)
-
             try {
-
                 if (activeGameState.value === EGameState.Init) {
 
                     const player: IPlayer | undefined = await fetchPlayer()
@@ -44,6 +34,7 @@ export default defineComponent({
                     if (player) {
                         await setPlayer(player)
                     } else {
+                        updateGameState(EGameState.Create)
                         router.push({ name: 'characterCreation' })
                     }
                 }
@@ -51,12 +42,7 @@ export default defineComponent({
             } catch (error) {
                 console.log(error)
             }
-            updateGameState(EGameState.Battle)
-
-            router.push({ name: 'home' })
-
         })
-
         return {}
     },
 })

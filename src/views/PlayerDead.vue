@@ -3,7 +3,7 @@
         <div class="o-playerDead__textContainer">
             <h1 class="o-playerDead__title">YOU DIED</h1>
             <p class="o-playerDead__text"> you were killed by:<br />
-                {{ activeCharacter.name }} with {{ activeCharacter.weapon?.name }}</p>
+                {{ activeCharacter.name }} with a {{ activeCharacter.weapon?.name }}</p>
             <button @click="router.push({ name: 'home' })" class="a-button">Try again</button>
         </div>
     </div>

@@ -19,7 +19,7 @@
                             value="human"
                             class="item__input"
                             checked="true"
-                            v-model="race"
+                            v-model="playerObject.race"
                         />
                     </div>
                     <div class="o-characterGenerator__item">
@@ -132,17 +132,22 @@ import { defineComponent, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { IPlayer } from '@/interfaces/IPlayer'
 import { stats } from '@/assets/models/statsModel'
-
+import { EGameState } from '@/enums/EGameState'
+import { useGameStateManager } from '@/composables/useGameStateManager'
 export default defineComponent({
     setup() {
         const router = useRouter()
         const { player, createPlayer } = usePlayer()
-
+        const { updateGameState } = useGameStateManager()
         const playerObject = player
 
         const rollStats = () => {
             console.log(playerObject)
-            if (playerObject && playerObject.value?.race === 'human') {
+            if (!playerObject.value) {
+                throw new Error("No Player object");                
+                return
+            }
+            if (playerObject.value.race === 'human') {
                 Object.assign(playerObject.value?.stats, {
                     hp: diceRollK3() + 4,
                     melee: diceRollK10() * 2 + 20,
@@ -159,7 +164,7 @@ export default defineComponent({
                 })
             }
 
-            if (playerObject.value && playerObject.value.race === 'dwarf') {
+            if (playerObject.value.race === 'dwarf') {
                 Object.assign(playerObject.value.stats, {
                     hp: diceRollK3() + 5,
                     melee: diceRollK10() * 2 + 30,
@@ -179,6 +184,7 @@ export default defineComponent({
         const savePlayer = () => {
             if (playerObject.value) {
                 createPlayer(playerObject.value)
+                updateGameState(EGameState.Battle)
                 router.push({ name: 'home' })
             }
         }

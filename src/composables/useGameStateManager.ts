@@ -22,6 +22,9 @@ export const useGameStateManager = () => {
                 // changeActiveTurnState(ETurnState.Init)
                 createScene('level 1', 4)
                 break
+            case EGameState.Create: 
+                console.log('GAME STATE: Create Character');
+                break
             case EGameState.Battle:
                 console.log('GAME STATE: Battle started')
                 break
