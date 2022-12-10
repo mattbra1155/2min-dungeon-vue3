@@ -21,9 +21,9 @@ export const useSceneManager = () => {
         return monster
     }
 
-    const createScene = (levelName: string, numberOfEnemies = 1) => {
+    const createScene = (levelName?: string, numberOfEnemies = 1) => {
         const id = state.scene.id++
-        const name = levelName || 'name level placeholder'
+        const name = levelName || `level ${state.scene.id}`
         const enemyList: IMonster[] = []
         const createEnemyList = (enemiesToCreate = numberOfEnemies) => {
             let createdEnemies = 0

@@ -37,7 +37,6 @@ export default defineComponent({
         watch(player.value, () => {
             if (player.value.isAlive === false) {
                 router.push({ name: 'playerDead' })
-
             }
 
         })

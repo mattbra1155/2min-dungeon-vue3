@@ -20,17 +20,14 @@ import { EGameState } from './enums/EGameState'
 export default defineComponent({
     setup() {
 
-        const { fetchPlayer, setPlayer } = usePlayer()
+        const { fetchPlayer, setPlayer, initPlayer } = usePlayer()
         const { activeGameState, updateGameState } = useGameStateManager()
         const router = useRouter()
 
         onMounted(async () => {
             updateGameState(EGameState.Init)
-            try {
                 if (activeGameState.value === EGameState.Init) {
-
                     const player: IPlayer | undefined = await fetchPlayer()
-                    console.log(player)
                     if (player) {
                         await setPlayer(player)
                         updateGameState(EGameState.Battle)
@@ -40,10 +37,6 @@ export default defineComponent({
                         router.push({ name: 'characterCreation' })
                     }
                 }
-
-            } catch (error) {
-                console.log(error)
-            }
         })
         return {}
     },

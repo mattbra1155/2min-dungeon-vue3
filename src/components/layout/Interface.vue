@@ -24,11 +24,9 @@ import { EGameState } from '@/enums/EGameState'
 
 export default defineComponent({
     setup() {
-        const { activeTurnState, activeCharacter, turnOrder, updateTurnStateMachine } = useTurn()
-        const { playerAttackTarget, setTargetToAttack, targetToAttack, attack } = useAttack()
-        const { enemyAttackTarget } = useEnemy()
+        const { activeTurnState, activeCharacter, updateTurnStateMachine } = useTurn()
+        const { targetToAttack, attack } = useAttack()
         const { player } = usePlayer()
-        const { activeGameState, updateGameState } = useGameStateManager()
 
         const playerAttack = () => {
             if (targetToAttack.value) {
@@ -36,12 +34,6 @@ export default defineComponent({
                 updateTurnStateMachine(ETurnState.EnemyAttack)
             }
         }
-
-        // watch(activeGameState, (newState) => {
-        //     console.log(activeGameState, newState);
-        //     updateTurnStateMachine(ETurnState.Init)
-        // })
-
 
         return {
             player,

@@ -11,17 +11,23 @@
 
 <script lang="ts">
 
-import { defineComponent } from "vue";
+import { defineComponent, onMounted } from "vue";
 import { useTurn } from "@/composables/useTurn";
 import { useRouter } from "vue-router";
 import { usePlayer } from "@/composables/usePlayer";
+import { useSceneManager } from "@/composables/useSceneManager";
 export default defineComponent({
 
     setup() {
         const { deadPlayer } = usePlayer()
         const router = useRouter()
         const { activeCharacter } = useTurn()
-        deadPlayer()
+        const { createScene } = useSceneManager()
+        onMounted(() => {
+            deadPlayer()   
+            createScene()      
+               
+        })
         return {
             router,
             activeCharacter

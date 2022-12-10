@@ -142,9 +142,8 @@ export default defineComponent({
         const playerObject = player
 
         const rollStats = () => {
-            console.log(playerObject)
             if (!playerObject.value) {
-                throw new Error("No Player object");                
+                throw new Error("No Player object to roll stats");                
                 return
             }
             if (playerObject.value.race === 'human') {
