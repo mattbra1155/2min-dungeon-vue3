@@ -1,6 +1,6 @@
 <template>
     <div id="top-bar">
-        <h2 id="levelName" class="level__name">{{ scene.name }}</h2>
+        <h2 v-if="scene" id="levelName" class="level__name">{{ scene.name }}</h2>
         <p style="text-align: center">{{ activeTurnState }}</p>
         <p style="text-align: center">Turn: {{ turn }}</p>
         <h3 id="turnNumber" class="text--center"></h3>
@@ -34,7 +34,7 @@ export default defineComponent({
         const { scene } = useSceneManager()
         const { activeTurnState, turn } = useTurn()
 
-        const enemyList = computed(() => scene.value.enemy)
+        const enemyList = computed(() => scene.value ? scene.value.enemy : null)
 
         return {
             turn,

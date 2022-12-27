@@ -6,43 +6,49 @@
     </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { defineComponent, watch } from 'vue'
 import Feed from '@/components/layout/Feed.vue'
 import TopBar from '@/components/layout/TopBar.vue'
 import Interface from '@/components/layout/Interface.vue'
 import { useGameStateManager } from '@/composables/useGameStateManager'
+import { useSceneManager } from '@/composables/useSceneManager'
 import { EGameState } from '@/enums/EGameState'
 import { useTurn } from '@/composables/useTurn'
 import { ETurnState } from '@/enums/ETurnState'
 import { usePlayer } from '@/composables/usePlayer'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
-export default defineComponent({
-    components: {
-        Feed,
-        TopBar,
-        Interface,
-    },
-    setup() {
-        const { activeGameState } = useGameStateManager()
-        const { activeTurnState, updateTurnStateMachine } = useTurn()
-        const { player } = usePlayer()
-        const router = useRouter()
+const { activeGameState } = useGameStateManager()
+const { createScene, scene } = useSceneManager()
+const { activeTurnState, updateTurnStateMachine, turnOrder } = useTurn()
+const { player } = usePlayer()
+const router = useRouter()
+const route = useRoute()
 
-        if (activeGameState.value === EGameState.Battle) {
-            updateTurnStateMachine(ETurnState.Init)
-        }
+createScene()
+console.log('ttt', scene.value);
 
-        watch(player.value, () => {
-            if (player.value.isAlive === false) {
-                router.push({ name: 'playerDead' })
-            }
+console.log(route.params);
+if (route.params.nextLevel === 'yes') {
+        createScene()
+}
 
-        })
-        return {}
+if (activeGameState.value === EGameState.Battle) {
+    updateTurnStateMachine(ETurnState.Init)
+}
+
+watch(player.value, () => {
+    if (player.value.isAlive === false) {
+        router.push({ name: 'playerDead' })
     }
+})
 
+watch(turnOrder.value, () => {
+    console.log(turnOrder.value);
+    if (!turnOrder.value.length) {
+        router.push({ name: 'levelFinished' })
+    }
 })
 
 

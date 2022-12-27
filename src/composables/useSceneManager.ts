@@ -6,12 +6,14 @@ import { Scene } from '@/assets/models/sceneModel'
 import { IMonster } from '@/interfaces/IMonster'
 
 interface iStateUseSceneManager {
+    currentId: number
     sceneList: iScene[]
-    scene: iScene
+    scene: iScene | null
 }
 
 const state: iStateUseSceneManager = reactive({
-    scene: new Scene(0, 'placeholder level name', []),
+    currentId: 0,
+    scene: null,
     sceneList: [],
 })
 
@@ -21,7 +23,10 @@ export const useSceneManager = () => {
         return monster
     }
 
-    const createScene = (levelName?: string, numberOfEnemies = 1) => {
+    const createScene = (numberOfEnemies = 1, levelName?: string ) => {
+        if (!state.scene) {
+            return new Error('No scene')
+        }
         const id = state.scene.id++
         const name = levelName || `level ${state.scene.id}`
         const enemyList: IMonster[] = []

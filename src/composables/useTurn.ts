@@ -9,8 +9,8 @@ import { useAttack } from '@/composables/useAttack'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { EGameState } from '@/enums/EGameState'
-const { scene } = useSceneManager()
 
+const { scene } = useSceneManager()
 const { player } = usePlayer()
 const { enemyAttackTarget } = useEnemy()
 const { attack } = useAttack()
@@ -32,7 +32,10 @@ const state: iTurn = reactive({
 
 export const useTurn = () => {
 
-    const sortTurnOrder = () => {
+const sortTurnOrder = () => {
+        if (!scene.value) {
+            return new Error('No scene')
+        }
         const sorted = scene.value.enemy.sort((a, b) => b.stats.initiative - a.stats.initiative)
         state.turnOrder = sorted
         return sorted
