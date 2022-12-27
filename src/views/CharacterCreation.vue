@@ -124,14 +124,11 @@
 </template>
 
 <script lang="ts">
-import { PlayerModel } from '@/assets/models/playerModel'
 import { usePlayer } from '@/composables/usePlayer'
 import { diceRollK2, diceRollK3, diceRollK10 } from '@/assets/scripts/diceRoll'
 
-import { defineComponent, reactive, ref } from 'vue'
+import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
-import { IPlayer } from '@/interfaces/IPlayer'
-import { stats } from '@/assets/models/statsModel'
 import { EGameState } from '@/enums/EGameState'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 export default defineComponent({
@@ -143,8 +140,7 @@ export default defineComponent({
 
         const rollStats = () => {
             if (!playerObject.value) {
-                throw new Error("No Player object to roll stats");                
-                return
+                throw new Error('No Player object to roll stats')
             }
             if (playerObject.value.race === 'human') {
                 Object.assign(playerObject.value?.stats, {

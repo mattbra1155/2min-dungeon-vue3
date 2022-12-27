@@ -39,8 +39,8 @@ const playerModel: IPlayer = {
 }
 
 interface iPlayerState {
-    player: IPlayer,
-    initPlayer: IPlayer,
+    player: IPlayer
+    initPlayer: IPlayer
 }
 const state: iPlayerState = reactive({
     initPlayer: {
@@ -76,7 +76,7 @@ const state: iPlayerState = reactive({
         isAlive: true,
         player: true,
     },
-    player:{
+    player: {
         id: 0,
         name: 'Charname',
         race: 'dwarf',
@@ -108,14 +108,14 @@ const state: iPlayerState = reactive({
         inventory: [],
         isAlive: true,
         player: true,
-    }
+    },
 })
 
 export const usePlayer = () => {
     const setPlayer = async (payload: IPlayer) => {
         await storePlayerModel()
         state.player = payload
-        
+
         await localforage.setItem('player', JSON.stringify(payload))
         return state.player
     }
@@ -143,14 +143,14 @@ export const usePlayer = () => {
             if (result) {
                 const player: IPlayer = JSON.parse(result)
                 return player
-            } 
+            }
         } catch (error: any) {
             throw Error(error)
         }
     }
 
     const resetPlayer = async () => {
-        state.player = await localforage.getItem('initPlayer') as IPlayer
+        state.player = (await localforage.getItem('initPlayer')) as IPlayer
     }
 
     const deadPlayer = () => {

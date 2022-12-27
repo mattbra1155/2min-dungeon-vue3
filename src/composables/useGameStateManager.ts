@@ -13,7 +13,6 @@ const state: IGameStateState = reactive({
 })
 
 export const useGameStateManager = () => {
-
     const updateGameState = (newState: EGameState) => {
         state.activeGameState = newState
         switch (state.activeGameState) {
@@ -22,8 +21,12 @@ export const useGameStateManager = () => {
                 // changeActiveTurnState(ETurnState.Init)
                 createScene()
                 break
-            case EGameState.Create: 
-                console.log('GAME STATE: Create Character');
+            case EGameState.CreateChar:
+                console.log('GAME STATE: Create Character')
+                break
+            case EGameState.CreateLevel:
+                console.log('GAME STATE: Create Level')
+                createScene()
                 break
             case EGameState.Battle:
                 console.log('GAME STATE: Battle started')

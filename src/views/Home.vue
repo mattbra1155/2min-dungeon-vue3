@@ -27,11 +27,11 @@ const router = useRouter()
 const route = useRoute()
 
 createScene()
-console.log('ttt', scene.value);
+console.log('ttt', scene.value)
 
-console.log(route.params);
+console.log(route.params)
 if (route.params.nextLevel === 'yes') {
-        createScene()
+    createScene()
 }
 
 if (activeGameState.value === EGameState.Battle) {
@@ -45,11 +45,9 @@ watch(player.value, () => {
 })
 
 watch(turnOrder.value, () => {
-    console.log(turnOrder.value);
+    console.log(turnOrder.value)
     if (!turnOrder.value.length) {
         router.push({ name: 'levelFinished' })
     }
 })
-
-
 </script>

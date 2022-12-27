@@ -9,16 +9,14 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, onMounted, watch } from 'vue'
-import { useSceneManager } from '@/composables/useSceneManager'
-import { useTurn } from '@/composables/useTurn'
+import { onMounted } from 'vue'
 import { usePlayer } from './composables/usePlayer'
 import { useRouter } from 'vue-router'
 import { IPlayer } from './interfaces/IPlayer'
 import { useGameStateManager } from './composables/useGameStateManager'
 import { EGameState } from './enums/EGameState'
 
-const { fetchPlayer, setPlayer, initPlayer } = usePlayer()
+const { fetchPlayer, setPlayer } = usePlayer()
 const { activeGameState, updateGameState } = useGameStateManager()
 const router = useRouter()
 
@@ -31,7 +29,7 @@ onMounted(async () => {
             updateGameState(EGameState.Battle)
             router.push({ name: 'home' })
         } else {
-            updateGameState(EGameState.Create)
+            updateGameState(EGameState.CreateChar)
             router.push({ name: 'characterCreation' })
         }
     }

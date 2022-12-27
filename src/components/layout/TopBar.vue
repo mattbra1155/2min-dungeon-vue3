@@ -9,8 +9,12 @@
                 <h2>{{ player?.name }}</h2>
                 <p id="playerHp" class="health--player">{{ player?.stats ? player.stats.hp : 0 }}</p>
             </div>
-            <div v-for="enemy in enemyList" class="monster-hp"
-                :class="{ 'monster-hp--active': targetToAttack === enemy }" :key="enemy.id">
+            <div
+                v-for="enemy in enemyList"
+                class="monster-hp"
+                :class="{ 'monster-hp--active': targetToAttack === enemy }"
+                :key="enemy.id"
+            >
                 <h2 @click="setTargetToAttack(enemy)" id="monsterName">
                     {{ enemy.name ? enemy.name : 'placeholder enemy' }}
                 </h2>
@@ -34,7 +38,7 @@ export default defineComponent({
         const { scene } = useSceneManager()
         const { activeTurnState, turn } = useTurn()
 
-        const enemyList = computed(() => scene.value ? scene.value.enemy : null)
+        const enemyList = computed(() => (scene.value ? scene.value.enemy : null))
 
         return {
             turn,

@@ -1,11 +1,19 @@
 <template>
     <div class="o-interface">
-        <button id="attackButtonOne" type="button" class="action__button" @click="playerAttack"
-            :disbaled="activeTurnState !== ETurnState.PlayerAttack" :disabled="!player.isAlive">
-            Attack </button>
+        <button
+            id="attackButtonOne"
+            type="button"
+            class="action__button"
+            @click="playerAttack"
+            :disbaled="activeTurnState !== ETurnState.PlayerAttack"
+            :disabled="!player.isAlive"
+        >
+            Attack
+        </button>
         <button id=" inventoryButton" type="button" class="action__button">Inventory</button>
-        <button :disabled="activeTurnState !== ETurnState.Init" @click="updateTurnStateMachine(ETurnState.Init)"> start
-            BATTLE</button>
+        <button :disabled="activeTurnState !== ETurnState.Init" @click="updateTurnStateMachine(ETurnState.Init)">
+            start BATTLE
+        </button>
     </div>
 </template>
 
@@ -41,7 +49,7 @@ export default defineComponent({
             activeTurnState,
             playerAttack,
             ETurnState,
-            updateTurnStateMachine
+            updateTurnStateMachine,
         }
     },
 })

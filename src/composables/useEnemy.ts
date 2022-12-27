@@ -12,7 +12,6 @@ const state = reactive({
 })
 
 export const useEnemy = () => {
-
     const setEnemy = (payload: IMonster) => {
         state.enemy = payload
     }

@@ -23,7 +23,7 @@ export const useSceneManager = () => {
         return monster
     }
 
-    const createScene = (numberOfEnemies = 1, levelName?: string ) => {
+    const createScene = (numberOfEnemies = 1, levelName?: string) => {
         if (!state.scene) {
             return new Error('No scene')
         }
@@ -56,4 +56,3 @@ export const useSceneManager = () => {
         createScene,
     }
 }
-
