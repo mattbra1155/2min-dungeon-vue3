@@ -19,6 +19,9 @@ const state: iStateUseItemGenerator = reactive({
 
 export const useItemGenerator = () => {
     const incrementItemId = (category: EItemCategory) => {
+        if (!state) {
+            return
+        }
         setItemIdState()
         switch (category) {
             case EItemCategory.Weapon:

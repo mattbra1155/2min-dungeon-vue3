@@ -24,11 +24,8 @@ export const useSceneManager = () => {
     }
 
     const createScene = (numberOfEnemies = 1, levelName?: string) => {
-        if (!state.scene) {
-            return new Error('No scene')
-        }
-        const id = state.scene.id++
-        const name = levelName || `level ${state.scene.id}`
+        console.log('create')
+
         const enemyList: IMonster[] = []
         const createEnemyList = (enemiesToCreate = numberOfEnemies) => {
             let createdEnemies = 0
@@ -39,13 +36,13 @@ export const useSceneManager = () => {
             }
         }
         const scene: iScene = {
-            id,
-            name,
+            id: state.currentId++,
+            name: levelName || `level ${state.currentId}`,
             enemy: enemyList,
         }
+
         createEnemyList()
         setScene(scene)
-        console.log(scene)
     }
     const setScene = (scene: iScene) => {
         state.scene = scene
