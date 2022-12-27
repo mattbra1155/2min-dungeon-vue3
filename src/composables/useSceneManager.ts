@@ -2,7 +2,6 @@
 import { reactive, toRefs } from 'vue'
 import { monsterGenerator } from '@/assets/generators/monsterGenerator'
 import { iScene } from '@/interfaces/Scene'
-import { Scene } from '@/assets/models/sceneModel'
 import { IMonster } from '@/interfaces/IMonster'
 
 interface iStateUseSceneManager {
@@ -48,8 +47,13 @@ export const useSceneManager = () => {
         state.scene = scene
     }
 
+    const resetScene = () => {
+        state.currentId = 0
+    }
+
     return {
         ...toRefs(state),
         createScene,
+        resetScene,
     }
 }

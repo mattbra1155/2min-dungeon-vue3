@@ -43,10 +43,12 @@ export const useTurn = () => {
         }
         state.activeTurnState = newTurnState
         switch (state.activeTurnState) {
-            case ETurnState.Init:
+            case ETurnState.Init: {
                 console.log('TURN STATE:', ETurnState.Init)
+                state.turn = 1
                 updateTurnStateMachine(ETurnState.SortOrder)
                 break
+            }
             case ETurnState.SortOrder:
                 console.log('TURN STATE:', ETurnState.SortOrder)
                 sortTurnOrder()

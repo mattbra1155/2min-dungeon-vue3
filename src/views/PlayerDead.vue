@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import { useTurn } from '@/composables/useTurn'
 import { useRouter } from 'vue-router'
 import { usePlayer } from '@/composables/usePlayer'
@@ -21,13 +21,13 @@ import { ETurnState } from '@/enums/ETurnState'
 
 const { deadPlayer } = usePlayer()
 const router = useRouter()
-const { activeCharacter } = useTurn()
-const { createScene } = useSceneManager()
+const { activeCharacter, updateTurnStateMachine } = useTurn()
+const { createScene, resetScene } = useSceneManager()
+
 onMounted(() => {
     deadPlayer()
-
-    const { updateTurnStateMachine } = useTurn()
     updateTurnStateMachine(ETurnState.Init)
+    resetScene()
     createScene()
 })
 </script>

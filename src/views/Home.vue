@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, watch } from 'vue'
+import { watch } from 'vue'
 import Feed from '@/components/layout/Feed.vue'
 import TopBar from '@/components/layout/TopBar.vue'
 import Interface from '@/components/layout/Interface.vue'
@@ -20,14 +20,11 @@ import { usePlayer } from '@/composables/usePlayer'
 import { useRouter, useRoute } from 'vue-router'
 
 const { activeGameState } = useGameStateManager()
-const { createScene, scene } = useSceneManager()
-const { activeTurnState, updateTurnStateMachine, turnOrder } = useTurn()
+const { createScene } = useSceneManager()
+const { updateTurnStateMachine, turnOrder } = useTurn()
 const { player } = usePlayer()
 const router = useRouter()
 const route = useRoute()
-
-createScene()
-console.log('ttt', scene.value)
 
 console.log(route.params)
 if (route.params.nextLevel === 'yes') {

@@ -24,7 +24,6 @@ const router = useRouter()
 
 onMounted(async () => {
     updateGameState(EGameState.Init)
-    createScene()
     if (activeGameState.value === EGameState.Init) {
         const player: IPlayer | undefined = await fetchPlayer()
         if (player) {
