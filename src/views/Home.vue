@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { watch } from 'vue'
+import { onMounted, watch } from 'vue'
 import Feed from '@/components/layout/Feed.vue'
 import TopBar from '@/components/layout/TopBar.vue'
 import Interface from '@/components/layout/Interface.vue'
@@ -27,7 +27,13 @@ const router = useRouter()
 const route = useRoute()
 
 console.log(route.params)
-if (route.params.nextLevel === 'yes') {
+
+const props = defineProps({
+    nextLevel: {
+        type: String,
+    },
+})
+if (props.nextLevel === 'yes') {
     createScene()
 }
 

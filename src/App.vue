@@ -15,9 +15,7 @@ import { useRouter } from 'vue-router'
 import { IPlayer } from './interfaces/IPlayer'
 import { useGameStateManager } from './composables/useGameStateManager'
 import { EGameState } from './enums/EGameState'
-import { useSceneManager } from './composables/useSceneManager'
 
-const { createScene } = useSceneManager()
 const { fetchPlayer, setPlayer } = usePlayer()
 const { activeGameState, updateGameState } = useGameStateManager()
 const router = useRouter()
