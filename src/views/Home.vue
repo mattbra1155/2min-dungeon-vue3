@@ -1,18 +1,53 @@
-<template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
-  </div>
-</template>
+<script setup lang="ts">
+import { watch } from 'vue'
+import Feed from '@/components/layout/Feed.vue'
+import TopBar from '@/components/layout/TopBar.vue'
+import Interface from '@/components/layout/Interface.vue'
+import { useGameStateManager } from '@/composables/useGameStateManager'
+import { useSceneManager } from '@/composables/useSceneManager'
+import { EGameState } from '@/enums/EGameState'
+import { useTurn } from '@/composables/useTurn'
+import { ETurnState } from '@/enums/ETurnState'
+import { usePlayer } from '@/composables/usePlayer'
+import { useRouter } from 'vue-router'
 
-<script lang="ts">
-import { defineComponent } from "vue";
-import HelloWorld from "@/components/HelloWorld.vue"; // @ is an alias to /src
+const { activeGameState } = useGameStateManager()
+const { createScene } = useSceneManager()
+const { updateTurnStateMachine, turnOrder } = useTurn()
+const { player } = usePlayer()
+const router = useRouter()
 
-export default defineComponent({
-  name: "Home",
-  components: {
-    HelloWorld,
-  },
-});
+const props = defineProps({
+    nextLevel: {
+        type: String,
+    },
+})
+if (props.nextLevel === 'yes') {
+    createScene()
+}
+
+if (activeGameState.value === EGameState.Battle) {
+    updateTurnStateMachine(ETurnState.Init)
+}
+
+watch(player.value, () => {
+    if (player.value.isAlive === false) {
+        router.push({ name: 'playerDead' })
+    }
+})
+
+watch(turnOrder.value, () => {
+    console.log(turnOrder.value)
+    if (!turnOrder.value.length) {
+        router.push({ name: 'levelFinished' })
+    }
+})
 </script>
+
+<template>
+    <div class="home">
+        <TopBar />
+        <Feed />
+        <Interface />
+    </div>
+</template>

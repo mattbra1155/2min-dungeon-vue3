@@ -1,30 +1,37 @@
-<template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
-  <router-view />
-</template>
+<script setup lang="ts">
+import { onMounted } from 'vue'
+import { usePlayer } from './composables/usePlayer'
+import { useRouter } from 'vue-router'
+import { IPlayer } from './interfaces/IPlayer'
+import { useGameStateManager } from './composables/useGameStateManager'
+import { EGameState } from './enums/EGameState'
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+const { fetchPlayer, setPlayer } = usePlayer()
+const { activeGameState, updateGameState } = useGameStateManager()
+const router = useRouter()
 
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+onMounted(async () => {
+    updateGameState(EGameState.Init)
+    if (activeGameState.value === EGameState.Init) {
+        const player: IPlayer | undefined = await fetchPlayer()
+        if (player) {
+            await setPlayer(player)
+            updateGameState(EGameState.Battle)
+            router.push({ name: 'home' })
+        } else {
+            updateGameState(EGameState.CreateChar)
+            router.push({ name: 'characterCreation' })
+        }
     }
-  }
-}
-</style>
+})
+</script>
+
+<template>
+    <div id="app">
+        <nav class="nav">
+            <router-link to="/">Main</router-link>
+            <router-link to="/character-creation/">Create</router-link>
+        </nav>
+        <router-view />
+    </div>
+</template>
