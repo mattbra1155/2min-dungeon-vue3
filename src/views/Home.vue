@@ -1,13 +1,5 @@
-<template>
-    <div class="home">
-        <TopBar />
-        <Feed />
-        <Interface />
-    </div>
-</template>
-
 <script setup lang="ts">
-import { onMounted, watch } from 'vue'
+import { watch } from 'vue'
 import Feed from '@/components/layout/Feed.vue'
 import TopBar from '@/components/layout/TopBar.vue'
 import Interface from '@/components/layout/Interface.vue'
@@ -17,16 +9,13 @@ import { EGameState } from '@/enums/EGameState'
 import { useTurn } from '@/composables/useTurn'
 import { ETurnState } from '@/enums/ETurnState'
 import { usePlayer } from '@/composables/usePlayer'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 const { activeGameState } = useGameStateManager()
 const { createScene } = useSceneManager()
 const { updateTurnStateMachine, turnOrder } = useTurn()
 const { player } = usePlayer()
 const router = useRouter()
-const route = useRoute()
-
-console.log(route.params)
 
 const props = defineProps({
     nextLevel: {
@@ -54,3 +43,11 @@ watch(turnOrder.value, () => {
     }
 })
 </script>
+
+<template>
+    <div class="home">
+        <TopBar />
+        <Feed />
+        <Interface />
+    </div>
+</template>

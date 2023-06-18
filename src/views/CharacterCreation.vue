@@ -1,3 +1,63 @@
+<script setup lang="ts">
+import { usePlayer } from '@/composables/usePlayer'
+import { diceRollK2, diceRollK3, diceRollK10 } from '@/assets/scripts/diceRoll'
+
+import { useRouter } from 'vue-router'
+import { EGameState } from '@/enums/EGameState'
+import { useGameStateManager } from '@/composables/useGameStateManager'
+
+const router = useRouter()
+const { player, createPlayer } = usePlayer()
+const { updateGameState } = useGameStateManager()
+const playerObject = player
+
+const rollStats = () => {
+    if (!playerObject.value) {
+        throw new Error('No Player object to roll stats')
+    }
+    if (playerObject.value.race === 'human') {
+        Object.assign(playerObject.value?.stats, {
+            hp: diceRollK3() + 4,
+            melee: diceRollK10() * 2 + 20,
+            ranged: diceRollK10() * 2 + 20,
+            dexterity: diceRollK10() + 20,
+            strength: diceRollK3() + 1,
+            thoughtness: diceRollK3() + 1,
+            speed: diceRollK3() + 2,
+            initiative: diceRollK10() * 2 + 20,
+            attacks: 1,
+            inteligence: diceRollK10() * 2 + 20,
+            willPower: diceRollK10() * 2 + 20,
+            charisma: diceRollK10() * 2 + 2,
+        })
+    }
+
+    if (playerObject.value.race === 'dwarf') {
+        Object.assign(playerObject.value.stats, {
+            hp: diceRollK3() + 5,
+            melee: diceRollK10() * 2 + 30,
+            ranged: diceRollK10() * 2 + 10,
+            dexterity: diceRollK10() + 10,
+            strength: diceRollK3() + 1,
+            thoughtness: diceRollK3() + 2,
+            speed: diceRollK2() + 2,
+            initiative: diceRollK10() * 2 + 10,
+            attacks: 1,
+            inteligence: diceRollK10() * 2 + 20,
+            willPower: diceRollK10() * 2 + 40,
+            charisma: diceRollK10() * 2 + 1,
+        })
+    }
+}
+const savePlayer = () => {
+    if (playerObject.value) {
+        createPlayer(playerObject.value)
+        updateGameState(EGameState.Battle)
+        router.push({ name: 'home' })
+    }
+}
+</script>
+
 <template>
     <div id="characterGenerator" class="o-characterGenerator" @submit.prevent="savePlayer">
         <form class="m-form o-characterGenerator__sheet">
@@ -122,76 +182,3 @@
         </form>
     </div>
 </template>
-
-<script lang="ts">
-import { usePlayer } from '@/composables/usePlayer'
-import { diceRollK2, diceRollK3, diceRollK10 } from '@/assets/scripts/diceRoll'
-
-import { defineComponent } from 'vue'
-import { useRouter } from 'vue-router'
-import { EGameState } from '@/enums/EGameState'
-import { useGameStateManager } from '@/composables/useGameStateManager'
-export default defineComponent({
-    setup() {
-        const router = useRouter()
-        const { player, createPlayer } = usePlayer()
-        const { updateGameState } = useGameStateManager()
-        const playerObject = player
-
-        const rollStats = () => {
-            if (!playerObject.value) {
-                throw new Error('No Player object to roll stats')
-            }
-            if (playerObject.value.race === 'human') {
-                Object.assign(playerObject.value?.stats, {
-                    hp: diceRollK3() + 4,
-                    melee: diceRollK10() * 2 + 20,
-                    ranged: diceRollK10() * 2 + 20,
-                    dexterity: diceRollK10() + 20,
-                    strength: diceRollK3() + 1,
-                    thoughtness: diceRollK3() + 1,
-                    speed: diceRollK3() + 2,
-                    initiative: diceRollK10() * 2 + 20,
-                    attacks: 1,
-                    inteligence: diceRollK10() * 2 + 20,
-                    willPower: diceRollK10() * 2 + 20,
-                    charisma: diceRollK10() * 2 + 2,
-                })
-            }
-
-            if (playerObject.value.race === 'dwarf') {
-                Object.assign(playerObject.value.stats, {
-                    hp: diceRollK3() + 5,
-                    melee: diceRollK10() * 2 + 30,
-                    ranged: diceRollK10() * 2 + 10,
-                    dexterity: diceRollK10() + 10,
-                    strength: diceRollK3() + 1,
-                    thoughtness: diceRollK3() + 2,
-                    speed: diceRollK2() + 2,
-                    initiative: diceRollK10() * 2 + 10,
-                    attacks: 1,
-                    inteligence: diceRollK10() * 2 + 20,
-                    willPower: diceRollK10() * 2 + 40,
-                    charisma: diceRollK10() * 2 + 1,
-                })
-            }
-        }
-        const savePlayer = () => {
-            if (playerObject.value) {
-                createPlayer(playerObject.value)
-                updateGameState(EGameState.Battle)
-                router.push({ name: 'home' })
-            }
-        }
-        return {
-            playerObject,
-            rollStats,
-            savePlayer,
-            diceRollK2,
-            diceRollK3,
-            diceRollK10,
-            defineComponent,
-        }
-    },
-})
-</script>

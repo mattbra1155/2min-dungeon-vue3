@@ -1,13 +1,3 @@
-<template>
-    <div id="app">
-        <nav class="nav">
-            <router-link to="/">Main</router-link>
-            <router-link to="/character-creation/">Create</router-link>
-        </nav>
-        <router-view />
-    </div>
-</template>
-
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { usePlayer } from './composables/usePlayer'
@@ -35,3 +25,13 @@ onMounted(async () => {
     }
 })
 </script>
+
+<template>
+    <div id="app">
+        <nav class="nav">
+            <router-link to="/">Main</router-link>
+            <router-link to="/character-creation/">Create</router-link>
+        </nav>
+        <router-view />
+    </div>
+</template>

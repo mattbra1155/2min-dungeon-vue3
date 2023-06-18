@@ -1,3 +1,13 @@
+<script setup lang="ts">
+import { useTurn } from '@/composables/useTurn'
+import { ETurnState } from '@/enums/ETurnState'
+import { useRouter } from 'vue-router'
+
+const { updateTurnStateMachine } = useTurn()
+updateTurnStateMachine(ETurnState.Init)
+const router = useRouter()
+</script>
+
 <template>
     <div class="m-main o-levelFinished">
         <div class="o-levelFinished__textContainer">
@@ -9,12 +19,3 @@
         </div>
     </div>
 </template>
-<script setup lang="ts">
-import { useTurn } from '@/composables/useTurn'
-import { ETurnState } from '@/enums/ETurnState'
-import { useRouter } from 'vue-router'
-
-const { updateTurnStateMachine } = useTurn()
-updateTurnStateMachine(ETurnState.Init)
-const router = useRouter()
-</script>
