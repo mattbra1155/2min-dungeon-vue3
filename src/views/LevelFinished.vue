@@ -13,7 +13,7 @@ const router = useRouter()
         <div class="o-levelFinished__textContainer">
             <h1 class="o-levelFinished__title">LEVEL CLEARED</h1>
             <p class="o-levelFinished__text">you found<br /></p>
-            <button @click="router.push({ name: 'home', params: { nextLevel: 'yes', yyy: 'uyyy' } })" class="a-button">
+            <button @click="router.push({ name: 'home', state: { nextLevel: true } })" class="a-button">
                 Next level
             </button>
         </div>

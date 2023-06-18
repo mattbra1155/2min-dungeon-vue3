@@ -17,12 +17,7 @@ const { updateTurnStateMachine, turnOrder } = useTurn()
 const { player } = usePlayer()
 const router = useRouter()
 
-const props = defineProps({
-    nextLevel: {
-        type: String,
-    },
-})
-if (props.nextLevel === 'yes') {
+if (history.state.nextLevel) {
     createScene()
 }
 
