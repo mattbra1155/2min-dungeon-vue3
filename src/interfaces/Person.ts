@@ -1,5 +1,5 @@
 import { iBodyParts } from '@/interfaces/BodyParts'
-import { iArmor, iPotion, iUtility, iWeapon } from '@/interfaces/Item'
+import { IArmor, IPotion, iUtility, IWeapon } from '@/interfaces/IItem'
 import { IMonster } from './IMonster'
 import { IPlayer } from './IPlayer'
 
@@ -20,9 +20,9 @@ export interface iPerson {
         willPower: number
         charisma: number
     }
-    weapon: iWeapon | null
+    weapon: IWeapon | null
     description: string
-    inventory: Array<iWeapon | iArmor | iPotion | iUtility>
+    inventory: Array<IWeapon | IArmor | IPotion | iUtility>
     bodyParts: iBodyParts
     isAlive: boolean
 }

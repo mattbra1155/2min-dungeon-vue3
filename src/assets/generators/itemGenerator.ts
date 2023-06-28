@@ -1,6 +1,6 @@
 import { Weapon, Armor, Potion } from '@/assets/models/itemsModel'
 import itemMods from '@/assets/json/itemMods.json'
-import { iWeapon, iArmor, iPotion, iItemPrefix } from '@/interfaces/Item'
+import { IWeapon, IArmor, IPotion, IItemPrefix } from '@/interfaces/IItem'
 import { useItemGenerator } from '@/composables/useItemGenerator'
 import { EItemCategory } from '@/enums/ItemCategory'
 
@@ -18,8 +18,10 @@ class ItemGenerator {
                 itemObject = new Potion()
                 break
         }
+        console.log('here:', itemMods[category])
         const itemCategory = itemMods[category]
         const randomItem = itemCategory.item[Math.floor(Math.random() * itemCategory.item.length)]
+
         const itemType = (item: any) => {
             if (Array.isArray(item.type)) {
                 return item.type[Math.floor(Math.random() * item.type.length)]
@@ -27,10 +29,11 @@ class ItemGenerator {
                 return item.type
             }
         }
-        const finalItem = Object.assign(itemObject, randomItem, {
+        const finalItem: IWeapon | IArmor | IPotion = Object.assign(itemObject, randomItem, {
             category: itemCategory,
             type: itemType(randomItem),
         })
+        console.log('final', finalItem)
         return finalItem
     }
 
@@ -40,7 +43,7 @@ class ItemGenerator {
         return prefix
     }
 
-    createDescription(baseItem: iWeapon | iArmor | iPotion, prefix: iItemPrefix) {
+    createDescription(baseItem: IWeapon | IArmor | IPotion, prefix: IItemPrefix) {
         if (prefix.name === 'used') {
             return `This is a ${baseItem.name}. Nothing out of the ordinary`
         } else {
@@ -54,7 +57,6 @@ class ItemGenerator {
 
         return id
     }
-
     createItem(category: EItemCategory) {
         const itemBase = this.createItemBase(category)
         const prefix = this.createPrefix(category)

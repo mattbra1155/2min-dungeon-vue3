@@ -2,6 +2,10 @@ import { reactive, toRefs } from 'vue'
 import localforage from 'localforage'
 import { IPlayer } from '@/interfaces/IPlayer'
 import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
+import { ItemGenerator } from '@/assets/generators/itemGenerator'
+import { EItemCategory } from '@/enums/ItemCategory'
+import { IWeapon } from '@/interfaces/IItem'
+import { Weapon } from '@/assets/models/itemsModel'
 const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 
 const playerModel: IPlayer = {
@@ -124,6 +128,10 @@ export const usePlayer = () => {
         if (payload) {
             state.player = Object.assign(state.player, payload)
             state.player.isAlive = true
+            const weapon = new ItemGenerator().createItem(EItemCategory.Weapon)
+            if (weapon instanceof Weapon) {
+                state.player.weapon = weapon
+            }
             localforage.setItem('player', JSON.stringify(state.player))
         }
     }

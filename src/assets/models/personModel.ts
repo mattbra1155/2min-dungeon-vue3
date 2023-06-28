@@ -4,7 +4,7 @@ import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
 import { stats } from '@/assets/models/statsModel'
 
 import { iPerson } from '@/interfaces/Person'
-import { iArmor, iPotion, iUtility, iWeapon } from '@/interfaces/Item'
+import { IArmor, IPotion, iUtility, IWeapon } from '@/interfaces/IItem'
 import { iBodyParts } from '@/interfaces/BodyParts'
 import { IMonster } from '@/interfaces/IMonster'
 import { IPlayer } from '@/interfaces/IPlayer'
@@ -67,9 +67,9 @@ class PersonModel implements iPerson {
             leftLeg,
             rightLeg,
         },
-        public weapon: iWeapon | null = null,
+        public weapon: IWeapon | null = null,
         public description: string = '',
-        public inventory: Array<iWeapon | iArmor | iPotion | iUtility> = [],
+        public inventory: Array<IWeapon | IArmor | IPotion | iUtility> = [],
         public isAlive: boolean = true
     ) {}
 

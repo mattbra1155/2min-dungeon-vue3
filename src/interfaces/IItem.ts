@@ -1,6 +1,6 @@
 import { iBodyParts } from './BodyParts'
 
-export interface iItem {
+export interface IItem {
     id: number
     name: string
     description: string
@@ -8,29 +8,29 @@ export interface iItem {
     category: string
 }
 
-export interface iWeapon extends iItem {
+export interface IWeapon extends IItem {
     damage: number
-    prefix: iItemPrefix
+    prefix: IItemPrefix
     modifier: number
 }
 
-export interface iArmor extends iItem {
+export interface IArmor extends IItem {
     bodyPart: iBodyParts
     item: string
-    prefix: iItemPrefix
+    prefix: IItemPrefix
     modifier: number
     armorPoints: number
 }
 
-export interface iPotion extends iItem {
+export interface IPotion extends IItem {
     item: string
-    prefix: iItemPrefix
+    prefix: IItemPrefix
     modifier: number
 }
 
-export type iUtility = iItem
+export type iUtility = IItem
 
-export interface iItemPrefix {
+export interface IItemPrefix {
     name: string
     modifier: number
 }

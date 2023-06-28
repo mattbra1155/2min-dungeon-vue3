@@ -1,6 +1,6 @@
 import { PersonModel } from '@/assets/models/personModel'
 import { iBodyParts } from '@/interfaces/BodyParts'
-import { iArmor, iPotion, iUtility, iWeapon } from '@/interfaces/Item'
+import { IArmor, IPotion, iUtility, IWeapon } from '@/interfaces/IItem'
 import { IMonster } from '@/interfaces/IMonster'
 import { bodyPartsModel } from './bodyPartsModel'
 
@@ -38,7 +38,7 @@ class MonsterModel extends PersonModel implements IMonster {
             charisma: 0,
             willPower: 0,
         },
-        public weapon: null | iWeapon = {
+        public weapon: null | IWeapon = {
             name: '',
             category: '',
             damage: 0,
@@ -59,7 +59,7 @@ class MonsterModel extends PersonModel implements IMonster {
             leftLeg,
             rightLeg,
         },
-        public inventory: Array<iWeapon | iArmor | iPotion | iUtility> = [],
+        public inventory: Array<IWeapon | IArmor | IPotion | iUtility> = [],
         public description: string = '',
         public isAlive: boolean = true
     ) {

@@ -1,10 +1,9 @@
-import { EItemCategory } from '@/enums/ItemCategory'
 import { iBodyParts } from '@/interfaces/BodyParts'
-import { iArmor, iItem, iItemPrefix, iPotion, iWeapon } from '@/interfaces/Item'
+import { IArmor, IItem, IItemPrefix, IPotion, IWeapon } from '@/interfaces/IItem'
 import { bodyPartsModel } from './bodyPartsModel'
 const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 
-class Item implements iItem {
+class Item implements IItem {
     constructor(
         public id: number,
         public name: string,
@@ -20,7 +19,7 @@ class Item implements iItem {
     }
 }
 
-class Weapon extends Item implements iWeapon {
+class Weapon extends Item implements IWeapon {
     constructor(
         public id: number = 0,
         public name: string = '',
@@ -28,7 +27,7 @@ class Weapon extends Item implements iWeapon {
         public damage: number = 0,
         public category: string = '',
         public type: string = '',
-        public prefix: iItemPrefix = { name: '', modifier: 0 },
+        public prefix: IItemPrefix = { name: '', modifier: 0 },
         public modifier: number = 0
     ) {
         super(id, name, description, type, category)
@@ -54,7 +53,7 @@ class Weapon extends Item implements iWeapon {
     // }
 }
 
-class Armor extends Item implements iArmor {
+class Armor extends Item implements IArmor {
     constructor(
         public id: number = 0,
         public name: string = '',
@@ -72,7 +71,7 @@ class Armor extends Item implements iArmor {
         public item: string = '',
         public category: string = '',
         public armorPoints: number = 0,
-        public prefix: iItemPrefix = { name: '', modifier: 0 }
+        public prefix: IItemPrefix = { name: '', modifier: 0 }
     ) {
         super(id, name, description, type, category)
         this.id = id
@@ -84,7 +83,7 @@ class Armor extends Item implements iArmor {
     }
 }
 
-class Potion extends Item implements iPotion {
+class Potion extends Item implements IPotion {
     constructor(
         public id: number = 0,
         public name: string = '',
@@ -93,7 +92,7 @@ class Potion extends Item implements iPotion {
         public type: string = '',
         public category: string = '',
         public item: string = '',
-        public prefix: iItemPrefix = { name: '', modifier: 0 }
+        public prefix: IItemPrefix = { name: '', modifier: 0 }
     ) {
         super(id, name, description, type, category)
         this.id = id
