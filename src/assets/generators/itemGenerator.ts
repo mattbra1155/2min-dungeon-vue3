@@ -6,7 +6,7 @@ import { EItemCategory } from '@/enums/ItemCategory'
 
 class ItemGenerator {
     createItemBase(category: EItemCategory) {
-        let itemObject: iWeapon | iArmor | iPotion
+        let itemObject
         switch (category) {
             case EItemCategory.Weapon:
                 itemObject = new Weapon()
@@ -18,20 +18,16 @@ class ItemGenerator {
                 itemObject = new Potion()
                 break
         }
-        interface iRandomItem {
-            name: string
-            type?: string | string[]
-        }
         const itemCategory = itemMods[category]
-        const randomItem: iRandomItem = itemCategory.item[Math.floor(Math.random() * itemCategory.item.length)]
-        const itemType = (item: iRandomItem) => {
+        const randomItem = itemCategory.item[Math.floor(Math.random() * itemCategory.item.length)]
+        const itemType = (item: any) => {
             if (Array.isArray(item.type)) {
                 return item.type[Math.floor(Math.random() * item.type.length)]
             } else {
                 return item.type
             }
         }
-        const finalItem: iWeapon | iArmor | iPotion = Object.assign(itemObject, randomItem, {
+        const finalItem = Object.assign(itemObject, randomItem, {
             category: itemCategory,
             type: itemType(randomItem),
         })

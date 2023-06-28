@@ -10,14 +10,12 @@ export interface iItem {
 
 export interface iWeapon extends iItem {
     damage: number
-    type: string
     prefix: iItemPrefix
     modifier: number
 }
 
 export interface iArmor extends iItem {
     bodyPart: iBodyParts
-    type: string
     item: string
     prefix: iItemPrefix
     modifier: number

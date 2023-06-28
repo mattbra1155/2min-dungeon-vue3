@@ -10,6 +10,8 @@ import { useTurn } from '@/composables/useTurn'
 import { ETurnState } from '@/enums/ETurnState'
 import { usePlayer } from '@/composables/usePlayer'
 import { useRouter } from 'vue-router'
+import { ItemGenerator } from '@/assets/generators/itemGenerator'
+import { EItemCategory } from '@/enums/ItemCategory'
 
 const { activeGameState } = useGameStateManager()
 const { createScene } = useSceneManager()
@@ -20,6 +22,10 @@ const router = useRouter()
 if (history.state.nextLevel) {
     createScene()
 }
+
+const weapon = new ItemGenerator().createItem(EItemCategory.Weapon)
+
+console.log(weapon)
 
 if (activeGameState.value === EGameState.Battle) {
     updateTurnStateMachine(ETurnState.Init)
