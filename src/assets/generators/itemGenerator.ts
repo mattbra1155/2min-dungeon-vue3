@@ -23,8 +23,6 @@ class ItemGenerator {
 
         const itemType = (item: any) => {
             if (Array.isArray(item.type)) {
-                console.log(item.type[Math.floor(Math.random() * item.type.length)])
-
                 return item.type[Math.floor(Math.random() * item.type.length)]
             } else {
                 return item.type
@@ -34,7 +32,6 @@ class ItemGenerator {
             category: itemCategory,
             type: itemType(randomItem),
         })
-        console.log('final', finalItem)
         return finalItem
     }
 

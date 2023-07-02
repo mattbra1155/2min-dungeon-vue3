@@ -11,7 +11,7 @@ const { fetchPlayer, setPlayer } = usePlayer()
 const { activeGameState, updateGameState } = useGameStateManager()
 const router = useRouter()
 
-onMounted(async () => {
+const init = async () => {
     updateGameState(EGameState.Init)
     if (activeGameState.value === EGameState.Init) {
         const player: IPlayer | undefined = await fetchPlayer()
@@ -24,7 +24,10 @@ onMounted(async () => {
             router.push({ name: 'characterCreation' })
         }
     }
-})
+}
+
+// starts the app
+init()
 </script>
 
 <template>

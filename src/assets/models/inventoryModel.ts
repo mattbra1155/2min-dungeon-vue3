@@ -5,8 +5,8 @@ import { IPlayer } from '@/interfaces/IPlayer'
 import { Armor, Weapon } from '@/assets/models/itemsModel'
 
 class Inventory implements IInventory {
-    constructor(public inventory: Array<IWeapon | IArmor | IPotion> = [], public owner: IPlayer | IMonster) {
-        this.inventory = inventory
+    constructor(public list: Array<IWeapon | IArmor | IPotion> = [], public owner: IPlayer | IMonster) {
+        this.list = list
         this.owner = owner
     }
 
@@ -14,20 +14,20 @@ class Inventory implements IInventory {
         if (!item) {
             return
         }
-        this.inventory.push(item)
+        this.list.push(item)
     }
     removeItem(itemId: number): void {
         if (!itemId) {
             return
         }
-        const indexToRemove = this.inventory.findIndex((element) => element.id === itemId)
-        this.inventory.splice(indexToRemove, 1)
+        const indexToRemove = this.list.findIndex((element) => element.id === itemId)
+        this.list.splice(indexToRemove, 1)
     }
     getItem(itemId: number) {
         if (!itemId) {
             return
         }
-        return this.inventory.find((element) => element.id === itemId)
+        return this.list.find((element) => element.id === itemId)
     }
     wieldItem(itemId: number) {
         if (!itemId) {

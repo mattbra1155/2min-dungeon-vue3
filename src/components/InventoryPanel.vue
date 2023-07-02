@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { usePlayer } from '@/composables/usePlayer'
 import { useInventory } from '@/composables/useInventory'
-import { Inventory } from '@/assets/models/inventoryModel'
+import { useRouter } from 'vue-router'
 const { player } = usePlayer()
 const { isOpen, toggleInventory } = useInventory()
 
-const inventory = player.value.inventory
+const router = useRouter()
+router.beforeEach(() => {
+    toggleInventory()
+})
 </script>
 
 <template>
@@ -13,7 +16,8 @@ const inventory = player.value.inventory
         <h2>Inventory</h2>
         <button id="inventoryCloseButton" class="close" @click="toggleInventory">Close Inventory</button>
         <ul id="inventoryList" class="inventory__list">
-            <li v-for="item in inventory" :key="item.id">{{ item.name }}</li>
+            <li v-for="item in player?.inventory" :key="item.id">tt{{ item.name }}</li>
+            end
         </ul>
     </div>
 </template>

@@ -6,6 +6,7 @@ import { ItemGenerator } from '@/assets/generators/itemGenerator'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { IWeapon } from '@/interfaces/IItem'
 import { Weapon } from '@/assets/models/itemsModel'
+import { Inventory } from '@/assets/models/inventoryModel'
 const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 
 const playerModel: IPlayer = {
@@ -128,7 +129,12 @@ export const usePlayer = () => {
         if (payload) {
             state.player = Object.assign(state.player, payload)
             state.player.isAlive = true
+            // add inventory, add weapon do player
             const weapon = new ItemGenerator().createItem(EItemCategory.Weapon)
+            const inventory = new Inventory([weapon], state.player)
+            Object.assign(state.player.inventory, inventory.list)
+            console.log('char creation inv', state.player.inventory)
+
             if (weapon instanceof Weapon) {
                 state.player.weapon = weapon
             }
@@ -150,6 +156,8 @@ export const usePlayer = () => {
             const result: string | null = await localforage.getItem('player')
             if (result) {
                 const player: IPlayer = JSON.parse(result)
+                console.log(player)
+                state.player = player
                 return player
             }
         } catch (error: any) {

@@ -6,6 +6,6 @@ export interface IInventoryState {
     isOpen: boolean
 }
 export interface IInventory {
-    inventory: Array<IWeapon | IArmor | IPotion>
+    list: Array<IWeapon | IArmor | IPotion>
     owner: IPlayer | IMonster
 }
