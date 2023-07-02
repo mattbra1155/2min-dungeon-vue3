@@ -4,7 +4,6 @@ import { IPlayer } from '@/interfaces/IPlayer'
 import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
 import { ItemGenerator } from '@/assets/generators/itemGenerator'
 import { EItemCategory } from '@/enums/ItemCategory'
-import { IWeapon } from '@/interfaces/IItem'
 import { Weapon } from '@/assets/models/itemsModel'
 import { Inventory } from '@/assets/models/inventoryModel'
 const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
