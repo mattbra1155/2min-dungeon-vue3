@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router'
 import { IPlayer } from './interfaces/IPlayer'
 import { useGameStateManager } from './composables/useGameStateManager'
 import { EGameState } from './enums/EGameState'
+import InventoryPanel from './components/InventoryPanel.vue'
 
 const { fetchPlayer, setPlayer } = usePlayer()
 const { activeGameState, updateGameState } = useGameStateManager()
@@ -33,5 +34,6 @@ onMounted(async () => {
             <router-link to="/character-creation/">Create</router-link>
         </nav>
         <router-view />
+        <inventory-panel />
     </div>
 </template>
