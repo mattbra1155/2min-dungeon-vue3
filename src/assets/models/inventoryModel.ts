@@ -2,9 +2,7 @@ import { IInventory } from '@/interfaces/IInventory'
 import { IArmor, IPotion, IWeapon } from '@/interfaces/IItem'
 import { IMonster } from '@/interfaces/IMonster'
 import { IPlayer } from '@/interfaces/IPlayer'
-import { Armor, Weapon } from './itemsModel'
-import { EItemCategory } from '@/enums/ItemCategory'
-import itemMods from '@/assets/json/itemMods.json'
+import { Armor, Weapon } from '@/assets/models/itemsModel'
 
 class Inventory implements IInventory {
     constructor(public inventory: Array<IWeapon | IArmor | IPotion> = [], public owner: IPlayer | IMonster) {
@@ -46,8 +44,12 @@ class Inventory implements IInventory {
         if (!itemId) {
             return
         }
-        const armor = this.getItem(itemId)
+        const armorItem = this.getItem(itemId)
         /// TO DO REST
+        if (armorItem instanceof Armor) {
+            const equipSpace = Object.keys(this.owner.bodyParts).find((bodyPart) => bodyPart === armorItem.bodyPart)
+            console.log(equipSpace)
+        }
     }
 }
 

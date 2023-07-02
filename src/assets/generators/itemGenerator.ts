@@ -18,12 +18,13 @@ class ItemGenerator {
                 itemObject = new Potion()
                 break
         }
-        console.log('here:', itemMods[category])
         const itemCategory = itemMods[category]
         const randomItem = itemCategory.item[Math.floor(Math.random() * itemCategory.item.length)]
 
         const itemType = (item: any) => {
             if (Array.isArray(item.type)) {
+                console.log(item.type[Math.floor(Math.random() * item.type.length)])
+
                 return item.type[Math.floor(Math.random() * item.type.length)]
             } else {
                 return item.type

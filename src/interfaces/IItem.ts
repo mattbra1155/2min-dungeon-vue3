@@ -1,4 +1,4 @@
-import { iBodyParts } from './BodyParts'
+import { iBodyPart } from '@/interfaces/BodyParts'
 
 export interface IItem {
     id: number
@@ -15,7 +15,7 @@ export interface IWeapon extends IItem {
 }
 
 export interface IArmor extends IItem {
-    bodyPart: iBodyParts
+    bodyPart: iBodyPart
     item: string
     prefix: IItemPrefix
     modifier: number

@@ -1,46 +1,56 @@
+import { EBodyParts } from '@/enums/EBodyParts'
 import { IArmor, IItem } from '@/interfaces/IItem'
 
-export interface iBodyParts {
-    head: {
-        name: 'Head'
-        armor: {
-            armorPoints: number
-            item: IArmor | null
-        }
-    }
-    rightArm: {
-        name: 'Right arm'
-        armor: {
-            armorPoints: number
-            item: IArmor | null
-        }
-    }
-    leftArm: {
-        name: 'Left arm'
-        armor: {
-            armorPoints: number
-            item: IArmor | null
-        }
-    }
-    torso: {
-        name: 'Torso'
-        armor: {
-            armorPoints: number
-            item: IArmor | null
-        }
-    }
-    rightLeg: {
-        name: 'Right leg'
-        armor: {
-            armorPoints: number
-            item: IArmor | null
-        }
-    }
-    leftLeg: {
-        name: 'Left leg'
+export type iBodyPart = {
+    [key in EBodyParts]: {
+        name: string
         armor: {
             armorPoints: number
             item: IArmor | null
         }
     }
 }
+// export interface iBodyParts {
+//     head: {
+//         name: 'Head'
+//         armor: {
+//             armorPoints: number
+//             item: IArmor | null
+//         }
+//     }
+//     rightArm: {
+//         name: 'Right arm'
+//         armor: {
+//             armorPoints: number
+//             item: IArmor | null
+//         }
+//     }
+//     leftArm: {
+//         name: 'Left arm'
+//         armor: {
+//             armorPoints: number
+//             item: IArmor | null
+//         }
+//     }
+//     torso: {
+//         name: 'Torso'
+//         armor: {
+//             armorPoints: number
+//             item: IArmor | null
+//         }
+//     }
+//     rightLeg: {
+//         name: 'Right leg'
+//         armor: {
+//             armorPoints: number
+//             item: IArmor | null
+//         }
+//     }
+//     leftLeg: {
+//         name: 'Left leg'
+//         armor: {
+//             armorPoints: number
+//             item: IArmor | null
+//         }
+//     }
+// }

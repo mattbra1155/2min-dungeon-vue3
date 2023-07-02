@@ -23,9 +23,9 @@ if (history.state.nextLevel) {
     createScene()
 }
 
-const weapon = new ItemGenerator().createItem(EItemCategory.Weapon)
+const armor = new ItemGenerator().createItem(EItemCategory.Armor)
 
-console.log(weapon)
+console.log(armor)
 
 if (activeGameState.value === EGameState.Battle) {
     updateTurnStateMachine(ETurnState.Init)
