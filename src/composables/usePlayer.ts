@@ -128,12 +128,9 @@ export const usePlayer = () => {
         if (payload) {
             state.player = Object.assign(state.player, payload)
             state.player.isAlive = true
-            // add inventory, add weapon do player
             const weapon = new ItemGenerator().createItem(EItemCategory.Weapon)
-            const inventory = new Inventory([weapon], state.player)
-            Object.assign(state.player.inventory, inventory.list)
-            console.log('char creation inv', state.player.inventory)
-
+            const inventory = new Inventory([weapon])
+            state.player.inventory = inventory.inventory
             if (weapon instanceof Weapon) {
                 state.player.weapon = weapon
             }

@@ -6,7 +6,7 @@ import { IArmor, IPotion, IWeapon } from '@/interfaces/IItem'
 import { EItemCategory } from '@/enums/ItemCategory'
 import InventoryItem from './InventoryItem.vue'
 const { player } = usePlayer()
-const { isOpen, toggleInventory } = useInventory()
+const { activeItemId, isOpen, toggleInventory, setactiveItemId } = useInventory()
 
 const getButtonType = (item: IWeapon | IArmor | IPotion) => {
     console.log(item)
@@ -35,12 +35,19 @@ router.beforeEach(() => {
                 Close Inventory
             </button>
         </div>
-        <ul id="inventoryList" class="o-inventory__list">
-            <li v-for="item in player?.inventory" :key="item.id" class="o-inventory__item">
-                {{ item.name }} <button class="a-button">{{ getButtonType(item) }}</button>
-                <div class="o-inventory__details">modifiers: {{ item.modifier }}</div>
-                <InventoryItem :item="item" />
-            </li>
-        </ul>
+        <div class="o-inventory__content">
+            <InventoryItem v-if="activeItemId" :item-id="activeItemId" />
+            <ul v-else id="inventoryList" class="o-inventory__list">
+                <li
+                    v-for="item in player?.inventory"
+                    :key="item.id"
+                    class="o-inventory__item"
+                    @click="setactiveItemId(item.id)"
+                >
+                    {{ item.name }} <button class="a-button">{{ getButtonType(item) }}</button>
+                    <div class="o-inventory__details">modifiers: {{ item.modifier }}</div>
+                </li>
+            </ul>
+        </div>
     </div>
 </template>

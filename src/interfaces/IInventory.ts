@@ -1,11 +1,9 @@
 import { IArmor, IPotion, IWeapon } from '@/interfaces/IItem'
-import { IPlayer } from '@/interfaces/IPlayer'
-import { IMonster } from '@/interfaces/IMonster'
 
 export interface IInventoryState {
+    activeItemId: number | null
     isOpen: boolean
 }
 export interface IInventory {
-    list: Array<IWeapon | IArmor | IPotion>
-    owner: IPlayer | IMonster
+    inventory: Array<IWeapon | IArmor | IPotion>
 }
