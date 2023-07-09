@@ -1,6 +1,7 @@
 import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
 import { iBodyParts } from '@/interfaces/BodyParts'
 import { IArmor, IPotion, iUtility, IWeapon } from '@/interfaces/IItem'
+import { Inventory } from './inventoryModel'
 
 const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 
@@ -46,7 +47,7 @@ class PlayerModel {
         },
         public weapon: IWeapon | null = null,
         public description: string = '',
-        public inventory: Array<IWeapon | IArmor | IPotion | iUtility> = [],
+        public inventory: Inventory = new Inventory(),
         public isAlive: boolean = true,
         public player: boolean = true
     ) {

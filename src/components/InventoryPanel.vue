@@ -5,8 +5,10 @@ import { useRouter } from 'vue-router'
 import { IArmor, IPotion, IWeapon } from '@/interfaces/IItem'
 import { EItemCategory } from '@/enums/ItemCategory'
 import InventoryItem from './InventoryItem.vue'
+import { getTotalDamage } from '@/helpers/getTotalDamage'
 const { player } = usePlayer()
 const { activeItemId, isOpen, toggleInventory, setactiveItemId } = useInventory()
+import { onMounted } from 'vue'
 
 const getButtonType = (item: IWeapon | IArmor | IPotion) => {
     console.log(item)
@@ -21,6 +23,9 @@ const getButtonType = (item: IWeapon | IArmor | IPotion) => {
     }
 }
 
+onMounted(() => {
+    player.value.inventory.inventory.forEach((element) => console.log(element))
+})
 const router = useRouter()
 router.beforeEach(() => {
     toggleInventory()
@@ -38,14 +43,10 @@ router.beforeEach(() => {
         <div class="o-inventory__content">
             <InventoryItem v-if="activeItemId" :item-id="activeItemId" />
             <ul v-else id="inventoryList" class="o-inventory__list">
-                <li
-                    v-for="item in player?.inventory"
-                    :key="item.id"
-                    class="o-inventory__item"
-                    @click="setactiveItemId(item.id)"
-                >
-                    {{ item.name }} <button class="a-button">{{ getButtonType(item) }}</button>
-                    <div class="o-inventory__details">modifiers: {{ item.modifier }}</div>
+                <li v-for="item in player?.inventory.inventory" :key="item.id" class="o-inventory__item">
+                    <p @click="setactiveItemId(item.id)">{{ item.name }} + {{ getTotalDamage(item as IWeapon) }}</p>
+                    <button class="a-button">{{ getButtonType(item) }}</button>
+                    <div class="o-inventory__details">modifiers: {{ getTotalDamage(item as IWeapon) }}</div>
                 </li>
             </ul>
         </div>

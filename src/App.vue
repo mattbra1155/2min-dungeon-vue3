@@ -14,6 +14,7 @@ const router = useRouter()
 const init = async () => {
     updateGameState(EGameState.Init)
     if (activeGameState.value === EGameState.Init) {
+        // TO FIX: Player is not a class but just a object with interface added.
         const player: IPlayer | undefined = await fetchPlayer()
         if (player) {
             await setPlayer(player)

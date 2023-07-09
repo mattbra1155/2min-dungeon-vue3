@@ -5,11 +5,12 @@ import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
 import { ItemGenerator } from '@/assets/generators/itemGenerator'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { Weapon } from '@/assets/models/itemsModel'
+import { PlayerModel } from '@/assets/models/playerModel'
 import { Inventory } from '@/assets/models/inventoryModel'
+import { IWeapon } from '@/interfaces/IItem'
 const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 
-const playerModel: IPlayer = {
-    id: 0,
+const playerModel: PlayerModel = {
     name: 'Charname',
     race: 'dwarf',
     profession: '',
@@ -37,7 +38,7 @@ const playerModel: IPlayer = {
     },
     weapon: null,
     description: '',
-    inventory: [],
+    inventory: new Inventory(),
     isAlive: true,
     player: true,
 }
@@ -76,7 +77,7 @@ const state: iPlayerState = reactive({
         },
         weapon: null,
         description: '',
-        inventory: [],
+        inventory: new Inventory(),
         isAlive: true,
         player: true,
     },
@@ -109,7 +110,7 @@ const state: iPlayerState = reactive({
         },
         weapon: null,
         description: '',
-        inventory: [],
+        inventory: new Inventory(),
         isAlive: true,
         player: true,
     },
@@ -124,16 +125,16 @@ export const usePlayer = () => {
         return state.player
     }
 
-    const createPlayer = (payload: IPlayer | null) => {
+    const createPlayer = (payload: PlayerModel | null) => {
         if (payload) {
             state.player = Object.assign(state.player, payload)
             state.player.isAlive = true
             const weapon = new ItemGenerator().createItem(EItemCategory.Weapon)
-            const inventory = new Inventory([weapon])
-            state.player.inventory = inventory.inventory
+            state.player.inventory.addItem(weapon)
             if (weapon instanceof Weapon) {
                 state.player.weapon = weapon
             }
+            // TO FIX: When saving Player the Class is lost. Need to find a way to restore it
             localforage.setItem('player', JSON.stringify(state.player))
         }
     }
@@ -151,9 +152,9 @@ export const usePlayer = () => {
         try {
             const result: string | null = await localforage.getItem('player')
             if (result) {
-                const player: IPlayer = JSON.parse(result)
+                const player = JSON.parse(result) as PlayerModel
                 console.log(player)
-                state.player = player
+                state.player.inventory = player.inventory
                 return player
             }
         } catch (error: any) {

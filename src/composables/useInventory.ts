@@ -20,6 +20,7 @@ export const useInventory = () => {
     const toggleInventory = () => {
         if (state.isOpen) {
             state.isOpen = false
+            state.activeItemId = null
         } else {
             state.isOpen = true
         }

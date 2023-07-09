@@ -1,1 +1,23 @@
-.o-inventoryItem
+.m-inventoryItem
+    display: flex
+    flex-direction: column
+    gap: 1rem
+    width: 100%
+    &__title::first-letter
+        text-transform: capitalize
+    &__imageWrapper
+        max-height: 200px
+    &__details
+        display: grid
+        grid-template-columns: 1fr 1fr
+        gap: 0.5rem
+    &__detailsItem
+        &.--fullWidth
+            grid-column: span 2
+    &__modifiers
+        display: grid
+        grid-template-columns: 1fr 1fr
+        gap: 0.5rem
+    &__modifierItem
+        &.--fullWidth
+            grid-column: span 2
