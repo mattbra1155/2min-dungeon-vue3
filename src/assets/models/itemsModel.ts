@@ -48,6 +48,7 @@ class Weapon extends Item implements IWeapon {
         }
         if (weapon instanceof Weapon) {
             owner.weapon = weapon
+            console.log('wielded', weapon)
         } else {
             console.error(`${weapon?.name} not a weapon!!`)
         }

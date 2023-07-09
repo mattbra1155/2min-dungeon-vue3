@@ -152,8 +152,11 @@ export const usePlayer = () => {
         try {
             const result: string | null = await localforage.getItem('player')
             if (result) {
-                const player = JSON.parse(result) as PlayerModel
-                console.log(player)
+                const playerData = JSON.parse(result) as PlayerModel
+                //create new EMPTY player class
+                const player = new PlayerModel()
+                // assign data to player class
+                Object.assign(player, playerData)
                 state.player.inventory = player.inventory
                 return player
             }

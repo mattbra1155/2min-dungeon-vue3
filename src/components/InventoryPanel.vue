@@ -9,9 +9,9 @@ import { getTotalDamage } from '@/helpers/getTotalDamage'
 const { player } = usePlayer()
 const { activeItemId, isOpen, toggleInventory, setactiveItemId } = useInventory()
 import { onMounted } from 'vue'
+import { Armor, Potion, Weapon } from '@/assets/models/itemsModel'
 
 const getButtonType = (item: IWeapon | IArmor | IPotion) => {
-    console.log(item)
     if (item.category === EItemCategory.Weapon) {
         return 'Wield'
     } else if (item.category === EItemCategory.Armor) {
@@ -26,6 +26,7 @@ const getButtonType = (item: IWeapon | IArmor | IPotion) => {
 onMounted(() => {
     player.value.inventory.inventory.forEach((element) => console.log(element))
 })
+
 const router = useRouter()
 router.beforeEach(() => {
     toggleInventory()

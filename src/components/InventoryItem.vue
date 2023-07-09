@@ -12,7 +12,7 @@ const props = defineProps<{
 }>()
 
 const item = computed(() => player.value.inventory.inventory.find((inventoryItem) => inventoryItem.id === props.itemId))
-
+console.log(player.value)
 const getDamage = computed(() => {
     console.log(item.value instanceof Weapon)
 
