@@ -4,7 +4,7 @@ import { IPlayer } from '@/interfaces/IPlayer'
 import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
 import { ItemGenerator } from '@/assets/generators/itemGenerator'
 import { EItemCategory } from '@/enums/ItemCategory'
-import { Weapon } from '@/assets/models/itemsModel'
+import { Armor, Potion, Weapon } from '@/assets/models/itemsModel'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { Inventory } from '@/assets/models/inventoryModel'
 import { IWeapon } from '@/interfaces/IItem'
@@ -130,7 +130,9 @@ export const usePlayer = () => {
             state.player = Object.assign(state.player, payload)
             state.player.isAlive = true
             const weapon = new ItemGenerator().createItem(EItemCategory.Weapon)
+            const armor = new ItemGenerator().createItem(EItemCategory.Armor)
             state.player.inventory.addItem(weapon)
+            state.player.inventory.addItem(armor)
             if (weapon instanceof Weapon) {
                 state.player.weapon = weapon
             }
@@ -158,6 +160,39 @@ export const usePlayer = () => {
                 // assign data to player class
                 Object.assign(player, playerData)
                 state.player.inventory = player.inventory
+                const populateInventoryItemClasses = () => {
+                    state.player.inventory.inventory.forEach((item) => {
+                        let newItem = {}
+                        switch (item.category) {
+                            case EItemCategory.Weapon:
+                                newItem = new Weapon()
+                                Object.assign(newItem, item)
+
+                                console.log(newItem)
+                                return newItem
+                                break
+                            case EItemCategory.Armor:
+                                newItem = new Armor()
+                                Object.assign(newItem, item)
+
+                                console.log(newItem)
+                                return newItem
+                                break
+                            case EItemCategory.Potion:
+                                newItem = new Potion()
+                                Object.assign(newItem, item)
+
+                                console.log(newItem)
+                                return newItem
+                                break
+
+                            default:
+                                break
+                        }
+                    })
+                }
+                populateInventoryItemClasses()
+
                 return player
             }
         } catch (error: any) {

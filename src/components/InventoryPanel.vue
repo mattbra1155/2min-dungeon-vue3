@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { usePlayer } from '@/composables/usePlayer'
 import { useInventory } from '@/composables/useInventory'
 import { useRouter } from 'vue-router'
@@ -6,10 +7,11 @@ import { IArmor, IPotion, IWeapon } from '@/interfaces/IItem'
 import { EItemCategory } from '@/enums/ItemCategory'
 import InventoryItem from './InventoryItem.vue'
 import { getTotalDamage } from '@/helpers/getTotalDamage'
+import { getTotalArmorPoints } from '@/helpers/getTotalArmorPoints'
+import { Armor } from '@/assets/models/itemsModel'
+
 const { player } = usePlayer()
 const { activeItemId, isOpen, toggleInventory, setactiveItemId } = useInventory()
-import { onMounted } from 'vue'
-import { Armor, Potion, Weapon } from '@/assets/models/itemsModel'
 
 const getButtonType = (item: IWeapon | IArmor | IPotion) => {
     if (item.category === EItemCategory.Weapon) {
@@ -45,9 +47,24 @@ router.beforeEach(() => {
             <InventoryItem v-if="activeItemId" :item-id="activeItemId" />
             <ul v-else id="inventoryList" class="o-inventory__list">
                 <li v-for="item in player?.inventory.inventory" :key="item.id" class="o-inventory__item">
-                    <p @click="setactiveItemId(item.id)">{{ item.name }} + {{ getTotalDamage(item as IWeapon) }}</p>
+                    <p @click="setactiveItemId(item.id)">
+                        {{ item.name }}
+                        <i v-if="Math.sign(getTotalArmorPoints(item as Armor))">+</i>
+                        {{
+                            item.category === EItemCategory.Weapon
+                                ? getTotalDamage(item as IWeapon)
+                                : getTotalArmorPoints(item as Armor)
+                        }}
+                    </p>
                     <button class="a-button">{{ getButtonType(item) }}</button>
-                    <div class="o-inventory__details">modifiers: {{ getTotalDamage(item as IWeapon) }}</div>
+                    <div class="o-inventory__details">
+                        modifiers:
+                        {{
+                            item.category === EItemCategory.Weapon
+                                ? getTotalDamage(item as IWeapon)
+                                : getTotalArmorPoints(item as Armor)
+                        }}
+                    </div>
                 </li>
             </ul>
         </div>
