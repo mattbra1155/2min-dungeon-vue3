@@ -58,7 +58,7 @@ onMounted(() => {
     <div v-if="isOpen" id="inventory" class="o-inventory">
         <div class="o-inventory__header">
             <h2 class="o-inventory__title">Inventory</h2>
-            <button id="inventoryCloseButton" class="o-inventory__close" @click="toggleInventory">
+            <button id="inventoryCloseButton" class="a-button --secondary o-inventory__close" @click="toggleInventory">
                 Close Inventory
             </button>
         </div>
@@ -71,7 +71,7 @@ onMounted(() => {
 
                         {{ getItemValue(item) }}
                     </p>
-                    <button class="a-button">{{ getButtonType(item) }}</button>
+                    <button class="a-button --primary">{{ getButtonType(item) }}</button>
                     <div class="o-inventory__details">
                         modifiers:
                         {{ getItemValue(item) }}
