@@ -7,7 +7,7 @@
     position: fixed
     top: 0
     left: 0
-    background: #ededed
+    background: #ecc9ac
     z-index: 100
     +smallDesktop
         padding: 4rem 2rem
@@ -28,16 +28,18 @@
         justify-content: flex-start
         align-items: flex-start
         width: 100%
-        padding: 5%
         list-style: none
         overflow: auto
-
     &__item
         display: flex
         flex-direction: row
         justify-content: space-between
         position: relative
         width: 100%
+        padding: 0.5rem
+        background: #caae95
+        border: 1px solid #3a2a1b
+        border-radius: 8px
         &:hover
             .o-inventory__details
                 display: flex

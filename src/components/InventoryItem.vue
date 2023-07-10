@@ -32,7 +32,7 @@ const getArmorPoints = computed(() => {
 
 <template>
     <div v-if="item" class="m-inventoryItem">
-        <picture class="m-inventory__imageWrapper">
+        <picture class="m-inventoryItem__imageWrapper">
             <source srcset="https://placehold.co/200x200" media="(max-width: 768px )" />
             <img src="https://placehold.co/200x200" alt="" class="a-image m-inventoryItem__image" />
         </picture>
