@@ -1,13 +1,11 @@
 import { reactive, toRefs } from 'vue'
 import localforage from 'localforage'
-import { IPlayer } from '@/interfaces/IPlayer'
 import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
 import { ItemGenerator } from '@/assets/generators/itemGenerator'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { Armor, Potion, Weapon } from '@/assets/models/itemsModel'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { Inventory } from '@/assets/models/inventoryModel'
-import { IWeapon } from '@/interfaces/IItem'
 const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 
 const playerModel: PlayerModel = {
@@ -44,8 +42,8 @@ const playerModel: PlayerModel = {
 }
 
 interface iPlayerState {
-    player: IPlayer
-    initPlayer: IPlayer
+    player: PlayerModel
+    initPlayer: PlayerModel
 }
 const state: iPlayerState = reactive({
     initPlayer: {
@@ -117,7 +115,7 @@ const state: iPlayerState = reactive({
 })
 
 export const usePlayer = () => {
-    const setPlayer = async (payload: IPlayer) => {
+    const setPlayer = async (payload: PlayerModel) => {
         await storePlayerModel()
         state.player = payload
 
@@ -128,6 +126,8 @@ export const usePlayer = () => {
     const createPlayer = (payload: PlayerModel | null) => {
         if (payload) {
             state.player = Object.assign(state.player, payload)
+            const inventory = new Inventory()
+            state.player.inventory = inventory
             state.player.isAlive = true
             const weapon = new ItemGenerator().createItem(EItemCategory.Weapon)
             const armor = new ItemGenerator().createItem(EItemCategory.Armor)
@@ -201,7 +201,7 @@ export const usePlayer = () => {
     }
 
     const resetPlayer = async () => {
-        state.player = (await localforage.getItem('initPlayer')) as IPlayer
+        state.player = (await localforage.getItem('initPlayer')) as PlayerModel
     }
 
     const deadPlayer = () => {

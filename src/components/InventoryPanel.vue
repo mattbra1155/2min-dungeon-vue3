@@ -2,7 +2,6 @@
 import { onMounted } from 'vue'
 import { usePlayer } from '@/composables/usePlayer'
 import { useInventory } from '@/composables/useInventory'
-import { useRouter } from 'vue-router'
 import { IArmor, IPotion, IWeapon } from '@/interfaces/IItem'
 import { EItemCategory } from '@/enums/ItemCategory'
 import InventoryItem from './InventoryItem.vue'
@@ -27,11 +26,6 @@ const getButtonType = (item: IWeapon | IArmor | IPotion) => {
 
 onMounted(() => {
     player.value.inventory.inventory.forEach((element) => console.log(element))
-})
-
-const router = useRouter()
-router.beforeEach(() => {
-    toggleInventory()
 })
 </script>
 
