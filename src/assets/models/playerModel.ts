@@ -2,8 +2,9 @@
 import { iBodyPart } from '@/interfaces/BodyParts'
 import { IWeapon } from '@/interfaces/IItem'
 import { Inventory } from './inventoryModel'
+import { bodyPartsModel } from './bodyPartsModel'
 
-// const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
+const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 
 class PlayerModel {
     constructor(
@@ -37,7 +38,7 @@ class PlayerModel {
             willPower: 0,
             charisma: 0,
         },
-        public bodyParts: iBodyPart,
+        public bodyParts: iBodyPart = bodyPartsModel,
         public weapon: IWeapon | null = null,
         public description: string = '',
         public inventory: Inventory = new Inventory(),

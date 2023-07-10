@@ -1,6 +1,7 @@
-import { iBodyPart } from '@/interfaces/BodyParts'
+import { EBodyParts } from '@/enums/EBodyParts'
 import { IMonster } from '@/interfaces/IMonster'
 import { IPlayer } from '@/interfaces/IPlayer'
+import { iBodyPart } from './BodyParts'
 
 export interface IItem {
     id: number

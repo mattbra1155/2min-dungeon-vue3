@@ -1,11 +1,11 @@
-import { iBodyPart } from '@/interfaces/BodyParts'
+import { iBodyPart, iBodyParts } from '@/interfaces/BodyParts'
 import { IArmor, IItem, IItemPrefix, IPotion, IWeapon } from '@/interfaces/IItem'
-// import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
+import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
 import { IPlayer } from '@/interfaces/IPlayer'
 import { IMonster } from '@/interfaces/IMonster'
 import { PlayerModel } from './playerModel'
 import { EBodyParts } from '@/enums/EBodyParts'
-// const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
+const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 
 class Item implements IItem {
     constructor(
@@ -72,7 +72,14 @@ class Armor extends Item implements IArmor {
         public name: string = '',
         public description: string = '',
         public modifier: number = 0,
-        public bodyPart: iBodyPart,
+        public bodyPart: iBodyPart = {
+            head,
+            leftArm,
+            rightArm,
+            leftLeg,
+            rightLeg,
+            torso,
+        },
         public type: string = '',
         public item: string = '',
         public category: string = '',
@@ -105,6 +112,7 @@ class Armor extends Item implements IArmor {
         }
         // equip the item
         owner.bodyParts[itemSlot].armor.item = this
+        console.log(`equiped ${this.name} on ${itemSlot}`)
     }
 }
 
