@@ -1,8 +1,8 @@
 export enum EBodyParts {
     Head = 'head',
-    rightArm = 'rightArm',
-    leftArm = 'leftArm',
-    torso = 'torso',
-    rightLeg = 'rightLeg',
-    leftLeg = 'leftLeg',
+    RightArm = 'rightArm',
+    LeftArm = 'leftArm',
+    Torso = 'torso',
+    RightLeg = 'rightLeg',
+    LeftLeg = 'leftLeg',
 }

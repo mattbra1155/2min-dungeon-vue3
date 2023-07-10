@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { usePlayer } from '@/composables/usePlayer'
 import { useInventory } from '@/composables/useInventory'
 import { IArmor, IPotion, IWeapon } from '@/interfaces/IItem'
 import { EItemCategory } from '@/enums/ItemCategory'
-import InventoryItem from './InventoryItem.vue'
 import { getTotalDamage } from '@/helpers/getTotalDamage'
 import { getTotalArmorPoints } from '@/helpers/getTotalArmorPoints'
 import { Armor, Potion, Weapon } from '@/assets/models/itemsModel'
+import InventoryItem from '@/components/InventoryItem.vue'
 
 const { player } = usePlayer()
 const { activeItemId, isOpen, toggleInventory, setactiveItemId } = useInventory()
@@ -30,15 +30,19 @@ const getItemValue = (item: IWeapon | IArmor | IPotion) => {
         case EItemCategory.Weapon:
             if (getTotalDamage(item as Weapon) > 0) {
                 value.value = `+${getTotalDamage(item as Weapon)}`
-            } else {
+            } else if (getTotalDamage(item as Weapon) < 0) {
                 value.value = getTotalDamage(item as Weapon)
+            } else {
+                value.value = ''
             }
             break
         case EItemCategory.Armor:
             if (getTotalArmorPoints(item as Armor) > 0) {
                 value.value = `+${getTotalArmorPoints(item as Armor)}`
-            } else {
+            } else if (getTotalArmorPoints(item as Armor) < 0) {
                 value.value = getTotalArmorPoints(item as Armor)
+            } else {
+                value.value = ''
             }
             break
         case EItemCategory.Potion:
@@ -49,9 +53,13 @@ const getItemValue = (item: IWeapon | IArmor | IPotion) => {
     return value.value
 }
 
-onMounted(() => {
-    player.value.inventory.inventory.forEach((element) => console.log(element))
-})
+const submitAction = (item: Weapon | Armor | Potion) => {
+    if (item instanceof Weapon) {
+        item.wield(player.value)
+    } else if (item instanceof Armor) {
+        item.equip(player.value)
+    }
+}
 </script>
 
 <template>
@@ -68,10 +76,9 @@ onMounted(() => {
                 <li v-for="item in player?.inventory.inventory" :key="item.id" class="o-inventory__item">
                     <p @click="setactiveItemId(item.id)">
                         {{ item.name }}
-
                         {{ getItemValue(item) }}
                     </p>
-                    <button class="a-button --primary">{{ getButtonType(item) }}</button>
+                    <button class="a-button --primary" @click="submitAction(item)">{{ getButtonType(item) }}</button>
                     <div class="o-inventory__details">
                         modifiers:
                         {{ getItemValue(item) }}

@@ -1,3 +1,4 @@
+import { Armor } from '@/assets/models/itemsModel'
 import { EBodyParts } from '@/enums/EBodyParts'
 import { IArmor } from '@/interfaces/IItem'
 
@@ -6,7 +7,7 @@ export type iBodyPart = {
         name: string
         armor: {
             armorPoints: number
-            item: IArmor | null
+            item: Armor | null
         }
     }
 }
