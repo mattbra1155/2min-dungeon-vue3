@@ -6,6 +6,7 @@ import { EItemCategory } from '@/enums/ItemCategory'
 import { Armor, Potion, Weapon } from '@/assets/models/itemsModel'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { Inventory } from '@/assets/models/inventoryModel'
+import { IArmor, IPotion, IWeapon } from '@/interfaces/IItem'
 const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 
 const playerModel: PlayerModel = {
@@ -118,7 +119,6 @@ export const usePlayer = () => {
     const setPlayer = async (payload: PlayerModel) => {
         await storePlayerModel()
         state.player = payload
-
         await localforage.setItem('player', JSON.stringify(payload))
         return state.player
     }
@@ -158,42 +158,35 @@ export const usePlayer = () => {
                 //create new EMPTY player class
                 const player = new PlayerModel()
                 // assign data to player class
-                Object.assign(player, playerData)
-                state.player.inventory = player.inventory
+
+                const newPlayer = Object.assign(player, playerData)
+
+                const inventory = new Inventory()
+                state.player.inventory = inventory
+
+                Object.assign(state.player.inventory, player.inventory)
                 const populateInventoryItemClasses = () => {
-                    state.player.inventory.inventory.forEach((item) => {
-                        let newItem = {}
-                        switch (item.category) {
-                            case EItemCategory.Weapon:
-                                newItem = new Weapon()
-                                Object.assign(newItem, item)
-
-                                console.log(newItem)
-                                return newItem
-                                break
-                            case EItemCategory.Armor:
-                                newItem = new Armor()
-                                Object.assign(newItem, item)
-
-                                console.log(newItem)
-                                return newItem
-                                break
-                            case EItemCategory.Potion:
-                                newItem = new Potion()
-                                Object.assign(newItem, item)
-
-                                console.log(newItem)
-                                return newItem
-                                break
-
-                            default:
-                                break
+                    state.player.inventory.inventory = state.player.inventory.inventory.map((item) => {
+                        if (item.category === EItemCategory.Weapon) {
+                            const weapon = new Weapon()
+                            const newWeapon = Object.assign(weapon, item)
+                            return newWeapon as IWeapon
+                        } else if (item.category === EItemCategory.Armor) {
+                            const armor = new Armor()
+                            const newArmor = Object.assign(armor, item)
+                            return newArmor as IArmor
+                        } else if (item.category === EItemCategory.Potion) {
+                            const potion = new Potion()
+                            const newPotion = Object.assign(potion, item)
+                            return newPotion as IPotion
+                        } else {
+                            return item
                         }
                     })
                 }
                 populateInventoryItemClasses()
 
-                return player
+                return newPlayer
             }
         } catch (error: any) {
             throw Error(error)

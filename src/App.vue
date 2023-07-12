@@ -17,6 +17,7 @@ const init = async () => {
         // TO FIX: Player is not a class but just a object with interface added.
         const player: IPlayer | undefined = await fetchPlayer()
         if (player) {
+            console.log(player)
             await setPlayer(player)
             updateGameState(EGameState.Battle)
             router.push({ name: 'home' })

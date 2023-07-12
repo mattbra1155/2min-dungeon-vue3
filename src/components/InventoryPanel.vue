@@ -11,8 +11,9 @@ import InventoryItem from '@/components/InventoryItem.vue'
 
 const { player } = usePlayer()
 const { activeItemId, isOpen, toggleInventory, setactiveItemId } = useInventory()
-
-const getButtonType = (item: IWeapon | IArmor | IPotion) => {
+console.log(player.value)
+const getButtonType = (item: Weapon | Armor | Potion) => {
+    console.log(item)
     if (item.category === EItemCategory.Weapon) {
         return 'Wield'
     } else if (item.category === EItemCategory.Armor) {
@@ -54,6 +55,8 @@ const getItemValue = (item: IWeapon | IArmor | IPotion) => {
 }
 
 const submitAction = (item: Weapon | Armor | Potion) => {
+    console.log(player.value)
+    console.log(item)
     if (item instanceof Weapon) {
         item.wield(player.value)
     } else if (item instanceof Armor) {
