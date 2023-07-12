@@ -1,5 +1,4 @@
 import { IMonster } from '@/interfaces/IMonster'
-import { IPlayer } from '@/interfaces/IPlayer'
 import { usePlayer } from '@/composables/usePlayer'
 import { reactive, toRefs } from 'vue'
 import { ETurnState } from '@/enums/ETurnState'
@@ -7,6 +6,7 @@ import { useSceneManager } from '@/composables/useSceneManager'
 import { useAttack } from '@/composables/useAttack'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { EGameState } from '@/enums/EGameState'
+import { PlayerModel } from '@/assets/models/playerModel'
 
 const { scene } = useSceneManager()
 const { player } = usePlayer()
@@ -15,9 +15,9 @@ const { updateGameState } = useGameStateManager()
 
 interface iTurn {
     turn: number
-    turnOrder: Array<IMonster | IPlayer>
+    turnOrder: Array<IMonster | PlayerModel>
     activeTurnState: ETurnState
-    activeCharacter: IPlayer | IMonster
+    activeCharacter: PlayerModel | IMonster
 }
 
 const state: iTurn = reactive({
@@ -112,7 +112,7 @@ export const useTurn = () => {
         }
     }
 
-    const removeDeadFromOrder = (dead: IMonster | IPlayer) => {
+    const removeDeadFromOrder = (dead: IMonster | PlayerModel) => {
         const deadPerson = state.turnOrder.find((character) => character === dead)
         const deadPersonIndex = state.turnOrder.findIndex((character) => character === deadPerson)
         const updatedTurnOrder = state.turnOrder.splice(deadPersonIndex, 1)

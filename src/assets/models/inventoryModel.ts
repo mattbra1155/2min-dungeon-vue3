@@ -1,12 +1,12 @@
 import { IInventory } from '@/interfaces/IInventory'
-import { IArmor, IPotion, IWeapon } from '@/interfaces/IItem'
+import { Armor, Potion, Weapon } from '@/assets/models/itemsModel'
 
 class Inventory implements IInventory {
-    constructor(public inventory: Array<IWeapon | IArmor | IPotion> = []) {
+    constructor(public inventory: Array<Weapon | Armor | Potion> = []) {
         this.inventory = inventory
     }
 
-    addItem(item: IArmor | IWeapon | IPotion): void {
+    addItem(item: Weapon | Armor | Potion): void {
         if (!item) {
             return
         }

@@ -158,13 +158,13 @@ export const usePlayer = () => {
                 //create new EMPTY player class
                 const player = new PlayerModel()
                 // assign data to player class
+                // const inventory = new Inventory()
 
                 const newPlayer = Object.assign(player, playerData)
 
-                const inventory = new Inventory()
-                state.player.inventory = inventory
+                newPlayer.inventory = player.inventory
+                // Object.assign(newPlayer.inventory, player.inventory)
 
-                Object.assign(state.player.inventory, player.inventory)
                 const populateInventoryItemClasses = () => {
                     state.player.inventory.inventory = state.player.inventory.inventory.map((item) => {
                         if (item.category === EItemCategory.Weapon) {

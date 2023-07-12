@@ -1,9 +1,8 @@
-import { iBodyPart, iBodyParts } from '@/interfaces/BodyParts'
+import { iBodyPart } from '@/interfaces/BodyParts'
 import { IArmor, IItem, IItemPrefix, IPotion, IWeapon } from '@/interfaces/IItem'
 import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
-import { IPlayer } from '@/interfaces/IPlayer'
 import { IMonster } from '@/interfaces/IMonster'
-import { PlayerModel } from './playerModel'
+import { PlayerModel } from '@/assets/models/playerModel'
 import { EBodyParts } from '@/enums/EBodyParts'
 const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 
@@ -43,7 +42,7 @@ class Weapon extends Item implements IWeapon {
         this.modifier = modifier
     }
 
-    wield(owner: IPlayer | IMonster) {
+    wield(owner: PlayerModel | IMonster) {
         if (!this) {
             console.error(`no weapon to wield!!`)
             return

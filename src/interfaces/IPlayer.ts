@@ -1,7 +1,7 @@
 import { iPerson } from '@/interfaces/Person'
 
 export interface IPlayer extends iPerson {
-    // id: number
+    id: number
     player: boolean
     profession: string
 }

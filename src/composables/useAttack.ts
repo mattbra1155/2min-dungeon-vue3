@@ -2,8 +2,8 @@ import { reactive, toRefs } from 'vue'
 
 import { diceRollK100, diceRollK6 } from '@/assets/scripts/diceRoll'
 import { IMonster } from '@/interfaces/IMonster'
-import { IPlayer } from '@/interfaces/IPlayer'
 import { usePlayer } from '@/composables/usePlayer'
+import { PlayerModel } from '@/assets/models/playerModel'
 
 const { player } = usePlayer()
 
@@ -16,7 +16,7 @@ const state: IAttackState = reactive({
 })
 
 export const useAttack = () => {
-    const attack = (attacker: IMonster | IPlayer, enemy: IMonster | IPlayer) => {
+    const attack = (attacker: IMonster | PlayerModel, enemy: IMonster | PlayerModel) => {
         const diceRollHitResult = diceRollK100()
         console.log(`Dice roll: ${diceRollHitResult}`)
         // check if attack hits

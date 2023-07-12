@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { usePlayer } from '@/composables/usePlayer'
 import { useInventory } from '@/composables/useInventory'
-import { IArmor, IPotion, IWeapon } from '@/interfaces/IItem'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { getTotalDamage } from '@/helpers/getTotalDamage'
 import { getTotalArmorPoints } from '@/helpers/getTotalArmorPoints'
@@ -11,9 +10,11 @@ import InventoryItem from '@/components/InventoryItem.vue'
 
 const { player } = usePlayer()
 const { activeItemId, isOpen, toggleInventory, setactiveItemId } = useInventory()
-console.log(player.value)
+
+onMounted(() => {
+    console.log(player.value)
+})
 const getButtonType = (item: Weapon | Armor | Potion) => {
-    console.log(item)
     if (item.category === EItemCategory.Weapon) {
         return 'Wield'
     } else if (item.category === EItemCategory.Armor) {
@@ -25,7 +26,7 @@ const getButtonType = (item: Weapon | Armor | Potion) => {
     }
 }
 
-const getItemValue = (item: IWeapon | IArmor | IPotion) => {
+const getItemValue = (item: Weapon | Armor | Potion) => {
     const value = ref<string | number>()
     switch (item.category) {
         case EItemCategory.Weapon:
@@ -80,6 +81,7 @@ const submitAction = (item: Weapon | Armor | Potion) => {
                     <p @click="setactiveItemId(item.id)">
                         {{ item.name }}
                         {{ getItemValue(item) }}
+                        {{ item instanceof Weapon }}
                     </p>
                     <button class="a-button --primary" @click="submitAction(item)">{{ getButtonType(item) }}</button>
                     <div class="o-inventory__details">
