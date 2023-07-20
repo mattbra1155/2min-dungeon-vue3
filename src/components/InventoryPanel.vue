@@ -15,6 +15,7 @@ onMounted(() => {
     console.log(player.value)
 })
 const getButtonType = (item: Weapon | Armor | Potion) => {
+    console.log(item instanceof Weapon)
     if (item.category === EItemCategory.Weapon) {
         return 'Wield'
     } else if (item.category === EItemCategory.Armor) {

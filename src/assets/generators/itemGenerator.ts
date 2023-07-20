@@ -1,6 +1,6 @@
 import { Weapon, Armor, Potion } from '@/assets/models/itemsModel'
 import itemMods from '@/assets/json/itemMods.json'
-import { IWeapon, IArmor, IPotion, IItemPrefix } from '@/interfaces/IItem'
+import { IItemPrefix } from '@/interfaces/IItem'
 import { useItemGenerator } from '@/composables/useItemGenerator'
 import { EItemCategory } from '@/enums/ItemCategory'
 
@@ -28,7 +28,7 @@ class ItemGenerator {
                 return item.type
             }
         }
-        const finalItem: IWeapon | IArmor | IPotion = Object.assign(itemObject, randomItem, {
+        const finalItem: Weapon | Armor | Potion = Object.assign(itemObject, randomItem, {
             category: itemCategory,
             type: itemType(randomItem),
         })
@@ -41,7 +41,7 @@ class ItemGenerator {
         return prefix
     }
 
-    createDescription(baseItem: IWeapon | IArmor | IPotion, prefix: IItemPrefix) {
+    createDescription(baseItem: Weapon | Armor | Potion, prefix: IItemPrefix) {
         if (prefix.name === 'used') {
             return `This is a ${baseItem.name}. Nothing out of the ordinary`
         } else {

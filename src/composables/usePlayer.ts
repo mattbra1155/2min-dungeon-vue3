@@ -153,39 +153,43 @@ export const usePlayer = () => {
     const fetchPlayer = async () => {
         try {
             const result: string | null = await localforage.getItem('player')
+
             if (result) {
-                const playerData = JSON.parse(result) as PlayerModel
+                const playerData = JSON.parse(result)
                 //create new EMPTY player class
-                const player = new PlayerModel()
+                const playerClass = new PlayerModel()
                 // assign data to player class
-                // const inventory = new Inventory()
+                const newPlayer = Object.assign(playerClass, playerData)
+                // create new inventory class
+                const inventory = new Inventory()
 
-                const newPlayer = Object.assign(player, playerData)
-
-                newPlayer.inventory = player.inventory
-                // Object.assign(newPlayer.inventory, player.inventory)
+                newPlayer.inventory = inventory
 
                 const populateInventoryItemClasses = () => {
-                    state.player.inventory.inventory = state.player.inventory.inventory.map((item) => {
-                        if (item.category === EItemCategory.Weapon) {
-                            const weapon = new Weapon()
-                            const newWeapon = Object.assign(weapon, item)
-                            return newWeapon as IWeapon
-                        } else if (item.category === EItemCategory.Armor) {
-                            const armor = new Armor()
-                            const newArmor = Object.assign(armor, item)
-                            return newArmor as IArmor
-                        } else if (item.category === EItemCategory.Potion) {
-                            const potion = new Potion()
-                            const newPotion = Object.assign(potion, item)
-                            return newPotion as IPotion
-                        } else {
-                            return item
+                    if (!playerData.inventory) {
+                        return
+                    }
+                    newPlayer.inventory.inventory = playerData.inventory.inventory.map(
+                        (item: Weapon | Armor | Potion) => {
+                            if (item.category === EItemCategory.Weapon) {
+                                const weapon = new Weapon()
+                                const newWeapon = Object.assign(weapon, item)
+                                return newWeapon as IWeapon
+                            } else if (item.category === EItemCategory.Armor) {
+                                const armor = new Armor()
+                                const newArmor = Object.assign(armor, item)
+                                return newArmor as IArmor
+                            } else if (item.category === EItemCategory.Potion) {
+                                const potion = new Potion()
+                                const newPotion = Object.assign(potion, item)
+                                return newPotion as IPotion
+                            } else {
+                                return item
+                            }
                         }
-                    })
+                    )
                 }
                 populateInventoryItemClasses()
-
                 return newPlayer
             }
         } catch (error: any) {
