@@ -65,14 +65,26 @@ const submitAction = (item: Weapon | Armor | Potion) => {
         item.equip(player.value)
     }
 }
+
+const closeItemDetails = () => {
+    activeItemId.value = null
+}
 </script>
 
 <template>
     <div v-if="isOpen" id="inventory" class="o-inventory">
         <div class="o-inventory__header">
             <h2 class="o-inventory__title">Inventory</h2>
-            <button id="inventoryCloseButton" class="a-button --secondary o-inventory__close" @click="toggleInventory">
-                Close Inventory
+            <button v-if="activeItemId" class="a-button --secondary o-inventory__close" @click="closeItemDetails">
+                Back
+            </button>
+            <button
+                v-else
+                id="inventoryCloseButton"
+                class="a-button --secondary o-inventory__close"
+                @click="toggleInventory"
+            >
+                Close
             </button>
         </div>
         <div class="o-inventory__content">
