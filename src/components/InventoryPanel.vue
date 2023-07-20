@@ -48,14 +48,11 @@ const getItemValue = (item: Weapon | Armor | Potion) => {
             // TO DO: add potion func
             console.log('potion switch case not implementd')
             break
-        default:
-            value.value = 'Equipped'
     }
     return value.value
 }
 
 const submitAction = (item: Weapon | Armor | Potion) => {
-    item.isEquipped = true
     if (item instanceof Weapon) {
         item.wield(player.value)
     } else if (item instanceof Armor) {
@@ -65,6 +62,12 @@ const submitAction = (item: Weapon | Armor | Potion) => {
 
 const closeItemDetails = () => {
     activeItemId.value = null
+}
+
+const unequip = (item: Weapon | Armor | Potion) => {
+    if (item instanceof Weapon || item instanceof Armor) {
+        item.unequip(player.value)
+    }
 }
 </script>
 
@@ -88,16 +91,15 @@ const closeItemDetails = () => {
             <h3 class="a-text">Equipped</h3>
             <ul class="o-inventory__list">
                 <template v-for="item in player?.inventory.inventory" :key="item.id">
-                    <li v-if="item.isEquipped" class="o-inventory__item">
+                    <li v-if="item.isEquipped" class="o-inventory__item --equipped">
                         <p class="a-text" v-if="item instanceof Armor">{{ item.bodyPart }}</p>
+                        <p class="a-text" v-if="item instanceof Weapon">weapon</p>
                         <p @click="setactiveItemId(item.id)">
                             {{ item.name }}
                             {{ getItemValue(item) }}
-                            {{ item instanceof Weapon }}
-                            <b>Equipped</b>
                         </p>
-                        <button class="a-button --primary" @click="submitAction(item)">
-                            {{ getButtonType(item) }}
+                        <button class="a-button --primary o-inventory__actionButton" @click="unequip(item)">
+                            unequip
                         </button>
                         <div class="o-inventory__details">
                             modifiers:

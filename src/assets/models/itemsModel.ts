@@ -54,6 +54,11 @@ class Weapon extends Item implements IWeapon {
         console.log('wielded', this)
     }
 
+    unequip(owner: PlayerModel | IMonster) {
+        owner.weapon = null
+        this.isEquipped = false
+    }
+
     // get fullName() {
     //     return (this.name = `${this.prefix.name} ${this.name}`)
     // }
@@ -116,6 +121,20 @@ class Armor extends Item implements IArmor {
         owner.bodyParts[itemSlot].armor.item = this
         this.isEquipped = true
         console.log(`equiped ${this.name} on ${itemSlot}`)
+    }
+
+    unequip(owner: PlayerModel | IMonster) {
+        const itemSlot: EBodyParts | undefined = Object.values(EBodyParts).find((bodyPart) => {
+            if (bodyPart === this.bodyPart.toString()) {
+                return bodyPart
+            }
+        })
+        if (!itemSlot) {
+            console.log('item slot not found')
+            return
+        }
+        owner.bodyParts[itemSlot].armor.item = null
+        this.isEquipped = false
     }
 }
 

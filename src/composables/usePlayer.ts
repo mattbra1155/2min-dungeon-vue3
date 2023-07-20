@@ -131,8 +131,10 @@ export const usePlayer = () => {
             state.player.isAlive = true
             const weapon = new ItemGenerator().createItem(EItemCategory.Weapon)
             const armor = new ItemGenerator().createItem(EItemCategory.Armor)
+            const armor2 = new ItemGenerator().createItem(EItemCategory.Armor)
             state.player.inventory.addItem(weapon)
             state.player.inventory.addItem(armor)
+            state.player.inventory.addItem(armor2)
             if (weapon instanceof Weapon) {
                 state.player.weapon = weapon
             }

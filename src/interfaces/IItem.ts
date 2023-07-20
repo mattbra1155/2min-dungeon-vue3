@@ -16,6 +16,7 @@ export interface IWeapon extends IItem {
     prefix: IItemPrefix
     modifier: number
     wield(owner: PlayerModel | IMonster): void
+    unequip(owner: PlayerModel | IMonster): void
 }
 
 export interface IArmor extends IItem {
@@ -25,6 +26,7 @@ export interface IArmor extends IItem {
     modifier: number
     armorPoints: number
     equip(owner: PlayerModel | IMonster): void
+    unequip(owner: PlayerModel | IMonster): void
 }
 
 export interface IPotion extends IItem {
