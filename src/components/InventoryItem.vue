@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Armor, Weapon } from '@/assets/models/itemsModel'
+import { Armor, Potion, Weapon } from '@/assets/models/itemsModel'
 import { usePlayer } from '@/composables/usePlayer'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { IArmor } from '@/interfaces/IItem'
@@ -13,6 +13,7 @@ const props = defineProps<{
 }>()
 
 const item = computed(() => player.value.inventory.inventory.find((inventoryItem) => inventoryItem.id === props.itemId))
+
 const getDamage = computed(() => {
     if (item.value?.category === EItemCategory.Weapon) {
         return (item.value as Weapon).damage

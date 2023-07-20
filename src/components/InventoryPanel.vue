@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { usePlayer } from '@/composables/usePlayer'
 import { useInventory } from '@/composables/useInventory'
 import { EItemCategory } from '@/enums/ItemCategory'
@@ -11,11 +11,7 @@ import InventoryItem from '@/components/InventoryItem.vue'
 const { player } = usePlayer()
 const { activeItemId, isOpen, toggleInventory, setactiveItemId } = useInventory()
 
-onMounted(() => {
-    console.log(player.value)
-})
 const getButtonType = (item: Weapon | Armor | Potion) => {
-    console.log(item instanceof Weapon)
     if (item.category === EItemCategory.Weapon) {
         return 'Wield'
     } else if (item.category === EItemCategory.Armor) {
@@ -52,13 +48,14 @@ const getItemValue = (item: Weapon | Armor | Potion) => {
             // TO DO: add potion func
             console.log('potion switch case not implementd')
             break
+        default:
+            value.value = 'Equipped'
     }
     return value.value
 }
 
 const submitAction = (item: Weapon | Armor | Potion) => {
-    console.log(player.value)
-    console.log(item)
+    item.isEquipped = true
     if (item instanceof Weapon) {
         item.wield(player.value)
     } else if (item instanceof Armor) {
@@ -88,20 +85,48 @@ const closeItemDetails = () => {
             </button>
         </div>
         <div class="o-inventory__content">
+            <h3 class="a-text">Equipped</h3>
+            <ul class="o-inventory__list">
+                <template v-for="item in player?.inventory.inventory" :key="item.id">
+                    <li v-if="item.isEquipped" class="o-inventory__item">
+                        <p class="a-text" v-if="item instanceof Armor">{{ item.bodyPart }}</p>
+                        <p @click="setactiveItemId(item.id)">
+                            {{ item.name }}
+                            {{ getItemValue(item) }}
+                            {{ item instanceof Weapon }}
+                            <b>Equipped</b>
+                        </p>
+                        <button class="a-button --primary" @click="submitAction(item)">
+                            {{ getButtonType(item) }}
+                        </button>
+                        <div class="o-inventory__details">
+                            modifiers:
+                            {{ getItemValue(item) }}
+                        </div>
+                    </li>
+                </template>
+            </ul>
+            ---
+            <hr />
+            ---
             <InventoryItem v-if="activeItemId" :item-id="activeItemId" />
             <ul v-else id="inventoryList" class="o-inventory__list">
-                <li v-for="item in player?.inventory.inventory" :key="item.id" class="o-inventory__item">
-                    <p @click="setactiveItemId(item.id)">
-                        {{ item.name }}
-                        {{ getItemValue(item) }}
-                        {{ item instanceof Weapon }}
-                    </p>
-                    <button class="a-button --primary" @click="submitAction(item)">{{ getButtonType(item) }}</button>
-                    <div class="o-inventory__details">
-                        modifiers:
-                        {{ getItemValue(item) }}
-                    </div>
-                </li>
+                <template v-for="item in player?.inventory.inventory" :key="item.id">
+                    <li v-if="!item.isEquipped" class="o-inventory__item">
+                        <p @click="setactiveItemId(item.id)">
+                            {{ item.name }}
+                            {{ getItemValue(item) }}
+                            {{ item instanceof Weapon }}
+                        </p>
+                        <button class="a-button --primary" @click="submitAction(item)">
+                            {{ getButtonType(item) }}
+                        </button>
+                        <div class="o-inventory__details">
+                            modifiers:
+                            {{ getItemValue(item) }}
+                        </div>
+                    </li>
+                </template>
             </ul>
         </div>
     </div>

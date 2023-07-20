@@ -12,7 +12,8 @@ class Item implements IItem {
         public name: string,
         public description: string,
         public type: string,
-        public category: string
+        public category: string,
+        public isEquipped: boolean = false
     ) {
         this.name = name
         this.description = description
@@ -30,6 +31,7 @@ class Weapon extends Item implements IWeapon {
         public damage: number = 0,
         public category: string = '',
         public type: string = '',
+        public isEquipped: boolean = false,
         public prefix: IItemPrefix = { name: '', modifier: 0 },
         public modifier: number = 0
     ) {
@@ -48,6 +50,7 @@ class Weapon extends Item implements IWeapon {
             return
         }
         owner.weapon = this
+        this.isEquipped = true
         console.log('wielded', this)
     }
 
@@ -111,6 +114,7 @@ class Armor extends Item implements IArmor {
         }
         // equip the item
         owner.bodyParts[itemSlot].armor.item = this
+        this.isEquipped = true
         console.log(`equiped ${this.name} on ${itemSlot}`)
     }
 }

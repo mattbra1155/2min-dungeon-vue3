@@ -8,6 +8,7 @@ export interface IItem {
     description: string
     type: string
     category: string
+    isEquipped: boolean
 }
 
 export interface IWeapon extends IItem {
