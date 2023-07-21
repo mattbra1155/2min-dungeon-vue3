@@ -1,7 +1,6 @@
-import { iBodyParts } from '@/interfaces/BodyParts'
-import { IArmor, IPotion, iUtility, IWeapon } from '@/interfaces/IItem'
-import { IMonster } from './IMonster'
-import { IPlayer } from './IPlayer'
+import { iBodyPart } from '@/interfaces/BodyParts'
+import { IWeapon } from '@/interfaces/IItem'
+import { Inventory } from '@/assets/models/inventoryModel'
 
 export interface iPerson {
     name: string
@@ -22,7 +21,7 @@ export interface iPerson {
     }
     weapon: IWeapon | null
     description: string
-    inventory: Array<IWeapon | IArmor | IPotion | iUtility>
-    bodyParts: iBodyParts
+    inventory: Inventory
+    bodyParts: iBodyPart
     isAlive: boolean
 }

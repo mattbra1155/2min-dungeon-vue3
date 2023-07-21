@@ -1,6 +1,9 @@
-import { iBodyParts } from '@/interfaces/BodyParts'
+import { iBodyPart } from '@/interfaces/BodyParts'
 import { IArmor, IItem, IItemPrefix, IPotion, IWeapon } from '@/interfaces/IItem'
-import { bodyPartsModel } from './bodyPartsModel'
+import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
+import { IMonster } from '@/interfaces/IMonster'
+import { PlayerModel } from '@/assets/models/playerModel'
+import { EBodyParts } from '@/enums/EBodyParts'
 const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 
 class Item implements IItem {
@@ -9,7 +12,8 @@ class Item implements IItem {
         public name: string,
         public description: string,
         public type: string,
-        public category: string
+        public category: string,
+        public isEquipped: boolean = false
     ) {
         this.name = name
         this.description = description
@@ -27,16 +31,32 @@ class Weapon extends Item implements IWeapon {
         public damage: number = 0,
         public category: string = '',
         public type: string = '',
+        public isEquipped: boolean = false,
         public prefix: IItemPrefix = { name: '', modifier: 0 },
         public modifier: number = 0
     ) {
         super(id, name, description, type, category)
         this.id = id
-        this.name = `${prefix.name} ${name}`
+        this.name = `${prefix.name} ${category} ${name}`
         this.damage = damage
         this.type = type
         this.prefix = prefix
         this.modifier = modifier
+    }
+
+    wield(owner: PlayerModel | IMonster) {
+        if (!this) {
+            console.error(`no weapon to wield!!`)
+            return
+        }
+        owner.weapon = this
+        this.isEquipped = true
+        console.log('wielded', this)
+    }
+
+    unequip(owner: PlayerModel | IMonster) {
+        owner.weapon = null
+        this.isEquipped = false
     }
 
     // get fullName() {
@@ -59,13 +79,13 @@ class Armor extends Item implements IArmor {
         public name: string = '',
         public description: string = '',
         public modifier: number = 0,
-        public bodyPart: iBodyParts = {
+        public bodyPart: iBodyPart = {
             head,
             leftArm,
             rightArm,
-            torso,
             leftLeg,
             rightLeg,
+            torso,
         },
         public type: string = '',
         public item: string = '',
@@ -80,6 +100,41 @@ class Armor extends Item implements IArmor {
         this.type = type
         this.item = item
         this.prefix = prefix
+    }
+
+    equip(owner: PlayerModel | IMonster) {
+        if (!this) {
+            console.log('no item to equip')
+            return
+        }
+        // Find where the item should be worn
+        const itemSlot: EBodyParts | undefined = Object.values(EBodyParts).find((bodyPart) => {
+            if (bodyPart === this.bodyPart.toString()) {
+                return bodyPart
+            }
+        })
+        if (!itemSlot) {
+            console.log('item slot not found')
+            return
+        }
+        // equip the item
+        owner.bodyParts[itemSlot].armor.item = this
+        this.isEquipped = true
+        console.log(`equiped ${this.name} on ${itemSlot}`)
+    }
+
+    unequip(owner: PlayerModel | IMonster) {
+        const itemSlot: EBodyParts | undefined = Object.values(EBodyParts).find((bodyPart) => {
+            if (bodyPart === this.bodyPart.toString()) {
+                return bodyPart
+            }
+        })
+        if (!itemSlot) {
+            console.log('item slot not found')
+            return
+        }
+        owner.bodyParts[itemSlot].armor.item = null
+        this.isEquipped = false
     }
 }
 

@@ -1,16 +1,12 @@
-// import { sceneEngine, global, turn } from '../scripts/index.js'
 import { diceRollK100, diceRollK6 } from '@/assets/scripts/diceRoll'
 import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
 import { stats } from '@/assets/models/statsModel'
-
 import { iPerson } from '@/interfaces/Person'
-import { IArmor, IPotion, iUtility, IWeapon } from '@/interfaces/IItem'
-import { iBodyParts } from '@/interfaces/BodyParts'
+import { iBodyPart } from '@/interfaces/BodyParts'
 import { IMonster } from '@/interfaces/IMonster'
-import { IPlayer } from '@/interfaces/IPlayer'
-import { usePlayer } from '@/composables/usePlayer'
-import { useEnemy } from '@/composables/useEnemy'
-// const { takeDamage } = useEnemy()
+import { Inventory } from './inventoryModel'
+import { PlayerModel } from './playerModel'
+import { Weapon } from './itemsModel'
 
 const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 const {
@@ -59,7 +55,7 @@ class PersonModel implements iPerson {
             willPower,
             charisma,
         },
-        public bodyParts: iBodyParts = {
+        public bodyParts: iBodyPart = {
             head,
             leftArm,
             rightArm,
@@ -67,13 +63,13 @@ class PersonModel implements iPerson {
             leftLeg,
             rightLeg,
         },
-        public weapon: IWeapon | null = null,
+        public weapon: Weapon | null = null,
         public description: string = '',
-        public inventory: Array<IWeapon | IArmor | IPotion | iUtility> = [],
+        public inventory: Inventory,
         public isAlive: boolean = true
     ) {}
 
-    attack(enemy: IMonster | IPlayer) {
+    attack(enemy: IMonster | PlayerModel) {
         // dice roll
         const diceRollHitResult = diceRollK100()
         console.log(`Dice roll: ${diceRollHitResult}`)

@@ -165,7 +165,7 @@ const savePlayer = () => {
             <div class="m-form__row o-characterGenerator__row">
                 <div class="m-form__column">
                     <h2 class="o-characterGenerator__header">Inventory</h2>
-                    <div id="charInventory" class="inventory"></div>
+                    <div id="charInventory" class="o-characterGenerator__inventory"></div>
                 </div>
             </div>
             <div class="m-form__row o-characterGenerator__row">

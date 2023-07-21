@@ -1,15 +1,15 @@
 import { reactive, toRefs } from 'vue'
 import localforage from 'localforage'
-import { IPlayer } from '@/interfaces/IPlayer'
 import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
 import { ItemGenerator } from '@/assets/generators/itemGenerator'
 import { EItemCategory } from '@/enums/ItemCategory'
-import { IWeapon } from '@/interfaces/IItem'
-import { Weapon } from '@/assets/models/itemsModel'
+import { Armor, Potion, Weapon } from '@/assets/models/itemsModel'
+import { PlayerModel } from '@/assets/models/playerModel'
+import { Inventory } from '@/assets/models/inventoryModel'
+import { IArmor, IPotion, IWeapon } from '@/interfaces/IItem'
 const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 
-const playerModel: IPlayer = {
-    id: 0,
+const playerModel: PlayerModel = {
     name: 'Charname',
     race: 'dwarf',
     profession: '',
@@ -37,14 +37,14 @@ const playerModel: IPlayer = {
     },
     weapon: null,
     description: '',
-    inventory: [],
+    inventory: new Inventory(),
     isAlive: true,
     player: true,
 }
 
 interface iPlayerState {
-    player: IPlayer
-    initPlayer: IPlayer
+    player: PlayerModel
+    initPlayer: PlayerModel
 }
 const state: iPlayerState = reactive({
     initPlayer: {
@@ -76,7 +76,7 @@ const state: iPlayerState = reactive({
         },
         weapon: null,
         description: '',
-        inventory: [],
+        inventory: new Inventory(),
         isAlive: true,
         player: true,
     },
@@ -109,29 +109,36 @@ const state: iPlayerState = reactive({
         },
         weapon: null,
         description: '',
-        inventory: [],
+        inventory: new Inventory(),
         isAlive: true,
         player: true,
     },
 })
 
 export const usePlayer = () => {
-    const setPlayer = async (payload: IPlayer) => {
+    const setPlayer = async (payload: PlayerModel) => {
         await storePlayerModel()
         state.player = payload
-
         await localforage.setItem('player', JSON.stringify(payload))
         return state.player
     }
 
-    const createPlayer = (payload: IPlayer | null) => {
+    const createPlayer = (payload: PlayerModel | null) => {
         if (payload) {
             state.player = Object.assign(state.player, payload)
+            const inventory = new Inventory()
+            state.player.inventory = inventory
             state.player.isAlive = true
             const weapon = new ItemGenerator().createItem(EItemCategory.Weapon)
+            const armor = new ItemGenerator().createItem(EItemCategory.Armor)
+            const armor2 = new ItemGenerator().createItem(EItemCategory.Armor)
+            state.player.inventory.addItem(weapon)
+            state.player.inventory.addItem(armor)
+            state.player.inventory.addItem(armor2)
             if (weapon instanceof Weapon) {
                 state.player.weapon = weapon
             }
+            // TO FIX: When saving Player the Class is lost. Need to find a way to restore it
             localforage.setItem('player', JSON.stringify(state.player))
         }
     }
@@ -148,9 +155,44 @@ export const usePlayer = () => {
     const fetchPlayer = async () => {
         try {
             const result: string | null = await localforage.getItem('player')
+
             if (result) {
-                const player: IPlayer = JSON.parse(result)
-                return player
+                const playerData = JSON.parse(result)
+                //create new EMPTY player class
+                const playerClass = new PlayerModel()
+                // assign data to player class
+                const newPlayer = Object.assign(playerClass, playerData)
+                // create new inventory class
+                const inventory = new Inventory()
+
+                newPlayer.inventory = inventory
+
+                const populateInventoryItemClasses = () => {
+                    if (!playerData.inventory) {
+                        return
+                    }
+                    newPlayer.inventory.inventory = playerData.inventory.inventory.map(
+                        (item: Weapon | Armor | Potion) => {
+                            if (item.category === EItemCategory.Weapon) {
+                                const weapon = new Weapon()
+                                const newWeapon = Object.assign(weapon, item)
+                                return newWeapon as IWeapon
+                            } else if (item.category === EItemCategory.Armor) {
+                                const armor = new Armor()
+                                const newArmor = Object.assign(armor, item)
+                                return newArmor as IArmor
+                            } else if (item.category === EItemCategory.Potion) {
+                                const potion = new Potion()
+                                const newPotion = Object.assign(potion, item)
+                                return newPotion as IPotion
+                            } else {
+                                return item
+                            }
+                        }
+                    )
+                }
+                populateInventoryItemClasses()
+                return newPlayer
             }
         } catch (error: any) {
             throw Error(error)
@@ -158,7 +200,7 @@ export const usePlayer = () => {
     }
 
     const resetPlayer = async () => {
-        state.player = (await localforage.getItem('initPlayer')) as IPlayer
+        state.player = (await localforage.getItem('initPlayer')) as PlayerModel
     }
 
     const deadPlayer = () => {

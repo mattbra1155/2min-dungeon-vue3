@@ -1,20 +1,22 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
 import { usePlayer } from './composables/usePlayer'
 import { useRouter } from 'vue-router'
-import { IPlayer } from './interfaces/IPlayer'
 import { useGameStateManager } from './composables/useGameStateManager'
 import { EGameState } from './enums/EGameState'
+import InventoryPanel from './components/InventoryPanel.vue'
+import { PlayerModel } from './assets/models/playerModel'
 
-const { fetchPlayer, setPlayer } = usePlayer()
+const { fetchPlayer, setPlayer, player: pp } = usePlayer()
 const { activeGameState, updateGameState } = useGameStateManager()
 const router = useRouter()
 
-onMounted(async () => {
+const init = async () => {
     updateGameState(EGameState.Init)
     if (activeGameState.value === EGameState.Init) {
-        const player: IPlayer | undefined = await fetchPlayer()
+        // TO FIX: Player is not a class but just a object with interface added.
+        const player: PlayerModel | undefined = await fetchPlayer()
         if (player) {
+            console.log(player)
             await setPlayer(player)
             updateGameState(EGameState.Battle)
             router.push({ name: 'home' })
@@ -23,7 +25,10 @@ onMounted(async () => {
             router.push({ name: 'characterCreation' })
         }
     }
-})
+}
+
+// starts the app
+init()
 </script>
 
 <template>
@@ -33,5 +38,6 @@ onMounted(async () => {
             <router-link to="/character-creation/">Create</router-link>
         </nav>
         <router-view />
+        <inventory-panel />
     </div>
 </template>

@@ -41,12 +41,18 @@
             {
                 "name": "sword",
                 "damage": 0,
-                "type": ["one handed", "two handed"]
+                "type": [
+                    "one handed",
+                    "two handed"
+                ]
             },
             {
                 "name": "axe",
                 "damage": 0,
-                "type": ["one handed", "two handed"]
+                "type": [
+                    "one handed",
+                    "two handed"
+                ]
             },
             {
                 "name": "zweihander",
@@ -111,17 +117,17 @@
             },
             {
                 "name": "glove",
-                "bodyPart": ["right arm", "left arm"],
+                "bodyPart": "rightArm",
+                "modifiers": []
+            },
+            {
+                "name": "glove",
+                "bodyPart": "leftArm",
                 "modifiers": []
             },
             {
                 "name": "tunic",
                 "bodyPart": "torso",
-                "modifiers": []
-            },
-            {
-                "name": "leather boot",
-                "bodyPart": ["right leg", "left leg"],
                 "modifiers": []
             },
             {
@@ -131,7 +137,12 @@
             },
             {
                 "name": "boot",
-                "bodyPart": ["right leg", "left leg"],
+                "bodyPart": "rightLeg",
+                "modifiers": []
+            },
+            {
+                "name": "boot",
+                "bodyPart": "leftLeg",
                 "modifiers": []
             },
             {

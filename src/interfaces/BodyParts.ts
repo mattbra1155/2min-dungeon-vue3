@@ -1,5 +1,16 @@
-import { IArmor, IItem } from '@/interfaces/IItem'
+import { Armor } from '@/assets/models/itemsModel'
+import { EBodyParts } from '@/enums/EBodyParts'
+import { IArmor } from '@/interfaces/IItem'
 
+export type iBodyPart = {
+    [key in EBodyParts]: {
+        name: string
+        armor: {
+            armorPoints: number
+            item: Armor | null
+        }
+    }
+}
 export interface iBodyParts {
     head: {
         name: 'Head'

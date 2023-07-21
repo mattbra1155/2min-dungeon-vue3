@@ -1,6 +1,6 @@
-import { iBodyParts } from '@/interfaces/BodyParts'
+import { iBodyPart, iBodyParts } from '@/interfaces/BodyParts'
 
-export const bodyPartsModel: iBodyParts = {
+export const bodyPartsModel: iBodyPart = {
     head: {
         name: 'Head',
         armor: {

@@ -1,5 +1,5 @@
 import { PersonModel } from '@/assets/models/personModel'
-import { iBodyParts } from '@/interfaces/BodyParts'
+import { iBodyPart } from '@/interfaces/BodyParts'
 import { IArmor, IPotion, iUtility, IWeapon } from '@/interfaces/IItem'
 import { IMonster } from '@/interfaces/IMonster'
 import { bodyPartsModel } from './bodyPartsModel'
@@ -51,7 +51,7 @@ class MonsterModel extends PersonModel implements IMonster {
             description: '',
             id: 0,
         },
-        public bodyParts: iBodyParts = {
+        public bodyParts: iBodyPart = {
             head,
             leftArm,
             rightArm,

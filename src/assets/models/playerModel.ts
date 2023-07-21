@@ -1,6 +1,8 @@
-import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
-import { iBodyParts } from '@/interfaces/BodyParts'
-import { IArmor, IPotion, iUtility, IWeapon } from '@/interfaces/IItem'
+// import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
+import { iBodyPart } from '@/interfaces/BodyParts'
+import { IWeapon } from '@/interfaces/IItem'
+import { Inventory } from './inventoryModel'
+import { bodyPartsModel } from './bodyPartsModel'
 
 const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 
@@ -36,17 +38,10 @@ class PlayerModel {
             willPower: 0,
             charisma: 0,
         },
-        public bodyParts: iBodyParts = {
-            head,
-            leftArm,
-            rightArm,
-            torso,
-            leftLeg,
-            rightLeg,
-        },
+        public bodyParts: iBodyPart = bodyPartsModel,
         public weapon: IWeapon | null = null,
         public description: string = '',
-        public inventory: Array<IWeapon | IArmor | IPotion | iUtility> = [],
+        public inventory: Inventory = new Inventory(),
         public isAlive: boolean = true,
         public player: boolean = true
     ) {
