@@ -4,11 +4,12 @@ import { useTurn } from '@/composables/useTurn'
 import { ETurnState } from '@/enums/ETurnState'
 import { usePlayer } from '@/composables/usePlayer'
 import { useInventory } from '@/composables/useInventory'
+import { useCharacterScreen } from '@/composables/useCharacterScreen'
 const { activeTurnState, activeCharacter, updateTurnStateMachine } = useTurn()
 const { targetToAttack, attack } = useAttack()
 const { player } = usePlayer()
 const { toggleInventory } = useInventory()
-
+const { toggleCharacterScreen } = useCharacterScreen()
 const playerAttack = () => {
     if (targetToAttack.value) {
         attack(activeCharacter.value, targetToAttack.value)
@@ -33,5 +34,6 @@ const playerAttack = () => {
         <button :disabled="activeTurnState !== ETurnState.Init" @click="updateTurnStateMachine(ETurnState.Init)">
             start BATTLE
         </button>
+        <button class="action__button" @click="toggleCharacterScreen">Character Screen</button>
     </div>
 </template>
