@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { useGameStateManager } from './composables/useGameStateManager'
 import { EGameState } from './enums/EGameState'
 import InventoryPanel from './components/InventoryPanel.vue'
+import CharacterScreen from './components/CharacterScreen.vue'
 import { PlayerModel } from './assets/models/playerModel'
 
 const { fetchPlayer, setPlayer, player: pp } = usePlayer()
@@ -39,5 +40,6 @@ init()
         </nav>
         <router-view />
         <inventory-panel />
+        <character-screen />
     </div>
 </template>
