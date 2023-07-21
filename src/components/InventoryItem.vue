@@ -40,6 +40,9 @@ const getArmorPoints = computed(() => {
         <div class="m-inventoryItem__details">
             <h2 class="a-text m-inventoryItem__title m-inventoryItem__detailsItem --fullWidth">{{ item.name }}</h2>
             <p class="a-text m-inventoryItem__detailsItem --fullWidth">Type: {{ item.type }}</p>
+            <p class="a-text m-inventoryItem__detailsItem --fullWidth" v-if="item instanceof Armor">
+                Slot: {{ item.bodyPart }}
+            </p>
             <p class="a-text m-inventoryItem__detailsItem" v-if="item.category === EItemCategory.Weapon">
                 Damage: <i v-if="item.prefix.modifier > 0">+</i>{{ getTotalDamage(item as Weapon) }}
             </p>

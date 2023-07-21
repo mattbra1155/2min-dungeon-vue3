@@ -88,29 +88,32 @@ const unequip = (item: Weapon | Armor | Potion) => {
             </button>
         </div>
         <div class="o-inventory__content">
-            <h3 class="a-text">Equipped</h3>
-            <ul class="o-inventory__list">
-                <template v-for="item in player?.inventory.inventory" :key="item.id">
-                    <li v-if="item.isEquipped" class="o-inventory__item --equipped">
-                        <p class="a-text" v-if="item instanceof Armor">{{ item.bodyPart }}</p>
-                        <p class="a-text" v-if="item instanceof Weapon">weapon</p>
-                        <p @click="setactiveItemId(item.id)">
-                            {{ item.name }}
-                            {{ getItemValue(item) }}
-                        </p>
-                        <button class="a-button --primary o-inventory__actionButton" @click="unequip(item)">
-                            unequip
-                        </button>
-                        <div class="o-inventory__details">
-                            modifiers:
-                            {{ getItemValue(item) }}
-                        </div>
-                    </li>
-                </template>
-            </ul>
-            ---
-            <hr />
-            ---
+            <template v-if="!activeItemId">
+                <h3 class="a-text">Equipped</h3>
+                <ul class="o-inventory__list">
+                    <template v-for="item in player?.inventory.inventory" :key="item.id">
+                        <li v-if="item.isEquipped" class="o-inventory__item --equipped">
+                            <p class="a-text" v-if="item instanceof Armor">{{ item.bodyPart }}</p>
+                            <p class="a-text" v-if="item instanceof Weapon">weapon</p>
+                            <p @click="setactiveItemId(item.id)">
+                                {{ item.name }}
+                                {{ getItemValue(item) }}
+                            </p>
+                            <button class="a-button --primary o-inventory__actionButton" @click="unequip(item)">
+                                unequip
+                            </button>
+                            <div class="o-inventory__details">
+                                modifiers:
+                                {{ getItemValue(item) }}
+                            </div>
+                        </li>
+                    </template>
+                </ul>
+                ---
+                <hr />
+                ---
+            </template>
+
             <InventoryItem v-if="activeItemId" :item-id="activeItemId" />
             <ul v-else id="inventoryList" class="o-inventory__list">
                 <template v-for="item in player?.inventory.inventory" :key="item.id">

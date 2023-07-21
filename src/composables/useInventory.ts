@@ -8,6 +8,7 @@ const state: IInventoryState = reactive({
 
 export const useInventory = () => {
     const setactiveItemId = (itemId: number) => {
+        console.log(itemId)
         if (!itemId) {
             return
         }
