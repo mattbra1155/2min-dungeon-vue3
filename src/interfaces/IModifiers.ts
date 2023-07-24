@@ -10,6 +10,7 @@ export interface IModifierItem {
     modifiers: Partial<IStats>
     owner: IPlayer | IMonster
     target: IPlayer | IMonster
+    updateOnBeginning: boolean
 }
 
 export interface IModifiers {

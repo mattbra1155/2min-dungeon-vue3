@@ -56,7 +56,8 @@ export const useTurn = () => {
                 break
             case ETurnState.PlayerAttack:
                 console.log('<====>')
-
+                console.log(player.value)
+                player.value.modifiers.updateStats(player.value)
                 console.log('TURN STATE:', ETurnState.PlayerAttack)
                 state.activeCharacter = player.value
                 break

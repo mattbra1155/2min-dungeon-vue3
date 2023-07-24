@@ -11,7 +11,8 @@ class ModifierItem implements IModifierItem {
         public type: EModifierTypes,
         public modifiers: Partial<IStats>,
         public owner: PlayerModel | IMonster,
-        public target: PlayerModel | IMonster
+        public target: PlayerModel | IMonster,
+        public updateOnBeginning: boolean = true
     ) {
         this.id = id
         this.name = name

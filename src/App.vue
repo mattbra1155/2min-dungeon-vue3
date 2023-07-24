@@ -6,6 +6,8 @@ import { EGameState } from './enums/EGameState'
 import InventoryPanel from './components/InventoryPanel.vue'
 import CharacterScreen from './components/CharacterScreen.vue'
 import { PlayerModel } from './assets/models/playerModel'
+import { ModifierItem } from './assets/models/modifierItemModel'
+import { EModifierTypes } from './enums/EModifierTypes'
 
 const { fetchPlayer, setPlayer } = usePlayer()
 const { activeGameState, updateGameState } = useGameStateManager()
@@ -20,7 +22,8 @@ const init = async () => {
             await setPlayer(player)
             updateGameState(EGameState.Battle)
             console.log(player)
-
+            const mmm = new ModifierItem(999, 'test', EModifierTypes.Passive, { hp: 10 }, player, player, true)
+            player.modifiers.addItem(mmm)
             router.push({ name: 'home' })
         } else {
             console.log(player)

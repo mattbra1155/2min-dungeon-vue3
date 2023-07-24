@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { usePlayer } from '@/composables/usePlayer'
 import { diceRollK2, diceRollK3, diceRollK10 } from '@/assets/scripts/diceRoll'
-
 import { useRouter } from 'vue-router'
 import { EGameState } from '@/enums/EGameState'
 import { useGameStateManager } from '@/composables/useGameStateManager'

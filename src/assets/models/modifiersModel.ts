@@ -1,5 +1,7 @@
 import { IModifiers } from '@/interfaces/IModifiers'
 import { ModifierItem } from '@/assets/models/modifierItemModel'
+import { IMonster } from '@/interfaces/IMonster'
+import { PlayerModel } from './playerModel'
 
 class Modifiers implements IModifiers {
     constructor(public list: ModifierItem[] = []) {
@@ -23,6 +25,10 @@ class Modifiers implements IModifiers {
         } else {
             console.log('Modifier to remove not found')
         }
+    }
+
+    updateStats(character: PlayerModel | IMonster) {
+        // TO DO reduce??
     }
 }
 

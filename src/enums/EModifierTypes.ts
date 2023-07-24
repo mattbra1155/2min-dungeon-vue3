@@ -1,4 +1,4 @@
 export enum EModifierTypes {
     Passive = 'passive',
-    Active = 'active',
+    Attack = 'attack',
 }

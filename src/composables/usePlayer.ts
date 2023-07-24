@@ -7,7 +7,6 @@ import { PlayerModel } from '@/assets/models/playerModel'
 import { Inventory } from '@/assets/models/inventoryModel'
 import { IArmor, IPotion, IWeapon } from '@/interfaces/IItem'
 import { ModifierItem } from '@/assets/models/modifierItemModel'
-import { EModifierTypes } from '@/enums/EModifierTypes'
 import { Modifiers } from '@/assets/models/modifiersModel'
 
 interface iPlayerState {
@@ -41,13 +40,13 @@ export const usePlayer = () => {
             state.player.inventory.addItem(weapon)
             state.player.inventory.addItem(armor)
             state.player.inventory.addItem(armor2)
-            const mmm = new ModifierItem(999, 'test', EModifierTypes.Passive, { hp: 10 }, state.player, state.player)
-            state.player.modifiers.addItem(mmm)
+
             console.log(state.player)
             if (weapon instanceof Weapon) {
                 state.player.weapon = weapon
             }
-            localforage.setItem('player', JSON.stringify(state.player))
+            const stringifiedPlayer = JSON.stringify(state.player)
+            localforage.setItem('player', stringifiedPlayer)
         }
     }
 
@@ -72,8 +71,17 @@ export const usePlayer = () => {
                 const newPlayer = Object.assign(playerClass, playerData)
                 // create new inventory class
                 const inventory = new Inventory()
+                // create new modifiers class
+                const modifiers = new Modifiers()
 
                 newPlayer.inventory = inventory
+                newPlayer.modifiers = modifiers
+
+                const populateModifiers = () => {
+                    console.log(playerData.modifiers)
+
+                    playerData.modifiers.list.forEach((modifier: ModifierItem) => newPlayer.modifiers.addItem(modifier))
+                }
 
                 const populateInventoryItemClasses = () => {
                     if (!playerData.inventory) {
@@ -100,6 +108,7 @@ export const usePlayer = () => {
                     )
                 }
                 populateInventoryItemClasses()
+                populateModifiers()
                 return newPlayer
             }
         } catch (error: any) {
