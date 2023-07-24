@@ -2,7 +2,7 @@ import { EModifierTypes } from '@/enums/EModifierTypes'
 import { IModifier } from '@/interfaces/IModifier'
 import { IStats } from '@/interfaces/IStats'
 
-class Modifier implements IModifier {
+class ModifierItem implements IModifier {
     constructor(
         public id: number,
         public name: string,
@@ -16,4 +16,4 @@ class Modifier implements IModifier {
     }
 }
 
-export { Modifier }
+export { ModifierItem }

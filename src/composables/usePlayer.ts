@@ -1,16 +1,13 @@
 import { reactive, toRefs } from 'vue'
 import localforage from 'localforage'
-import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
 import { ItemGenerator } from '@/assets/generators/itemGenerator'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { Armor, Potion, Weapon } from '@/assets/models/itemsModel'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { Inventory } from '@/assets/models/inventoryModel'
 import { IArmor, IPotion, IWeapon } from '@/interfaces/IItem'
-import { Modifier } from '@/assets/models/modifierModel'
+import { ModifierItem } from '@/assets/models/modifierItemModel'
 import { EModifierTypes } from '@/enums/EModifierTypes'
-import { IPlayer } from '@/interfaces/IPlayer'
-const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 
 interface iPlayerState {
     player: PlayerModel
@@ -30,9 +27,6 @@ export const usePlayer = () => {
     }
 
     const createPlayer = (payload: PlayerModel | null) => {
-        // localforage.removeItem('player')
-        // state.player = state.initPlayer
-        // console.log(state.initPlayer)
         if (payload) {
             state.player = Object.assign(state.player, payload)
             const inventory = new Inventory()
@@ -44,7 +38,7 @@ export const usePlayer = () => {
             state.player.inventory.addItem(weapon)
             state.player.inventory.addItem(armor)
             state.player.inventory.addItem(armor2)
-            const mmm = new Modifier(999, 'test', EModifierTypes.Passive, { hp: 10 })
+            const mmm = new ModifierItem(999, 'test', EModifierTypes.Passive, { hp: 10 })
             state.player.modifiers.push(mmm)
             console.log(state.player)
             if (weapon instanceof Weapon) {
