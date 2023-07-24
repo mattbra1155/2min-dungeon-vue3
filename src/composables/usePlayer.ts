@@ -41,7 +41,7 @@ export const usePlayer = () => {
             state.player.inventory.addItem(weapon)
             state.player.inventory.addItem(armor)
             state.player.inventory.addItem(armor2)
-            const mmm = new ModifierItem(999, 'test', EModifierTypes.Passive, { hp: 10 })
+            const mmm = new ModifierItem(999, 'test', EModifierTypes.Passive, { hp: 10 }, state.player, state.player)
             state.player.modifiers.addItem(mmm)
             console.log(state.player)
             if (weapon instanceof Weapon) {
