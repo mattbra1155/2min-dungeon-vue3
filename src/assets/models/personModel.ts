@@ -8,6 +8,7 @@ import { Inventory } from './inventoryModel'
 import { PlayerModel } from './playerModel'
 import { Weapon } from './itemsModel'
 import { IModifier } from '@/interfaces/IModifier'
+import { ModifierList } from './modifierListModel'
 
 const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 const {
@@ -68,7 +69,7 @@ class PersonModel implements IPerson {
         public description: string = '',
         public inventory: Inventory,
         public isAlive: boolean = true,
-        public modifiers: IModifier[] = []
+        public modifiers: ModifierList
     ) {}
 
     attack(enemy: IMonster | PlayerModel) {

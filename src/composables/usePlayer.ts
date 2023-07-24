@@ -8,6 +8,7 @@ import { Inventory } from '@/assets/models/inventoryModel'
 import { IArmor, IPotion, IWeapon } from '@/interfaces/IItem'
 import { ModifierItem } from '@/assets/models/modifierItemModel'
 import { EModifierTypes } from '@/enums/EModifierTypes'
+import { ModifierList } from '@/assets/models/modifierListModel'
 
 interface iPlayerState {
     player: PlayerModel
@@ -30,7 +31,9 @@ export const usePlayer = () => {
         if (payload) {
             state.player = Object.assign(state.player, payload)
             const inventory = new Inventory()
+            const modifiers = new ModifierList()
             state.player.inventory = inventory
+            state.player.modifiers = modifiers
             state.player.isAlive = true
             const weapon = new ItemGenerator().createItem(EItemCategory.Weapon)
             const armor = new ItemGenerator().createItem(EItemCategory.Armor)
@@ -39,12 +42,11 @@ export const usePlayer = () => {
             state.player.inventory.addItem(armor)
             state.player.inventory.addItem(armor2)
             const mmm = new ModifierItem(999, 'test', EModifierTypes.Passive, { hp: 10 })
-            state.player.modifiers.push(mmm)
+            state.player.modifiers.addItem(mmm)
             console.log(state.player)
             if (weapon instanceof Weapon) {
                 state.player.weapon = weapon
             }
-            // TO FIX: When saving Player the Class is lost. Need to find a way to restore it
             localforage.setItem('player', JSON.stringify(state.player))
         }
     }

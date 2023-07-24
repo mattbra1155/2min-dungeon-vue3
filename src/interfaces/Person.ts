@@ -2,6 +2,7 @@ import { iBodyPart } from '@/interfaces/BodyParts'
 import { IWeapon } from '@/interfaces/IItem'
 import { Inventory } from '@/assets/models/inventoryModel'
 import { IModifier } from './IModifier'
+import { ModifierList } from '@/assets/models/modifierListModel'
 
 export interface IPerson {
     name: string
@@ -25,5 +26,5 @@ export interface IPerson {
     inventory: Inventory
     bodyParts: iBodyPart
     isAlive: boolean
-    modifiers: IModifier[]
+    modifiers: ModifierList
 }

@@ -7,3 +7,7 @@ export interface IModifier {
     type: EModifierTypes | null
     modifiers: Partial<IStats>
 }
+
+export interface IModifierList {
+    list: IModifier[]
+}

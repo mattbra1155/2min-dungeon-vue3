@@ -1,7 +1,7 @@
 import { ModifierItem } from './modifierItemModel'
 
-class ModifierList {
-    constructor(public list: ModifierItem[]) {
+class ModifierList implements ModifierList {
+    constructor(public list: ModifierItem[] = []) {
         this.list = list
     }
 
@@ -17,11 +17,11 @@ class ModifierList {
         const itemToRemove: ModifierItem | undefined = this.list.find((element: ModifierItem) => element.id === itemId)
         if (itemToRemove) {
             const itemIndex = this.list.findIndex((element: ModifierItem) => element.id === itemToRemove.id)
-
             this.list.splice(itemIndex)
+            console.log('Removed modifier from list:', this.list)
+        } else {
+            console.log('Modifier to remove not found')
         }
-
-        console.log(this.list)
     }
 }
 
