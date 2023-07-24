@@ -5,5 +5,5 @@ export interface IModifier {
     id: number
     name: string
     type: EModifierTypes | null
-    modifiers: IStats
+    modifiers: Partial<IStats>
 }

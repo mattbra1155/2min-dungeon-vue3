@@ -5,11 +5,13 @@ import { diceRollK2, diceRollK3, diceRollK10 } from '@/assets/scripts/diceRoll'
 import { useRouter } from 'vue-router'
 import { EGameState } from '@/enums/EGameState'
 import { useGameStateManager } from '@/composables/useGameStateManager'
+import { PlayerModel } from '@/assets/models/playerModel'
+import { ref } from 'vue'
 
 const router = useRouter()
-const { player, createPlayer } = usePlayer()
+const { initPlayer, createPlayer, resetPlayer } = usePlayer()
 const { updateGameState } = useGameStateManager()
-const playerObject = player
+const playerObject = ref<PlayerModel>(initPlayer.value)
 
 const rollStats = () => {
     if (!playerObject.value) {
@@ -49,8 +51,9 @@ const rollStats = () => {
         })
     }
 }
-const savePlayer = () => {
+const savePlayer = async () => {
     if (playerObject.value) {
+        await resetPlayer()
         createPlayer(playerObject.value)
         updateGameState(EGameState.Battle)
         router.push({ name: 'home' })

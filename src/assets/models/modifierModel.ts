@@ -3,7 +3,12 @@ import { IModifier } from '@/interfaces/IModifier'
 import { IStats } from '@/interfaces/IStats'
 
 class Modifier implements IModifier {
-    constructor(public id: number, public name: string, public type: EModifierTypes, public modifiers: IStats) {
+    constructor(
+        public id: number,
+        public name: string,
+        public type: EModifierTypes,
+        public modifiers: Partial<IStats>
+    ) {
         this.id = id
         this.name = name
         this.type = type

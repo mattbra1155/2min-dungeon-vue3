@@ -33,6 +33,10 @@ const { player } = usePlayer()
         </div>
         <div class="o-characterScreen__modifiersWrapper">
             <h2 class="a-text">Modifiers</h2>
+            <p v-for="modifierItem in player.modifiers" :key="modifierItem.id">
+                {{ modifierItem.name }} {{ modifierItem.type }}
+                <template v-for="(value, key) in modifierItem.modifiers"> {{ key }}: {{ value }}</template>
+            </p>
         </div>
     </div>
 </template>

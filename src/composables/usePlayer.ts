@@ -7,112 +7,18 @@ import { Armor, Potion, Weapon } from '@/assets/models/itemsModel'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { Inventory } from '@/assets/models/inventoryModel'
 import { IArmor, IPotion, IWeapon } from '@/interfaces/IItem'
+import { Modifier } from '@/assets/models/modifierModel'
+import { EModifierTypes } from '@/enums/EModifierTypes'
+import { IPlayer } from '@/interfaces/IPlayer'
 const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
-
-const playerModel: PlayerModel = {
-    name: 'Charname',
-    race: 'dwarf',
-    profession: '',
-    stats: {
-        hp: 0,
-        melee: 0,
-        ranged: 0,
-        dexterity: 0,
-        strength: 0,
-        thoughtness: 0,
-        speed: 0,
-        initiative: 0,
-        attacks: 0,
-        inteligence: 0,
-        willPower: 0,
-        charisma: 0,
-    },
-    bodyParts: {
-        head,
-        leftArm,
-        rightArm,
-        torso,
-        leftLeg,
-        rightLeg,
-    },
-    weapon: null,
-    description: '',
-    inventory: new Inventory(),
-    isAlive: true,
-    player: true,
-}
 
 interface iPlayerState {
     player: PlayerModel
     initPlayer: PlayerModel
 }
 const state: iPlayerState = reactive({
-    initPlayer: {
-        id: 0,
-        name: 'Charname',
-        race: 'dwarf',
-        profession: '',
-        stats: {
-            hp: 0,
-            melee: 0,
-            ranged: 0,
-            dexterity: 0,
-            strength: 0,
-            thoughtness: 0,
-            speed: 0,
-            initiative: 0,
-            attacks: 0,
-            inteligence: 0,
-            willPower: 0,
-            charisma: 0,
-        },
-        bodyParts: {
-            head,
-            leftArm,
-            rightArm,
-            torso,
-            leftLeg,
-            rightLeg,
-        },
-        weapon: null,
-        description: '',
-        inventory: new Inventory(),
-        isAlive: true,
-        player: true,
-    },
-    player: {
-        id: 0,
-        name: 'Charname',
-        race: 'dwarf',
-        profession: '',
-        stats: {
-            hp: 0,
-            melee: 0,
-            ranged: 0,
-            dexterity: 0,
-            strength: 0,
-            thoughtness: 0,
-            speed: 0,
-            initiative: 0,
-            attacks: 0,
-            inteligence: 0,
-            willPower: 0,
-            charisma: 0,
-        },
-        bodyParts: {
-            head,
-            leftArm,
-            rightArm,
-            torso,
-            leftLeg,
-            rightLeg,
-        },
-        weapon: null,
-        description: '',
-        inventory: new Inventory(),
-        isAlive: true,
-        player: true,
-    },
+    initPlayer: new PlayerModel(),
+    player: new PlayerModel(),
 })
 
 export const usePlayer = () => {
@@ -124,6 +30,9 @@ export const usePlayer = () => {
     }
 
     const createPlayer = (payload: PlayerModel | null) => {
+        // localforage.removeItem('player')
+        // state.player = state.initPlayer
+        // console.log(state.initPlayer)
         if (payload) {
             state.player = Object.assign(state.player, payload)
             const inventory = new Inventory()
@@ -135,6 +44,9 @@ export const usePlayer = () => {
             state.player.inventory.addItem(weapon)
             state.player.inventory.addItem(armor)
             state.player.inventory.addItem(armor2)
+            const mmm = new Modifier(999, 'test', EModifierTypes.Passive, { hp: 10 })
+            state.player.modifiers.push(mmm)
+            console.log(state.player)
             if (weapon instanceof Weapon) {
                 state.player.weapon = weapon
             }
@@ -145,7 +57,7 @@ export const usePlayer = () => {
 
     const storePlayerModel = async () => {
         try {
-            const result = await localforage.setItem('initPlayer', playerModel)
+            const result = await localforage.setItem('initPlayer', JSON.stringify(state.initPlayer))
             return result
         } catch (error: any) {
             throw Error(error)
@@ -200,7 +112,14 @@ export const usePlayer = () => {
     }
 
     const resetPlayer = async () => {
-        state.player = (await localforage.getItem('initPlayer')) as PlayerModel
+        const payload: string | null = await localforage.getItem('initPlayer')
+        if (payload) {
+            const playerData = JSON.parse(payload)
+            Object.assign(state.player, playerData)
+            console.log('Player reset')
+        } else {
+            console.log('Player reset: Cant get initPlayer from storage')
+        }
     }
 
     const deadPlayer = () => {
