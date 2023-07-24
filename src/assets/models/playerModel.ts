@@ -5,8 +5,7 @@ import { Inventory } from './inventoryModel'
 import { bodyPartsModel } from './bodyPartsModel'
 import { IPlayer } from '@/interfaces/IPlayer'
 import { PersonModel } from './personModel'
-import { IModifier } from '@/interfaces/IModifier'
-import { ModifierList } from './modifierListModel'
+import { Modifiers } from './modifiersModel'
 
 const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 
@@ -49,7 +48,7 @@ class PlayerModel extends PersonModel implements IPlayer {
         public inventory: Inventory = new Inventory(),
         public isAlive: boolean = true,
         public player: boolean = true,
-        public modifiers: ModifierList = new ModifierList()
+        public modifiers: Modifiers = new Modifiers()
     ) {
         super(name, race, stats, bodyParts, weapon, description, inventory, isAlive, modifiers)
     }

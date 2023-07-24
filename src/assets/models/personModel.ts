@@ -4,11 +4,10 @@ import { stats } from '@/assets/models/statsModel'
 import { IPerson } from '@/interfaces/Person'
 import { iBodyPart } from '@/interfaces/BodyParts'
 import { IMonster } from '@/interfaces/IMonster'
-import { Inventory } from './inventoryModel'
-import { PlayerModel } from './playerModel'
-import { Weapon } from './itemsModel'
-import { IModifier } from '@/interfaces/IModifier'
-import { ModifierList } from './modifierListModel'
+import { Inventory } from '@/assets/models/inventoryModel'
+import { PlayerModel } from '@/assets/models//playerModel'
+import { Weapon } from '@/assets/models//itemsModel'
+import { Modifiers } from '@/assets/models/modifiersModel'
 
 const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 const {
@@ -69,7 +68,7 @@ class PersonModel implements IPerson {
         public description: string = '',
         public inventory: Inventory,
         public isAlive: boolean = true,
-        public modifiers: ModifierList
+        public modifiers: Modifiers
     ) {}
 
     attack(enemy: IMonster | PlayerModel) {

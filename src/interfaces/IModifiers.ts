@@ -3,7 +3,7 @@ import { IStats } from '@/interfaces/IStats'
 import { IPlayer } from './IPlayer'
 import { IMonster } from './IMonster'
 
-export interface IModifier {
+export interface IModifierItem {
     id: number
     name: string
     type: EModifierTypes | null
@@ -12,6 +12,6 @@ export interface IModifier {
     target: IPlayer | IMonster
 }
 
-export interface IModifierList {
-    list: IModifier[]
+export interface IModifiers {
+    list: IModifierItem[]
 }

@@ -8,7 +8,7 @@ import { Inventory } from '@/assets/models/inventoryModel'
 import { IArmor, IPotion, IWeapon } from '@/interfaces/IItem'
 import { ModifierItem } from '@/assets/models/modifierItemModel'
 import { EModifierTypes } from '@/enums/EModifierTypes'
-import { ModifierList } from '@/assets/models/modifierListModel'
+import { Modifiers } from '@/assets/models/modifiersModel'
 
 interface iPlayerState {
     player: PlayerModel
@@ -31,7 +31,7 @@ export const usePlayer = () => {
         if (payload) {
             state.player = Object.assign(state.player, payload)
             const inventory = new Inventory()
-            const modifiers = new ModifierList()
+            const modifiers = new Modifiers()
             state.player.inventory = inventory
             state.player.modifiers = modifiers
             state.player.isAlive = true

@@ -1,10 +1,10 @@
 import { EModifierTypes } from '@/enums/EModifierTypes'
-import { IModifier } from '@/interfaces/IModifier'
+import { IModifierItem } from '@/interfaces/IModifiers'
 import { IMonster } from '@/interfaces/IMonster'
 import { IStats } from '@/interfaces/IStats'
 import { PlayerModel } from './playerModel'
 
-class ModifierItem implements IModifier {
+class ModifierItem implements IModifierItem {
     constructor(
         public id: number,
         public name: string,

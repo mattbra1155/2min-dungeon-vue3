@@ -1,6 +1,7 @@
-import { ModifierItem } from './modifierItemModel'
+import { IModifiers } from '@/interfaces/IModifiers'
+import { ModifierItem } from '@/assets/models/modifierItemModel'
 
-class ModifierList implements ModifierList {
+class Modifiers implements IModifiers {
     constructor(public list: ModifierItem[] = []) {
         this.list = list
     }
@@ -25,4 +26,4 @@ class ModifierList implements ModifierList {
     }
 }
 
-export { ModifierList }
+export { Modifiers }
