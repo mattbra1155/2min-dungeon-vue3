@@ -1,12 +1,13 @@
 import { diceRollK100, diceRollK6 } from '@/assets/scripts/diceRoll'
 import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
 import { stats } from '@/assets/models/statsModel'
-import { iPerson } from '@/interfaces/Person'
+import { IPerson } from '@/interfaces/Person'
 import { iBodyPart } from '@/interfaces/BodyParts'
 import { IMonster } from '@/interfaces/IMonster'
 import { Inventory } from './inventoryModel'
 import { PlayerModel } from './playerModel'
 import { Weapon } from './itemsModel'
+import { IModifier } from '@/interfaces/IModifier'
 
 const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 const {
@@ -24,7 +25,7 @@ const {
     charisma,
 } = stats
 
-class PersonModel implements iPerson {
+class PersonModel implements IPerson {
     constructor(
         public name: string = '',
         public race: string = '',
@@ -66,7 +67,8 @@ class PersonModel implements iPerson {
         public weapon: Weapon | null = null,
         public description: string = '',
         public inventory: Inventory,
-        public isAlive: boolean = true
+        public isAlive: boolean = true,
+        public modifiers: IModifier[] = []
     ) {}
 
     attack(enemy: IMonster | PlayerModel) {

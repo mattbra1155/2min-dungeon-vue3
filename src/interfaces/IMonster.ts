@@ -1,7 +1,7 @@
-import { iPerson } from '@/interfaces/Person'
+import { IPerson } from '@/interfaces/Person'
 import { iBodyParts } from '@/interfaces/BodyParts'
 
-export interface IMonster extends iPerson {
+export interface IMonster extends IPerson {
     id: number
     bodyParts: iBodyParts
 }

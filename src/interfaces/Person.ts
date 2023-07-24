@@ -1,8 +1,9 @@
 import { iBodyPart } from '@/interfaces/BodyParts'
 import { IWeapon } from '@/interfaces/IItem'
 import { Inventory } from '@/assets/models/inventoryModel'
+import { IModifier } from './IModifier'
 
-export interface iPerson {
+export interface IPerson {
     name: string
     race: string
     stats: {
@@ -24,4 +25,5 @@ export interface iPerson {
     inventory: Inventory
     bodyParts: iBodyPart
     isAlive: boolean
+    modifiers: IModifier[]
 }

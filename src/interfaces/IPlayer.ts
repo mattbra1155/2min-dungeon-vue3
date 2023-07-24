@@ -1,6 +1,6 @@
-import { iPerson } from '@/interfaces/Person'
+import { IPerson } from '@/interfaces/Person'
 
-export interface IPlayer extends iPerson {
+export interface IPlayer extends IPerson {
     id: number
     player: boolean
     profession: string

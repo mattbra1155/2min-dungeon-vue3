@@ -3,11 +3,15 @@ import { iBodyPart } from '@/interfaces/BodyParts'
 import { IWeapon } from '@/interfaces/IItem'
 import { Inventory } from './inventoryModel'
 import { bodyPartsModel } from './bodyPartsModel'
+import { IPlayer } from '@/interfaces/IPlayer'
+import { PersonModel } from './personModel'
+import { IModifier } from '@/interfaces/IModifier'
 
 const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 
-class PlayerModel {
+class PlayerModel extends PersonModel implements IPlayer {
     constructor(
+        public id: number = 0,
         public name: string = 'Charname',
         public race: string = 'dwarf',
         public profession: string = '',
@@ -43,9 +47,10 @@ class PlayerModel {
         public description: string = '',
         public inventory: Inventory = new Inventory(),
         public isAlive: boolean = true,
-        public player: boolean = true
+        public player: boolean = true,
+        public modifiers: IModifier[] = []
     ) {
-        // super(name, race, stats, bodyParts, weapon, description, inventory, isAlive)
+        super(name, race, stats, bodyParts, weapon, description, inventory, isAlive, modifiers)
     }
 
     // equipItem(item: Item) {
