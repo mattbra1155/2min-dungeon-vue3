@@ -29,6 +29,15 @@ class Modifiers implements IModifiers {
 
     updateStats(character: PlayerModel | IMonster) {
         // TO DO reduce??
+        // FIX comparing character stats withj modifiers string/number
+        this.list.forEach((modifier) => {
+            const ttt = Object.entries(modifier.modifiers).reduce((acc, [key, value]) => {
+                console.log(acc, key, value)
+                return (acc as unknown as number) + value
+            }, character.stats.hp)
+
+            console.log(ttt)
+        })
     }
 }
 
