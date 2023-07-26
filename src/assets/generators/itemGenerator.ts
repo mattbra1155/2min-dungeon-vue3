@@ -3,7 +3,10 @@ import itemMods from '@/assets/json/itemMods.json'
 import { IItemPrefix } from '@/interfaces/IItem'
 import { useItemGenerator } from '@/composables/useItemGenerator'
 import { EItemCategory } from '@/enums/ItemCategory'
-
+import { ModifierItem } from '../models/modifierItemModel'
+import { EModifierTypes } from '@/enums/EModifierTypes'
+import { IModifierItem } from '@/interfaces/IModifiers'
+const { incrementItemId } = useItemGenerator()
 class ItemGenerator {
     createItemBase(category: EItemCategory) {
         let itemObject
@@ -50,7 +53,6 @@ class ItemGenerator {
     }
 
     async addId(category: EItemCategory) {
-        const { incrementItemId } = useItemGenerator()
         const id = await incrementItemId(category)
 
         return id
@@ -69,6 +71,7 @@ class ItemGenerator {
                     id,
                     description,
                     category,
+                    modifiers: [prefix],
                     damage: prefix.modifier + itemBase.modifier,
                 })
                 break
@@ -79,6 +82,7 @@ class ItemGenerator {
                     id,
                     description,
                     category,
+                    modifiers: [prefix],
                     armorPoints: prefix.modifier + itemBase.modifier,
                 })
                 break
@@ -89,6 +93,7 @@ class ItemGenerator {
                     id,
                     description,
                     category,
+                    modifiers: [prefix],
                     baseValue: prefix.modifier + itemBase.modifier,
                 })
                 break

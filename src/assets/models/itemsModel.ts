@@ -4,6 +4,7 @@ import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
 import { IMonster } from '@/interfaces/IMonster'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { EBodyParts } from '@/enums/EBodyParts'
+import { ModifierItem } from './modifierItemModel'
 const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 
 class Item implements IItem {
@@ -13,13 +14,15 @@ class Item implements IItem {
         public description: string,
         public type: string,
         public category: string,
-        public isEquipped: boolean = false
+        public isEquipped: boolean = false,
+        public modifiers: ModifierItem[] = []
     ) {
         this.name = name
         this.description = description
         this.type = type
         this.id = id
         this.category = category
+        this.modifiers = modifiers
     }
 }
 
@@ -121,6 +124,14 @@ class Armor extends Item implements IArmor {
         owner.bodyParts[itemSlot].armor.item = this
         this.isEquipped = true
         console.log(`equiped ${this.name} on ${itemSlot}`)
+
+        // add modifiers
+        // TO DO figure out how to add id to modifiers
+        // this.modifiers.forEach((modifier) => {
+        // const ttt = new ModifierItem()
+        // })
+        owner.modifiers.list = [...owner.modifiers.list, ...this.modifiers]
+        console.log(this.modifiers, owner.modifiers)
     }
 
     unequip(owner: PlayerModel | IMonster) {

@@ -1,6 +1,7 @@
 import { IMonster } from '@/interfaces/IMonster'
 import { iBodyPart } from './BodyParts'
 import { PlayerModel } from '@/assets/models/playerModel'
+import { ModifierItem } from '@/assets/models/modifierItemModel'
 
 export interface IItem {
     id: number
@@ -9,6 +10,7 @@ export interface IItem {
     type: string
     category: string
     isEquipped: boolean
+    modifiers: ModifierItem[]
 }
 
 export interface IWeapon extends IItem {

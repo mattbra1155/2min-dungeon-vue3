@@ -29,6 +29,10 @@ class Modifiers implements IModifiers {
         }
     }
 
+    // updateModifiers(character: PlayerModel | IMonster) {
+
+    // }
+
     updateStats(character: PlayerModel | IMonster) {
         this.list.forEach((modifier) => {
             const mods = Object.entries(modifier.modifiers)
