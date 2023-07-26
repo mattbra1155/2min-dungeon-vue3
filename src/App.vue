@@ -22,8 +22,26 @@ const init = async () => {
             await setPlayer(player)
             updateGameState(EGameState.Battle)
             console.log(player)
-            const mmm = new ModifierItem(999, 'test', EModifierTypes.Passive, { hp: 10 }, player, player, true)
+            const mmm = new ModifierItem(
+                888,
+                'test',
+                EModifierTypes.Passive,
+                { attacks: 4, ranged: 100 },
+                player,
+                player,
+                true
+            )
+            const nnn = new ModifierItem(
+                999,
+                'test123',
+                EModifierTypes.Passive,
+                { hp: 44, melee: 120 },
+                player,
+                player,
+                true
+            )
             player.modifiers.addItem(mmm)
+            player.modifiers.addItem(nnn)
             router.push({ name: 'home' })
         } else {
             console.log(player)

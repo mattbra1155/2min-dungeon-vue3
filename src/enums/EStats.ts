@@ -3,7 +3,7 @@ export enum EStats {
     Melee = 'melee',
     Ranged = 'ranged',
     Dexterity = 'dexterity',
-    Strength = 'strenght',
+    Strength = 'strength',
     Thoughtness = 'thoughtness',
     Speed = 'speed',
     Initiative = 'initiative',

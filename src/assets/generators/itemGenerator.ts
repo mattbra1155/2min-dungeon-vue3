@@ -49,9 +49,9 @@ class ItemGenerator {
         }
     }
 
-    addId(category: EItemCategory) {
+    async addId(category: EItemCategory) {
         const { incrementItemId } = useItemGenerator()
-        const id = incrementItemId(category)
+        const id = await incrementItemId(category)
 
         return id
     }

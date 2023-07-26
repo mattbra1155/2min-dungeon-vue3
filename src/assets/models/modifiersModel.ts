@@ -2,6 +2,8 @@ import { IModifiers } from '@/interfaces/IModifiers'
 import { ModifierItem } from '@/assets/models/modifierItemModel'
 import { IMonster } from '@/interfaces/IMonster'
 import { PlayerModel } from './playerModel'
+import { EStats } from '@/enums/EStats'
+import { IStats } from '@/interfaces/IStats'
 
 class Modifiers implements IModifiers {
     constructor(public list: ModifierItem[] = []) {
@@ -28,15 +30,17 @@ class Modifiers implements IModifiers {
     }
 
     updateStats(character: PlayerModel | IMonster) {
-        // TO DO reduce??
-        // FIX comparing character stats withj modifiers string/number
         this.list.forEach((modifier) => {
-            const ttt = Object.entries(modifier.modifiers).reduce((acc, [key, value]) => {
-                console.log(acc, key, value)
-                return (acc as unknown as number) + value
-            }, character.stats.hp)
-
-            console.log(ttt)
+            const mods = Object.entries(modifier.modifiers)
+            mods.forEach((xxx) => {
+                const statName = Object.values(EStats).find((stat) => stat === xxx[0])
+                if (!statName) {
+                    throw new Error('No statName')
+                }
+                if (xxx[0] === statName) {
+                    character.stats[statName] += xxx[1]
+                }
+            })
         })
     }
 }
