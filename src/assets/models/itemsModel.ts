@@ -5,16 +5,16 @@ import { IMonster } from '@/interfaces/IMonster'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { EBodyParts } from '@/enums/EBodyParts'
 import { ModifierItem } from './modifierItemModel'
-const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
 
 class Item implements IItem {
     constructor(
-        public id: number,
+        public id: string | undefined,
         public name: string,
         public description: string,
         public type: string,
         public category: string,
         public isEquipped: boolean = false,
+        public ownerId: string | undefined = undefined,
         public modifiers: ModifierItem[] = []
     ) {
         this.name = name
@@ -28,7 +28,7 @@ class Item implements IItem {
 
 class Weapon extends Item implements IWeapon {
     constructor(
-        public id: number = 0,
+        public id: string = '',
         public name: string = '',
         public description: string = '',
         public damage: number = 0,
@@ -61,35 +61,15 @@ class Weapon extends Item implements IWeapon {
         owner.weapon = null
         this.isEquipped = false
     }
-
-    // get fullName() {
-    //     return (this.name = `${this.prefix.name} ${this.name}`)
-    // }
-
-    // addModifier(baseItem, prefix) {
-    //     let modifier
-    //     const mods = baseItem.modifier === undefined ? 0 : baseItem.modifier
-    //     const prefixMod = prefix.modifier
-    //     modifier = mods + prefixMod
-
-    //     return modifier
-    // }
 }
 
 class Armor extends Item implements IArmor {
     constructor(
-        public id: number = 0,
+        public id: string = '',
         public name: string = '',
         public description: string = '',
         public modifier: number = 0,
-        public bodyPart: iBodyPart = {
-            head,
-            leftArm,
-            rightArm,
-            leftLeg,
-            rightLeg,
-            torso,
-        },
+        public bodyPart: iBodyPart = bodyPartsModel,
         public type: string = '',
         public item: string = '',
         public category: string = '',
@@ -103,6 +83,8 @@ class Armor extends Item implements IArmor {
         this.type = type
         this.item = item
         this.prefix = prefix
+        this.category = category
+        this.description = description
     }
 
     equip(owner: PlayerModel | IMonster) {
@@ -125,13 +107,18 @@ class Armor extends Item implements IArmor {
         this.isEquipped = true
         console.log(`equiped ${this.name} on ${itemSlot}`)
 
-        // add modifiers
-        // TO DO figure out how to add id to modifiers
-        // this.modifiers.forEach((modifier) => {
-        // const ttt = new ModifierItem()
-        // })
+        // assign modifier to owner after equipping
+        this.modifiers.forEach((modifier) => {
+            if (owner.modifiers.list.find((item) => item.id !== modifier.id)) {
+                console.log('yes')
+            } else {
+                console.log('not')
+                owner.modifiers.addItem(modifier)
+            }
+        })
+
         owner.modifiers.list = [...owner.modifiers.list, ...this.modifiers]
-        console.log(this.modifiers, owner.modifiers)
+        console.log(this.modifiers, owner)
     }
 
     unequip(owner: PlayerModel | IMonster) {
@@ -151,7 +138,7 @@ class Armor extends Item implements IArmor {
 
 class Potion extends Item implements IPotion {
     constructor(
-        public id: number = 0,
+        public id: string = '',
         public name: string = '',
         public modifier: number = 0,
         public description: string = '',

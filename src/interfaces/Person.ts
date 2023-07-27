@@ -4,6 +4,7 @@ import { Inventory } from '@/assets/models/inventoryModel'
 import { Modifiers } from '@/assets/models/modifiersModel'
 
 export interface IPerson {
+    id: string
     name: string
     race: string
     stats: {

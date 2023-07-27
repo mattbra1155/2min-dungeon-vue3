@@ -6,12 +6,12 @@ import { PlayerModel } from './playerModel'
 
 class ModifierItem implements IModifierItem {
     constructor(
-        public id: number,
+        public id: string,
         public name: string,
         public type: EModifierTypes,
         public modifiers: Partial<IStats>,
-        public owner: PlayerModel | IMonster,
-        public target: PlayerModel | IMonster,
+        public owner: PlayerModel | IMonster | undefined,
+        public target: PlayerModel | IMonster | undefined,
         public updateOnBeginning: boolean = true
     ) {
         this.id = id

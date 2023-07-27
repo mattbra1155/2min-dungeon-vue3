@@ -6,20 +6,21 @@ class Inventory implements IInventory {
         this.inventory = inventory
     }
 
-    addItem(item: Weapon | Armor | Potion): void {
+    addItem(item: Weapon | Armor | Potion, ownerId: string | undefined): void {
         if (!item) {
             return
         }
         this.inventory.push(item)
+        item.ownerId = ownerId
     }
-    removeItem(itemId: number): void {
+    removeItem(itemId: string): void {
         if (!itemId) {
             return
         }
         const indexToRemove = this.inventory.findIndex((element) => element.id === itemId)
         this.inventory.splice(indexToRemove, 1)
     }
-    getItem(itemId: number) {
+    getItem(itemId: string) {
         if (!itemId) {
             return
         }

@@ -8,10 +8,11 @@ import { Inventory } from '@/assets/models/inventoryModel'
 import { IArmor, IPotion, IWeapon } from '@/interfaces/IItem'
 import { ModifierItem } from '@/assets/models/modifierItemModel'
 import { Modifiers } from '@/assets/models/modifiersModel'
+import { IPlayer } from '@/interfaces/IPlayer'
 
 interface iPlayerState {
-    player: PlayerModel
-    initPlayer: PlayerModel
+    player: IPlayer
+    initPlayer: IPlayer
 }
 const state: iPlayerState = reactive({
     initPlayer: new PlayerModel(),
@@ -37,9 +38,9 @@ export const usePlayer = () => {
             const weapon = new ItemGenerator().createItem(EItemCategory.Weapon)
             const armor = new ItemGenerator().createItem(EItemCategory.Armor)
             const armor2 = new ItemGenerator().createItem(EItemCategory.Armor)
-            state.player.inventory.addItem(weapon)
-            state.player.inventory.addItem(armor)
-            state.player.inventory.addItem(armor2)
+            state.player.inventory.addItem(weapon, state.player.id)
+            state.player.inventory.addItem(armor, state.player.id)
+            state.player.inventory.addItem(armor2, state.player.id)
 
             console.log(state.player)
             if (weapon instanceof Weapon) {

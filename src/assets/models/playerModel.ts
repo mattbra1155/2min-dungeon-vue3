@@ -1,17 +1,15 @@
 // import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
 import { iBodyPart } from '@/interfaces/BodyParts'
-import { IWeapon } from '@/interfaces/IItem'
 import { Inventory } from './inventoryModel'
 import { bodyPartsModel } from './bodyPartsModel'
 import { IPlayer } from '@/interfaces/IPlayer'
 import { PersonModel } from './personModel'
 import { Modifiers } from './modifiersModel'
-
-const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
+import { Weapon } from './itemsModel'
 
 class PlayerModel extends PersonModel implements IPlayer {
     constructor(
-        public id: number = 0,
+        public id: string = self.crypto.randomUUID(),
         public name: string = 'Charname',
         public race: string = 'dwarf',
         public profession: string = '',
@@ -43,7 +41,7 @@ class PlayerModel extends PersonModel implements IPlayer {
             charisma: 0,
         },
         public bodyParts: iBodyPart = bodyPartsModel,
-        public weapon: IWeapon | null = null,
+        public weapon: Weapon | null = null,
         public description: string = '',
         public inventory: Inventory = new Inventory(),
         public isAlive: boolean = true,

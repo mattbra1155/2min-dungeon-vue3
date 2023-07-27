@@ -18,7 +18,7 @@ class Modifiers implements IModifiers {
         }
     }
 
-    removeItem(itemId: number) {
+    removeItem(itemId: string) {
         const itemToRemove: ModifierItem | undefined = this.list.find((element: ModifierItem) => element.id === itemId)
         if (itemToRemove) {
             const itemIndex = this.list.findIndex((element: ModifierItem) => element.id === itemToRemove.id)
