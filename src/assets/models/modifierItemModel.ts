@@ -12,7 +12,12 @@ class ModifierItem implements IModifierItem {
         public modifiers: Partial<IStats>,
         public owner: PlayerModel | IMonster | undefined,
         public target: PlayerModel | IMonster | undefined,
-        public updateOnBeginning: boolean = true
+        public updateOnBeginning: boolean = true,
+        public duration: {
+            isActive: boolean
+            current: number
+            max: number
+        }
     ) {
         this.id = id
         this.name = name
@@ -20,6 +25,7 @@ class ModifierItem implements IModifierItem {
         this.modifiers = modifiers
         this.owner = owner
         this.target = target
+        this.duration = duration
     }
 }
 

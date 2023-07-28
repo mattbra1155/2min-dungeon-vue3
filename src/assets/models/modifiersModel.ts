@@ -3,7 +3,6 @@ import { ModifierItem } from '@/assets/models/modifierItemModel'
 import { IMonster } from '@/interfaces/IMonster'
 import { PlayerModel } from './playerModel'
 import { EStats } from '@/enums/EStats'
-import { IStats } from '@/interfaces/IStats'
 
 class Modifiers implements IModifiers {
     constructor(public list: ModifierItem[] = []) {
@@ -29,12 +28,26 @@ class Modifiers implements IModifiers {
         }
     }
 
-    // updateModifiers(character: PlayerModel | IMonster) {
+    updateModifiers(character: PlayerModel | IMonster, turn: number) {
+        // check duration and remove
+        this.list.forEach((modifier) => {
+            if (!modifier.duration.isActive) {
+                return
+            }
+            modifier.duration.max = turn + modifier.duration.max
+            modifier.duration.current++
 
-    // }
+            if (modifier.duration.current === modifier.duration.max) {
+                this.removeItem(modifier.id)
+            }
+        })
+        this.updateCurrentStats(character)
+    }
 
     updateCurrentStats(character: PlayerModel | IMonster) {
+        // remove all applied modifiers
         character.clearCurrentStats()
+        // check and add new modifiers
         this.list.forEach((modifier) => {
             const mods = Object.entries(modifier.modifiers)
             mods.forEach((xxx) => {

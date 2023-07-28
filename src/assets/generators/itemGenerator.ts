@@ -63,7 +63,13 @@ class ItemGenerator {
             EModifierTypes.Passive,
             { inteligence: 100 },
             undefined,
-            undefined
+            undefined,
+            true,
+            {
+                isActive: true,
+                current: 0,
+                max: 2,
+            }
         )
         return modifier
     }
