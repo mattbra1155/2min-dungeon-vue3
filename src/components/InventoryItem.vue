@@ -9,7 +9,7 @@ import { computed } from 'vue'
 
 const { player } = usePlayer()
 const props = defineProps<{
-    itemId: number
+    itemId: string
 }>()
 
 const item = computed(() => player.value.inventory.inventory.find((inventoryItem) => inventoryItem.id === props.itemId))

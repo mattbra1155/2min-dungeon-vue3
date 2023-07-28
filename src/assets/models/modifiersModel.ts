@@ -33,7 +33,8 @@ class Modifiers implements IModifiers {
 
     // }
 
-    updateStats(character: PlayerModel | IMonster) {
+    updateCurrentStats(character: PlayerModel | IMonster) {
+        character.clearCurrentStats()
         this.list.forEach((modifier) => {
             const mods = Object.entries(modifier.modifiers)
             mods.forEach((xxx) => {
@@ -42,7 +43,8 @@ class Modifiers implements IModifiers {
                     throw new Error('No statName')
                 }
                 if (xxx[0] === statName) {
-                    character.stats[statName] += xxx[1]
+                    // need to update new acutal stast instead of basic stats
+                    character.currentStats[statName] += xxx[1]
                 }
             })
         })
