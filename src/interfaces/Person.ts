@@ -8,20 +8,7 @@ export interface IPerson {
     id: string
     name: string
     race: string
-    stats: {
-        hp: number
-        melee: number
-        ranged: number
-        dexterity: number
-        strength: number
-        thoughtness: number
-        speed: number
-        initiative: number
-        attacks: number
-        inteligence: number
-        willPower: number
-        charisma: number
-    }
+    stats: IStats
     currentStats: IStats
     weapon: IWeapon | null
     description: string
@@ -29,4 +16,5 @@ export interface IPerson {
     bodyParts: iBodyPart
     isAlive: boolean
     modifiers: Modifiers
+    clearCurrentStats(): void
 }

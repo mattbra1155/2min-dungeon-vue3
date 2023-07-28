@@ -37,9 +37,8 @@ class PlayerModel extends PersonModel implements IPlayer {
         public player: boolean = true,
         public modifiers: Modifiers = new Modifiers()
     ) {
-        super(name, race, stats, bodyParts, weapon, description, inventory, isAlive, modifiers)
+        super(id, name, race, stats, currentStats, bodyParts, weapon, description, inventory, isAlive, modifiers)
     }
-
     // equipItem(item: Item) {
     //     switch (item.category) {
     //         case 'armor': {

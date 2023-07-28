@@ -11,8 +11,8 @@ import { Modifiers } from '@/assets/models/modifiersModel'
 import { IPlayer } from '@/interfaces/IPlayer'
 
 interface iPlayerState {
-    player: IPlayer
-    initPlayer: IPlayer
+    player: PlayerModel
+    initPlayer: PlayerModel
 }
 const state: iPlayerState = reactive({
     initPlayer: new PlayerModel(),
@@ -30,6 +30,8 @@ export const usePlayer = () => {
     const createPlayer = (payload: PlayerModel | null) => {
         if (payload) {
             state.player = Object.assign(state.player, payload)
+            state.player.currentStats = JSON.parse(JSON.stringify(state.player.stats))
+
             const inventory = new Inventory()
             const modifiers = new Modifiers()
             state.player.inventory = inventory
