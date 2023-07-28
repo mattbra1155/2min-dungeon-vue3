@@ -6,6 +6,7 @@ import { IPlayer } from '@/interfaces/IPlayer'
 import { PersonModel } from './personModel'
 import { Modifiers } from './modifiersModel'
 import { Weapon } from './itemsModel'
+import { IStats } from '@/interfaces/IStats'
 
 class PlayerModel extends PersonModel implements IPlayer {
     constructor(
@@ -13,20 +14,7 @@ class PlayerModel extends PersonModel implements IPlayer {
         public name: string = 'Charname',
         public race: string = 'dwarf',
         public profession: string = '',
-        public stats: {
-            hp: number
-            melee: number
-            ranged: number
-            dexterity: number
-            strength: number
-            thoughtness: number
-            speed: number
-            initiative: number
-            attacks: number
-            inteligence: number
-            willPower: number
-            charisma: number
-        } = {
+        public stats: IStats = {
             hp: 0,
             melee: 0,
             ranged: 0,
@@ -40,6 +28,7 @@ class PlayerModel extends PersonModel implements IPlayer {
             willPower: 0,
             charisma: 0,
         },
+        public currentStats: IStats = stats,
         public bodyParts: iBodyPart = bodyPartsModel,
         public weapon: Weapon | null = null,
         public description: string = '',

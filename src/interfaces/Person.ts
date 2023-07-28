@@ -2,6 +2,7 @@ import { iBodyPart } from '@/interfaces/BodyParts'
 import { IWeapon } from '@/interfaces/IItem'
 import { Inventory } from '@/assets/models/inventoryModel'
 import { Modifiers } from '@/assets/models/modifiersModel'
+import { IStats } from '@/interfaces/IStats'
 
 export interface IPerson {
     id: string
@@ -21,6 +22,7 @@ export interface IPerson {
         willPower: number
         charisma: number
     }
+    currentStats: IStats
     weapon: IWeapon | null
     description: string
     inventory: Inventory
