@@ -32,16 +32,19 @@ class Modifiers implements IModifiers {
         // check duration and remove
         this.list.forEach((modifier) => {
             if (!modifier.duration.isActive) {
+                modifier.duration.max = turn + modifier.duration.max
+                modifier.duration.current = turn
                 return
             }
-            modifier.duration.max = turn + modifier.duration.max
             modifier.duration.current++
+            console.log(modifier.durations)
 
             if (modifier.duration.current === modifier.duration.max) {
                 this.removeItem(modifier.id)
+                console.log(`Removed modifier: ${modifier.name}`)
+                this.updateCurrentStats(character)
             }
         })
-        this.updateCurrentStats(character)
     }
 
     updateCurrentStats(character: PlayerModel | IMonster) {

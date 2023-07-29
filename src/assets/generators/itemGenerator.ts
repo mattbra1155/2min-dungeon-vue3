@@ -66,7 +66,7 @@ class ItemGenerator {
             undefined,
             true,
             {
-                isActive: true,
+                isActive: false,
                 current: 0,
                 max: 2,
             }
