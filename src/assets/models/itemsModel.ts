@@ -56,9 +56,9 @@ class Weapon extends Item implements IWeapon {
         this.isEquipped = true
         // assign modifier to owner after equipping
         this.modifiers.forEach((modifier) => {
-            console.log(owner.modifiers.list.find((item) => item.id !== modifier.id))
+            const foundModifier = !!owner.modifiers.list.find((item) => item.id === modifier.id)
 
-            if (!owner.modifiers.list.find((item) => item.id !== modifier.id)) {
+            if (foundModifier) {
                 console.log(`Modifier: "${modifier.name}" was already added`)
                 return
             } else {
@@ -121,16 +121,17 @@ class Armor extends Item implements IArmor {
 
         // assign modifier to owner after equipping
         this.modifiers.forEach((modifier) => {
-            if (owner.modifiers.list.find((mod) => mod.id !== modifier.id)) {
+            const foundModifier = !!owner.modifiers.list.find((item) => item.id === modifier.id)
+
+            if (foundModifier) {
                 console.log(`Modifier: "${modifier.name}" was already added`)
                 return
             } else {
                 owner.modifiers.addItem(modifier)
             }
         })
-        // update current stats with modifiers
         owner.modifiers.updateCurrentStats(owner)
-        console.log(owner)
+        console.log('Equipped', this)
     }
 
     unequip(owner: PlayerModel | IMonster) {

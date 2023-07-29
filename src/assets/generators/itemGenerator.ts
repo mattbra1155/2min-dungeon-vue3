@@ -59,7 +59,7 @@ class ItemGenerator {
         const id = `modifier-${self.crypto.randomUUID()}`
         const modifier = new ModifierItem(
             id,
-            this.createPrefix(category).name,
+            'test modifier',
             EModifierTypes.Passive,
             { inteligence: 100 },
             undefined,
