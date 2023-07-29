@@ -3,7 +3,8 @@ import itemMods from '@/assets/json/itemMods.json'
 import { IItemPrefix } from '@/interfaces/IItem'
 import { useItemGenerator } from '@/composables/useItemGenerator'
 import { EItemCategory } from '@/enums/ItemCategory'
-
+import { ModifierItem } from '../models/modifierItemModel'
+import { EModifierTypes } from '@/enums/EModifierTypes'
 class ItemGenerator {
     createItemBase(category: EItemCategory) {
         let itemObject
@@ -50,16 +51,35 @@ class ItemGenerator {
     }
 
     addId(category: EItemCategory) {
-        const { incrementItemId } = useItemGenerator()
-        const id = incrementItemId(category)
-
-        return id
+        const id = self.crypto.randomUUID()
+        return `${category}-${id}`
     }
+
+    createModifiers(category: EItemCategory) {
+        const id = `modifier-${self.crypto.randomUUID()}`
+        const modifier = new ModifierItem(
+            id,
+            'test modifier',
+            EModifierTypes.Passive,
+            { inteligence: 100 },
+            undefined,
+            undefined,
+            true,
+            {
+                isActive: false,
+                current: 0,
+                max: 2,
+            }
+        )
+        return modifier
+    }
+
     createItem(category: EItemCategory) {
         const itemBase = this.createItemBase(category)
         const prefix = this.createPrefix(category)
         const description = this.createDescription(itemBase, prefix)
         const id = this.addId(category)
+        const modifier = this.createModifiers(category)
         let item = itemBase
         switch (category) {
             case EItemCategory.Weapon:
@@ -69,6 +89,7 @@ class ItemGenerator {
                     id,
                     description,
                     category,
+                    modifiers: [modifier],
                     damage: prefix.modifier + itemBase.modifier,
                 })
                 break
@@ -79,6 +100,7 @@ class ItemGenerator {
                     id,
                     description,
                     category,
+                    modifiers: [modifier],
                     armorPoints: prefix.modifier + itemBase.modifier,
                 })
                 break
@@ -89,6 +111,7 @@ class ItemGenerator {
                     id,
                     description,
                     category,
+                    modifiers: [modifier],
                     baseValue: prefix.modifier + itemBase.modifier,
                 })
                 break

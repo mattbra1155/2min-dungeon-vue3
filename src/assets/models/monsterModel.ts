@@ -1,14 +1,14 @@
 import { PersonModel } from '@/assets/models/personModel'
 import { iBodyPart } from '@/interfaces/BodyParts'
-import { IArmor, IPotion, iUtility, IWeapon } from '@/interfaces/IItem'
 import { IMonster } from '@/interfaces/IMonster'
-import { bodyPartsModel } from './bodyPartsModel'
-
-const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
+import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
+import { Inventory } from '@/assets/models/inventoryModel'
+import { Modifiers } from '@/assets/models/modifiersModel'
+import { Weapon } from '@/assets/models/itemsModel'
 
 class MonsterModel extends PersonModel implements IMonster {
     constructor(
-        public id: number = 0,
+        public id: string,
         public name: string = '',
         public race: string = '',
         public stats: {
@@ -38,32 +38,14 @@ class MonsterModel extends PersonModel implements IMonster {
             charisma: 0,
             willPower: 0,
         },
-        public weapon: null | IWeapon = {
-            name: '',
-            category: '',
-            damage: 0,
-            type: '',
-            modifier: 0,
-            prefix: {
-                name: '',
-                modifier: 0,
-            },
-            description: '',
-            id: 0,
-        },
-        public bodyParts: iBodyPart = {
-            head,
-            leftArm,
-            rightArm,
-            torso,
-            leftLeg,
-            rightLeg,
-        },
-        public inventory: Array<IWeapon | IArmor | IPotion | iUtility> = [],
+        public weapon: null | Weapon,
+        public bodyParts: iBodyPart = bodyPartsModel,
+        public inventory: Inventory = new Inventory(),
         public description: string = '',
-        public isAlive: boolean = true
+        public isAlive: boolean = true,
+        public modifiers: Modifiers = new Modifiers()
     ) {
-        super(name, race, stats, bodyParts, weapon, description, inventory, isAlive)
+        super(name, race, stats, bodyParts, weapon, description, inventory, isAlive, modifiers)
     }
 }
 

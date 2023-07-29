@@ -7,21 +7,21 @@ import InventoryPanel from './components/InventoryPanel.vue'
 import CharacterScreen from './components/CharacterScreen.vue'
 import { PlayerModel } from './assets/models/playerModel'
 
-const { fetchPlayer, setPlayer, player: pp } = usePlayer()
+const { fetchPlayer, setPlayer } = usePlayer()
 const { activeGameState, updateGameState } = useGameStateManager()
 const router = useRouter()
 
 const init = async () => {
     updateGameState(EGameState.Init)
     if (activeGameState.value === EGameState.Init) {
-        // TO FIX: Player is not a class but just a object with interface added.
         const player: PlayerModel | undefined = await fetchPlayer()
         if (player) {
-            console.log(player)
             await setPlayer(player)
             updateGameState(EGameState.Battle)
+            console.log(player)
             router.push({ name: 'home' })
         } else {
+            console.log(player)
             updateGameState(EGameState.CreateChar)
             router.push({ name: 'characterCreation' })
         }

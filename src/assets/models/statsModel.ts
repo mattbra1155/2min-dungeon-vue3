@@ -1,6 +1,6 @@
-import { iStats } from '@/interfaces/Stats'
+import { IStats } from '@/interfaces/IStats'
 
-export const stats: iStats = {
+export const stats: IStats = {
     hp: 0,
     melee: 0,
     ranged: 0,
