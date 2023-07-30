@@ -5,7 +5,9 @@ import { useRouter } from 'vue-router'
 import { EGameState } from '@/enums/EGameState'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { PlayerModel } from '@/assets/models/playerModel'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { ItemGenerator } from '@/assets/generators/itemGenerator'
+import { EItemCategory } from '@/enums/ItemCategory'
 
 const router = useRouter()
 const { initPlayer, createPlayer, resetPlayer } = usePlayer()
@@ -49,6 +51,13 @@ const rollStats = () => {
             charisma: diceRollK10() * 2 + 1,
         })
     }
+}
+
+const createInventoryItems = () => {
+    const weapon = new ItemGenerator().createItem(EItemCategory.Weapon)
+    const armor = new ItemGenerator().createItem(EItemCategory.Armor)
+    playerObject.value.inventory.addItem(weapon, playerObject.value.id)
+    playerObject.value.inventory.addItem(armor, playerObject.value.id)
 }
 const savePlayer = async () => {
     if (playerObject.value) {
@@ -147,7 +156,12 @@ const savePlayer = async () => {
             <div class="m-form__row o-characterGenerator__row">
                 <div class="m-form__column">
                     <h2 class="o-characterGenerator__header">Stats</h2>
-                    <button type="button" @click="rollStats" id="generateStatsButton" class="button action__button">
+                    <button
+                        type="button"
+                        @click="rollStats(), createInventoryItems()"
+                        id="generateStatsButton"
+                        class="button action__button"
+                    >
                         Roll dice
                     </button>
                     <div id="statList" class="o-characterGenerator__statList">
@@ -167,13 +181,23 @@ const savePlayer = async () => {
             <div class="m-form__row o-characterGenerator__row">
                 <div class="m-form__column">
                     <h2 class="o-characterGenerator__header">Inventory</h2>
-                    <div id="charInventory" class="o-characterGenerator__inventory"></div>
-                </div>
-            </div>
-            <div class="m-form__row o-characterGenerator__row">
-                <div class="m-form__column">
-                    <h2 class="o-characterGenerator__header">Weapon</h2>
-                    <div id="charWeapon" class="weapon"></div>
+                    <div
+                        id="charInventory"
+                        class="o-characterGenerator__inventory"
+                        v-for="item in playerObject.inventory.inventory"
+                        :key="item.id"
+                    >
+                        <div class="o-characterGenerator__inventory">
+                            {{ item.name }}
+                            {{
+                                item.prefix.modifier !== 0
+                                    ? Math.sign(item.prefix.modifier)
+                                        ? `+${item.prefix.modifier}`
+                                        : `${item.prefix.modifier}`
+                                    : ''
+                            }}
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="m-form__row o-characterGenerator__row">

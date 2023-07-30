@@ -32,24 +32,11 @@ export const usePlayer = () => {
             state.player = Object.assign(state.player, payload)
             state.player.currentStats = JSON.parse(JSON.stringify(state.player.stats))
 
-            const inventory = new Inventory()
-            const modifiers = new Modifiers()
-            state.player.inventory = inventory
-            state.player.modifiers = modifiers
             state.player.isAlive = true
-            const weapon = new ItemGenerator().createItem(EItemCategory.Weapon)
-            const armor = new ItemGenerator().createItem(EItemCategory.Armor)
-            const armor2 = new ItemGenerator().createItem(EItemCategory.Armor)
-            state.player.inventory.addItem(weapon, state.player.id)
-            state.player.inventory.addItem(armor, state.player.id)
-            state.player.inventory.addItem(armor2, state.player.id)
 
-            console.log(state.player)
-            if (weapon instanceof Weapon) {
-                state.player.weapon = weapon
-            }
             const stringifiedPlayer = JSON.stringify(state.player)
             localforage.setItem('player', stringifiedPlayer)
+            return state.player
         }
     }
 

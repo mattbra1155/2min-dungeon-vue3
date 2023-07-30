@@ -39,7 +39,8 @@ init()
             <router-link to="/">Main</router-link>
             <router-link to="/character-creation/">Create</router-link>
         </nav>
-        <router-view />
+
+        <router-view class="o-page" />
         <inventory-panel />
         <character-screen />
     </div>
