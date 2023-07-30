@@ -25,7 +25,7 @@ const { player } = usePlayer()
         <div class="o-characterScreen__statsWrapper">
             <h2 class="a-text">Stats:</h2>
             <div class="o-characterScreen__statList">
-                <div class="o-characterScreen__statItem" v-for="(value, key) in player.stats" :key="key">
+                <div class="o-characterScreen__statItem" v-for="(value, key) in player.currentStats" :key="key">
                     <p class="a-text">{{ key }}</p>
                     <p class="a-text">{{ value }}</p>
                 </div>
@@ -34,8 +34,10 @@ const { player } = usePlayer()
         <div class="o-characterScreen__modifiersWrapper">
             <h2 class="a-text">Modifiers</h2>
             <p v-for="modifierItem in player.modifiers.list" :key="modifierItem.id">
-                {{ modifierItem.name }} {{ modifierItem.type }}
-                <template v-for="(value, key) in modifierItem.modifiers"> {{ key }}: {{ value }}</template>
+                <span class="a-text">{{ modifierItem.name }} </span>&nbsp; &rarr; &nbsp;
+                <span v-for="(value, key) in modifierItem.modifiers" :key="key">
+                    {{ key }}: {{ Math.sign(value!) ? `+${value}` : `${value}` }}</span
+                >
             </p>
         </div>
     </div>
