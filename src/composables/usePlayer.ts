@@ -62,7 +62,7 @@ export const usePlayer = () => {
         }
     }
 
-    const fetchPlayer = async () => {
+    const fetchPlayer = async (): playerModel => {
         try {
             const result: string | null = await localforage.getItem('player')
 
