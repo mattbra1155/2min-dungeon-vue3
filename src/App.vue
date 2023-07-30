@@ -20,6 +20,7 @@ const init = async () => {
             updateGameState(EGameState.Battle)
             console.log(player)
             router.push({ name: 'home' })
+            return player
         } else {
             console.log(player)
             updateGameState(EGameState.CreateChar)
