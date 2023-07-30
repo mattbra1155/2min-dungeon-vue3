@@ -1,30 +1,20 @@
 // import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
 import { iBodyPart } from '@/interfaces/BodyParts'
-import { IWeapon } from '@/interfaces/IItem'
 import { Inventory } from './inventoryModel'
 import { bodyPartsModel } from './bodyPartsModel'
+import { IPlayer } from '@/interfaces/IPlayer'
+import { PersonModel } from './personModel'
+import { Modifiers } from './modifiersModel'
+import { Weapon } from './itemsModel'
+import { IStats } from '@/interfaces/IStats'
 
-const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
-
-class PlayerModel {
+class PlayerModel extends PersonModel implements IPlayer {
     constructor(
+        public id: string = self.crypto.randomUUID(),
         public name: string = 'Charname',
         public race: string = 'dwarf',
         public profession: string = '',
-        public stats: {
-            hp: number
-            melee: number
-            ranged: number
-            dexterity: number
-            strength: number
-            thoughtness: number
-            speed: number
-            initiative: number
-            attacks: number
-            inteligence: number
-            willPower: number
-            charisma: number
-        } = {
+        public stats: IStats = {
             hp: 0,
             melee: 0,
             ranged: 0,
@@ -38,16 +28,17 @@ class PlayerModel {
             willPower: 0,
             charisma: 0,
         },
+        public currentStats: IStats = stats,
         public bodyParts: iBodyPart = bodyPartsModel,
-        public weapon: IWeapon | null = null,
+        public weapon: Weapon | null = null,
         public description: string = '',
         public inventory: Inventory = new Inventory(),
         public isAlive: boolean = true,
-        public player: boolean = true
+        public player: boolean = true,
+        public modifiers: Modifiers = new Modifiers()
     ) {
-        // super(name, race, stats, bodyParts, weapon, description, inventory, isAlive)
+        super(id, name, race, stats, currentStats, bodyParts, weapon, description, inventory, isAlive, modifiers)
     }
-
     // equipItem(item: Item) {
     //     switch (item.category) {
     //         case 'armor': {

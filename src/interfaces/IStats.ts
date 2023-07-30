@@ -1,4 +1,4 @@
-export interface iStats {
+export interface IStats {
     hp: number
     melee: number
     ranged: number

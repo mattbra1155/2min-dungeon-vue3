@@ -1,73 +1,45 @@
 import { diceRollK100, diceRollK6 } from '@/assets/scripts/diceRoll'
 import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
-import { stats } from '@/assets/models/statsModel'
-import { iPerson } from '@/interfaces/Person'
+import { IPerson } from '@/interfaces/Person'
 import { iBodyPart } from '@/interfaces/BodyParts'
 import { IMonster } from '@/interfaces/IMonster'
-import { Inventory } from './inventoryModel'
-import { PlayerModel } from './playerModel'
-import { Weapon } from './itemsModel'
-
-const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
-const {
-    hp,
-    melee,
-    ranged,
-    dexterity,
-    strength,
-    thoughtness,
-    speed,
-    initiative,
-    attacks,
-    inteligence,
-    willPower,
-    charisma,
-} = stats
-
-class PersonModel implements iPerson {
+import { Inventory } from '@/assets/models/inventoryModel'
+import { PlayerModel } from '@/assets/models//playerModel'
+import { Weapon } from '@/assets/models//itemsModel'
+import { Modifiers } from '@/assets/models/modifiersModel'
+import { IStats } from '@/interfaces/IStats'
+import localforage from 'localforage'
+class PersonModel implements IPerson {
     constructor(
+        public id: string = self.crypto.randomUUID(),
         public name: string = '',
         public race: string = '',
-        public stats: {
-            hp: number
-            melee: number
-            ranged: number
-            dexterity: number
-            strength: number
-            thoughtness: number
-            speed: number
-            initiative: number
-            attacks: number
-            inteligence: number
-            willPower: number
-            charisma: number
-        } = {
-            hp,
-            melee,
-            ranged,
-            dexterity,
-            strength,
-            thoughtness,
-            speed,
-            initiative,
-            attacks,
-            inteligence,
-            willPower,
-            charisma,
+        public stats: IStats = {
+            hp: 0,
+            melee: 0,
+            ranged: 0,
+            dexterity: 0,
+            strength: 0,
+            thoughtness: 0,
+            speed: 0,
+            initiative: 0,
+            attacks: 0,
+            inteligence: 0,
+            willPower: 0,
+            charisma: 0,
         },
-        public bodyParts: iBodyPart = {
-            head,
-            leftArm,
-            rightArm,
-            torso,
-            leftLeg,
-            rightLeg,
-        },
+        public currentStats: IStats = stats,
+        public bodyParts: iBodyPart = bodyPartsModel,
         public weapon: Weapon | null = null,
         public description: string = '',
         public inventory: Inventory,
-        public isAlive: boolean = true
+        public isAlive: boolean = true,
+        public modifiers: Modifiers
     ) {}
+
+    async clearCurrentStats() {
+        this.currentStats = JSON.parse(JSON.stringify(this.stats))
+    }
 
     attack(enemy: IMonster | PlayerModel) {
         // dice roll

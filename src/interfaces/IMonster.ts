@@ -1,7 +1,3 @@
-import { iPerson } from '@/interfaces/Person'
-import { iBodyParts } from '@/interfaces/BodyParts'
+import { IPerson } from '@/interfaces/Person'
 
-export interface IMonster extends iPerson {
-    id: number
-    bodyParts: iBodyParts
-}
+export type IMonster = IPerson

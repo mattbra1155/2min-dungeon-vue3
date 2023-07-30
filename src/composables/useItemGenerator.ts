@@ -18,11 +18,11 @@ const state: iStateUseItemGenerator = reactive({
 })
 
 export const useItemGenerator = () => {
-    const incrementItemId = (category: EItemCategory) => {
+    const incrementItemId = async (category: EItemCategory) => {
         if (!state) {
             return
         }
-        setItemIdState()
+        await setItemIdState()
         switch (category) {
             case EItemCategory.Weapon:
                 state.ids.weapon++
