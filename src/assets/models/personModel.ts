@@ -9,6 +9,7 @@ import { Weapon } from '@/assets/models//itemsModel'
 import { Modifiers } from '@/assets/models/modifiersModel'
 import { IStats } from '@/interfaces/IStats'
 import localforage from 'localforage'
+import { EModifierTypes } from '@/enums/EModifierTypes'
 class PersonModel implements IPerson {
     constructor(
         public id: string = self.crypto.randomUUID(),
@@ -81,15 +82,45 @@ class PersonModel implements IPerson {
             // Calculate damage
             const damage = () => {
                 const damageDiceRoll = diceRollK6()
-                let damagePoints =
-                    this.stats.strength -
-                    enemy.stats.thoughtness -
-                    (enemyArmorPoints ? enemyArmorPoints : 0) +
-                    ((this.weapon === null ? 0 : this.weapon.damage) + damageDiceRoll)
+                let damagePoints = 0
+
+                const weaponDamage = () => {
+                    if (!this.weapon) {
+                        return 0
+                    }
+                    const baseDamage = this.weapon.damage
+                    const prefixDamage = this.weapon.prefix.modifier
+                    let modifierDamage = 0
+
+                    this.weapon.modifiers.forEach((modifier) => {
+                        if (modifier.type !== EModifierTypes.Attack) {
+                            return 0
+                        }
+                        console.log(typeof modifier.modifiers !== 'number')
+
+                        if (typeof modifier.modifiers !== 'number') {
+                            return 0
+                        }
+
+                        modifierDamage = modifier.modifiers
+                    })
+
+                    const damage = baseDamage + prefixDamage + modifierDamage
+
+                    return damage
+                }
+
+                console.log(this.stats.strength)
+                damagePoints += this.stats.strength
+                damagePoints += enemyArmorPoints ? enemyArmorPoints : 0
+                damagePoints += weaponDamage()
+                damagePoints += damageDiceRoll
+                damagePoints -= enemy.stats.thoughtness
+
                 if (damagePoints < 0) {
                     damagePoints = 0
                 }
-                console.log(damagePoints)
+                console.log('damage', damagePoints)
                 return damagePoints
             }
             /*  turn.turns.unshift({

@@ -7,7 +7,7 @@ export interface IModifierItem {
     id: string
     name: string
     type: EModifierTypes | null
-    modifiers: Partial<IStats>
+    modifiers: Partial<IStats> | number
     owner: PlayerModel | IMonster | undefined
     target: PlayerModel | IMonster | undefined
     duration: {

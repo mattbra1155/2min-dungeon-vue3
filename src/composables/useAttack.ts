@@ -63,6 +63,7 @@ export const useAttack = () => {
                 if (damagePoints < 0) {
                     damagePoints = 0
                 }
+                console.log('ttt', attacker.weapon?.damage)
                 console.log(damagePoints)
                 return damagePoints
             }

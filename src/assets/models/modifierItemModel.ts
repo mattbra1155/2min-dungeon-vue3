@@ -9,7 +9,7 @@ class ModifierItem implements IModifierItem {
         public id: string,
         public name: string,
         public type: EModifierTypes,
-        public modifiers: Partial<IStats>,
+        public modifiers: Partial<IStats> | number,
         public owner: PlayerModel | IMonster | undefined,
         public target: PlayerModel | IMonster | undefined,
         public updateOnBeginning: boolean = true,

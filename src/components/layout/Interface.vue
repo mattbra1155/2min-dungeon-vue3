@@ -12,7 +12,8 @@ const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
 const playerAttack = () => {
     if (targetToAttack.value) {
-        attack(activeCharacter.value, targetToAttack.value)
+        // attack(activeCharacter.value, targetToAttack.value)
+        player.value.attack(targetToAttack.value)
         updateTurnStateMachine(ETurnState.EnemyAttack)
     }
 }
