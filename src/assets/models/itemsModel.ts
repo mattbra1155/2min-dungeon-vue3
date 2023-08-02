@@ -1,7 +1,7 @@
 import { iBodyPart } from '@/interfaces/BodyParts'
 import { IArmor, IItem, IItemPrefix, IPotion, IWeapon } from '@/interfaces/IItem'
 import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
-import { IMonster } from '@/interfaces/IMonster'
+import { MonsterModel } from '@/interfaces/MonsterModel'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { EBodyParts } from '@/enums/EBodyParts'
 import { ModifierItem } from './modifierItemModel'
@@ -47,7 +47,7 @@ class Weapon extends Item implements IWeapon {
         this.modifier = modifier
     }
 
-    wield(owner: PlayerModel | IMonster) {
+    wield(owner: PlayerModel | MonsterModel) {
         if (!this) {
             console.error(`no weapon to wield!!`)
             return
@@ -69,7 +69,7 @@ class Weapon extends Item implements IWeapon {
         console.log('wielded', this)
     }
 
-    unequip(owner: PlayerModel | IMonster) {
+    unequip(owner: PlayerModel | MonsterModel) {
         owner.weapon = null
         this.isEquipped = false
     }
@@ -99,7 +99,7 @@ class Armor extends Item implements IArmor {
         this.description = description
     }
 
-    equip(owner: PlayerModel | IMonster) {
+    equip(owner: PlayerModel | MonsterModel) {
         if (!this) {
             console.log('no item to equip')
             return
@@ -134,7 +134,7 @@ class Armor extends Item implements IArmor {
         console.log('Equipped', this)
     }
 
-    unequip(owner: PlayerModel | IMonster) {
+    unequip(owner: PlayerModel | MonsterModel) {
         const itemSlot: EBodyParts | undefined = Object.values(EBodyParts).find((bodyPart) => {
             if (bodyPart === this.bodyPart.toString()) {
                 return bodyPart

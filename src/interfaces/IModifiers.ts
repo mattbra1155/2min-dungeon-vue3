@@ -1,6 +1,6 @@
 import { EModifierTypes } from '@/enums/EModifierTypes'
 import { IStats } from '@/interfaces/IStats'
-import { IMonster } from './IMonster'
+import { MonsterModel } from './MonsterModel'
 import { PlayerModel } from '@/assets/models/playerModel'
 
 export interface IModifierItem {
@@ -8,8 +8,8 @@ export interface IModifierItem {
     name: string
     type: EModifierTypes | null
     modifiers: Partial<IStats> | number
-    owner: PlayerModel | IMonster | undefined
-    target: PlayerModel | IMonster | undefined
+    owner: PlayerModel | MonsterModel | undefined
+    target: PlayerModel | MonsterModel | undefined
     duration: {
         current: number | undefined
         max: number | undefined

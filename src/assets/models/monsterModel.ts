@@ -5,6 +5,7 @@ import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
 import { Inventory } from '@/assets/models/inventoryModel'
 import { Modifiers } from '@/assets/models/modifiersModel'
 import { Weapon } from '@/assets/models/itemsModel'
+import { IStats } from '@/interfaces/IStats'
 
 class MonsterModel extends PersonModel implements IMonster {
     constructor(
@@ -43,9 +44,10 @@ class MonsterModel extends PersonModel implements IMonster {
         public inventory: Inventory = new Inventory(),
         public description: string = '',
         public isAlive: boolean = true,
-        public modifiers: Modifiers = new Modifiers()
+        public modifiers: Modifiers = new Modifiers(),
+        public currentStats: IStats = stats
     ) {
-        super(name, race, stats, bodyParts, weapon, description, inventory, isAlive, modifiers)
+        super(id, name, race, stats, currentStats, bodyParts, weapon, description, inventory, isAlive, modifiers)
     }
 }
 

@@ -2,7 +2,7 @@
 import { reactive, toRefs } from 'vue'
 import { monsterGenerator } from '@/assets/generators/monsterGenerator'
 import { iScene } from '@/interfaces/Scene'
-import { IMonster } from '@/interfaces/IMonster'
+import { MonsterModel } from '@/interfaces/MonsterModel'
 
 interface iStateUseSceneManager {
     currentId: number
@@ -25,7 +25,7 @@ export const useSceneManager = () => {
     const createScene = (numberOfEnemies = 1, levelName?: string) => {
         console.log('create')
 
-        const enemyList: IMonster[] = []
+        const enemyList: MonsterModel[] = []
         const createEnemyList = (enemiesToCreate = numberOfEnemies) => {
             let createdEnemies = 0
             while (createdEnemies < enemiesToCreate) {

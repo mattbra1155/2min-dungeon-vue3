@@ -2,14 +2,14 @@ import { diceRollK100, diceRollK6 } from '@/assets/scripts/diceRoll'
 import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
 import { IPerson } from '@/interfaces/Person'
 import { iBodyPart } from '@/interfaces/BodyParts'
-import { IMonster } from '@/interfaces/IMonster'
 import { Inventory } from '@/assets/models/inventoryModel'
 import { PlayerModel } from '@/assets/models//playerModel'
 import { Weapon } from '@/assets/models//itemsModel'
 import { Modifiers } from '@/assets/models/modifiersModel'
 import { IStats } from '@/interfaces/IStats'
-import localforage from 'localforage'
 import { EModifierTypes } from '@/enums/EModifierTypes'
+import { EStats } from '@/enums/EStats'
+import { MonsterModel } from '@/assets/models/monsterModel'
 class PersonModel implements IPerson {
     constructor(
         public id: string = self.crypto.randomUUID(),
@@ -42,18 +42,44 @@ class PersonModel implements IPerson {
         this.currentStats = JSON.parse(JSON.stringify(this.stats))
     }
 
-    attack(enemy: IMonster | PlayerModel) {
+    attack(enemy: MonsterModel | PlayerModel) {
         // dice roll
         const diceRollHitResult = diceRollK100()
         console.log(`Dice roll: ${diceRollHitResult}`)
+
+        // set temp character stats for attack
+        const attackStats = JSON.parse(JSON.stringify(this.currentStats))
+
+        const addModifiers = () => {
+            this.modifiers.list.forEach((modifier) => {
+                if (modifier.type !== EModifierTypes.Attack) {
+                    return
+                }
+                if (modifier.modifiers !== EStats) {
+                    return
+                }
+                const mods = Object.entries(modifier.modifiers)
+                mods.forEach((modItem) => {
+                    const statName = Object.values(EStats).find((stat) => stat === modItem[0])
+                    if (!statName) {
+                        throw new Error('No statName')
+                    }
+                    if (modItem[0] === statName) {
+                        attackStats[statName] += modItem[1]
+                    }
+                })
+            })
+        }
+
+        addModifiers()
+
         // check if attack hits
-        if (this.stats.melee < diceRollHitResult) {
-            console.log(`${this} missed`)
+        if (attackStats.melee < diceRollHitResult) {
+            console.log(`${this.name} missed`)
             return
         }
 
         const diceRollBodyPartResult = diceRollK100()
-
         console.log(`Body part hit result: ${diceRollBodyPartResult}`)
 
         const getBodyPart = () => {
@@ -81,7 +107,6 @@ class PersonModel implements IPerson {
         const savedBodyPart = getBodyPart()
 
         const enemyArmorPoints = savedBodyPart?.armor.armorPoints
-        // const enemyArmorName = savedBodyPart.name
 
         // Calculate damage
         const damage = () => {
@@ -92,30 +117,34 @@ class PersonModel implements IPerson {
                 if (!this.weapon) {
                     return 0
                 }
-                const baseDamage = this.weapon.damage
-                const prefixDamage = this.weapon.prefix.modifier
+
+                let baseDamage = 0
+                let prefixDamage = 0
                 let modifierDamage = 0
 
-                this.weapon.modifiers.forEach((modifier) => {
-                    if (modifier.type !== EModifierTypes.Attack) {
-                        return 0
-                    }
-                    console.log(typeof modifier.modifiers !== 'number')
+                const getModifierDamage = () => {
+                    let sum = 0
+                    this.modifiers.list.forEach((modifier) => {
+                        if (typeof modifier.modifiers !== 'number') {
+                            return 0
+                        }
 
-                    if (typeof modifier.modifiers !== 'number') {
-                        return 0
-                    }
+                        sum += modifier.modifiers
+                        console.log(this.weapon, modifier.modifiers, sum)
+                    })
+                    return sum
+                }
 
-                    modifierDamage = modifier.modifiers
-                })
+                baseDamage = this.weapon.damage
+                prefixDamage = this.weapon.prefix.modifier
+                modifierDamage = getModifierDamage()
 
                 const damage = baseDamage + prefixDamage + modifierDamage
 
                 return damage
             }
 
-            console.log(this.stats.strength)
-            damagePoints += this.stats.strength
+            damagePoints += attackStats.strength
             damagePoints += enemyArmorPoints ? enemyArmorPoints : 0
             damagePoints += weaponDamage()
             damagePoints += damageDiceRoll
@@ -136,8 +165,6 @@ class PersonModel implements IPerson {
                 }`
             }) */
 
-        // reduce health
-        // playerTakeDamage(damage())
         const finalDamage = damage()
 
         if (finalDamage) {

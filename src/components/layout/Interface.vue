@@ -5,14 +5,13 @@ import { ETurnState } from '@/enums/ETurnState'
 import { usePlayer } from '@/composables/usePlayer'
 import { useInventory } from '@/composables/useInventory'
 import { useCharacterScreen } from '@/composables/useCharacterScreen'
-const { activeTurnState, activeCharacter, updateTurnStateMachine } = useTurn()
-const { targetToAttack, attack } = useAttack()
+const { activeTurnState, updateTurnStateMachine } = useTurn()
+const { targetToAttack } = useAttack()
 const { player } = usePlayer()
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
 const playerAttack = () => {
     if (targetToAttack.value) {
-        // attack(activeCharacter.value, targetToAttack.value)
         player.value.attack(targetToAttack.value)
         updateTurnStateMachine(ETurnState.EnemyAttack)
     }
