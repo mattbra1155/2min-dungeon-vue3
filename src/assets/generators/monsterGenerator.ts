@@ -2,7 +2,6 @@ import { bestiary } from '@/assets/generators/bestiary'
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { ItemGenerator } from '@/assets/generators/itemGenerator'
 import { EItemCategory } from '@/enums/ItemCategory'
-import { MonsterModel } from '@/interfaces/MonsterModel'
 
 class MonsterGenerator {
     id: number

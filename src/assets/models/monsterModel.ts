@@ -9,23 +9,10 @@ import { IStats } from '@/interfaces/IStats'
 
 class MonsterModel extends PersonModel implements IMonster {
     constructor(
-        public id: string,
+        public id: string = self.crypto.randomUUID(),
         public name: string = '',
         public race: string = '',
-        public stats: {
-            hp: number
-            melee: number
-            ranged: number
-            dexterity: number
-            strength: number
-            thoughtness: number
-            speed: number
-            initiative: number
-            attacks: number
-            inteligence: number
-            charisma: number
-            willPower: number
-        } = {
+        public stats: IStats = {
             hp: 0,
             melee: 0,
             ranged: 0,
@@ -39,13 +26,14 @@ class MonsterModel extends PersonModel implements IMonster {
             charisma: 0,
             willPower: 0,
         },
-        public weapon: null | Weapon,
+        public currentStats: IStats = stats,
+        public weapon: null | Weapon = null,
         public bodyParts: iBodyPart = bodyPartsModel,
         public inventory: Inventory = new Inventory(),
         public description: string = '',
         public isAlive: boolean = true,
         public modifiers: Modifiers = new Modifiers(),
-        public currentStats: IStats = stats
+        public prefferedPosition: string = ''
     ) {
         super(id, name, race, stats, currentStats, bodyParts, weapon, description, inventory, isAlive, modifiers)
     }
