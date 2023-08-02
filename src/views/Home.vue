@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { watch } from 'vue'
-import Feed from '@/components/layout/Feed.vue'
 import TopBar from '@/components/layout/TopBar.vue'
-import Interface from '@/components/layout/Interface.vue'
+import LayoutInterface from '@/components/layout/LayoutInterface.vue'
+import LayoutFeed from '@/components/layout/LayoutFeed.vue'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { useSceneManager } from '@/composables/useSceneManager'
 import { EGameState } from '@/enums/EGameState'
@@ -41,7 +41,7 @@ watch(turnOrder.value, () => {
 <template>
     <div class="home">
         <TopBar />
-        <Feed />
-        <Interface />
+        <LayoutFeed />
+        <LayoutInterface />
     </div>
 </template>
