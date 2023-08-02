@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { watch } from 'vue'
-import TopBar from '@/components/layout/TopBar.vue'
 import LayoutInterface from '@/components/layout/LayoutInterface.vue'
 import LayoutFeed from '@/components/layout/LayoutFeed.vue'
 import { useGameStateManager } from '@/composables/useGameStateManager'
@@ -10,6 +9,7 @@ import { useTurn } from '@/composables/useTurn'
 import { ETurnState } from '@/enums/ETurnState'
 import { usePlayer } from '@/composables/usePlayer'
 import { useRouter } from 'vue-router'
+import LayoutTopBar from '@/components/layout/LayoutTopBar.vue'
 
 const { activeGameState } = useGameStateManager()
 const { createScene } = useSceneManager()
@@ -40,7 +40,7 @@ watch(turnOrder.value, () => {
 
 <template>
     <div class="home">
-        <TopBar />
+        <LayoutTopBar />
         <LayoutFeed />
         <LayoutInterface />
     </div>
