@@ -47,83 +47,87 @@ class PersonModel implements IPerson {
         const diceRollHitResult = diceRollK100()
         console.log(`Dice roll: ${diceRollHitResult}`)
         // check if attack hits
-        if (this.stats.melee > diceRollHitResult) {
-            const diceRollBodyPartResult = diceRollK100()
+        if (this.stats.melee < diceRollHitResult) {
+            console.log(`${this} missed`)
+            return
+        }
 
-            console.log(`Body part hit result: ${diceRollBodyPartResult}`)
+        const diceRollBodyPartResult = diceRollK100()
 
-            const getBodyPart = () => {
-                if (diceRollBodyPartResult >= 1 && diceRollBodyPartResult <= 15) {
-                    console.log(`${this.name} hit ${enemy.name} in the Head`)
-                    return enemy.bodyParts['head']
-                } else if (diceRollBodyPartResult >= 16 && diceRollBodyPartResult <= 35) {
-                    console.log(`${this.name} hit ${enemy.name} in the Right arm`)
-                    return enemy.bodyParts.rightArm
-                } else if (diceRollBodyPartResult >= 36 && diceRollBodyPartResult <= 55) {
-                    console.log(`${this.name} hit ${enemy.name} in the Left arm`)
-                    return enemy.bodyParts.leftArm
-                } else if (diceRollBodyPartResult >= 56 && diceRollBodyPartResult <= 80) {
-                    console.log(`${this.name} hit ${enemy.name} in the Torso`)
-                    return enemy.bodyParts['torso']
-                } else if (diceRollBodyPartResult >= 81 && diceRollBodyPartResult <= 90) {
-                    console.log(`${this.name} hit ${enemy.name} in the Right leg`)
-                    return enemy.bodyParts.rightLeg
-                } else if (diceRollBodyPartResult >= 91 && diceRollBodyPartResult <= 100) {
-                    console.log(`${this.name} hit ${enemy.name} in the Left leg`)
-                    return enemy.bodyParts.leftLeg
-                }
+        console.log(`Body part hit result: ${diceRollBodyPartResult}`)
+
+        const getBodyPart = () => {
+            if (diceRollBodyPartResult >= 1 && diceRollBodyPartResult <= 15) {
+                console.log(`${this.name} hit ${enemy.name} in the Head`)
+                return enemy.bodyParts['head']
+            } else if (diceRollBodyPartResult >= 16 && diceRollBodyPartResult <= 35) {
+                console.log(`${this.name} hit ${enemy.name} in the Right arm`)
+                return enemy.bodyParts.rightArm
+            } else if (diceRollBodyPartResult >= 36 && diceRollBodyPartResult <= 55) {
+                console.log(`${this.name} hit ${enemy.name} in the Left arm`)
+                return enemy.bodyParts.leftArm
+            } else if (diceRollBodyPartResult >= 56 && diceRollBodyPartResult <= 80) {
+                console.log(`${this.name} hit ${enemy.name} in the Torso`)
+                return enemy.bodyParts['torso']
+            } else if (diceRollBodyPartResult >= 81 && diceRollBodyPartResult <= 90) {
+                console.log(`${this.name} hit ${enemy.name} in the Right leg`)
+                return enemy.bodyParts.rightLeg
+            } else if (diceRollBodyPartResult >= 91 && diceRollBodyPartResult <= 100) {
+                console.log(`${this.name} hit ${enemy.name} in the Left leg`)
+                return enemy.bodyParts.leftLeg
             }
+        }
 
-            const savedBodyPart = getBodyPart()
+        const savedBodyPart = getBodyPart()
 
-            const enemyArmorPoints = savedBodyPart?.armor.armorPoints
-            // const enemyArmorName = savedBodyPart.name
+        const enemyArmorPoints = savedBodyPart?.armor.armorPoints
+        // const enemyArmorName = savedBodyPart.name
 
-            // Calculate damage
-            const damage = () => {
-                const damageDiceRoll = diceRollK6()
-                let damagePoints = 0
+        // Calculate damage
+        const damage = () => {
+            const damageDiceRoll = diceRollK6()
+            let damagePoints = 0
 
-                const weaponDamage = () => {
-                    if (!this.weapon) {
+            const weaponDamage = () => {
+                if (!this.weapon) {
+                    return 0
+                }
+                const baseDamage = this.weapon.damage
+                const prefixDamage = this.weapon.prefix.modifier
+                let modifierDamage = 0
+
+                this.weapon.modifiers.forEach((modifier) => {
+                    if (modifier.type !== EModifierTypes.Attack) {
                         return 0
                     }
-                    const baseDamage = this.weapon.damage
-                    const prefixDamage = this.weapon.prefix.modifier
-                    let modifierDamage = 0
+                    console.log(typeof modifier.modifiers !== 'number')
 
-                    this.weapon.modifiers.forEach((modifier) => {
-                        if (modifier.type !== EModifierTypes.Attack) {
-                            return 0
-                        }
-                        console.log(typeof modifier.modifiers !== 'number')
+                    if (typeof modifier.modifiers !== 'number') {
+                        return 0
+                    }
 
-                        if (typeof modifier.modifiers !== 'number') {
-                            return 0
-                        }
+                    modifierDamage = modifier.modifiers
+                })
 
-                        modifierDamage = modifier.modifiers
-                    })
+                const damage = baseDamage + prefixDamage + modifierDamage
 
-                    const damage = baseDamage + prefixDamage + modifierDamage
-
-                    return damage
-                }
-
-                console.log(this.stats.strength)
-                damagePoints += this.stats.strength
-                damagePoints += enemyArmorPoints ? enemyArmorPoints : 0
-                damagePoints += weaponDamage()
-                damagePoints += damageDiceRoll
-                damagePoints -= enemy.stats.thoughtness
-
-                if (damagePoints < 0) {
-                    damagePoints = 0
-                }
-                console.log('damage', damagePoints)
-                return damagePoints
+                return damage
             }
-            /*  turn.turns.unshift({
+
+            console.log(this.stats.strength)
+            damagePoints += this.stats.strength
+            damagePoints += enemyArmorPoints ? enemyArmorPoints : 0
+            damagePoints += weaponDamage()
+            damagePoints += damageDiceRoll
+            damagePoints -= enemy.stats.thoughtness
+
+            if (damagePoints < 0) {
+                damagePoints = 0
+            }
+            console.log('damage', damagePoints)
+            return damagePoints
+        }
+        /*  turn.turns.unshift({
                 person: this,
                 action: `${this.name} rolls: ${diceRollHitResult} and hit's ${
                     enemy.name
@@ -132,23 +136,22 @@ class PersonModel implements IPerson {
                 }`
             }) */
 
-            // reduce health
-            // playerTakeDamage(damage())
-            const finalDamage = damage()
+        // reduce health
+        // playerTakeDamage(damage())
+        const finalDamage = damage()
 
-            if (finalDamage) {
-                console.log(`${enemy.name} took ${finalDamage} damage`)
-                enemy.stats.hp -= finalDamage
-                return finalDamage | 0
-            }
+        if (finalDamage) {
+            console.log(`${enemy.name} took ${finalDamage} damage`)
+            enemy.stats.hp -= finalDamage
+            return finalDamage | 0
         }
-        // } else {
-        //     // add action to the turn array
-        //     /* turn.turns.unshift({
-        //         person: this,
-        //         action: `${this.name} rolls: ${diceRollHitResult} and misses.`
-        //     }) */
-        // }
     }
+    // } else {
+    //     // add action to the turn array
+    //     /* turn.turns.unshift({
+    //         person: this,
+    //         action: `${this.name} rolls: ${diceRollHitResult} and misses.`
+    //     }) */
+    // }
 }
 export { PersonModel }
