@@ -5,10 +5,10 @@ import { useRouter } from 'vue-router'
 import { EGameState } from '@/enums/EGameState'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { PlayerModel } from '@/assets/models/playerModel'
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { ItemGenerator } from '@/assets/generators/itemGenerator'
 import { EItemCategory } from '@/enums/ItemCategory'
-
+import professions from '@/assets/json/professions.json'
 const router = useRouter()
 const { initPlayer, createPlayer, resetPlayer } = usePlayer()
 const { updateGameState } = useGameStateManager()
@@ -138,6 +138,24 @@ const savePlayer = async () => {
                                 v-model="playerObject.profession"
                             />
                         </label>
+                    </div>
+                </div>
+            </div>
+            <div class="m-form__row o-characterGenerator__row">
+                <div class="m-form__row">
+                    <h2 class="o-characterGenerator__header">Profession</h2>
+                    <div class="m-form__column">
+                        <div v-for="profession in professions.warrior" :key="profession.id" class="m-form__item">
+                            <label for="Profession">
+                                {{ profession.name }}
+                                <input
+                                    type="radio"
+                                    class="item__input"
+                                    :value="profession.name"
+                                    v-model="playerObject.profession"
+                                />
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>

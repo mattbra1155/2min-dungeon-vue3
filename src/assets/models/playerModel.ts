@@ -7,13 +7,14 @@ import { PersonModel } from './personModel'
 import { Modifiers } from './modifiersModel'
 import { Weapon } from './itemsModel'
 import { IStats } from '@/interfaces/IStats'
+import { Profession } from './professionModel'
 
 class PlayerModel extends PersonModel implements IPlayer {
     constructor(
         public id: string = self.crypto.randomUUID(),
         public name: string = 'Charname',
         public race: string = 'dwarf',
-        public profession: string = '',
+        public profession: Profession = new Profession(),
         public stats: IStats = {
             hp: 0,
             melee: 0,
