@@ -5,26 +5,14 @@ import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
 import { Inventory } from '@/assets/models/inventoryModel'
 import { Modifiers } from '@/assets/models/modifiersModel'
 import { Weapon } from '@/assets/models/itemsModel'
+import { IStats } from '@/interfaces/IStats'
 
 class MonsterModel extends PersonModel implements IMonster {
     constructor(
-        public id: string,
+        public id: string = self.crypto.randomUUID(),
         public name: string = '',
         public race: string = '',
-        public stats: {
-            hp: number
-            melee: number
-            ranged: number
-            dexterity: number
-            strength: number
-            thoughtness: number
-            speed: number
-            initiative: number
-            attacks: number
-            inteligence: number
-            charisma: number
-            willPower: number
-        } = {
+        public stats: IStats = {
             hp: 0,
             melee: 0,
             ranged: 0,
@@ -38,14 +26,16 @@ class MonsterModel extends PersonModel implements IMonster {
             charisma: 0,
             willPower: 0,
         },
-        public weapon: null | Weapon,
+        public currentStats: IStats = stats,
+        public weapon: null | Weapon = null,
         public bodyParts: iBodyPart = bodyPartsModel,
         public inventory: Inventory = new Inventory(),
         public description: string = '',
         public isAlive: boolean = true,
-        public modifiers: Modifiers = new Modifiers()
+        public modifiers: Modifiers = new Modifiers(),
+        public prefferedPosition: string = ''
     ) {
-        super(name, race, stats, bodyParts, weapon, description, inventory, isAlive, modifiers)
+        super(id, name, race, stats, currentStats, bodyParts, weapon, description, inventory, isAlive, modifiers)
     }
 }
 

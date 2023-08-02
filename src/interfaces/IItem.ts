@@ -1,4 +1,4 @@
-import { IMonster } from '@/interfaces/IMonster'
+import { MonsterModel } from '@/interfaces/MonsterModel'
 import { iBodyPart } from './BodyParts'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { ModifierItem } from '@/assets/models/modifierItemModel'
@@ -18,8 +18,8 @@ export interface IWeapon extends IItem {
     damage: number
     prefix: IItemPrefix
     modifier: number
-    wield(owner: PlayerModel | IMonster): void
-    unequip(owner: PlayerModel | IMonster): void
+    wield(owner: PlayerModel | MonsterModel): void
+    unequip(owner: PlayerModel | MonsterModel): void
 }
 
 export interface IArmor extends IItem {
@@ -28,8 +28,8 @@ export interface IArmor extends IItem {
     prefix: IItemPrefix
     modifier: number
     armorPoints: number
-    equip(owner: PlayerModel | IMonster): void
-    unequip(owner: PlayerModel | IMonster): void
+    equip(owner: PlayerModel | MonsterModel): void
+    unequip(owner: PlayerModel | MonsterModel): void
 }
 
 export interface IPotion extends IItem {

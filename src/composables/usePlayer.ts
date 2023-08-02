@@ -1,6 +1,5 @@
 import { reactive, toRefs } from 'vue'
 import localforage from 'localforage'
-import { ItemGenerator } from '@/assets/generators/itemGenerator'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { Armor, Potion, Weapon } from '@/assets/models/itemsModel'
 import { PlayerModel } from '@/assets/models/playerModel'
@@ -8,7 +7,6 @@ import { Inventory } from '@/assets/models/inventoryModel'
 import { IArmor, IPotion, IWeapon } from '@/interfaces/IItem'
 import { ModifierItem } from '@/assets/models/modifierItemModel'
 import { Modifiers } from '@/assets/models/modifiersModel'
-import { IPlayer } from '@/interfaces/IPlayer'
 
 interface iPlayerState {
     player: PlayerModel
@@ -49,7 +47,7 @@ export const usePlayer = () => {
         }
     }
 
-    const fetchPlayer = async (): playerModel => {
+    const fetchPlayer = async () => {
         try {
             const result: string | null = await localforage.getItem('player')
 
@@ -58,7 +56,7 @@ export const usePlayer = () => {
                 //create new EMPTY player class
                 const playerClass = new PlayerModel()
                 // assign data to player class
-                const newPlayer = Object.assign(playerClass, playerData)
+                const newPlayer: PlayerModel = Object.assign(playerClass, playerData)
                 // create new inventory class
                 const inventory = new Inventory()
                 // create new modifiers class

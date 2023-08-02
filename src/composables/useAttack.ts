@@ -1,14 +1,14 @@
 import { reactive, toRefs } from 'vue'
 
 import { diceRollK100, diceRollK6 } from '@/assets/scripts/diceRoll'
-import { IMonster } from '@/interfaces/IMonster'
+import { MonsterModel } from '@/assets/models/monsterModel'
 import { usePlayer } from '@/composables/usePlayer'
 import { PlayerModel } from '@/assets/models/playerModel'
 
 const { player } = usePlayer()
 
 interface IAttackState {
-    targetToAttack: IMonster | null
+    targetToAttack: MonsterModel | null
 }
 
 const state: IAttackState = reactive({
@@ -16,7 +16,7 @@ const state: IAttackState = reactive({
 })
 
 export const useAttack = () => {
-    const attack = (attacker: IMonster | PlayerModel, enemy: IMonster | PlayerModel) => {
+    const attack = (attacker: MonsterModel | PlayerModel, enemy: MonsterModel | PlayerModel) => {
         const diceRollHitResult = diceRollK100()
         console.log(`Dice roll: ${diceRollHitResult}`)
         // check if attack hits
@@ -63,6 +63,7 @@ export const useAttack = () => {
                 if (damagePoints < 0) {
                     damagePoints = 0
                 }
+                console.log('ttt', attacker.weapon?.damage)
                 console.log(damagePoints)
                 return damagePoints
             }
@@ -102,7 +103,7 @@ export const useAttack = () => {
         }
     }
 
-    const setTargetToAttack = (enemy: IMonster | null) => {
+    const setTargetToAttack = (enemy: MonsterModel | null) => {
         state.targetToAttack = enemy
     }
     return {
