@@ -112,7 +112,7 @@ const savePlayer = async () => {
                     </p>
                 </div>
             </div>
-            <div class="m-form__row o-characterGenerator__row">
+            <!-- <div class="m-form__row o-characterGenerator__row">
                 <h2 class="o-characterGenerator__header">Class</h2>
                 <div class="m-form__column">
                     <div class="m-form__item">
@@ -123,7 +123,7 @@ const savePlayer = async () => {
                                 name="class"
                                 value="warrior"
                                 class="item__input"
-                                v-model="playerObject.profession"
+                                v-model="playerObject."
                             />
                         </label>
                     </div>
@@ -140,7 +140,7 @@ const savePlayer = async () => {
                         </label>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="m-form__row o-characterGenerator__row">
                 <div class="m-form__row">
                     <h2 class="o-characterGenerator__header">Profession</h2>
@@ -151,12 +151,13 @@ const savePlayer = async () => {
                                 <input
                                     type="radio"
                                     class="item__input"
-                                    :value="profession.name"
+                                    :value="profession"
                                     v-model="playerObject.profession"
                                 />
                             </label>
                         </div>
                     </div>
+                    {{ playerObject.profession }}
                 </div>
             </div>
             <div class="m-form__row o-characterGenerator__row">
@@ -191,7 +192,7 @@ const savePlayer = async () => {
                             <p class="a-text">
                                 {{ key }}
                             </p>
-                            <p class="a-text">{{ value }}</p>
+                            <p class="a-text">{{ value.value }}</p>
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,6 @@
 import { EModifierTypes } from '@/enums/EModifierTypes'
 import { IStats } from '@/interfaces/IStats'
-import { MonsterModel } from './MonsterModel'
+import { MonsterModel } from '@/assets/models/monsterModel'
 import { PlayerModel } from '@/assets/models/playerModel'
 
 export interface IModifierItem {
