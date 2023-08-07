@@ -52,7 +52,7 @@ export const stats: IStats = {
         value: 0,
     },
     willPower: {
-        name: 'will powier',
+        name: 'will power',
         symbol: 'wp',
         value: 0,
     },

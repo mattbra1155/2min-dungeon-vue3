@@ -12,6 +12,7 @@ import professions from '@/assets/json/professions.json'
 import { Profession } from '@/assets/models/professionModel'
 import { IStat } from '@/interfaces/IStats'
 import { EStats } from '@/enums/EStats'
+import { IProfession } from '@/interfaces/IProfession'
 const router = useRouter()
 const { initPlayer, createPlayer, resetPlayer } = usePlayer()
 const { updateGameState } = useGameStateManager()
@@ -56,20 +57,39 @@ const rollStats = () => {
     }
 }
 
-const selectProfession = (profession: Profession) => {
+const selectProfession = (profession: IProfession) => {
     const ttt = () => {
-        return Object.entries(profession.statsDevelopment).reduce(([www, xxx], [key, value]) => {
-            
-        })
+        Object.entries(profession.statsDevelopment).forEach(([key, value]) => {
+            // console.log(key, value)
+            const statName = Object.values(EStats).find((stat) => stat === key)
+            if (!statName) {
+                throw new Error('No statName')
+            }
 
+            console.log(playerObject.value.profession.statsDevelopment[statName])
+
+            // mods.forEach((xxx) => {
+            //     const statName = Object.values(EStats).find((stat) => stat === xxx[0])
+            //     if (!statName) {
+            //         throw new Error('No statName')
+            //     }
+            //     if (xxx[0] === statName) {
+            //         // need to update new acutal stast instead of basic stats
+            //         character.currentStats[statName] += xxx[1]
+            //     }
+            // })
+        })
+    }
     ttt()
-    // playerObject.value.profession = {
-    //     id: profession.id,
-    //     description: profession.description,
-    //     name: profession.name,
-    //     statsDevelopment:
-    // }
+    playerObject.value.profession = new Profession()
+    playerObject.value.profession = profession
 }
+// playerObject.value.profession = {
+//     id: profession.id,
+//     description: profession.description,
+//     name: profession.name,
+//     statsDevelopment:
+// }
 
 const createInventoryItems = () => {
     const weapon = new ItemGenerator().createItem(EItemCategory.Weapon)
