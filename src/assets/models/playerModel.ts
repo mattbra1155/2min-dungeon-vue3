@@ -18,49 +18,16 @@ class PlayerModel extends PersonModel implements IPlayer {
         public profession: Profession = new Profession(),
         public stats: IStats = statsModel,
         public currentStats: IStats = stats,
+        public advancedStats: Partial<IStats>[],
         public bodyParts: iBodyPart = bodyPartsModel,
         public weapon: Weapon | null = null,
         public description: string = '',
         public inventory: Inventory = new Inventory(),
-        public isAlive: boolean = true,
+        public isAlive: boolean,
         public player: boolean = true,
         public modifiers: Modifiers = new Modifiers()
     ) {
         super(id, name, race, stats, currentStats, bodyParts, weapon, description, inventory, isAlive, modifiers)
     }
-    // equipItem(item: Item) {
-    //     switch (item.category) {
-    //         case 'armor': {
-    //             let playerBodyPartKeys = Object.keys(this.bodyParts)
-
-    //             const getBodyPart = playerBodyPartKeys.find(
-    //                 (playerBodyPart) => {
-    //                     if (playerBodyPart === item.bodyPart) {
-    //                         return playerBodyPart
-    //                     }
-    //                 }
-    //             )
-    //             this.bodyParts[getBodyPart].armor.item = item
-    //             this.bodyParts[getBodyPart].armor.armorPoints = item.armorPoints
-    //             break
-    //         }
-    //         case 'weapon':
-    //             this.weapon = item
-    //             break
-
-    //         case 'potion':
-    //             //todo
-    //             this.hp += item.modifier
-    //             break
-
-    //         case 'utility':
-    //             //todo
-    //             this.weapon = item
-    //     }
-    // }
-
-    // pickUpItem(item: Item) {
-    //     this.inventory.push(item)
-    // }
 }
 export { PlayerModel }

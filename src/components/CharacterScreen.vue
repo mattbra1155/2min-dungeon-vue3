@@ -25,10 +25,11 @@ const { player } = usePlayer()
         <div class="o-characterScreen__statsWrapper">
             <h2 class="a-text">Profession advancement:</h2>
             <div class="o-characterScreen__statList">
-                <template v-for="(value, key) in player.profession.statsDevelopment" :key="key">
-                    <div v-if="value" class="o-characterScreen__statItem">
-                        <p class="a-text">{{ key }}</p>
-                        <p class="a-text">+{{ value }}</p>
+                <template v-for="item in player.profession.statsDevelopment" :key="item.name">
+                    <div v-if="item" class="o-characterScreen__statItem">
+                        {{ player.profession.statsDevelopment }}
+                        <p class="a-text">{{ item.name }}</p>
+                        <p class="a-text">+{{ item.value }}</p>
                     </div>
                 </template>
             </div>

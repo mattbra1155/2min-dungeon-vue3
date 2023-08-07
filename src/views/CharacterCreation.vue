@@ -9,6 +9,9 @@ import { ref } from 'vue'
 import { ItemGenerator } from '@/assets/generators/itemGenerator'
 import { EItemCategory } from '@/enums/ItemCategory'
 import professions from '@/assets/json/professions.json'
+import { Profession } from '@/assets/models/professionModel'
+import { IStat } from '@/interfaces/IStats'
+import { EStats } from '@/enums/EStats'
 const router = useRouter()
 const { initPlayer, createPlayer, resetPlayer } = usePlayer()
 const { updateGameState } = useGameStateManager()
@@ -51,6 +54,21 @@ const rollStats = () => {
             charisma: diceRollK10() * 2 + 1,
         })
     }
+}
+
+const selectProfession = (profession: Profession) => {
+    const ttt = () => {
+        return Object.entries(profession.statsDevelopment).reduce(([www, xxx], [key, value]) => {
+            
+        })
+
+    ttt()
+    // playerObject.value.profession = {
+    //     id: profession.id,
+    //     description: profession.description,
+    //     name: profession.name,
+    //     statsDevelopment:
+    // }
 }
 
 const createInventoryItems = () => {
@@ -152,7 +170,7 @@ const savePlayer = async () => {
                                     type="radio"
                                     class="item__input"
                                     :value="profession"
-                                    v-model="playerObject.profession"
+                                    @change="selectProfession(profession)"
                                 />
                             </label>
                         </div>
