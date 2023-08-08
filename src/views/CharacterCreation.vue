@@ -57,7 +57,26 @@ const rollStats = () => {
     }
 }
 
-const selectProfession = (profession: IProfession) => {
+interface IProfessionPayload {
+    id: string
+    name: string
+    description: string
+    statsDevelopment: {
+        hp: number
+        melee: number
+        ranged: number
+        dexterity: number
+        strength: number
+        thoughtness: number
+        speed: number
+        initiative: number
+        attacks: number
+        inteligence: number
+        willPower: number
+        charisma: number
+    }
+}
+const selectProfession = (profession: IProfessionPayload) => {
     const ttt = () => {
         Object.entries(profession.statsDevelopment).forEach(([key, value]) => {
             // console.log(key, value)
@@ -65,8 +84,12 @@ const selectProfession = (profession: IProfession) => {
             if (!statName) {
                 throw new Error('No statName')
             }
-
-            console.log(playerObject.value.profession.statsDevelopment[statName])
+            console.log(statName, value)
+            if (key && statName === key) {
+                playerObject.value.profession.statsDevelopment[key]!.value += value
+                console.log(playerObject.value.profession.statsDevelopment)
+            }
+            // console.log(playerObject.value.profession.statsDevelopment[statName])
 
             // mods.forEach((xxx) => {
             //     const statName = Object.values(EStats).find((stat) => stat === xxx[0])
@@ -81,8 +104,6 @@ const selectProfession = (profession: IProfession) => {
         })
     }
     ttt()
-    playerObject.value.profession = new Profession()
-    playerObject.value.profession = profession
 }
 // playerObject.value.profession = {
 //     id: profession.id,
@@ -190,7 +211,7 @@ const savePlayer = async () => {
                                     type="radio"
                                     class="item__input"
                                     :value="profession"
-                                    @change="selectProfession(profession)"
+                                    @change="selectProfession(profession as IProfessionPayload)"
                                 />
                             </label>
                         </div>
