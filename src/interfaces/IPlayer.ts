@@ -4,6 +4,6 @@ import { IStats } from '@/interfaces/IStats'
 
 export interface IPlayer extends IPerson {
     player: boolean
-    profession: Profession
+    profession: Profession | undefined
     advancedStats: Partial<IStats>[]
 }

@@ -9,21 +9,21 @@ import { ref } from 'vue'
 import { ItemGenerator } from '@/assets/generators/itemGenerator'
 import { EItemCategory } from '@/enums/ItemCategory'
 import professions from '@/assets/json/professions.json'
-import { Profession } from '@/assets/models/professionModel'
-import { IStat } from '@/interfaces/IStats'
 import { EStats } from '@/enums/EStats'
-import { IProfession } from '@/interfaces/IProfession'
+import { IProfessionPayload } from '@/interfaces/IProfession'
+import { Profession } from '@/assets/models/professionModel'
 const router = useRouter()
 const { initPlayer, createPlayer, resetPlayer } = usePlayer()
 const { updateGameState } = useGameStateManager()
 const playerObject = ref<PlayerModel>(initPlayer.value)
-
+const selectedProfession = ref<IProfessionPayload>()
+console.log(playerObject.value.stats)
 const rollStats = () => {
     if (!playerObject.value) {
         throw new Error('No Player object to roll stats')
     }
     if (playerObject.value.race === 'human') {
-        Object.assign(playerObject.value?.stats, {
+        const updated = {
             hp: diceRollK3() + 4,
             melee: diceRollK10() * 2 + 20,
             ranged: diceRollK10() * 2 + 20,
@@ -36,11 +36,16 @@ const rollStats = () => {
             inteligence: diceRollK10() * 2 + 20,
             willPower: diceRollK10() * 2 + 20,
             charisma: diceRollK10() * 2 + 2,
+        }
+
+        Object.entries(updated).forEach(([key, stat]) => {
+            const statName: EStats = Object.values(EStats).find((item) => item === key) as EStats
+            if (!statName) return
+            playerObject.value.stats[statName].value = stat
         })
     }
-
     if (playerObject.value.race === 'dwarf') {
-        Object.assign(playerObject.value.stats, {
+        const updated = {
             hp: diceRollK3() + 5,
             melee: diceRollK10() * 2 + 30,
             ranged: diceRollK10() * 2 + 10,
@@ -53,64 +58,30 @@ const rollStats = () => {
             inteligence: diceRollK10() * 2 + 20,
             willPower: diceRollK10() * 2 + 40,
             charisma: diceRollK10() * 2 + 1,
+        }
+        Object.entries(updated).forEach(([key, stat]) => {
+            const statName: EStats = Object.values(EStats).find((item) => item === key) as EStats
+            if (!statName) return
+            playerObject.value.stats[statName].value = stat
         })
     }
 }
 
-interface IProfessionPayload {
-    id: string
-    name: string
-    description: string
-    statsDevelopment: {
-        hp: number
-        melee: number
-        ranged: number
-        dexterity: number
-        strength: number
-        thoughtness: number
-        speed: number
-        initiative: number
-        attacks: number
-        inteligence: number
-        willPower: number
-        charisma: number
-    }
-}
 const selectProfession = (profession: IProfessionPayload) => {
-    const ttt = () => {
-        Object.entries(profession.statsDevelopment).forEach(([key, value]) => {
-            // console.log(key, value)
-            const statName = Object.values(EStats).find((stat) => stat === key)
-            if (!statName) {
-                throw new Error('No statName')
-            }
-            console.log(statName, value)
-            if (key && statName === key) {
-                playerObject.value.profession.statsDevelopment[key]!.value += value
-                console.log(playerObject.value.profession.statsDevelopment)
-            }
-            // console.log(playerObject.value.profession.statsDevelopment[statName])
-
-            // mods.forEach((xxx) => {
-            //     const statName = Object.values(EStats).find((stat) => stat === xxx[0])
-            //     if (!statName) {
-            //         throw new Error('No statName')
-            //     }
-            //     if (xxx[0] === statName) {
-            //         // need to update new acutal stast instead of basic stats
-            //         character.currentStats[statName] += xxx[1]
-            //     }
-            // })
-        })
-    }
-    ttt()
+    playerObject.value.profession = undefined
+    playerObject.value.profession = new Profession('123', profession.id, profession.description)
+    Object.entries(profession.statsDevelopment).forEach(([key, value]) => {
+        const statName = Object.values(EStats).find((stat) => stat === key)
+        if (!statName) {
+            throw new Error('No statName')
+        }
+        if (key && statName === key && playerObject.value.profession) {
+            playerObject.value.profession.statsDevelopment[key].value = value
+            console.log(playerObject.value.profession.statsDevelopment)
+        }
+    })
+    return playerObject.value.profession
 }
-// playerObject.value.profession = {
-//     id: profession.id,
-//     description: profession.description,
-//     name: profession.name,
-//     statsDevelopment:
-// }
 
 const createInventoryItems = () => {
     const weapon = new ItemGenerator().createItem(EItemCategory.Weapon)
@@ -203,20 +174,21 @@ const savePlayer = async () => {
             <div class="m-form__row o-characterGenerator__row">
                 <div class="m-form__row">
                     <h2 class="o-characterGenerator__header">Profession</h2>
-                    <div class="m-form__column">
+                    <form class="m-form__column">
                         <div v-for="profession in professions.warrior" :key="profession.id" class="m-form__item">
-                            <label for="Profession">
+                            <label :for="profession.name">
                                 {{ profession.name }}
                                 <input
                                     type="radio"
                                     class="item__input"
+                                    name="profession"
                                     :value="profession"
                                     @change="selectProfession(profession as IProfessionPayload)"
                                 />
                             </label>
+                            {{ selectedProfession }}
                         </div>
-                    </div>
-                    {{ playerObject.profession }}
+                    </form>
                 </div>
             </div>
             <div class="m-form__row o-characterGenerator__row">
@@ -236,7 +208,8 @@ const savePlayer = async () => {
                     <h2 class="o-characterGenerator__header">Stats</h2>
                     <button
                         type="button"
-                        @click="rollStats(), createInventoryItems()"
+                        @click="rollStats()"
+                        @click.once="createInventoryItems()"
                         id="generateStatsButton"
                         class="button action__button"
                     >

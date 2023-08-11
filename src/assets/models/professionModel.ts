@@ -3,12 +3,11 @@ import { IStats } from '@/interfaces/IStats'
 import { stats as statsModel } from '@/assets/models/statsModel'
 class Profession implements IProfession {
     constructor(
-        public id: string = '0',
+        public id: string = `prof-${self.crypto.randomUUID()}`,
         public name: string = '',
         public description: string = '',
-        public statsDevelopment: Partial<IStats> = statsModel
+        public statsDevelopment: IStats = structuredClone(statsModel)
     ) {
-        this.id = id
         this.name = name
         this.description = description
         this.statsDevelopment = statsDevelopment
