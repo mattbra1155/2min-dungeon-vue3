@@ -17,7 +17,6 @@ const { initPlayer, createPlayer, resetPlayer } = usePlayer()
 const { updateGameState } = useGameStateManager()
 const playerObject = ref<PlayerModel>(initPlayer.value)
 const selectedProfession = ref<IProfessionPayload>()
-console.log(playerObject.value.stats)
 const rollStats = () => {
     if (!playerObject.value) {
         throw new Error('No Player object to roll stats')
@@ -77,7 +76,6 @@ const selectProfession = (profession: IProfessionPayload) => {
         }
         if (key && statName === key && playerObject.value.profession) {
             playerObject.value.profession.statsDevelopment[key].value = value
-            console.log(playerObject.value.profession.statsDevelopment)
         }
     })
     return playerObject.value.profession

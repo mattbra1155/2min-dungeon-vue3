@@ -17,7 +17,7 @@ const { player } = usePlayer()
         </picture>
         <div class="o-characterScreen__detailsWrapper">
             <h2 class="a-text">{{ player.name }}</h2>
-            <p class="a-text">Profession: {{ player.profession.name }}</p>
+            <p class="a-text" v-if="player.profession">Profession: {{ player.profession.name }}</p>
             <p class="a-text">Race: {{ player.race }}</p>
             <p class="a-text">Bio:</p>
             <p class="a-text">{{ player.description }}</p>
@@ -25,9 +25,8 @@ const { player } = usePlayer()
         <div class="o-characterScreen__statsWrapper">
             <h2 class="a-text">Profession advancement:</h2>
             <div class="o-characterScreen__statList">
-                <template v-for="item in player.profession.statsDevelopment" :key="item.name">
-                    <div v-if="item" class="o-characterScreen__statItem">
-                        {{ player.profession.statsDevelopment }}
+                <template v-for="item in player.profession?.statsDevelopment" :key="item.name">
+                    <div v-if="item.value" class="o-characterScreen__statItem">
                         <p class="a-text">{{ item.name }}</p>
                         <p class="a-text">+{{ item.value }}</p>
                     </div>
@@ -40,7 +39,7 @@ const { player } = usePlayer()
                 <template v-for="(value, key) in player.currentStats" :key="key">
                     <div v-if="value" class="o-characterScreen__statItem">
                         <p class="a-text">{{ key }}</p>
-                        <p class="a-text">{{ value }}</p>
+                        <p class="a-text">{{ value.value }}</p>
                     </div>
                 </template>
             </div>
