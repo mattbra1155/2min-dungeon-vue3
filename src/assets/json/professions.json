@@ -9,7 +9,7 @@
                 "melee": 10,
                 "ranged": 10,
                 "dexterity": 0,
-                "strength": 10,
+                "strength": 1,
                 "thoughtness": 0,
                 "speed": 0,
                 "initiative": 10,
