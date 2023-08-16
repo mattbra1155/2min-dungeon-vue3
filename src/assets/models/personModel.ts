@@ -63,7 +63,7 @@ class PersonModel implements IPerson {
         addModifiers()
 
         // check if attack hits
-        if (attackStats.melee < diceRollHitResult) {
+        if (attackStats.melee.value < diceRollHitResult) {
             console.log(`${this.name} missed`)
             return
         }
@@ -158,7 +158,7 @@ class PersonModel implements IPerson {
 
         if (finalDamage) {
             console.log(`${enemy.name} took ${finalDamage} damage`)
-            enemy.stats.hp.value - finalDamage
+            enemy.stats.hp.value -= finalDamage
             return finalDamage | 0
         }
     }

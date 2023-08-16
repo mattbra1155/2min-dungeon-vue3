@@ -7,7 +7,7 @@
         <div class="health__display">
             <div class="player-hp">
                 <h2>{{ player?.name }}</h2>
-                <p id="playerHp" class="health--player">{{ player.stats.hp.value }}</p>
+                <p id="playerHp" class="health--player">{{ player.stats.hp.value ? player.stats.hp.value : 0 }}</p>
             </div>
             <div
                 v-for="enemy in enemyList"
@@ -18,7 +18,7 @@
                 <h2 @click="setTargetToAttack(enemy)" id="monsterName">
                     {{ enemy.name ? enemy.name : 'placeholder enemy' }}
                 </h2>
-                <p id="monsterHp" class="health--monster">{{ enemy.stats ? enemy.stats.hp : 0 }}</p>
+                <p id="monsterHp" class="health--monster">{{ enemy.stats.hp.value ? enemy.stats.hp.value : 0 }}</p>
             </div>
         </div>
     </div>

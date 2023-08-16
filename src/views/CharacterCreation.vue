@@ -69,7 +69,7 @@ const rollStats = () => {
 
 const selectProfession = (profession: IProfessionPayload) => {
     playerObject.value.profession = undefined
-    playerObject.value.profession = new Profession('123', profession.id, profession.description)
+    playerObject.value.profession = new Profession(profession.id, profession.name, profession.description)
     Object.entries(profession.statsDevelopment).forEach(([key, value]) => {
         const statName = Object.values(EStats).find((stat) => stat === key)
         if (!statName) {
