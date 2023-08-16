@@ -12,10 +12,12 @@ class MonsterGenerator {
         const generateId = () => {
             return this.id++
         }
-        const bestiaryCopy = JSON.parse(JSON.stringify([...bestiary]))
+        const bestiaryCopy = structuredClone(bestiary)
         const monsterRandom = bestiaryCopy[Math.floor(Math.random() * bestiaryCopy.length)]
         const generatedWeapon = new ItemGenerator().createItem(EItemCategory.Weapon)
         const monsterClass = new MonsterModel()
+        console.log(monsterRandom)
+
         const monster: MonsterModel = Object.assign(monsterClass, monsterRandom, {
             id: generateId(),
             weapon: generatedWeapon,

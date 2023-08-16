@@ -102,7 +102,7 @@ class PersonModel implements IPerson {
             const damageDiceRoll = diceRollK6()
             let damagePoints = 0
 
-            const weaponDamage = () => {
+            const weaponDamage = (): number => {
                 if (!this.weapon) {
                     return 0
                 }
@@ -111,7 +111,7 @@ class PersonModel implements IPerson {
                 let prefixDamage = 0
                 let modifierDamage = 0
 
-                const getModifierDamage = () => {
+                const getModifierDamage = (): number => {
                     let sum = 0
                     this.modifiers.list.forEach((modifier) => {
                         if (typeof modifier.modifiers !== 'number') {
@@ -133,7 +133,7 @@ class PersonModel implements IPerson {
                 return damage
             }
 
-            damagePoints += attackStats.strength
+            damagePoints += attackStats.strength.value
             damagePoints += enemyArmorPoints ? enemyArmorPoints : 0
             damagePoints += weaponDamage()
             damagePoints += damageDiceRoll
@@ -158,7 +158,7 @@ class PersonModel implements IPerson {
 
         if (finalDamage) {
             console.log(`${enemy.name} took ${finalDamage} damage`)
-            enemy.stats.hp.value -= finalDamage
+            enemy.stats.hp.value - finalDamage
             return finalDamage | 0
         }
     }

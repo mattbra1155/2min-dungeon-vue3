@@ -18,12 +18,12 @@ class PlayerModel extends PersonModel implements IPlayer {
         public profession: Profession | undefined = new Profession(),
         public stats: IStats = structuredClone(statsModel),
         public currentStats: IStats = structuredClone(statsModel),
-        public advancedStats: Partial<IStats>[],
+        public advancedStats: Partial<IStats>[] = [],
         public bodyParts: iBodyPart = bodyPartsModel,
         public weapon: Weapon | null = null,
         public description: string = '',
         public inventory: Inventory = new Inventory(),
-        public isAlive: boolean,
+        public isAlive: boolean = true,
         public player: boolean = true,
         public modifiers: Modifiers = new Modifiers()
     ) {

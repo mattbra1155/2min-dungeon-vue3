@@ -142,55 +142,6 @@ const savePlayer = async () => {
                     </p>
                 </div>
             </div>
-            <!-- <div class="m-form__row o-characterGenerator__row">
-                <h2 class="o-characterGenerator__header">Class</h2>
-                <div class="m-form__column">
-                    <div class="m-form__item">
-                        <label for="class">
-                            Warrior
-                            <input
-                                type="radio"
-                                name="class"
-                                value="warrior"
-                                class="item__input"
-                                v-model="playerObject."
-                            />
-                        </label>
-                    </div>
-                    <div class="m-form__item">
-                        <label for="class">
-                            Mage
-                            <input
-                                type="radio"
-                                name="class"
-                                value="mage"
-                                class="item__input"
-                                v-model="playerObject.profession"
-                            />
-                        </label>
-                    </div>
-                </div>
-            </div> -->
-            <div class="m-form__row o-characterGenerator__row">
-                <div class="m-form__row">
-                    <h2 class="o-characterGenerator__header">Profession</h2>
-                    <form class="m-form__column">
-                        <div v-for="profession in professions.warrior" :key="profession.id" class="m-form__item">
-                            <label :for="profession.name">
-                                {{ profession.name }}
-                                <input
-                                    type="radio"
-                                    class="item__input"
-                                    name="profession"
-                                    :value="profession"
-                                    @change="selectProfession(profession as IProfessionPayload)"
-                                />
-                            </label>
-                            {{ selectedProfession }}
-                        </div>
-                    </form>
-                </div>
-            </div>
             <div class="m-form__row o-characterGenerator__row">
                 <div class="m-form__column">
                     <label for="bio" class="o-characterGenerator__header">Bio</label>
@@ -251,6 +202,41 @@ const savePlayer = async () => {
                     </div>
                 </div>
             </div>
+            <div class="m-form__row o-characterGenerator__row">
+                <div class="m-form__row">
+                    <h2 class="o-characterGenerator__header">Profession</h2>
+                    <form class="m-form__column">
+                        <div
+                            v-for="profession in professions.warrior"
+                            :key="profession.id"
+                            class="m-form__item m-form__item--column"
+                        >
+                            <label :for="profession.name">
+                                {{ profession.name }}
+                                <input
+                                    type="radio"
+                                    class="item__input"
+                                    name="profession"
+                                    :value="profession"
+                                    @change="selectProfession(profession as IProfessionPayload)"
+                                />
+                            </label>
+                            {{ selectedProfession }}
+                            <div class="o-characterGenerator__statList">
+                                <template v-for="[key, value] in Object.entries(profession.statsDevelopment)">
+                                    <div v-if="value !== 0" :key="key" class="o-characterGenerator__statItem">
+                                        <p class="a-text">
+                                            {{ key }}
+                                        </p>
+                                        <p class="a-text">+{{ value }}</p>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
             <div class="m-form__row o-characterGenerator__row">
                 <div class="m-form__column">
                     <button type="submit" id="createPlayerButton" class="button action__button">Create</button>

@@ -7,7 +7,7 @@
         <div class="health__display">
             <div class="player-hp">
                 <h2>{{ player?.name }}</h2>
-                <p id="playerHp" class="health--player">{{ player?.stats ? player.stats.hp : 0 }}</p>
+                <p id="playerHp" class="health--player">{{ player.stats.hp.value }}</p>
             </div>
             <div
                 v-for="enemy in enemyList"
