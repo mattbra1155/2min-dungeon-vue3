@@ -17,7 +17,7 @@ export interface IItem {
 export interface IWeapon extends IItem {
     damage: number
     prefix: IItemPrefix
-    traits: []
+    traits: string[]
     wield(owner: PlayerModel | MonsterModel): void
     unequip(owner: PlayerModel | MonsterModel): void
 }
@@ -27,7 +27,7 @@ export interface IArmor extends IItem {
     item: string
     prefix: IItemPrefix
     armorPoints: number
-    traits: []
+    traits: string[]
     equip(owner: PlayerModel | MonsterModel): void
     unequip(owner: PlayerModel | MonsterModel): void
 }
