@@ -5,9 +5,16 @@ import { EItemCategory } from '@/enums/ItemCategory'
 import { ModifierItem } from '../models/modifierItemModel'
 import { EModifierTypes } from '@/enums/EModifierTypes'
 class ItemGenerator {
-    createItemBase(category: EItemCategory) {
+    category: EItemCategory | null
+    constructor() {
+        this.category = null
+    }
+    createItemBase() {
+        if (!this.category) {
+            throw Error('no category')
+        }
         let itemObject
-        switch (category) {
+        switch (this.category) {
             case EItemCategory.Weapon:
                 itemObject = new Weapon()
                 break
@@ -18,28 +25,22 @@ class ItemGenerator {
                 itemObject = new Potion()
                 break
         }
-        const itemCategory = itemMods[category]
+        const itemCategory = itemMods[this.category]
         const randomItem = itemCategory.item[Math.floor(Math.random() * itemCategory.item.length)]
-
-        const itemType = (item: any) => {
-            console.log(item)
-
-            if (Array.isArray(item.type)) {
-                return item.type[Math.floor(Math.random() * item.type.length)]
-            } else {
-                return item.type
-            }
-        }
 
         const finalItem: Weapon | Armor | Potion = Object.assign(itemObject, randomItem, {
             category: itemCategory,
-            type: itemType(randomItem),
         })
+        console.log(finalItem)
+
         return finalItem
     }
 
-    createPrefix(category: EItemCategory) {
-        const itemCategory = itemMods[category]
+    createPrefix() {
+        if (!this.category) {
+            throw Error('no category')
+        }
+        const itemCategory = itemMods[this.category]
         const prefix = itemCategory.prefix[Math.floor(Math.random() * itemCategory.prefix.length)]
         return prefix
     }
@@ -52,12 +53,18 @@ class ItemGenerator {
         }
     }
 
-    addId(category: EItemCategory) {
+    addId() {
+        if (!this.category) {
+            throw Error('no category')
+        }
         const id = self.crypto.randomUUID()
-        return `${category}-${id}`
+        return `${this.category}-${id}`
     }
 
-    createModifiers(category: EItemCategory) {
+    createModifiers() {
+        if (!this.category) {
+            throw Error('no category')
+        }
         const id = `modifier-${self.crypto.randomUUID()}`
         const modifier = new ModifierItem(
             id,
@@ -77,11 +84,18 @@ class ItemGenerator {
     }
 
     createItem(category: EItemCategory) {
-        const itemBase = this.createItemBase(category)
-        const prefix = this.createPrefix(category)
+        this.category = category
+
+        console.log(category)
+        if (!this.category) {
+            throw Error('no category')
+        }
+
+        const itemBase = this.createItemBase()
+        const prefix = this.createPrefix()
         const description = this.createDescription(itemBase, prefix)
-        const id = this.addId(category)
-        const modifier = this.createModifiers(category)
+        const id = this.addId()
+        const modifier = this.createModifiers()
         let item = itemBase
 
         switch (category) {

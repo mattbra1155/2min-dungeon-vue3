@@ -5,6 +5,7 @@ import { MonsterModel } from '@/assets/models/monsterModel'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { EBodyParts } from '@/enums/EBodyParts'
 import { ModifierItem } from './modifierItemModel'
+import { IModifierItem } from '@/interfaces/IModifiers'
 
 class Item implements IItem {
     constructor(
@@ -80,7 +81,7 @@ class Armor extends Item implements IArmor {
         public id: string = '',
         public name: string = '',
         public description: string = '',
-        public modifier: number = 0,
+        public modifiers: IModifierItem[],
         public bodyPart: iBodyPart = bodyPartsModel,
         public type: string = '',
         public item: string = '',
@@ -91,7 +92,6 @@ class Armor extends Item implements IArmor {
         super(id, name, description, type, category)
         this.id = id
         this.name = `${prefix.name} ${name}`
-        this.modifier = modifier
         this.type = type
         this.item = item
         this.prefix = prefix

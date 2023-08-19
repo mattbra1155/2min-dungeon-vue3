@@ -1,83 +1,76 @@
 {
     "weapon": {
-        "type": [
-            {
-                "name": "one handed",
-                "modifiers": {
-                    "initiative": 0,
-                    "melee": 0
-                },
-                "rarity": 30
-            },
-            {
-                "name": "two handed",
-                "modifiers": {
-                    "initiative": -10,
-                    "melee": 0
-                },
-                "rarity": 10
-            },
-            {
-                "name": "knife",
-                "modifiers": {
-                    "initiative": 10,
-                    "melee": 0
-                },
-                "rarity": 30
-            },
-            {
-                "name": "spear",
-                "modifiers": {
-                    "initiative": 10,
-                    "melee": 0
-                },
-                "rarity": 20
-            },
-            {
-                "name": "staff",
-                "modifiers": {
-                    "initiative": 0,
-                    "melee": 0
-                },
-                "rarity": 10
-            }
-        ],
         "item": [
             {
-                "name": "sword",
+                "type": "sword",
                 "damage": 0,
-                "type": [
-                    "one handed",
-                    "two handed"
-                ]
+                "traits": [],
+                "modifiers": [],
+                "isTwoHanded": false
             },
             {
-                "name": "axe",
+                "type": "axe",
                 "damage": 0,
-                "type": [
-                    "one handed",
-                    "two handed"
-                ]
+                "traits": [],
+                "modifiers": [],
+                "isTwoHanded": false
             },
             {
-                "name": "zweihander",
+                "type": "two handed sword",
                 "damage": 2,
-                "type": "two handed"
+                "modifiers": [
+                    {
+                        "initiative": 10
+                    }
+                ],
+                "traits": [
+                    "devastating",
+                    "slow"
+                ],
+                "isTwoHanded": true
             },
             {
-                "name": "dagger",
+                "name": "two handed axe",
+                "damage": 2,
+                "modifiers": [
+                    {
+                        "initiative": 10
+                    }
+                ],
+                "traits": [
+                    "devastating",
+                    "slow"
+                ],
+                "isTwoHanded": true
+            },
+            {
+                "type": "dagger",
                 "damage": -2,
-                "type": "knife"
+                "modifiers": [
+                    {
+                        "initiative": 10
+                    }
+                ],
+                "traits": [],
+                "isTwoHanded": false
             },
             {
-                "name": "short spear",
+                "type": "spear",
                 "damage": 0,
-                "type": "spear"
+                "traits": [
+                    "fast"
+                ],
+                "isTwoHanded": false
             },
             {
-                "name": "staff",
-                "damage": 0,
-                "type": "staff"
+                "type": "staff",
+                "damage": -1,
+                "modifiers": [],
+                "traits": [
+                    "stun",
+                    "parry"
+                ],
+                "isTwoHanded": true
             }
         ],
         "prefix": [
