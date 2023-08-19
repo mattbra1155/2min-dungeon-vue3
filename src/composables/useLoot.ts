@@ -1,12 +1,6 @@
-import { MonsterModel } from '@/assets/models/monsterModel'
-import { diceRollK100 } from '@/assets/scripts/diceRoll'
-import { IArmor, IItem, IPotion, IWeapon } from '@/interfaces/IItem'
+import { PlayerModel } from '@/assets/models/playerModel'
+import { diceRollK100, diceRollK4 } from '@/assets/scripts/diceRoll'
 import { reactive, toRefs } from 'vue'
-
-interface ILootItem {
-    rarity: number
-    item: IWeapon | IArmor | IPotion
-}
 
 interface ILootState {
     baseLootChance: number
@@ -32,7 +26,7 @@ const state: ILootState = reactive({
 })
 
 export const useLoot = () => {
-    const generateLoot = (monster: MonsterModel) => {
+    const generateLoot = (target: PlayerModel, monsterLevel: number) => {
         const roll = diceRollK100()
 
         if (roll <= state.baseLootChance) {
@@ -51,6 +45,8 @@ export const useLoot = () => {
                 console.log('roll Potion')
             } else if (rollForItemType > state.baseChanceForPotion && rollForItemType <= state.baseChanceForGold) {
                 console.log('roll Gold')
+                target.inventory.gold = diceRollK4() * monsterLevel
+                console.log(target.inventory.gold)
             }
         }
     }
