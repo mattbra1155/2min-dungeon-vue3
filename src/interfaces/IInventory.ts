@@ -6,4 +6,5 @@ export interface IInventoryState {
 }
 export interface IInventory {
     inventory: Array<IWeapon | IArmor | IPotion>
+    gold: number
 }

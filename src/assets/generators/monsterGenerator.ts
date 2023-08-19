@@ -4,15 +4,12 @@ import { ItemGenerator } from '@/assets/generators/itemGenerator'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { EStats } from '@/enums/EStats'
 import { stats as statsModel } from '@/assets/models/statsModel'
+import { diceRollK6 } from '../scripts/diceRoll'
 
 class MonsterGenerator {
-    id: number
-    constructor() {
-        this.id = 1
-    }
     create() {
         const generateId = () => {
-            return this.id++
+            return self.crypto.randomUUID()
         }
         const bestiaryCopy = structuredClone(bestiary)
         const monsterRandom = bestiaryCopy[Math.floor(Math.random() * bestiaryCopy.length)]
@@ -32,9 +29,9 @@ class MonsterGenerator {
                 throw new Error('No statName')
             }
 
-            console.log(monster)
             monster.stats[statName].value = value
         })
+        monster.inventory.gold = diceRollK6()
         return monster
     }
 }

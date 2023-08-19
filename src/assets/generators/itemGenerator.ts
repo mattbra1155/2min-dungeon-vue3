@@ -1,7 +1,6 @@
 import { Weapon, Armor, Potion } from '@/assets/models/itemsModel'
 import itemMods from '@/assets/json/itemMods.json'
 import { IItemPrefix } from '@/interfaces/IItem'
-import { useItemGenerator } from '@/composables/useItemGenerator'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { ModifierItem } from '../models/modifierItemModel'
 import { EModifierTypes } from '@/enums/EModifierTypes'
@@ -23,12 +22,15 @@ class ItemGenerator {
         const randomItem = itemCategory.item[Math.floor(Math.random() * itemCategory.item.length)]
 
         const itemType = (item: any) => {
+            console.log(item)
+
             if (Array.isArray(item.type)) {
                 return item.type[Math.floor(Math.random() * item.type.length)]
             } else {
                 return item.type
             }
         }
+
         const finalItem: Weapon | Armor | Potion = Object.assign(itemObject, randomItem, {
             category: itemCategory,
             type: itemType(randomItem),
@@ -81,6 +83,7 @@ class ItemGenerator {
         const id = this.addId(category)
         const modifier = this.createModifiers(category)
         let item = itemBase
+
         switch (category) {
             case EItemCategory.Weapon:
                 item = Object.assign(itemBase, {

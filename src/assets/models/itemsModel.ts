@@ -1,7 +1,7 @@
 import { iBodyPart } from '@/interfaces/BodyParts'
 import { IArmor, IItem, IItemPrefix, IPotion, IWeapon } from '@/interfaces/IItem'
 import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
-import { MonsterModel } from '@/interfaces/MonsterModel'
+import { MonsterModel } from '@/assets/models/monsterModel'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { EBodyParts } from '@/enums/EBodyParts'
 import { ModifierItem } from './modifierItemModel'

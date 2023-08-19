@@ -1,4 +1,4 @@
-import { MonsterModel } from '@/interfaces/MonsterModel'
+import { MonsterModel } from '@/assets/models/monsterModel'
 import { iBodyPart } from './BodyParts'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { ModifierItem } from '@/assets/models/modifierItemModel'
