@@ -41,7 +41,7 @@ class Weapon extends Item implements IWeapon {
         public prefix: IItemPrefix = { name: '', modifier: 0 },
         public modifiers: ModifierItem[] = [],
         public traits: string[] = [],
-        public ownerId: string = ''
+        public ownerId: string | undefined = undefined
     ) {
         super(id, name, description, type, category, isEquipped, ownerId, modifiers)
         this.id = id
@@ -94,7 +94,7 @@ class Armor extends Item implements IArmor {
         public armorPoints: number = 0,
         public prefix: IItemPrefix = { name: '', modifier: 0 },
         public isEquipped: boolean = false,
-        public ownerId: string = '',
+        public ownerId: string | undefined = undefined,
         public modifiers: ModifierItem[] = [],
         public traits: string[] = []
     ) {
@@ -141,6 +141,7 @@ class Armor extends Item implements IArmor {
             } else {
                 owner.modifiers.addItem(modifier)
             }
+            console.log('here')
         })
         owner.modifiers.updateCurrentStats(owner)
         console.log('Equipped', this)

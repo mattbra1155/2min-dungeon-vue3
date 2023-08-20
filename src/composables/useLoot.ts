@@ -10,6 +10,7 @@ interface ILootState {
     baseChanceForPotion: number
     baseChanceForGold: number
     isHigherTierLoot: boolean
+    baseChanceFor2TierLoot: number
     lootTable: []
 }
 
@@ -20,14 +21,16 @@ const state: ILootState = reactive({
     baseChanceForGold: 80,
     baseChanceForHigherTierLoot: 5,
     baseLootChance: 50,
+    baseChanceFor2TierLoot: 40,
     isHigherTierLoot: false,
 
     lootTable: [],
 })
 
 export const useLoot = () => {
-    const generateLoot = (target: PlayerModel, monsterLevel: number) => {
+    const generateLoot = (enemyLootTier: number) => {
         const roll = diceRollK100()
+        let itemTier = null
 
         if (roll <= state.baseLootChance) {
             const rollForItemType = diceRollK100()
@@ -35,6 +38,14 @@ export const useLoot = () => {
             if (state.baseLootChance <= state.baseChanceForHigherTierLoot) {
                 console.log('roll higher chance loot to implement')
                 state.isHigherTierLoot = true
+            }
+
+            if (enemyLootTier > 1) {
+                const rollForItemTier = diceRollK100()
+
+                if (state.baseChanceFor2TierLoot <= rollForItemTier) {
+                    itemTier = enemyLootTier
+                }
             }
 
             if (rollForItemType <= state.baseChanceForWeapon) {
@@ -45,8 +56,6 @@ export const useLoot = () => {
                 console.log('roll Potion')
             } else if (rollForItemType > state.baseChanceForPotion && rollForItemType <= state.baseChanceForGold) {
                 console.log('roll Gold')
-                target.inventory.gold = diceRollK4() * monsterLevel
-                console.log(target.inventory.gold)
             }
         }
     }

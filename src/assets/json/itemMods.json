@@ -73,21 +73,51 @@
                 "isTwoHanded": true
             }
         ],
-        "prefix": [
+        "quality": [
             {
-                "name": "old",
-                "modifier": -1,
-                "rarity": 20
-            },
-            {
-                "name": "used",
-                "modifier": 0,
-                "rarity": 25
+                "name": "low quality",
+                "modifier": [
+                    {
+                        "name": "melee",
+                        "modifiers": {
+                            "melee": -5
+                        }
+                    }
+                ]
             },
             {
                 "name": "good quality",
-                "modifier": 1,
-                "rarity": 5
+                "modifier": [
+                    {}
+                ]
+            },
+            {
+                "name": "best quality",
+                "modifier": [
+                    {
+                        "melee": -5
+                    }
+                ]
+            }
+        ],
+        "tier": [
+            {
+                "name": "+1",
+                "modifier": {
+                    "damage": 1
+                }
+            },
+            {
+                "name": "+2",
+                "modifier": {
+                    "damage": 2
+                }
+            },
+            {
+                "name": "+3",
+                "modifier": {
+                    "damage": 3
+                }
             }
         ]
     },
@@ -95,18 +125,15 @@
         "type": [
             {
                 "name": "leather",
-                "armorPoints": 1,
-                "rarity": 30
+                "armorPoints": 1
             },
             {
                 "name": "chainmail",
-                "armorPoints": 2,
-                "rarity": 15
+                "armorPoints": 2
             },
             {
                 "name": "plate",
-                "armorPoints": 3,
-                "rarity": 5
+                "armorPoints": 3
             }
         ],
         "item": [
@@ -159,57 +186,79 @@
         "prefix": [
             {
                 "name": "old",
-                "modifier": -1,
-                "rarity": 15
+                "modifier": -1
             },
             {
                 "name": "used",
-                "modifier": 0,
-                "rarity": 25
+                "modifier": 0
             },
             {
                 "name": "good quality",
-                "modifier": 1,
-                "rarity": 5
+                "modifier": 1
+            }
+        ],
+        "quality": [
+            {
+                "name": "low quality",
+                "modifier": [
+                    {
+                        "encumbrance": 50
+                    }
+                ]
+            },
+            {
+                "name": "good quality",
+                "modifier": [
+                    {
+                        "encumbrance": -10
+                    }
+                ]
+            },
+            {
+                "name": "best quality",
+                "modifier": [
+                    {
+                        "encumbrance": -50
+                    }
+                ]
             }
         ]
     },
     "potion": {
-        "type": [
-            {
-                "name": "healing"
-            }
-        ],
         "item": [
             {
-                "name": "potion",
+                "type": "healing",
                 "baseValue": 1
             }
         ],
-        "prefix": [
+        "quality": [
             {
-                "name": "weak",
-                "modifier": -1
+                "name": "low quality",
+                "modifier": [
+                    {
+                        "power": -1
+                    }
+                ]
             },
             {
-                "name": "regular",
-                "modifier": 0
+                "name": "good quality",
+                "modifier": [
+                    {
+                        "power": 1
+                    }
+                ]
             },
             {
-                "name": "strong",
-                "modifier": 2
+                "name": "best quality",
+                "modifier": [
+                    {
+                        "power": 2
+                    }
+                ]
             }
         ]
     },
     "utility": {
-        "type": [
-            {
-                "name": "light source"
-            },
-            {
-                "name": "lockpick"
-            }
-        ],
         "item": [
             {
                 "name": "torch",
@@ -222,18 +271,30 @@
                 "type": "lockpick"
             }
         ],
-        "prefix": [
+        "quality": [
             {
-                "name": "used",
-                "modifier": -1
-            },
-            {
-                "name": "regular",
-                "modifier": 0
+                "name": "low quality",
+                "modifier": [
+                    {
+                        "power": -1
+                    }
+                ]
             },
             {
                 "name": "good quality",
-                "modifier": 2
+                "modifier": [
+                    {
+                        "power": 1
+                    }
+                ]
+            },
+            {
+                "name": "best quality",
+                "modifier": [
+                    {
+                        "power": 2
+                    }
+                ]
             }
         ]
     }
