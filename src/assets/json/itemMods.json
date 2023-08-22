@@ -76,46 +76,37 @@
         "quality": [
             {
                 "name": "low quality",
-                "modifier": [
-                    {
-                        "name": "melee",
-                        "modifiers": {
-                            "melee": -5
-                        }
-                    }
-                ]
+                "modifiers": {
+                    "melee": -5
+                }
             },
             {
                 "name": "good quality",
-                "modifier": [
-                    {}
-                ]
+                "modifiers": {}
             },
             {
                 "name": "best quality",
-                "modifier": [
-                    {
-                        "melee": -5
-                    }
-                ]
+                "modifiers": {
+                    "melee": 5
+                }
             }
         ],
         "tier": [
             {
                 "name": "+1",
-                "modifier": {
+                "modifiers": {
                     "damage": 1
                 }
             },
             {
                 "name": "+2",
-                "modifier": {
+                "modifiers": {
                     "damage": 2
                 }
             },
             {
                 "name": "+3",
-                "modifier": {
+                "modifiers": {
                     "damage": 3
                 }
             }
@@ -186,41 +177,35 @@
         "prefix": [
             {
                 "name": "old",
-                "modifier": -1
+                "modifiers": -1
             },
             {
                 "name": "used",
-                "modifier": 0
+                "modifiers": 0
             },
             {
                 "name": "good quality",
-                "modifier": 1
+                "modifiers": 1
             }
         ],
         "quality": [
             {
                 "name": "low quality",
-                "modifier": [
-                    {
-                        "encumbrance": 50
-                    }
-                ]
+                "modifiers": {
+                    "encumberence": 50
+                }
             },
             {
                 "name": "good quality",
-                "modifier": [
-                    {
-                        "encumbrance": -10
-                    }
-                ]
+                "modifiers": {
+                    "encumbrance": -10
+                }
             },
             {
                 "name": "best quality",
-                "modifier": [
-                    {
-                        "encumbrance": -50
-                    }
-                ]
+                "modifiers": {
+                    "encumbrance": -50
+                }
             }
         ]
     },
@@ -234,27 +219,21 @@
         "quality": [
             {
                 "name": "low quality",
-                "modifier": [
-                    {
-                        "power": -1
-                    }
-                ]
+                "modifiers": {
+                    "power": -1
+                }
             },
             {
                 "name": "good quality",
-                "modifier": [
-                    {
-                        "power": 1
-                    }
-                ]
+                "modifiers": {
+                    "power": 1
+                }
             },
             {
                 "name": "best quality",
-                "modifier": [
-                    {
-                        "power": 2
-                    }
-                ]
+                "modifiers": {
+                    "power": 2
+                }
             }
         ]
     },
@@ -274,27 +253,21 @@
         "quality": [
             {
                 "name": "low quality",
-                "modifier": [
-                    {
-                        "power": -1
-                    }
-                ]
+                "modifiers": {
+                    "power": -1
+                }
             },
             {
                 "name": "good quality",
-                "modifier": [
-                    {
-                        "power": 1
-                    }
-                ]
+                "modifiers": {
+                    "power": 1
+                }
             },
             {
                 "name": "best quality",
-                "modifier": [
-                    {
-                        "power": 2
-                    }
-                ]
+                "modifiers": {
+                    "power": 2
+                }
             }
         ]
     }
