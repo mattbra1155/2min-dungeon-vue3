@@ -1,5 +1,7 @@
+import { ItemGenerator } from '@/assets/generators/itemGenerator'
 import { PlayerModel } from '@/assets/models/playerModel'
-import { diceRollK100, diceRollK4 } from '@/assets/scripts/diceRoll'
+import { diceRollK10, diceRollK100, diceRollK4 } from '@/assets/scripts/diceRoll'
+import { EItemCategory } from '@/enums/ItemCategory'
 import { reactive, toRefs } from 'vue'
 
 interface ILootState {
@@ -30,33 +32,32 @@ const state: ILootState = reactive({
 export const useLoot = () => {
     const generateLoot = (enemyLootTier: number) => {
         const roll = diceRollK100()
-        let itemTier = null
+        const itemGenerator = new ItemGenerator()
+        // TO DO Tier loot
 
-        if (roll <= state.baseLootChance) {
-            const rollForItemType = diceRollK100()
+        if (roll < state.baseLootChance) {
+            console.log(`${roll} is smaller than baseLootChance`)
+            return
+        }
+        const rollForItemType = diceRollK100()
 
-            if (state.baseLootChance <= state.baseChanceForHigherTierLoot) {
-                console.log('roll higher chance loot to implement')
-                state.isHigherTierLoot = true
-            }
+        if (state.baseLootChance <= state.baseChanceForHigherTierLoot) {
+            console.log('roll higher chance loot to implement')
+            state.isHigherTierLoot = true
+        }
 
-            if (enemyLootTier > 1) {
-                const rollForItemTier = diceRollK100()
-
-                if (state.baseChanceFor2TierLoot <= rollForItemTier) {
-                    itemTier = enemyLootTier
-                }
-            }
-
-            if (rollForItemType <= state.baseChanceForWeapon) {
-                console.log('roll Weapon')
-            } else if (rollForItemType > state.baseChanceForWeapon && rollForItemType <= state.baseChanceForArmor) {
-                console.log('roll Armor')
-            } else if (rollForItemType > state.baseChanceForArmor && rollForItemType <= state.baseChanceForPotion) {
-                console.log('roll Potion')
-            } else if (rollForItemType > state.baseChanceForPotion && rollForItemType <= state.baseChanceForGold) {
-                console.log('roll Gold')
-            }
+        if (rollForItemType <= state.baseChanceForWeapon) {
+            console.log('roll Weapon')
+            return itemGenerator.createItem(EItemCategory.Weapon)
+        } else if (rollForItemType > state.baseChanceForWeapon && rollForItemType <= state.baseChanceForArmor) {
+            console.log('roll Armor')
+            return itemGenerator.createItem(EItemCategory.Armor)
+        } else if (rollForItemType > state.baseChanceForArmor && rollForItemType <= state.baseChanceForPotion) {
+            console.log('roll Potion')
+            return itemGenerator.createItem(EItemCategory.Potion)
+        } else if (rollForItemType > state.baseChanceForPotion && rollForItemType <= state.baseChanceForGold) {
+            console.log('roll Gold')
+            return diceRollK10()
         }
     }
     return {

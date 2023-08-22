@@ -7,13 +7,13 @@ import { EModifierTypes } from '@/enums/EModifierTypes'
 import { EQuality } from '@/enums/EQuality'
 import { IModifierItem } from '@/interfaces/IModifiers'
 class ItemGenerator {
-    category: EItemCategory | null
-    quality: IItemQuality | null
+    private category: EItemCategory | null
+    private quality: IItemQuality | null
     constructor() {
         this.category = null
         this.quality = null
     }
-    createItemBase() {
+    private createItemBase() {
         if (!this.category) {
             throw Error('no category')
         }
@@ -40,17 +40,7 @@ class ItemGenerator {
         return finalItem
     }
 
-    getQuality() {
-        if (!this.category) {
-            throw Error('no category')
-        }
-        const itemCategory = itemMods[this.category]
-        const quality = itemCategory.quality[Math.floor(Math.random() * itemCategory.quality.length)]
-        this.quality = quality
-        return quality
-    }
-
-    createDescription(baseItem: Weapon | Armor | Potion) {
+    private createDescription(baseItem: Weapon | Armor | Potion) {
         if (!this.quality) {
             return `This is a ${baseItem.type}. Nothing out of the ordinary`
         } else {
@@ -58,7 +48,7 @@ class ItemGenerator {
         }
     }
 
-    addId() {
+    private addId() {
         if (!this.category) {
             throw Error('no category')
         }
@@ -66,7 +56,7 @@ class ItemGenerator {
         return `${this.category}-${id}`
     }
 
-    createModifiers() {
+    private createModifiers() {
         if (!this.category) {
             throw Error('no category')
         }
@@ -106,7 +96,7 @@ class ItemGenerator {
         return modifierList
     }
 
-    createItem(category: EItemCategory, tier: number) {
+    createItem(category: EItemCategory, tier = 1) {
         this.category = category
 
         console.log(category)
@@ -115,7 +105,6 @@ class ItemGenerator {
         }
 
         const itemBase = this.createItemBase()
-        const quality = this.getQuality()
         const description = this.createDescription(itemBase)
         const id = this.addId()
         const modifiers = this.createModifiers()
@@ -125,8 +114,7 @@ class ItemGenerator {
             case EItemCategory.Weapon:
                 itemBase as Weapon
                 item = Object.assign(itemBase, {
-                    name: `${quality.name} ${itemBase.type}`,
-                    quality,
+                    name: `${itemBase.type}`,
                     id,
                     description,
                     category,
@@ -136,8 +124,7 @@ class ItemGenerator {
                 break
             case EItemCategory.Armor:
                 item = Object.assign(itemBase, {
-                    name: `${quality.name} ${itemBase.name}`,
-                    quality,
+                    name: ` ${itemBase.name}`,
                     id,
                     description,
                     category,
@@ -147,8 +134,7 @@ class ItemGenerator {
                 break
             case EItemCategory.Potion:
                 item = Object.assign(itemBase, {
-                    name: `${quality.name} ${itemBase.name}`,
-                    quality,
+                    name: ` ${itemBase.name}`,
                     id,
                     description,
                     category,
@@ -157,6 +143,9 @@ class ItemGenerator {
                 })
                 break
         }
+
+        this.category = null
+        this.quality = null
 
         return item
     }
