@@ -34,10 +34,8 @@ class Gold implements IGold {
     public name: string
     public description = 'Coins made of gold'
     public type: EItemCategory.Gold
-    public ownerId: string | undefined
-    public amount = 0
 
-    constructor(amount: number, ownerId?: string | undefined) {
+    constructor(public amount = 0, public ownerId?: string) {
         this.name = 'Gold'
         this.description
         this.type = EItemCategory.Gold
@@ -55,17 +53,15 @@ class Weapon extends Item implements IWeapon {
         public category: string = '',
         public type: string = '',
         public isEquipped: boolean = false,
-        public prefix: IItemPrefix = { name: '', modifier: 0 },
         public modifiers: ModifierItem[] = [],
         public traits: string[] = [],
         public ownerId: string | undefined = undefined
     ) {
         super(id, name, description, type, category, isEquipped, ownerId, modifiers)
         this.id = id
-        this.name = `${prefix.name} ${category} ${name}`
+        this.name = `${name}`
         this.damage = damage
         this.type = type
-        this.prefix = prefix
         this.modifiers = modifiers
         this.isEquipped = isEquipped
         this.ownerId = ownerId
@@ -109,7 +105,6 @@ class Armor extends Item implements IArmor {
         public item: string = '',
         public category: string = '',
         public armorPoints: number = 0,
-        public prefix: IItemPrefix = { name: '', modifier: 0 },
         public isEquipped: boolean = false,
         public ownerId: string | undefined = undefined,
         public modifiers: ModifierItem[] = [],
@@ -117,10 +112,9 @@ class Armor extends Item implements IArmor {
     ) {
         super(id, name, description, type, category, isEquipped, ownerId, modifiers)
         this.id = id
-        this.name = `${prefix.name} ${name}`
+        this.name = `${name}`
         this.type = type
         this.item = item
-        this.prefix = prefix
         this.category = category
         this.description = description
         this.isEquipped = isEquipped
@@ -187,13 +181,11 @@ class Potion extends Item implements IPotion {
         public description: string = '',
         public type: string = '',
         public category: string = '',
-        public item: string = '',
-        public prefix: IItemPrefix = { name: '', modifier: 0 }
+        public item: string = ''
     ) {
         super(id, name, description, type, category)
         this.id = id
         this.item = item
-        this.prefix = prefix
         this.modifier = modifier
     }
 }

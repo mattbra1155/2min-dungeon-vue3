@@ -5,16 +5,16 @@ export interface IStat {
 }
 
 export interface IStats {
-    hp: IStat
-    melee: IStat
-    ranged: IStat
-    dexterity: IStat
-    strength: IStat
-    thoughtness: IStat
-    speed: IStat
-    initiative: IStat
-    attacks: IStat
-    inteligence: IStat
-    willPower: IStat
-    charisma: IStat
+    hp: number
+    melee: number
+    ranged: number
+    dexterity: number
+    strength: number
+    thoughtness: number
+    speed: number
+    initiative: number
+    attacks: number
+    inteligence: number
+    willPower: number
+    charisma: number
 }

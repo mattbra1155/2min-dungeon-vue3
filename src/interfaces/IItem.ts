@@ -2,7 +2,6 @@ import { MonsterModel } from '@/assets/models/monsterModel'
 import { iBodyPart } from './BodyParts'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { ModifierItem } from '@/assets/models/modifierItemModel'
-import { IModifierItem } from './IModifiers'
 
 export interface IItem {
     id: string | undefined
@@ -14,13 +13,13 @@ export interface IItem {
     ownerId: string | undefined
     modifiers: ModifierItem[]
 }
-export interface IGold extends Omit<IItem, 'id' | 'category' | 'isEquipped' | 'modifiers'> {
+export interface IGold extends Omit<IItem, 'id' | 'category' | 'isEquipped' | 'modifiers' | 'ownerId'> {
     amount: number
+    ownerId?: string | undefined
 }
 
 export interface IWeapon extends IItem {
     damage: number
-    quality: IItemQuality
     traits: string[]
     wield(owner: PlayerModel | MonsterModel): void
     unequip(owner: PlayerModel | MonsterModel): void
@@ -29,7 +28,6 @@ export interface IWeapon extends IItem {
 export interface IArmor extends IItem {
     bodyPart: iBodyPart
     item: string
-    quality: IItemQuality
     armorPoints: number
     traits: string[]
     equip(owner: PlayerModel | MonsterModel): void
@@ -38,19 +36,9 @@ export interface IArmor extends IItem {
 
 export interface IPotion extends IItem {
     item: string
-    quality: IItemQuality
     modifier: number
 }
 
 export type iUtility = IItem
-
-export interface IQualityModifier {
-    [key: string]: string | number | undefined
-}
-
-export interface IItemQuality {
-    name: string
-    modifier: IModifierItem[]
-}
 
 export type AllItemTypes = IWeapon | IArmor | IPotion | IGold

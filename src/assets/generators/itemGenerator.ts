@@ -1,13 +1,13 @@
 import { Weapon, Armor, Potion, Item, Gold } from '@/assets/models/itemsModel'
 import itemMods from '@/assets/json/itemMods.json'
-import { AllItemTypes, IGold, IItemQuality } from '@/interfaces/IItem'
+import { AllItemTypes, IGold } from '@/interfaces/IItem'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { ModifierItem } from '../models/modifierItemModel'
 import { EModifierTypes } from '@/enums/EModifierTypes'
 import { IModifierItem } from '@/interfaces/IModifiers'
 class ItemGenerator {
     private category: EItemCategory | null
-    private quality: IItemQuality | null
+    private quality: IModifierItem | null
     constructor() {
         this.category = null
         this.quality = null
@@ -66,41 +66,19 @@ class ItemGenerator {
         const id = `modifier-${self.crypto.randomUUID()}`
         const modifierList: IModifierItem[] = []
 
-        if (this.category === EItemCategory.Weapon) {
-            this.quality?.modifier.forEach((mod) => {
-                if (!this.quality) {
-                    return
-                }
-                console.log(mod)
+        // TO DO MODIFIERS AGAIN
 
-                const modifier = new ModifierItem(
-                    id,
-                    this.quality.name,
-                    EModifierTypes.Passive,
-                    {
-                        inteligence: {
-                            name: 'ttt',
-                            symbol: 'i',
-                            value: 111,
-                        },
-                    },
-                    undefined,
-                    undefined,
-                    true,
-                    {
-                        isActive: false,
-                        current: 0,
-                        max: 2,
-                    }
-                )
-                modifierList.push(modifier)
-            })
-        }
         return modifierList
     }
 
-    createItem(category: EItemCategory, tier = 1) {
+    createItem(category: EItemCategory, tier = 1, amount = 0) {
         this.category = category
+
+        if (!this.category) {
+            throw Error('no category')
+        }
+
+        const itemBase = this.createItemBase()
 
         if (this.category === EItemCategory.Gold) {
             const gold: IGold = {
@@ -108,15 +86,12 @@ class ItemGenerator {
                 ownerId: undefined,
                 name: EItemCategory.Gold,
                 type: EItemCategory.Gold,
+                amount,
             }
+
+            return { ...itemBase, ...gold }
         }
 
-        console.log(category)
-        if (!this.category) {
-            throw Error('no category')
-        }
-
-        const itemBase = this.createItemBase()
         const description = this.createDescription(itemBase)
         const id = this.addId()
         const modifiers = this.createModifiers()

@@ -12,7 +12,7 @@ const router = useRouter()
 
 const { generateLoot } = useLoot()
 
-const loot = ref<Weapon | Armor | Potion | string | undefined>(generateLoot(1))
+const loot = ref<Weapon | Armor | Potion | string | undefined>(generateLoot(1)))
 </script>
 
 <template>

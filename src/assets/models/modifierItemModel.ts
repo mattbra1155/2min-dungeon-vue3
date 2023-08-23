@@ -1,7 +1,6 @@
 import { EModifierTypes } from '@/enums/EModifierTypes'
-import { IModifierItem } from '@/interfaces/IModifiers'
+import { IModifierItem, IModifiersList } from '@/interfaces/IModifiers'
 import { MonsterModel } from '@/assets/models/monsterModel'
-import { IStats } from '@/interfaces/IStats'
 import { PlayerModel } from './playerModel'
 
 class ModifierItem implements IModifierItem {
@@ -9,7 +8,7 @@ class ModifierItem implements IModifierItem {
         public id: string,
         public name: string,
         public type: EModifierTypes,
-        public modifiers: Partial<IStats> | number,
+        public modifiers: IModifiersList,
         public owner: PlayerModel | MonsterModel | undefined,
         public target: PlayerModel | MonsterModel | undefined,
         public updateOnBeginning: boolean = true,
