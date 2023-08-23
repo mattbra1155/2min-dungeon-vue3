@@ -57,7 +57,9 @@ export const useLoot = () => {
             return itemGenerator.createItem(EItemCategory.Potion)
         } else if (rollForItemType > state.baseChanceForPotion && rollForItemType <= state.baseChanceForGold) {
             console.log('roll Gold')
-            return diceRollK10()
+            return `${diceRollK10()} gold`
+        } else {
+            return 'nothing'
         }
     }
     return {

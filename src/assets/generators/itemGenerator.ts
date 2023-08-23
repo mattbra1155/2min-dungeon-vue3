@@ -1,10 +1,9 @@
-import { Weapon, Armor, Potion } from '@/assets/models/itemsModel'
+import { Weapon, Armor, Potion, Item, Gold } from '@/assets/models/itemsModel'
 import itemMods from '@/assets/json/itemMods.json'
-import { IItemQuality } from '@/interfaces/IItem'
+import { AllItemTypes, IGold, IItemQuality } from '@/interfaces/IItem'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { ModifierItem } from '../models/modifierItemModel'
 import { EModifierTypes } from '@/enums/EModifierTypes'
-import { EQuality } from '@/enums/EQuality'
 import { IModifierItem } from '@/interfaces/IModifiers'
 class ItemGenerator {
     private category: EItemCategory | null
@@ -13,34 +12,38 @@ class ItemGenerator {
         this.category = null
         this.quality = null
     }
-    private createItemBase() {
+    private createItemBase(): AllItemTypes {
         if (!this.category) {
             throw Error('no category')
         }
         let itemObject
-        switch (this.category) {
-            case EItemCategory.Weapon:
-                itemObject = new Weapon()
-                break
-            case EItemCategory.Armor:
-                itemObject = new Armor()
-                break
-            case EItemCategory.Potion:
-                itemObject = new Potion()
-                break
+
+        if (this.category !== EItemCategory.Gold) {
+            switch (this.category) {
+                case EItemCategory.Weapon:
+                    itemObject = new Weapon()
+                    break
+                case EItemCategory.Armor:
+                    itemObject = new Armor()
+                    break
+                case EItemCategory.Potion:
+                    itemObject = new Potion()
+                    break
+            }
+            const itemCategory = itemMods[this.category]
+            const randomItem = itemCategory.item[Math.floor(Math.random() * itemCategory.item.length)]
+
+            const finalItem: Weapon | Armor | Potion = Object.assign(itemObject, randomItem, {
+                category: itemCategory,
+            })
+            console.log(finalItem)
+            return finalItem
+        } else {
+            return new Gold()
         }
-        const itemCategory = itemMods[this.category]
-        const randomItem = itemCategory.item[Math.floor(Math.random() * itemCategory.item.length)]
-
-        const finalItem: Weapon | Armor | Potion = Object.assign(itemObject, randomItem, {
-            category: itemCategory,
-        })
-        console.log(finalItem)
-
-        return finalItem
     }
 
-    private createDescription(baseItem: Weapon | Armor | Potion) {
+    private createDescription(baseItem: AllItemTypes) {
         if (!this.quality) {
             return `This is a ${baseItem.type}. Nothing out of the ordinary`
         } else {
@@ -99,6 +102,15 @@ class ItemGenerator {
     createItem(category: EItemCategory, tier = 1) {
         this.category = category
 
+        if (this.category === EItemCategory.Gold) {
+            const gold: IGold = {
+                description: 'gold',
+                ownerId: undefined,
+                name: EItemCategory.Gold,
+                type: EItemCategory.Gold,
+            }
+        }
+
         console.log(category)
         if (!this.category) {
             throw Error('no category')
@@ -112,14 +124,14 @@ class ItemGenerator {
 
         switch (category) {
             case EItemCategory.Weapon:
-                itemBase as Weapon
-                item = Object.assign(itemBase, {
+                item = Object.assign(itemBase as Weapon, {
                     name: `${itemBase.type}`,
                     id,
                     description,
                     category,
                     modifiers: [modifiers],
-                    // damage: TO DO!,
+                    // damage: TO DO!
+                    // Damage comes now from itemMods json?,
                 })
                 break
             case EItemCategory.Armor:

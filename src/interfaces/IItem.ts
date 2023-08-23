@@ -2,8 +2,6 @@ import { MonsterModel } from '@/assets/models/monsterModel'
 import { iBodyPart } from './BodyParts'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { ModifierItem } from '@/assets/models/modifierItemModel'
-import { EStats } from '@/enums/EStats'
-import { IStat, IStats } from './IStats'
 import { IModifierItem } from './IModifiers'
 
 export interface IItem {
@@ -15,6 +13,9 @@ export interface IItem {
     isEquipped: boolean
     ownerId: string | undefined
     modifiers: ModifierItem[]
+}
+export interface IGold extends Omit<IItem, 'id' | 'category' | 'isEquipped' | 'modifiers'> {
+    amount: number
 }
 
 export interface IWeapon extends IItem {
@@ -51,3 +52,5 @@ export interface IItemQuality {
     name: string
     modifier: IModifierItem[]
 }
+
+export type AllItemTypes = IWeapon | IArmor | IPotion | IGold

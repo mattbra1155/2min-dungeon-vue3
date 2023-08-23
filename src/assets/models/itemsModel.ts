@@ -1,10 +1,11 @@
 import { iBodyPart } from '@/interfaces/BodyParts'
-import { IArmor, IItem, IItemPrefix, IPotion, IWeapon } from '@/interfaces/IItem'
+import { IArmor, IGold, IItem, IPotion, IWeapon } from '@/interfaces/IItem'
 import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { EBodyParts } from '@/enums/EBodyParts'
 import { ModifierItem } from './modifierItemModel'
+import { EItemCategory } from '@/enums/ItemCategory'
 
 class Item implements IItem {
     constructor(
@@ -26,6 +27,22 @@ class Item implements IItem {
         this.isEquipped = isEquipped
         this.ownerId = ownerId
         this.modifiers = modifiers
+    }
+}
+
+class Gold implements IGold {
+    public name: string
+    public description = 'Coins made of gold'
+    public type: EItemCategory.Gold
+    public ownerId: string | undefined
+    public amount = 0
+
+    constructor(amount: number, ownerId?: string | undefined) {
+        this.name = 'Gold'
+        this.description
+        this.type = EItemCategory.Gold
+        this.ownerId = ownerId
+        this.amount = amount
     }
 }
 
@@ -216,4 +233,4 @@ class Potion extends Item implements IPotion {
 //     ],
 // }
 
-export { Weapon, Armor, Potion }
+export { Item, Weapon, Armor, Potion, Gold }
