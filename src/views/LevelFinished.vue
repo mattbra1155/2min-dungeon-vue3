@@ -3,6 +3,7 @@ import { Armor, Potion, Weapon } from '@/assets/models/itemsModel'
 import { useLoot } from '@/composables/useLoot'
 import { useTurn } from '@/composables/useTurn'
 import { ETurnState } from '@/enums/ETurnState'
+import { AllItemTypes } from '@/interfaces/IItem'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -12,7 +13,7 @@ const router = useRouter()
 
 const { generateLoot } = useLoot()
 
-const loot = ref<Weapon | Armor | Potion | string | undefined>(generateLoot(1)))
+const loot = ref<AllItemTypes>(generateLoot(1)))
 </script>
 
 <template>
