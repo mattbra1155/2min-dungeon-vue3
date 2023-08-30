@@ -104,7 +104,7 @@ class Armor extends Item implements IArmor {
         public description: string = '',
         public bodyPart: iBodyPart = bodyPartsModel,
         public type: string = '',
-        public item: string = '',
+        public material: string = '',
         public category: string = '',
         public armorPoints: number = 0,
         public isEquipped: boolean = false,
@@ -116,7 +116,7 @@ class Armor extends Item implements IArmor {
         this.id = id
         this.name = `${name}`
         this.type = type
-        this.item = item
+        this.material = material
         this.category = category
         this.description = description
         this.isEquipped = isEquipped

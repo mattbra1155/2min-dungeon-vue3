@@ -1,7 +1,7 @@
 import { ItemGenerator } from '@/assets/generators/itemGenerator'
-import { PlayerModel } from '@/assets/models/playerModel'
-import { diceRollK10, diceRollK100, diceRollK4 } from '@/assets/scripts/diceRoll'
+import { diceRollK100, diceRollK4 } from '@/assets/scripts/diceRoll'
 import { EItemCategory } from '@/enums/ItemCategory'
+import { AllItemTypes } from '@/interfaces/IItem'
 import { reactive, toRefs } from 'vue'
 
 interface ILootState {
@@ -13,7 +13,7 @@ interface ILootState {
     baseChanceForGold: number
     isHigherTierLoot: boolean
     baseChanceFor2TierLoot: number
-    lootTable: []
+    lootList: AllItemTypes[]
 }
 
 const state: ILootState = reactive({
@@ -25,12 +25,22 @@ const state: ILootState = reactive({
     baseLootChance: 50,
     baseChanceFor2TierLoot: 40,
     isHigherTierLoot: false,
-
-    lootTable: [],
+    lootList: [],
 })
 
 export const useLoot = () => {
-    const generateLoot = (enemyLootTier: number) => {
+    const generateLoot = () => {
+        const lootAmount = diceRollK4()
+        for (let x = 0; x < lootAmount; x++) {
+            const loot = generateLootItem(1)
+            if (loot) {
+                state.lootList.push(loot)
+            } else {
+                throw Error('no loot generated')
+            }
+        }
+    }
+    const generateLootItem = (enemyLootTier: number) => {
         const roll = diceRollK100()
         const itemGenerator = new ItemGenerator()
         // TO DO Tier loot
@@ -55,7 +65,11 @@ export const useLoot = () => {
         } else if (rollForItemType > state.baseChanceForArmor && rollForItemType <= state.baseChanceForPotion) {
             console.log('roll Potion')
             return itemGenerator.createItem(EItemCategory.Potion)
-        } else if (rollForItemType > state.baseChanceForPotion && rollForItemType <= state.baseChanceForGold) {
+            // } else if (rollForItemType > state.baseChanceForPotion && rollForItemType <= state.baseChanceForGold) {
+            //     console.log('roll Gold')
+            //     return itemGenerator.createItem(EItemCategory.Gold)
+            // }
+        } else {
             console.log('roll Gold')
             return itemGenerator.createItem(EItemCategory.Gold)
         }
@@ -63,5 +77,6 @@ export const useLoot = () => {
     return {
         ...toRefs(state),
         generateLoot,
+        generateLootItem,
     }
 }

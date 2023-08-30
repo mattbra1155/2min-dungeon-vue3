@@ -6,14 +6,16 @@
                 "damage": 0,
                 "traits": [],
                 "modifiers": [],
-                "isTwoHanded": false
+                "isTwoHanded": false,
+                "price": 70
             },
             {
                 "type": "axe",
                 "damage": 0,
                 "traits": [],
                 "modifiers": [],
-                "isTwoHanded": false
+                "isTwoHanded": false,
+                "price": 70
             },
             {
                 "type": "two handed sword",
@@ -27,10 +29,11 @@
                     "devastating",
                     "slow"
                 ],
-                "isTwoHanded": true
+                "isTwoHanded": true,
+                "price": 70
             },
             {
-                "name": "two handed axe",
+                "type": "two handed axe",
                 "damage": 2,
                 "modifiers": [
                     {
@@ -41,7 +44,8 @@
                     "devastating",
                     "slow"
                 ],
-                "isTwoHanded": true
+                "isTwoHanded": true,
+                "price": 70
             },
             {
                 "type": "dagger",
@@ -52,7 +56,8 @@
                     }
                 ],
                 "traits": [],
-                "isTwoHanded": false
+                "isTwoHanded": false,
+                "price": 2
             },
             {
                 "type": "spear",
@@ -60,7 +65,8 @@
                 "traits": [
                     "fast"
                 ],
-                "isTwoHanded": false
+                "isTwoHanded": false,
+                "price": 70
             },
             {
                 "type": "staff",
@@ -70,7 +76,8 @@
                     "stun",
                     "parry"
                 ],
-                "isTwoHanded": true
+                "isTwoHanded": true,
+                "price": 70
             }
         ],
         "quality": [
@@ -113,65 +120,77 @@
         ]
     },
     "armor": {
-        "type": [
+        "material": [
             {
                 "name": "leather",
-                "armorPoints": 1
+                "armorPoints": 1,
+                "price": 70
             },
             {
                 "name": "chainmail",
-                "armorPoints": 2
+                "armorPoints": 2,
+                "price": 70
             },
             {
                 "name": "plate",
-                "armorPoints": 3
+                "armorPoints": 3,
+                "price": 70
             }
         ],
         "item": [
             {
-                "name": "cap",
+                "type": "cap",
                 "bodyPart": "head",
-                "modifiers": []
+                "modifiers": [],
+                "price": 70
             },
             {
-                "name": "glove",
+                "type": "right glove",
                 "bodyPart": "rightArm",
-                "modifiers": []
+                "modifiers": [],
+                "price": 70
             },
             {
-                "name": "glove",
+                "type": "left glove",
                 "bodyPart": "leftArm",
-                "modifiers": []
+                "modifiers": [],
+                "price": 70
             },
             {
-                "name": "tunic",
+                "type": "tunic",
                 "bodyPart": "torso",
-                "modifiers": []
+                "modifiers": [],
+                "price": 70
             },
             {
-                "name": "basinet",
+                "type": "basinet",
                 "bodyPart": "head",
-                "modifiers": []
+                "modifiers": [],
+                "price": 70
             },
             {
-                "name": "boot",
+                "type": "boot",
                 "bodyPart": "rightLeg",
-                "modifiers": []
+                "modifiers": [],
+                "price": 70
             },
             {
-                "name": "boot",
+                "type": "boot",
                 "bodyPart": "leftLeg",
-                "modifiers": []
+                "modifiers": [],
+                "price": 70
             },
             {
-                "name": "helmet",
+                "type": "helmet",
                 "bodyPart": "head",
-                "modifiers": []
+                "modifiers": [],
+                "price": 70
             },
             {
-                "name": "breastplate",
+                "type": "breastplate",
                 "bodyPart": "torso",
-                "modifiers": []
+                "modifiers": [],
+                "price": 70
             }
         ],
         "prefix": [
@@ -213,7 +232,8 @@
         "item": [
             {
                 "type": "healing",
-                "baseValue": 1
+                "baseValue": 1,
+                "price": 70
             }
         ],
         "quality": [
@@ -242,12 +262,14 @@
             {
                 "name": "torch",
                 "baseValue": 0,
-                "type": "light source"
+                "type": "light source",
+                "price": 70
             },
             {
                 "name": "lockpick",
                 "baseValue": 0,
-                "type": "lockpick"
+                "type": "lockpick",
+                "price": 70
             }
         ],
         "quality": [

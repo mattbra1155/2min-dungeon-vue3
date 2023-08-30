@@ -29,7 +29,7 @@ class MonsterGenerator {
                 throw new Error('No statName')
             }
 
-            monster.stats[statName].value = value
+            monster.stats[statName] = value
         })
         monster.inventory.gold = diceRollK6()
         return monster

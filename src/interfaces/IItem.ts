@@ -14,6 +14,7 @@ export interface IItem {
     modifiers: ModifierItem[]
 }
 export interface IGold extends Omit<IItem, 'category' | 'isEquipped' | 'modifiers' | 'ownerId'> {
+    id: string
     amount: number
     ownerId?: string | undefined
 }
@@ -27,9 +28,9 @@ export interface IWeapon extends IItem {
 
 export interface IArmor extends IItem {
     bodyPart: iBodyPart
-    item: string
     armorPoints: number
     traits: string[]
+    material: string
     equip(owner: PlayerModel | MonsterModel): void
     unequip(owner: PlayerModel | MonsterModel): void
 }
