@@ -31,11 +31,13 @@ class Item implements IItem {
 }
 
 class Gold implements IGold {
+    public id: string
     public name: string
     public description = 'Coins made of gold'
     public type: EItemCategory.Gold
 
     constructor(public amount = 0, public ownerId?: string) {
+        this.id = 'gold'
         this.name = 'Gold'
         this.description
         this.type = EItemCategory.Gold

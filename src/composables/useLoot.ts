@@ -35,8 +35,8 @@ export const useLoot = () => {
         const itemGenerator = new ItemGenerator()
         // TO DO Tier loot
 
-        if (roll < state.baseLootChance) {
-            console.log(`${roll} is smaller than baseLootChance`)
+        if (roll > state.baseLootChance) {
+            console.log(`${roll} is larger than baseLootChance`)
             return
         }
         const rollForItemType = diceRollK100()
@@ -58,8 +58,6 @@ export const useLoot = () => {
         } else if (rollForItemType > state.baseChanceForPotion && rollForItemType <= state.baseChanceForGold) {
             console.log('roll Gold')
             return itemGenerator.createItem(EItemCategory.Gold)
-        } else {
-            return 'nothing'
         }
     }
     return {

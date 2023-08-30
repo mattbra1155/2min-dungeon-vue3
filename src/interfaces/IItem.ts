@@ -13,7 +13,7 @@ export interface IItem {
     ownerId: string | undefined
     modifiers: ModifierItem[]
 }
-export interface IGold extends Omit<IItem, 'id' | 'category' | 'isEquipped' | 'modifiers' | 'ownerId'> {
+export interface IGold extends Omit<IItem, 'category' | 'isEquipped' | 'modifiers' | 'ownerId'> {
     amount: number
     ownerId?: string | undefined
 }
@@ -42,3 +42,7 @@ export interface IPotion extends IItem {
 export type iUtility = IItem
 
 export type AllItemTypes = IWeapon | IArmor | IPotion | IGold
+
+export interface lootItem extends IItem {
+    isTaken: boolean
+}
