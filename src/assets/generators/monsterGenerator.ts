@@ -15,7 +15,6 @@ class MonsterGenerator {
         const monsterRandom = bestiaryCopy[Math.floor(Math.random() * bestiaryCopy.length)]
         const generatedWeapon = new ItemGenerator().createItem(EItemCategory.Weapon)
         const monsterClass = new MonsterModel()
-        console.log(monsterRandom)
 
         const monster: MonsterModel = Object.assign(monsterClass, monsterRandom, {
             id: generateId(),
@@ -30,8 +29,11 @@ class MonsterGenerator {
             }
 
             monster.stats[statName] = value
+            monster.currentStats[statName] = value
         })
         monster.inventory.gold = diceRollK6()
+        console.log(monster)
+
         return monster
     }
 }

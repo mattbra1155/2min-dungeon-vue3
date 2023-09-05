@@ -1,10 +1,6 @@
 import { reactive, toRefs } from 'vue'
 import { MonsterModel } from '@/assets/models/monsterModel'
-import { useAttack } from '@/composables/useAttack'
 import { PlayerModel } from '@/assets/models/playerModel'
-
-// const { activeCharacter } = useTurn()
-const { attack } = useAttack()
 
 const state = reactive({
     enemy: <MonsterModel>{},
@@ -16,7 +12,7 @@ export const useEnemy = () => {
     }
 
     const takeDamage = (damage: number) => {
-        state.enemy.stats.hp.value -= damage
+        state.enemy.stats.hp -= damage
     }
     const getEnemy = () => state.enemy
 

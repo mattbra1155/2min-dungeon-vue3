@@ -10,50 +10,51 @@ class ItemGenerator {
         this.category = null
         this.quality = null
     }
-    private createItemBase(): AllItemTypes {
+    private createItemBase(category: EItemCategory.Weapon): Weapon
+    private createItemBase(category: EItemCategory.Armor): Armor
+    private createItemBase(category: EItemCategory.Potion): Potion
+    private createItemBase(category: EItemCategory.Gold): Gold
+    private createItemBase(category: any): any {
         if (!this.category) {
             throw Error('no category')
         }
-        let itemObject: AllItemTypes
 
-        if (this.category !== EItemCategory.Gold) {
-            switch (this.category) {
-                case EItemCategory.Weapon:
-                    itemObject = new Weapon()
-                    break
-                case EItemCategory.Armor:
-                    itemObject = new Armor()
-                    break
-                case EItemCategory.Potion:
-                    itemObject = new Potion()
-                    break
-            }
-            const itemCategory = itemMods[this.category]
-            const randomItem = itemCategory.item[Math.floor(Math.random() * itemCategory.item.length)]
-
-            console.log(this.category, EItemCategory.Armor)
-
-            if (this.category === EItemCategory.Armor) {
-                const armorType =
-                    itemMods[this.category].material[
-                        Math.floor(Math.floor(Math.random() * itemMods[this.category].material.length))
-                    ]
-
-                itemObject = Object.assign(itemObject, {
-                    material: armorType.name,
-                    armorPoints: (itemObject as Armor).armorPoints + armorType.armorPoints,
-                })
-                console.log(itemObject)
-            }
-            console.log(itemObject)
-            const finalItem: AllItemTypes = Object.assign(itemObject, randomItem, {
-                category: itemCategory,
-            })
-            console.log(finalItem)
-            return finalItem
-        } else {
+        if (this.category === EItemCategory.Gold) {
             return new Gold()
         }
+
+        let itemObject: AllItemTypes
+
+        switch (this.category) {
+            case EItemCategory.Weapon:
+                itemObject = new Weapon()
+                break
+            case EItemCategory.Armor:
+                itemObject = new Armor()
+                break
+            case EItemCategory.Potion:
+                itemObject = new Potion()
+                break
+        }
+        const itemCategory = itemMods[this.category]
+        const randomItem = itemCategory.item[Math.floor(Math.random() * itemCategory.item.length)]
+
+        if (this.category === EItemCategory.Armor) {
+            const armorType =
+                itemMods[this.category].material[
+                    Math.floor(Math.floor(Math.random() * itemMods[this.category].material.length))
+                ]
+
+            itemObject = Object.assign(itemObject, {
+                material: armorType.name,
+                armorPoints: (itemObject as Armor).armorPoints + armorType.armorPoints,
+            })
+        }
+        const finalItem: AllItemTypes = Object.assign(itemObject, randomItem, {
+            category: itemCategory,
+        })
+        console.log(finalItem)
+        return finalItem
     }
 
     private createDescription(baseItem: AllItemTypes) {
@@ -84,26 +85,27 @@ class ItemGenerator {
         return modifierList
     }
 
-    createItem(category: EItemCategory, tier = 1, amount = 0) {
+    createItem(category: EItemCategory, tier = 1, amount = 0): AllItemTypes | Gold {
         this.category = category
 
         if (!this.category) {
             throw Error('no category')
         }
 
-        const itemBase = this.createItemBase()
+        const itemBase = this.createItemBase(EItemCategory.Weapon)
 
         if (this.category === EItemCategory.Gold) {
+            const goldBase = this.createItemBase(EItemCategory.Gold)
             const gold: IGold = {
                 id: 'gold',
-                description: 'gold',
+                description: 'Gold coins with the face of our King',
+                category: EItemCategory.Gold,
                 ownerId: undefined,
                 name: EItemCategory.Gold,
-                type: EItemCategory.Gold,
                 amount,
             }
 
-            return { ...itemBase, ...gold }
+            return { ...goldBase, ...gold }
         }
 
         const description = this.createDescription(itemBase)
@@ -125,7 +127,7 @@ class ItemGenerator {
                 break
             case EItemCategory.Armor:
                 item = Object.assign(itemBase, {
-                    name: ` ${itemBase.name}`,
+                    name: ` ${itemBase.type}`,
                     id,
                     description,
                     category,
