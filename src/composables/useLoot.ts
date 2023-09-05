@@ -2,7 +2,7 @@ import { ItemGenerator } from '@/assets/generators/itemGenerator'
 import { Armor, Gold, Potion, Weapon } from '@/assets/models/itemsModel'
 import { diceRollK100, diceRollK4 } from '@/assets/scripts/diceRoll'
 import { EItemCategory } from '@/enums/ItemCategory'
-import { AllItemTypes, lootItem } from '@/interfaces/IItem'
+import { AllItemTypes } from '@/interfaces/IItem'
 import { reactive, toRefs } from 'vue'
 
 interface ILootState {
@@ -14,7 +14,7 @@ interface ILootState {
     baseChanceForGold: number
     isHigherTierLoot: boolean
     baseChanceFor2TierLoot: number
-    lootList: lootItem[]
+    lootList: Array<AllItemTypes | Gold>
 }
 
 const state: ILootState = reactive({
@@ -35,11 +35,7 @@ export const useLoot = () => {
         for (let x = 1; x <= lootAmount; x++) {
             const generatedItem = generateLootItem(1)
             if (generatedItem) {
-                const loot: lootItem = generatedItem
-            }
-
-            if (loot) {
-                state.lootList.push(loot)
+                state.lootList.push(generatedItem)
             } else {
                 throw Error('no loot generated')
             }
@@ -76,7 +72,7 @@ export const useLoot = () => {
             // }
         } else {
             console.log('roll Gold')
-            return itemGenerator.createItem(EItemCategory.Gold)
+            return itemGenerator.createItem(EItemCategory.Gold, undefined, diceRollK4())
         }
     }
     return {

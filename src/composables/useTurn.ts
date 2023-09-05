@@ -122,5 +122,6 @@ export const useTurn = () => {
         ...toRefs(state),
         sortTurnOrder,
         updateTurnStateMachine,
+        checkIfDead,
     }
 }

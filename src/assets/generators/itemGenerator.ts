@@ -1,6 +1,6 @@
 import { Weapon, Armor, Potion, Item, Gold } from '@/assets/models/itemsModel'
 import itemMods from '@/assets/json/itemMods.json'
-import { AllItemTypes, IGold } from '@/interfaces/IItem'
+import { AllItemTypes, IArmor, IGold, IWeapon } from '@/interfaces/IItem'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { IModifierItem } from '@/interfaces/IModifiers'
 class ItemGenerator {
@@ -23,19 +23,16 @@ class ItemGenerator {
             return new Gold()
         }
 
-        let itemObject: AllItemTypes
+        let itemObject: AllItemTypes = new Weapon()
 
-        switch (this.category) {
-            case EItemCategory.Weapon:
-                itemObject = new Weapon()
-                break
-            case EItemCategory.Armor:
-                itemObject = new Armor()
-                break
-            case EItemCategory.Potion:
-                itemObject = new Potion()
-                break
+        if (this.category === EItemCategory.Weapon) {
+            itemObject = new Weapon()
+        } else if (this.category === EItemCategory.Armor) {
+            itemObject = new Armor()
+        } else if (this.category === EItemCategory.Potion) {
+            itemObject = new Potion()
         }
+
         const itemCategory = itemMods[this.category]
         const randomItem = itemCategory.item[Math.floor(Math.random() * itemCategory.item.length)]
 
@@ -45,10 +42,12 @@ class ItemGenerator {
                     Math.floor(Math.floor(Math.random() * itemMods[this.category].material.length))
                 ]
 
-            itemObject = Object.assign(itemObject, {
+            const iii: Partial<IArmor> = {
                 material: armorType.name,
                 armorPoints: (itemObject as Armor).armorPoints + armorType.armorPoints,
-            })
+            }
+
+            itemObject = Object.assign(itemObject, iii)
         }
         const finalItem: AllItemTypes = Object.assign(itemObject, randomItem, {
             category: itemCategory,

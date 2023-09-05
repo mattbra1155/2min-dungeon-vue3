@@ -1,5 +1,6 @@
 import { IInventory } from '@/interfaces/IInventory'
 import { AllItemTypes } from '@/interfaces/IItem'
+import { Gold } from '@/assets/models/itemsModel'
 
 class Inventory implements IInventory {
     constructor(public inventory: Array<AllItemTypes> = [], public gold = 0) {
@@ -7,9 +8,10 @@ class Inventory implements IInventory {
         this.gold = gold
     }
 
-    addItem(item: AllItemTypes, ownerId: string | undefined): void {
-        if (!item) {
-            return
+    addItem(item: AllItemTypes | Gold, ownerId: string | undefined): void {
+        if (item instanceof Gold) {
+            this.gold += item.amount
+            return console.log(`${item.amount} gold added`)
         }
 
         this.inventory.push(item)

@@ -5,6 +5,7 @@ import { useTurn } from '@/composables/useTurn'
 import { ETurnState } from '@/enums/ETurnState'
 import { useRouter } from 'vue-router'
 import { AllItemTypes } from '@/interfaces/IItem'
+import { Gold } from '@/assets/models/itemsModel'
 
 const { updateTurnStateMachine } = useTurn()
 updateTurnStateMachine(ETurnState.Init)
@@ -14,7 +15,7 @@ const { lootList, generateLoot } = useLoot()
 
 console.log(player.value)
 
-const takeItem = (lootItem: AllItemTypes) => {
+const takeItem = (lootItem: AllItemTypes | Gold) => {
     player.value.inventory.addItem(lootItem, player.value.id)
 }
 </script>
