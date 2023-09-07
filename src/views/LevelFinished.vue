@@ -18,6 +18,11 @@ const takeItem = (lootItem: AllItemTypes | Gold) => {
     const indexOfItem = lootList.value.findIndex((item) => item.id === lootItem.id)
     lootList.value.splice(indexOfItem, 1)
 }
+
+const nextLevel = () => {
+    lootList.value = []
+    router.push({ name: 'home', state: { nextLevel: true } })
+}
 </script>
 
 <template>
@@ -36,9 +41,7 @@ const takeItem = (lootItem: AllItemTypes | Gold) => {
                     <button @click="takeItem(lootItem)">take</button>
                 </div>
             </template>
-            <button @click="router.push({ name: 'home', state: { nextLevel: true } })" class="a-button">
-                Next level
-            </button>
+            <button @click="nextLevel" class="a-button">Next level</button>
         </div>
     </div>
 </template>
