@@ -32,12 +32,16 @@ const state: ILootState = reactive({
 export const useLoot = () => {
     const generateLoot = () => {
         const lootAmount = diceRollK4()
+        console.log(lootAmount)
+
         for (let x = 1; x <= lootAmount; x++) {
             const generatedItem = generateLootItem(1)
             if (generatedItem) {
+                const lootItem: ILootItem = Object.assign(generatedItem, { isTaken: false })
+                console.log(generatedItem)
                 state.lootList.push(generatedItem)
             } else {
-                throw Error('no loot generated')
+                console.log('no loot generated')
             }
         }
     }
@@ -56,7 +60,7 @@ export const useLoot = () => {
             console.log('roll higher chance loot to implement')
             state.isHigherTierLoot = true
         }
-
+        console.log(rollForItemType)
         if (rollForItemType <= state.baseChanceForWeapon) {
             console.log('roll Weapon')
             return itemGenerator.createItem(EItemCategory.Weapon)
