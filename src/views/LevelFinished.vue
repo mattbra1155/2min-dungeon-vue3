@@ -13,10 +13,10 @@ const router = useRouter()
 const { player } = usePlayer()
 const { lootList, generateLoot } = useLoot()
 
-console.log(player.value)
-
 const takeItem = (lootItem: AllItemTypes | Gold) => {
     player.value.inventory.addItem(lootItem, player.value.id)
+    const indexOfItem = lootList.value.findIndex((item) => item.id === lootItem.id)
+    lootList.value.splice(indexOfItem, 1)
 }
 </script>
 

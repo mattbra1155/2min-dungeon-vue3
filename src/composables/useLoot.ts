@@ -37,7 +37,6 @@ export const useLoot = () => {
         for (let x = 1; x <= lootAmount; x++) {
             const generatedItem = generateLootItem(1)
             if (generatedItem) {
-                const lootItem: ILootItem = Object.assign(generatedItem, { isTaken: false })
                 console.log(generatedItem)
                 state.lootList.push(generatedItem)
             } else {
