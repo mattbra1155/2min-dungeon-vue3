@@ -37,7 +37,7 @@ class PersonModel implements IPerson {
         console.log(`Dice roll: ${diceRollHitResult}`)
 
         // set temp character stats for attack
-        const attackStats = JSON.parse(JSON.stringify(this.currentStats))
+        const attackStats: IStats = JSON.parse(JSON.stringify(this.currentStats))
 
         const addModifiers = () => {
             this.modifiers.list.forEach((modifier) => {
@@ -63,7 +63,7 @@ class PersonModel implements IPerson {
         addModifiers()
 
         // check if attack hits
-        if (attackStats.melee.value < diceRollHitResult) {
+        if (diceRollHitResult > attackStats.melee) {
             console.log(`${this.name} missed`)
             return
         }
@@ -108,7 +108,6 @@ class PersonModel implements IPerson {
                 }
 
                 let baseDamage = 0
-                let prefixDamage = 0
                 let modifierDamage = 0
 
                 const getModifierDamage = (): number => {
@@ -125,19 +124,18 @@ class PersonModel implements IPerson {
                 }
 
                 baseDamage = this.weapon.damage
-                prefixDamage = this.weapon.prefix.modifier
                 modifierDamage = getModifierDamage()
 
-                const damage = baseDamage + prefixDamage + modifierDamage
+                const damage = baseDamage + modifierDamage
 
                 return damage
             }
 
-            damagePoints += attackStats.strength.value
+            damagePoints += attackStats.strength
             damagePoints += enemyArmorPoints ? enemyArmorPoints : 0
             damagePoints += weaponDamage()
             damagePoints += damageDiceRoll
-            damagePoints -= enemy.stats.thoughtness.value
+            damagePoints -= enemy.currentStats.thoughtness
 
             if (damagePoints < 0) {
                 damagePoints = 0
@@ -158,7 +156,7 @@ class PersonModel implements IPerson {
 
         if (finalDamage) {
             console.log(`${enemy.name} took ${finalDamage} damage`)
-            enemy.stats.hp.value -= finalDamage
+            enemy.currentStats.hp -= finalDamage
             return finalDamage | 0
         }
     }

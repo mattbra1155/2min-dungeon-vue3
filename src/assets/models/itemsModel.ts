@@ -1,10 +1,11 @@
 import { iBodyPart } from '@/interfaces/BodyParts'
-import { IArmor, IItem, IItemPrefix, IPotion, IWeapon } from '@/interfaces/IItem'
+import { IArmor, IGold, IItem, IPotion, IWeapon } from '@/interfaces/IItem'
 import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
-import { MonsterModel } from '@/interfaces/MonsterModel'
+import { MonsterModel } from '@/assets/models/monsterModel'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { EBodyParts } from '@/enums/EBodyParts'
 import { ModifierItem } from './modifierItemModel'
+import { EItemCategory } from '@/enums/ItemCategory'
 
 class Item implements IItem {
     constructor(
@@ -23,6 +24,25 @@ class Item implements IItem {
         this.id = id
         this.category = category
         this.modifiers = modifiers
+        this.isEquipped = isEquipped
+        this.ownerId = ownerId
+        this.modifiers = modifiers
+    }
+}
+
+class Gold implements IGold {
+    public id: string
+    public name: string
+    public description = 'Coins made of gold'
+    public type: EItemCategory.Gold
+
+    constructor(public amount = 0, public ownerId?: string) {
+        this.id = 'gold'
+        this.name = 'Gold'
+        this.description
+        this.type = EItemCategory.Gold
+        this.ownerId = ownerId
+        this.amount = amount
     }
 }
 
@@ -35,16 +55,18 @@ class Weapon extends Item implements IWeapon {
         public category: string = '',
         public type: string = '',
         public isEquipped: boolean = false,
-        public prefix: IItemPrefix = { name: '', modifier: 0 },
-        public modifier: number = 0
+        public modifiers: ModifierItem[] = [],
+        public traits: string[] = [],
+        public ownerId: string | undefined = undefined
     ) {
-        super(id, name, description, type, category)
+        super(id, name, description, type, category, isEquipped, ownerId, modifiers)
         this.id = id
-        this.name = `${prefix.name} ${category} ${name}`
+        this.name = `${name}`
         this.damage = damage
         this.type = type
-        this.prefix = prefix
-        this.modifier = modifier
+        this.modifiers = modifiers
+        this.isEquipped = isEquipped
+        this.ownerId = ownerId
     }
 
     wield(owner: PlayerModel | MonsterModel) {
@@ -80,23 +102,26 @@ class Armor extends Item implements IArmor {
         public id: string = '',
         public name: string = '',
         public description: string = '',
-        public modifier: number = 0,
         public bodyPart: iBodyPart = bodyPartsModel,
         public type: string = '',
-        public item: string = '',
+        public material: string = '',
         public category: string = '',
         public armorPoints: number = 0,
-        public prefix: IItemPrefix = { name: '', modifier: 0 }
+        public isEquipped: boolean = false,
+        public ownerId: string | undefined = undefined,
+        public modifiers: ModifierItem[] = [],
+        public traits: string[] = []
     ) {
-        super(id, name, description, type, category)
+        super(id, name, description, type, category, isEquipped, ownerId, modifiers)
         this.id = id
-        this.name = `${prefix.name} ${name}`
-        this.modifier = modifier
+        this.name = `${name}`
         this.type = type
-        this.item = item
-        this.prefix = prefix
+        this.material = material
         this.category = category
         this.description = description
+        this.isEquipped = isEquipped
+        this.modifiers = modifiers
+        this.traits = []
     }
 
     equip(owner: PlayerModel | MonsterModel) {
@@ -129,6 +154,7 @@ class Armor extends Item implements IArmor {
             } else {
                 owner.modifiers.addItem(modifier)
             }
+            console.log('here')
         })
         owner.modifiers.updateCurrentStats(owner)
         console.log('Equipped', this)
@@ -157,13 +183,11 @@ class Potion extends Item implements IPotion {
         public description: string = '',
         public type: string = '',
         public category: string = '',
-        public item: string = '',
-        public prefix: IItemPrefix = { name: '', modifier: 0 }
+        public item: string = ''
     ) {
         super(id, name, description, type, category)
         this.id = id
         this.item = item
-        this.prefix = prefix
         this.modifier = modifier
     }
 }
@@ -203,4 +227,4 @@ class Potion extends Item implements IPotion {
 //     ],
 // }
 
-export { Weapon, Armor, Potion }
+export { Item, Weapon, Armor, Potion, Gold }

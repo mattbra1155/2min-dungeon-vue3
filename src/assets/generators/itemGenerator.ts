@@ -1,121 +1,159 @@
-import { Weapon, Armor, Potion } from '@/assets/models/itemsModel'
+import { Weapon, Armor, Potion, Item, Gold } from '@/assets/models/itemsModel'
 import itemMods from '@/assets/json/itemMods.json'
-import { IItemPrefix } from '@/interfaces/IItem'
-import { useItemGenerator } from '@/composables/useItemGenerator'
+import { AllItemTypes, IArmor, IGold, IWeapon } from '@/interfaces/IItem'
 import { EItemCategory } from '@/enums/ItemCategory'
-import { ModifierItem } from '../models/modifierItemModel'
-import { EModifierTypes } from '@/enums/EModifierTypes'
+import { IModifierItem } from '@/interfaces/IModifiers'
 class ItemGenerator {
-    createItemBase(category: EItemCategory) {
-        let itemObject
-        switch (category) {
-            case EItemCategory.Weapon:
-                itemObject = new Weapon()
-                break
-            case EItemCategory.Armor:
-                itemObject = new Armor()
-                break
-            case EItemCategory.Potion:
-                itemObject = new Potion()
-                break
+    private category: EItemCategory | null
+    private quality: IModifierItem | null
+    constructor() {
+        this.category = null
+        this.quality = null
+    }
+    private createItemBase(category: EItemCategory.Weapon): Weapon
+    private createItemBase(category: EItemCategory.Armor): Armor
+    private createItemBase(category: EItemCategory.Potion): Potion
+    private createItemBase(category: EItemCategory.Gold): Gold
+    private createItemBase(category: any): any {
+        if (!this.category) {
+            throw Error('no category')
         }
-        const itemCategory = itemMods[category]
+
+        if (this.category === EItemCategory.Gold) {
+            return new Gold()
+        }
+
+        let itemObject: AllItemTypes = new Weapon()
+
+        if (this.category === EItemCategory.Weapon) {
+            itemObject = new Weapon()
+        } else if (this.category === EItemCategory.Armor) {
+            itemObject = new Armor()
+        } else if (this.category === EItemCategory.Potion) {
+            itemObject = new Potion()
+        }
+
+        const itemCategory = itemMods[this.category]
         const randomItem = itemCategory.item[Math.floor(Math.random() * itemCategory.item.length)]
 
-        const itemType = (item: any) => {
-            if (Array.isArray(item.type)) {
-                return item.type[Math.floor(Math.random() * item.type.length)]
-            } else {
-                return item.type
+        if (this.category === EItemCategory.Armor) {
+            const armorType =
+                itemMods[this.category].material[
+                    Math.floor(Math.floor(Math.random() * itemMods[this.category].material.length))
+                ]
+
+            const iii: Partial<IArmor> = {
+                material: armorType.name,
+                armorPoints: (itemObject as Armor).armorPoints + armorType.armorPoints,
             }
+
+            itemObject = Object.assign(itemObject, iii)
         }
-        const finalItem: Weapon | Armor | Potion = Object.assign(itemObject, randomItem, {
+        const finalItem: AllItemTypes = Object.assign(itemObject, randomItem, {
             category: itemCategory,
-            type: itemType(randomItem),
         })
+        console.log(finalItem)
         return finalItem
     }
 
-    createPrefix(category: EItemCategory) {
-        const itemCategory = itemMods[category]
-        const prefix = itemCategory.prefix[Math.floor(Math.random() * itemCategory.prefix.length)]
-        return prefix
-    }
-
-    createDescription(baseItem: Weapon | Armor | Potion, prefix: IItemPrefix) {
-        if (prefix.name === 'used') {
-            return `This is a ${baseItem.name}. Nothing out of the ordinary`
+    private createDescription(baseItem: AllItemTypes) {
+        if (!this.quality) {
+            return `This is a ${baseItem.type}. Nothing out of the ordinary`
         } else {
-            return `This is a ${baseItem.name}. It's ${prefix.name}`
+            return `This is a ${baseItem.type}. It's ${this.quality.name}`
         }
     }
 
-    addId(category: EItemCategory) {
+    private addId() {
+        if (!this.category) {
+            throw Error('no category')
+        }
         const id = self.crypto.randomUUID()
-        return `${category}-${id}`
+        return `${this.category}-${id}`
     }
 
-    createModifiers(category: EItemCategory) {
+    private createModifiers() {
+        if (!this.category) {
+            throw Error('no category')
+        }
         const id = `modifier-${self.crypto.randomUUID()}`
-        const modifier = new ModifierItem(
-            id,
-            'test modifier',
-            EModifierTypes.Passive,
-            { inteligence: 100 },
-            undefined,
-            undefined,
-            true,
-            {
-                isActive: false,
-                current: 0,
-                max: 2,
-            }
-        )
-        return modifier
+        const modifierList: IModifierItem[] = []
+
+        // TO DO MODIFIERS AGAIN
+
+        return modifierList
     }
 
-    createItem(category: EItemCategory) {
-        const itemBase = this.createItemBase(category)
-        const prefix = this.createPrefix(category)
-        const description = this.createDescription(itemBase, prefix)
-        const id = this.addId(category)
-        const modifier = this.createModifiers(category)
+    createGold(amount = 0): Gold {
+        this.category = EItemCategory.Gold
+        const goldBase = this.createItemBase(EItemCategory.Gold)
+        console.log(goldBase)
+        const gold: IGold = {
+            id: 'gold',
+            description: 'Gold coins with the face of our King',
+            category: EItemCategory.Gold,
+            ownerId: undefined,
+            name: EItemCategory.Gold,
+            amount,
+        }
+        console.log(gold)
+
+        const result = Object.assign(goldBase, gold)
+        console.log(result)
+
+        return result
+    }
+
+    createItem(category: EItemCategory, tier = 1): AllItemTypes {
+        this.category = category
+
+        if (!this.category) {
+            throw Error('no category')
+        }
+
+        const itemBase = this.createItemBase(EItemCategory.Weapon)
+
+        const description = this.createDescription(itemBase)
+        const id = this.addId()
+        const modifiers = this.createModifiers()
         let item = itemBase
+
         switch (category) {
             case EItemCategory.Weapon:
-                item = Object.assign(itemBase, {
-                    name: `${prefix.name} ${itemBase.name}`,
-                    prefix,
+                item = Object.assign(itemBase as Weapon, {
+                    name: `${itemBase.type} ${itemBase.name}`,
                     id,
                     description,
                     category,
-                    modifiers: [modifier],
-                    damage: prefix.modifier + itemBase.modifier,
+                    modifiers: modifiers,
+                    // damage: TO DO!
+                    // Damage comes now from itemMods json?,
                 })
                 break
             case EItemCategory.Armor:
                 item = Object.assign(itemBase, {
-                    name: `${prefix.name} ${itemBase.name}`,
-                    prefix,
+                    name: ` ${itemBase.type}`,
                     id,
                     description,
                     category,
-                    modifiers: [modifier],
-                    armorPoints: prefix.modifier + itemBase.modifier,
+                    modifiers: modifiers,
+                    // armorPoints:  TO DO!
                 })
                 break
             case EItemCategory.Potion:
                 item = Object.assign(itemBase, {
-                    name: `${prefix.name} ${itemBase.name}`,
-                    prefix,
+                    name: ` ${itemBase.name}`,
                     id,
                     description,
                     category,
-                    modifiers: [modifier],
-                    baseValue: prefix.modifier + itemBase.modifier,
+                    modifiers: modifiers,
+                    // baseValue: TO DO!
                 })
                 break
         }
+
+        this.category = null
+        this.quality = null
 
         return item
     }

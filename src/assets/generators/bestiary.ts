@@ -59,7 +59,7 @@ const bestiary = [
             willPower: 29,
             charisma: 18,
         },
-        level: 1,
+        level: 2,
         type: 'humanoid',
         weapon: null,
         description:
@@ -81,7 +81,7 @@ const bestiary = [
             willPower: 29,
             charisma: 10,
         },
-        level: 1,
+        level: 3,
         type: 'humanoid',
         weapon: null,
         description:
@@ -125,7 +125,7 @@ const bestiary = [
             willPower: 89,
             charisma: 0,
         },
-        level: 1,
+        level: 4,
         type: 'humanoid',
         weapon: null,
         description:

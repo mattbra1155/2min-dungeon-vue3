@@ -40,7 +40,7 @@ const rollStats = () => {
         Object.entries(updated).forEach(([key, stat]) => {
             const statName: EStats = Object.values(EStats).find((item) => item === key) as EStats
             if (!statName) return
-            playerObject.value.stats[statName].value = stat
+            playerObject.value.stats[statName] = stat
         })
     }
     if (playerObject.value.race === 'dwarf') {
@@ -61,7 +61,7 @@ const rollStats = () => {
         Object.entries(updated).forEach(([key, stat]) => {
             const statName: EStats = Object.values(EStats).find((item) => item === key) as EStats
             if (!statName) return
-            playerObject.value.stats[statName].value = stat
+            playerObject.value.stats[statName] = stat
         })
     }
 }
@@ -75,7 +75,7 @@ const selectProfession = (profession: IProfessionPayload) => {
             throw new Error('No statName')
         }
         if (key && statName === key && playerObject.value.profession) {
-            playerObject.value.profession.statsDevelopment[key].value = value
+            playerObject.value.profession.statsDevelopment[key] = value
         }
     })
     return playerObject.value.profession
@@ -173,7 +173,7 @@ const savePlayer = async () => {
                             <p class="a-text">
                                 {{ key }}
                             </p>
-                            <p class="a-text">{{ value.value }}</p>
+                            <p class="a-text">{{ value }}</p>
                         </div>
                     </div>
                 </div>
@@ -189,13 +189,14 @@ const savePlayer = async () => {
                     >
                         <div class="o-characterGenerator__inventory">
                             {{ item.name }}
-                            {{
+                            <!-- TO DO MODIFIER NAME -->
+                            <!-- {{
                                 item.prefix.modifier !== 0
                                     ? Math.sign(item.prefix.modifier)
                                         ? `+${item.prefix.modifier}`
                                         : `${item.prefix.modifier}`
                                     : ''
-                            }}
+                            }} -->
                         </div>
                     </div>
                 </div>

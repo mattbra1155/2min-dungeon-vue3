@@ -1,7 +1,8 @@
-import { MonsterModel } from '@/interfaces/MonsterModel'
+import { MonsterModel } from '@/assets/models/monsterModel'
 import { iBodyPart } from './BodyParts'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { ModifierItem } from '@/assets/models/modifierItemModel'
+import { Armor, Potion, Weapon } from '@/assets/models/itemsModel'
 
 export interface IItem {
     id: string | undefined
@@ -16,31 +17,38 @@ export interface IItem {
 
 export interface IWeapon extends IItem {
     damage: number
-    prefix: IItemPrefix
-    modifier: number
+    traits: string[]
     wield(owner: PlayerModel | MonsterModel): void
     unequip(owner: PlayerModel | MonsterModel): void
 }
 
 export interface IArmor extends IItem {
     bodyPart: iBodyPart
-    item: string
-    prefix: IItemPrefix
-    modifier: number
     armorPoints: number
+    traits: string[]
+    material: string
     equip(owner: PlayerModel | MonsterModel): void
     unequip(owner: PlayerModel | MonsterModel): void
 }
 
 export interface IPotion extends IItem {
     item: string
-    prefix: IItemPrefix
     modifier: number
+}
+
+export interface IGold {
+    id: string
+    name: string
+    description: string
+    amount: number
+    category: string
+    ownerId: string | undefined
 }
 
 export type iUtility = IItem
 
-export interface IItemPrefix {
-    name: string
-    modifier: number
+export type AllItemTypes = Weapon | Armor | Potion
+
+export interface ILootItem {
+    isTaken: boolean
 }
