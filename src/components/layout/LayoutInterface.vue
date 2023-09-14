@@ -5,7 +5,7 @@ import { ETurnState } from '@/enums/ETurnState'
 import { usePlayer } from '@/composables/usePlayer'
 import { useInventory } from '@/composables/useInventory'
 import { useCharacterScreen } from '@/composables/useCharacterScreen'
-const { checkIfDead, activeTurnState, updateTurnStateMachine } = useTurn()
+const { activeTurnState, updateTurnStateMachine, checkIfDead } = useTurn()
 const { targetToAttack } = useAttack()
 const { player } = usePlayer()
 const { toggleInventory } = useInventory()

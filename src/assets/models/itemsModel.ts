@@ -35,11 +35,14 @@ class Gold implements IGold {
     public name: string
     public description = 'Coins made of gold'
     public type: EItemCategory.Gold
+    public category: EItemCategory.Gold
+    public ownerId: string | undefined
 
-    constructor(public amount = 0, public ownerId?: string) {
+    constructor(public amount = 0, ownerId: string | undefined) {
         this.id = 'gold'
         this.name = 'Gold'
         this.description
+        this.category = EItemCategory.Gold
         this.type = EItemCategory.Gold
         this.ownerId = ownerId
         this.amount = amount
@@ -161,41 +164,6 @@ class Armor extends Item implements IArmor {
     }
 
     unequip(owner: PlayerModel | MonsterModel) {
-        const itemSlot: EBodyParts | undefined = Object.values(EBodyParts).find((bodyPart) => {
-            if (bodyPart === this.bodyPart.toString()) {
-                return bodyPart
-            }
-        })
-        if (!itemSlot) {
-            console.log('item slot not found')
-            return
-        }
-        owner.bodyParts[itemSlot].armor.item = null
-        this.isEquipped = false
-    }
-
-    equip(owner: PlayerModel | IMonster) {
-        if (!this) {
-            console.log('no item to equip')
-            return
-        }
-        // Find where the item should be worn
-        const itemSlot: EBodyParts | undefined = Object.values(EBodyParts).find((bodyPart) => {
-            if (bodyPart === this.bodyPart.toString()) {
-                return bodyPart
-            }
-        })
-        if (!itemSlot) {
-            console.log('item slot not found')
-            return
-        }
-        // equip the item
-        owner.bodyParts[itemSlot].armor.item = this
-        this.isEquipped = true
-        console.log(`equiped ${this.name} on ${itemSlot}`)
-    }
-
-    unequip(owner: PlayerModel | IMonster) {
         const itemSlot: EBodyParts | undefined = Object.values(EBodyParts).find((bodyPart) => {
             if (bodyPart === this.bodyPart.toString()) {
                 return bodyPart

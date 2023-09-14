@@ -154,11 +154,9 @@ class PersonModel implements IPerson {
 
         const finalDamage = damage()
 
-        if (finalDamage) {
-            console.log(`${enemy.name} took ${finalDamage} damage`)
-            enemy.currentStats.hp -= finalDamage
-            return finalDamage | 0
-        }
+        console.log(`${enemy.name} took ${finalDamage} damage`)
+        enemy.currentStats.hp -= finalDamage
+        return finalDamage | 0
     }
     // } else {
     //     // add action to the turn array
