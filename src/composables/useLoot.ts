@@ -31,28 +31,25 @@ const state: ILootState = reactive({
 
 export const useLoot = () => {
     const generateLoot = () => {
+        const roll = diceRollK100()
+        if (roll > state.baseLootChance) {
+            console.log(`${roll}/${state.baseLootChance} = no loot generated`)
+            return
+        }
+
         const lootAmount = diceRollK4()
         console.log(lootAmount)
 
         for (let x = 1; x <= lootAmount; x++) {
             const generatedItem = generateLootItem(1)
-            if (generatedItem) {
-                console.log(generatedItem)
-                state.lootList.push(generatedItem)
-            } else {
-                console.log('no loot generated')
-            }
+            console.log(generatedItem)
+            state.lootList.push(generatedItem)
         }
     }
     const generateLootItem = (enemyLootTier: number) => {
-        const roll = diceRollK100()
         const itemGenerator = new ItemGenerator()
         // TO DO Tier loot
 
-        if (roll > state.baseLootChance) {
-            console.log(`${roll} is larger than baseLootChance`)
-            return
-        }
         const rollForItemType = diceRollK100()
 
         if (state.baseLootChance <= state.baseChanceForHigherTierLoot) {
@@ -75,7 +72,7 @@ export const useLoot = () => {
             // }
         } else {
             console.log('roll Gold')
-            return itemGenerator.createItem(EItemCategory.Gold, undefined, diceRollK4())
+            return itemGenerator.createGold(diceRollK4())
         }
     }
     return {

@@ -84,7 +84,27 @@ class ItemGenerator {
         return modifierList
     }
 
-    createItem(category: EItemCategory, tier = 1, amount = 0): AllItemTypes | Gold {
+    createGold(amount = 0): Gold {
+        this.category = EItemCategory.Gold
+        const goldBase = this.createItemBase(EItemCategory.Gold)
+        console.log(goldBase)
+        const gold: IGold = {
+            id: 'gold',
+            description: 'Gold coins with the face of our King',
+            category: EItemCategory.Gold,
+            ownerId: undefined,
+            name: EItemCategory.Gold,
+            amount,
+        }
+        console.log(gold)
+
+        const result = Object.assign(goldBase, gold)
+        console.log(result)
+
+        return result
+    }
+
+    createItem(category: EItemCategory, tier = 1): AllItemTypes {
         this.category = category
 
         if (!this.category) {
@@ -92,20 +112,6 @@ class ItemGenerator {
         }
 
         const itemBase = this.createItemBase(EItemCategory.Weapon)
-
-        if (this.category === EItemCategory.Gold) {
-            const goldBase = this.createItemBase(EItemCategory.Gold)
-            const gold: IGold = {
-                id: 'gold',
-                description: 'Gold coins with the face of our King',
-                category: EItemCategory.Gold,
-                ownerId: undefined,
-                name: EItemCategory.Gold,
-                amount,
-            }
-
-            return { ...goldBase, ...gold }
-        }
 
         const description = this.createDescription(itemBase)
         const id = this.addId()

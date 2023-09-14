@@ -89,6 +89,12 @@ const unequip = (item: AllItemTypes) => {
             </button>
         </div>
         <div class="o-inventory__content">
+            <div class="o-inventory__goldWrapper">
+                <p>Gold: {{ player.inventory.gold }}</p>
+            </div>
+            ---
+            <hr />
+            ---
             <template v-if="!activeItemId">
                 <h3 class="a-text">Equipped</h3>
                 <ul class="o-inventory__list">
