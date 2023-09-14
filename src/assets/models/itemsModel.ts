@@ -77,6 +77,9 @@ class Weapon extends Item implements IWeapon {
             console.error(`no weapon to wield!!`)
             return
         }
+        if (owner.weapon) {
+            owner.weapon?.unequip(owner)
+        }
         owner.weapon = this
         this.isEquipped = true
         // assign modifier to owner after equipping
@@ -97,6 +100,8 @@ class Weapon extends Item implements IWeapon {
     unequip(owner: PlayerModel | MonsterModel) {
         owner.weapon = null
         this.isEquipped = false
+        console.log(`unequiped ${this.name}`)
+        console.log(owner.inventory.inventory)
     }
 }
 
@@ -142,6 +147,10 @@ class Armor extends Item implements IArmor {
             console.log('item slot not found')
             return
         }
+        //unequip current item
+        owner.bodyParts[itemSlot].armor.item?.unequip(owner)
+        console.log(`unequipped ${this.name}`)
+
         // equip the item
         owner.bodyParts[itemSlot].armor.item = this
         this.isEquipped = true

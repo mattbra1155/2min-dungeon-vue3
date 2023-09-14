@@ -97,7 +97,7 @@ const unequip = (item: AllItemTypes) => {
             ---
             <template v-if="!activeItemId">
                 <h3 class="a-text">Equipped</h3>
-                <ul class="o-inventory__list">
+                <ul class="o-inventory__list --noScroll">
                     <template v-for="item in player?.inventory.inventory" :key="item.id">
                         <li v-if="item && item.id && item.isEquipped" class="o-inventory__item --equipped">
                             <p class="a-text" v-if="item instanceof Armor">{{ item.bodyPart }}</p>
