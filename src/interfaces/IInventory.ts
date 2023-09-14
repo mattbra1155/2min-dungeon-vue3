@@ -1,9 +1,10 @@
-import { IArmor, IPotion, IWeapon } from '@/interfaces/IItem'
+import { AllItemTypes } from '@/interfaces/IItem'
 
 export interface IInventoryState {
-    activeItemId: number | null
+    activeItemId: string | null
     isOpen: boolean
 }
 export interface IInventory {
-    inventory: Array<IWeapon | IArmor | IPotion>
+    inventory: Array<AllItemTypes>
+    gold: number
 }

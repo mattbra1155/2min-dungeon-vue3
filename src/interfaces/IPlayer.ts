@@ -1,7 +1,9 @@
-import { iPerson } from '@/interfaces/Person'
+import { Profession } from '@/assets/models/professionModel'
+import { IPerson } from '@/interfaces/Person'
+import { IStats } from '@/interfaces/IStats'
 
-export interface IPlayer extends iPerson {
-    id: number
+export interface IPlayer extends IPerson {
     player: boolean
-    profession: string
+    profession: Profession | undefined
+    advancedStats: Partial<IStats>[]
 }

@@ -1,15 +1,18 @@
 import { EModifierTypes } from '@/enums/EModifierTypes'
 import { IStats } from '@/interfaces/IStats'
-import { IMonster } from './IMonster'
+import { MonsterModel } from '@/assets/models/monsterModel'
 import { PlayerModel } from '@/assets/models/playerModel'
+import { Modifiers } from '@/assets/models/modifiersModel'
+
+export type IModifiersList = Partial<IStats> | Partial<{ damage: number; encumberence: number }>
 
 export interface IModifierItem {
     id: string
     name: string
     type: EModifierTypes | null
-    modifiers: Partial<IStats>
-    owner: PlayerModel | IMonster | undefined
-    target: PlayerModel | IMonster | undefined
+    modifiers: IModifiersList
+    owner: PlayerModel | MonsterModel | undefined
+    target: PlayerModel | MonsterModel | undefined
     duration: {
         current: number | undefined
         max: number | undefined

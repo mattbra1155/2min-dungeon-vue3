@@ -1,7 +1,6 @@
 import { EModifierTypes } from '@/enums/EModifierTypes'
-import { IModifierItem } from '@/interfaces/IModifiers'
-import { IMonster } from '@/interfaces/IMonster'
-import { IStats } from '@/interfaces/IStats'
+import { IModifierItem, IModifiersList } from '@/interfaces/IModifiers'
+import { MonsterModel } from '@/assets/models/monsterModel'
 import { PlayerModel } from './playerModel'
 
 class ModifierItem implements IModifierItem {
@@ -9,9 +8,9 @@ class ModifierItem implements IModifierItem {
         public id: string,
         public name: string,
         public type: EModifierTypes,
-        public modifiers: Partial<IStats>,
-        public owner: PlayerModel | IMonster | undefined,
-        public target: PlayerModel | IMonster | undefined,
+        public modifiers: IModifiersList,
+        public owner: PlayerModel | MonsterModel | undefined,
+        public target: PlayerModel | MonsterModel | undefined,
         public updateOnBeginning: boolean = true,
         public duration: {
             isActive: boolean

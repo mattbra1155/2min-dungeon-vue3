@@ -1,126 +1,149 @@
 import { diceRollK100, diceRollK6 } from '@/assets/scripts/diceRoll'
 import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
-import { stats } from '@/assets/models/statsModel'
-import { iPerson } from '@/interfaces/Person'
+import { IPerson } from '@/interfaces/Person'
 import { iBodyPart } from '@/interfaces/BodyParts'
-import { IMonster } from '@/interfaces/IMonster'
-import { Inventory } from './inventoryModel'
-import { PlayerModel } from './playerModel'
-import { Weapon } from './itemsModel'
+import { Inventory } from '@/assets/models/inventoryModel'
+import { PlayerModel } from '@/assets/models//playerModel'
+import { Weapon } from '@/assets/models//itemsModel'
+import { Modifiers } from '@/assets/models/modifiersModel'
+import { IStats } from '@/interfaces/IStats'
+import { EModifierTypes } from '@/enums/EModifierTypes'
+import { EStats } from '@/enums/EStats'
+import { MonsterModel } from '@/assets/models/monsterModel'
+import { stats as statsModel } from '@/assets/models/statsModel'
 
-const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
-const {
-    hp,
-    melee,
-    ranged,
-    dexterity,
-    strength,
-    thoughtness,
-    speed,
-    initiative,
-    attacks,
-    inteligence,
-    willPower,
-    charisma,
-} = stats
-
-class PersonModel implements iPerson {
+class PersonModel implements IPerson {
     constructor(
+        public id: string = self.crypto.randomUUID(),
         public name: string = '',
         public race: string = '',
-        public stats: {
-            hp: number
-            melee: number
-            ranged: number
-            dexterity: number
-            strength: number
-            thoughtness: number
-            speed: number
-            initiative: number
-            attacks: number
-            inteligence: number
-            willPower: number
-            charisma: number
-        } = {
-            hp,
-            melee,
-            ranged,
-            dexterity,
-            strength,
-            thoughtness,
-            speed,
-            initiative,
-            attacks,
-            inteligence,
-            willPower,
-            charisma,
-        },
-        public bodyParts: iBodyPart = {
-            head,
-            leftArm,
-            rightArm,
-            torso,
-            leftLeg,
-            rightLeg,
-        },
+        public stats: IStats = structuredClone(statsModel),
+        public currentStats: IStats = structuredClone(statsModel),
+        public bodyParts: iBodyPart = bodyPartsModel,
         public weapon: Weapon | null = null,
         public description: string = '',
         public inventory: Inventory,
-        public isAlive: boolean = true
+        public isAlive: boolean = true,
+        public modifiers: Modifiers
     ) {}
 
-    attack(enemy: IMonster | PlayerModel) {
+    async clearCurrentStats() {
+        this.currentStats = JSON.parse(JSON.stringify(this.stats))
+    }
+
+    attack(enemy: MonsterModel | PlayerModel) {
         // dice roll
         const diceRollHitResult = diceRollK100()
         console.log(`Dice roll: ${diceRollHitResult}`)
+
+        // set temp character stats for attack
+        const attackStats: IStats = JSON.parse(JSON.stringify(this.currentStats))
+
+        const addModifiers = () => {
+            this.modifiers.list.forEach((modifier) => {
+                if (modifier.type !== EModifierTypes.Attack) {
+                    return
+                }
+                if (modifier.modifiers !== EStats) {
+                    return
+                }
+                const mods = Object.entries(modifier.modifiers)
+                mods.forEach((modItem) => {
+                    const statName = Object.values(EStats).find((stat) => stat === modItem[0])
+                    if (!statName) {
+                        throw new Error('No statName')
+                    }
+                    if (modItem[0] === statName) {
+                        attackStats[statName] += modItem[1]
+                    }
+                })
+            })
+        }
+
+        addModifiers()
+
         // check if attack hits
-        if (this.stats.melee > diceRollHitResult) {
-            const diceRollBodyPartResult = diceRollK100()
+        if (diceRollHitResult > attackStats.melee) {
+            console.log(`${this.name} missed`)
+            return
+        }
 
-            console.log(`Body part hit result: ${diceRollBodyPartResult}`)
+        const diceRollBodyPartResult = diceRollK100()
+        console.log(`Body part hit result: ${diceRollBodyPartResult}`)
 
-            const getBodyPart = () => {
-                if (diceRollBodyPartResult >= 1 && diceRollBodyPartResult <= 15) {
-                    console.log(`${this.name} hit ${enemy.name} in the Head`)
-                    return enemy.bodyParts['head']
-                } else if (diceRollBodyPartResult >= 16 && diceRollBodyPartResult <= 35) {
-                    console.log(`${this.name} hit ${enemy.name} in the Right arm`)
-                    return enemy.bodyParts.rightArm
-                } else if (diceRollBodyPartResult >= 36 && diceRollBodyPartResult <= 55) {
-                    console.log(`${this.name} hit ${enemy.name} in the Left arm`)
-                    return enemy.bodyParts.leftArm
-                } else if (diceRollBodyPartResult >= 56 && diceRollBodyPartResult <= 80) {
-                    console.log(`${this.name} hit ${enemy.name} in the Torso`)
-                    return enemy.bodyParts['torso']
-                } else if (diceRollBodyPartResult >= 81 && diceRollBodyPartResult <= 90) {
-                    console.log(`${this.name} hit ${enemy.name} in the Right leg`)
-                    return enemy.bodyParts.rightLeg
-                } else if (diceRollBodyPartResult >= 91 && diceRollBodyPartResult <= 100) {
-                    console.log(`${this.name} hit ${enemy.name} in the Left leg`)
-                    return enemy.bodyParts.leftLeg
+        const getBodyPart = () => {
+            if (diceRollBodyPartResult >= 1 && diceRollBodyPartResult <= 15) {
+                console.log(`${this.name} hit ${enemy.name} in the Head`)
+                return enemy.bodyParts['head']
+            } else if (diceRollBodyPartResult >= 16 && diceRollBodyPartResult <= 35) {
+                console.log(`${this.name} hit ${enemy.name} in the Right arm`)
+                return enemy.bodyParts.rightArm
+            } else if (diceRollBodyPartResult >= 36 && diceRollBodyPartResult <= 55) {
+                console.log(`${this.name} hit ${enemy.name} in the Left arm`)
+                return enemy.bodyParts.leftArm
+            } else if (diceRollBodyPartResult >= 56 && diceRollBodyPartResult <= 80) {
+                console.log(`${this.name} hit ${enemy.name} in the Torso`)
+                return enemy.bodyParts['torso']
+            } else if (diceRollBodyPartResult >= 81 && diceRollBodyPartResult <= 90) {
+                console.log(`${this.name} hit ${enemy.name} in the Right leg`)
+                return enemy.bodyParts.rightLeg
+            } else if (diceRollBodyPartResult >= 91 && diceRollBodyPartResult <= 100) {
+                console.log(`${this.name} hit ${enemy.name} in the Left leg`)
+                return enemy.bodyParts.leftLeg
+            }
+        }
+
+        const savedBodyPart = getBodyPart()
+
+        const enemyArmorPoints = savedBodyPart?.armor.armorPoints
+
+        // Calculate damage
+        const damage = () => {
+            const damageDiceRoll = diceRollK6()
+            let damagePoints = 0
+
+            const weaponDamage = (): number => {
+                if (!this.weapon) {
+                    return 0
                 }
+
+                let baseDamage = 0
+                let modifierDamage = 0
+
+                const getModifierDamage = (): number => {
+                    let sum = 0
+                    this.modifiers.list.forEach((modifier) => {
+                        if (typeof modifier.modifiers !== 'number') {
+                            return 0
+                        }
+
+                        sum += modifier.modifiers
+                        console.log(this.weapon, modifier.modifiers, sum)
+                    })
+                    return sum
+                }
+
+                baseDamage = this.weapon.damage
+                modifierDamage = getModifierDamage()
+
+                const damage = baseDamage + modifierDamage
+
+                return damage
             }
 
-            const savedBodyPart = getBodyPart()
+            damagePoints += attackStats.strength
+            damagePoints += enemyArmorPoints ? enemyArmorPoints : 0
+            damagePoints += weaponDamage()
+            damagePoints += damageDiceRoll
+            damagePoints -= enemy.currentStats.thoughtness
 
-            const enemyArmorPoints = savedBodyPart?.armor.armorPoints
-            // const enemyArmorName = savedBodyPart.name
-
-            // Calculate damage
-            const damage = () => {
-                const damageDiceRoll = diceRollK6()
-                let damagePoints =
-                    this.stats.strength -
-                    enemy.stats.thoughtness -
-                    (enemyArmorPoints ? enemyArmorPoints : 0) +
-                    ((this.weapon === null ? 0 : this.weapon.damage) + damageDiceRoll)
-                if (damagePoints < 0) {
-                    damagePoints = 0
-                }
-                console.log(damagePoints)
-                return damagePoints
+            if (damagePoints < 0) {
+                damagePoints = 0
             }
-            /*  turn.turns.unshift({
+            console.log('damage', damagePoints)
+            return damagePoints
+        }
+        /*  turn.turns.unshift({
                 person: this,
                 action: `${this.name} rolls: ${diceRollHitResult} and hit's ${
                     enemy.name
@@ -129,23 +152,20 @@ class PersonModel implements iPerson {
                 }`
             }) */
 
-            // reduce health
-            // playerTakeDamage(damage())
-            const finalDamage = damage()
+        const finalDamage = damage()
 
-            if (finalDamage) {
-                console.log(`${enemy.name} took ${finalDamage} damage`)
-                enemy.stats.hp -= finalDamage
-                return finalDamage | 0
-            }
+        if (finalDamage) {
+            console.log(`${enemy.name} took ${finalDamage} damage`)
+            enemy.currentStats.hp -= finalDamage
+            return finalDamage | 0
         }
-        // } else {
-        //     // add action to the turn array
-        //     /* turn.turns.unshift({
-        //         person: this,
-        //         action: `${this.name} rolls: ${diceRollHitResult} and misses.`
-        //     }) */
-        // }
     }
+    // } else {
+    //     // add action to the turn array
+    //     /* turn.turns.unshift({
+    //         person: this,
+    //         action: `${this.name} rolls: ${diceRollHitResult} and misses.`
+    //     }) */
+    // }
 }
 export { PersonModel }
