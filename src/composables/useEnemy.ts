@@ -1,10 +1,6 @@
 import { reactive, toRefs } from 'vue'
-import { MonsterModel } from '@/interfaces/MonsterModel'
-import { useAttack } from '@/composables/useAttack'
+import { MonsterModel } from '@/assets/models/monsterModel'
 import { PlayerModel } from '@/assets/models/playerModel'
-
-// const { activeCharacter } = useTurn()
-const { attack } = useAttack()
 
 const state = reactive({
     enemy: <MonsterModel>{},

@@ -1,0 +1,41 @@
+{
+    "warrior": [
+        {
+            "id": "prof-0",
+            "name": "mercenary",
+            "description": "The Mercenary fights for money, the spoils of war, and the taste of blood. All Mercenaries dream of untold riches; for most of them, the reality consists of an early death and an unmarked grave. Mercenaries roam the Old World, from one war to another - inevitably someone will hire their swords to settle a grievance. Rich Nobles, Merchants, and others take on Mercenaries to bring an argument to a swift conclusion; the Old World kingdoms generate enough conflict to keep many thousands of Mercenaries fully employed. Eventually, however, the wiser ones realise that there is no crock of gold for the hired fighter, and so they turn to adventuring for variety or in search of greater rewards.",
+            "statsDevelopment": {
+                "hp": 2,
+                "melee": 10,
+                "ranged": 10,
+                "dexterity": 0,
+                "strength": 1,
+                "thoughtness": 0,
+                "speed": 0,
+                "initiative": 10,
+                "attacks": 1,
+                "inteligence": 0,
+                "willPower": 0,
+                "charisma": 0
+            }
+        },
+        {
+            "id": "prof-1",
+            "name": "bounty hunter",
+            "statsDevelopment": {
+                "hp": 2,
+                "melee": 10,
+                "ranged": 10,
+                "dexterity": 0,
+                "strength": 1,
+                "thoughtness": 0,
+                "speed": 0,
+                "initiative": 10,
+                "attacks": 0,
+                "inteligence": 0,
+                "willPower": 0,
+                "charisma": 0
+            }
+        }
+    ]
+}

@@ -10,26 +10,15 @@ import { IStats } from '@/interfaces/IStats'
 import { EModifierTypes } from '@/enums/EModifierTypes'
 import { EStats } from '@/enums/EStats'
 import { MonsterModel } from '@/assets/models/monsterModel'
+import { stats as statsModel } from '@/assets/models/statsModel'
+
 class PersonModel implements IPerson {
     constructor(
         public id: string = self.crypto.randomUUID(),
         public name: string = '',
         public race: string = '',
-        public stats: IStats = {
-            hp: 0,
-            melee: 0,
-            ranged: 0,
-            dexterity: 0,
-            strength: 0,
-            thoughtness: 0,
-            speed: 0,
-            initiative: 0,
-            attacks: 0,
-            inteligence: 0,
-            willPower: 0,
-            charisma: 0,
-        },
-        public currentStats: IStats = stats,
+        public stats: IStats = structuredClone(statsModel),
+        public currentStats: IStats = structuredClone(statsModel),
         public bodyParts: iBodyPart = bodyPartsModel,
         public weapon: Weapon | null = null,
         public description: string = '',
@@ -48,7 +37,7 @@ class PersonModel implements IPerson {
         console.log(`Dice roll: ${diceRollHitResult}`)
 
         // set temp character stats for attack
-        const attackStats = JSON.parse(JSON.stringify(this.currentStats))
+        const attackStats: IStats = JSON.parse(JSON.stringify(this.currentStats))
 
         const addModifiers = () => {
             this.modifiers.list.forEach((modifier) => {
@@ -74,7 +63,7 @@ class PersonModel implements IPerson {
         addModifiers()
 
         // check if attack hits
-        if (attackStats.melee < diceRollHitResult) {
+        if (diceRollHitResult > attackStats.melee) {
             console.log(`${this.name} missed`)
             return
         }
@@ -113,16 +102,15 @@ class PersonModel implements IPerson {
             const damageDiceRoll = diceRollK6()
             let damagePoints = 0
 
-            const weaponDamage = () => {
+            const weaponDamage = (): number => {
                 if (!this.weapon) {
                     return 0
                 }
 
                 let baseDamage = 0
-                let prefixDamage = 0
                 let modifierDamage = 0
 
-                const getModifierDamage = () => {
+                const getModifierDamage = (): number => {
                     let sum = 0
                     this.modifiers.list.forEach((modifier) => {
                         if (typeof modifier.modifiers !== 'number') {
@@ -136,10 +124,9 @@ class PersonModel implements IPerson {
                 }
 
                 baseDamage = this.weapon.damage
-                prefixDamage = this.weapon.prefix.modifier
                 modifierDamage = getModifierDamage()
 
-                const damage = baseDamage + prefixDamage + modifierDamage
+                const damage = baseDamage + modifierDamage
 
                 return damage
             }
@@ -148,7 +135,7 @@ class PersonModel implements IPerson {
             damagePoints += enemyArmorPoints ? enemyArmorPoints : 0
             damagePoints += weaponDamage()
             damagePoints += damageDiceRoll
-            damagePoints -= enemy.stats.thoughtness
+            damagePoints -= enemy.currentStats.thoughtness
 
             if (damagePoints < 0) {
                 damagePoints = 0
@@ -167,11 +154,9 @@ class PersonModel implements IPerson {
 
         const finalDamage = damage()
 
-        if (finalDamage) {
-            console.log(`${enemy.name} took ${finalDamage} damage`)
-            enemy.stats.hp -= finalDamage
-            return finalDamage | 0
-        }
+        console.log(`${enemy.name} took ${finalDamage} damage`)
+        enemy.currentStats.hp -= finalDamage
+        return finalDamage | 0
     }
     // } else {
     //     // add action to the turn array

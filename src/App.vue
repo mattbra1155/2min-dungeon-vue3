@@ -7,7 +7,7 @@ import InventoryPanel from './components/InventoryPanel.vue'
 import CharacterScreen from './components/CharacterScreen.vue'
 import { PlayerModel } from './assets/models/playerModel'
 
-const { fetchPlayer, setPlayer } = usePlayer()
+const { fetchPlayer, setPlayer, player: pp } = usePlayer()
 const { activeGameState, updateGameState } = useGameStateManager()
 const router = useRouter()
 
@@ -16,6 +16,7 @@ const init = async () => {
     if (activeGameState.value === EGameState.Init) {
         const player: PlayerModel | undefined = await fetchPlayer()
         if (player) {
+            console.log(player)
             await setPlayer(player)
             updateGameState(EGameState.Battle)
             console.log(player)

@@ -30,7 +30,7 @@ export const useTurn = () => {
         if (!scene.value) {
             return new Error('No scene')
         }
-        const sorted = scene.value.enemy.sort((a, b) => b.stats.initiative - a.stats.initiative)
+        const sorted = scene.value.enemy.sort((a, b) => b.currentStats.initiative - a.currentStats.initiative)
         state.turnOrder = sorted
         return sorted
     }
@@ -97,12 +97,13 @@ export const useTurn = () => {
     const checkIfDead = () => {
         console.log('checking who is dead...')
         state.turnOrder.forEach((enemy) => {
-            if (enemy.stats.hp <= 0) {
+            console.log(enemy)
+            if (enemy.currentStats.hp <= 0) {
                 console.log(`${enemy.name} is dead`)
                 removeDeadFromOrder(enemy)
             }
         })
-        if (player.value && player.value.stats.hp <= 0) {
+        if (player.value && player.value.currentStats.hp <= 0) {
             console.log('Player dead')
             player.value.isAlive = false
             updateGameState(EGameState.PlayerDead)
@@ -121,5 +122,6 @@ export const useTurn = () => {
         ...toRefs(state),
         sortTurnOrder,
         updateTurnStateMachine,
+        checkIfDead,
     }
 }

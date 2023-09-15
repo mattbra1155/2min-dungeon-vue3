@@ -31,7 +31,9 @@
         gap: 0.5rem
         width: 100%
         list-style: none
-        overflow: auto
+        overflow: scroll
+        &.--noScroll
+            overflow: initial
     &__item
         display: flex
         flex-direction: row
