@@ -3,7 +3,7 @@ import { IModifierDamageOverTime, IModifierItem, IModifierStatus } from '@/inter
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { PlayerModel } from './playerModel'
 import { diceRollK100 } from '@/assets/scripts/diceRoll'
-import modifiers from '@/assets/json/modifiers.json'
+import { statusList } from '@/assets/json/modifiers.json'
 
 class ModifierItem implements IModifierItem {
     constructor(
@@ -50,14 +50,14 @@ class ModifierDamageOverTime extends ModifierItem implements IModifierDamageOver
         public owner: PlayerModel | MonsterModel | undefined,
         public target: PlayerModel | MonsterModel | undefined,
         public chanceToApply: number | null = null,
-        public effectId: string
+        public statusId: string
     ) {
         super(id, name, type, owner, target)
         this.chanceToApply = chanceToApply
     }
 
     private applyEffect(target: PlayerModel | MonsterModel, modifierId: string) {
-        const modifierData = modifiers.find((mod) => mod.id === modifierId)
+        const modifierData = statusList.find((mod) => mod.id === modifierId)
         if (!modifierData) {
             console.error('No modifier found')
             return
@@ -78,6 +78,7 @@ class ModifierDamageOverTime extends ModifierItem implements IModifierDamageOver
         )
 
         target.modifiers.addItem(status)
+        console.log(`Applied status: ${status.name}`)
     }
 
     use() {
@@ -86,7 +87,7 @@ class ModifierDamageOverTime extends ModifierItem implements IModifierDamageOver
             return
         }
         if (this.chanceToApply && roll <= this.chanceToApply) {
-            this.applyEffect(this.target, this.effectId)
+            this.applyEffect(this.target, this.statusId)
         }
     }
 }

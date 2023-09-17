@@ -17,7 +17,7 @@ export interface IModifierItem {
 
 export interface IModifierDamageOverTime extends Omit<IModifierItem, 'modifiers' | 'owner'> {
     chanceToApply: number | null
-    effectId: string
+    statusId: string
 }
 
 export interface IModifierStatus extends IModifierItem {

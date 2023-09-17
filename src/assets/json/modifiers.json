@@ -1,11 +1,21 @@
-[
-    {
-        "id": "bleeding",
-        "name": "Bleeding",
-        "duration": {
-            "isActive": true,
-            "max": 3
-        },
-        "updateOnBeginning": false
-    }
-]
+{
+    "statusList": [
+        {
+            "id": "bleeding_status",
+            "name": "Bleeding",
+            "duration": {
+                "isActive": true,
+                "max": 3
+            },
+            "updateOnBeginning": false
+        }
+    ],
+    "modifierList": [
+        {
+            "id": "bleeding_chance",
+            "name": "Bleeding chance",
+            "chanceToApply": 50,
+            "statusId": "bleeding_status",
+        }
+    ]
+}
