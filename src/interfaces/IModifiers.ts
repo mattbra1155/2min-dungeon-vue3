@@ -3,6 +3,7 @@ import { IStats } from '@/interfaces/IStats'
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { Modifiers } from '@/assets/models/modifiersModel'
+import { ModifierDamageOverTime, ModifierStatus } from '@/assets/models/modifierItemModel'
 
 export type IModifiersList = Partial<IStats> | Partial<{ damage: number; encumberence: number }>
 
@@ -12,19 +13,25 @@ export interface IModifierItem {
     type: EModifierTypes | null
     owner: PlayerModel | MonsterModel | undefined
     target: PlayerModel | MonsterModel | undefined
-    updateOnBeginning: boolean
 }
 
-export interface IModifierDamageOverTime extends Omit<IModifierItem, 'modifiers'> {
+export interface IModifierDamageOverTime extends Omit<IModifierItem, 'modifiers' | 'owner'> {
     chanceToApply: number | null
     effectId: string
+}
+
+export interface IModifierStatus extends IModifierItem {
     duration: {
         isActive: boolean
         current: number | undefined
         max: number | undefined
     }
+    origin: PlayerModel | MonsterModel | undefined
+    updateOnBeginning: boolean
 }
 
+export type IModifierTypes = ModifierStatus | ModifierDamageOverTime
+
 export interface IModifiers {
-    list: IModifierItem[]
+    list: (ModifierStatus | ModifierDamageOverTime)[]
 }

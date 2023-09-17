@@ -1,16 +1,16 @@
 import { IModifiers } from '@/interfaces/IModifiers'
-import { ModifierItem } from '@/assets/models/modifierItemModel'
+import { ModifierDamageOverTime, ModifierItem, ModifierStatus } from '@/assets/models/modifierItemModel'
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { EStats } from '@/enums/EStats'
 
 class Modifiers implements IModifiers {
-    constructor(public list: ModifierItem[] = []) {
+    constructor(public list: (ModifierDamageOverTime | ModifierStatus)[] = []) {
         this.list = list
     }
 
-    addItem(item: ModifierItem) {
-        const itemExists = this.list.find((element: ModifierItem) => element.id === item.id)
+    addItem(item: ModifierStatus | ModifierDamageOverTime) {
+        const itemExists = this.list.find((element) => element.id === item.id)
 
         if (!itemExists) {
             this.list.push(item)
@@ -18,9 +18,9 @@ class Modifiers implements IModifiers {
     }
 
     removeItem(itemId: string) {
-        const itemToRemove: ModifierItem | undefined = this.list.find((element: ModifierItem) => element.id === itemId)
+        const itemToRemove = this.list.find((element) => element.id === itemId)
         if (itemToRemove) {
-            const itemIndex = this.list.findIndex((element: ModifierItem) => element.id === itemToRemove.id)
+            const itemIndex = this.list.findIndex((element) => element.id === itemToRemove.id)
             this.list.splice(itemIndex)
             console.log('Removed modifier from list:', this.list)
         } else {
@@ -31,16 +31,20 @@ class Modifiers implements IModifiers {
     updateModifiers(character: PlayerModel | MonsterModel, turn: number) {
         // check duration and remove
         this.list.forEach((modifier) => {
-            if (!modifier.duration.isActive) {
-                modifier.duration.max = turn + modifier.duration.max
-                modifier.duration.current = turn
+            const status = modifier as ModifierStatus
+            if (!status.duration.isActive) {
                 return
             }
-            modifier.duration.current++
+            if (status.duration.max) {
+                status.duration.max = turn + status.duration.max
+            }
+            status.duration.current = turn
 
-            if (modifier.duration.current === modifier.duration.max) {
-                this.removeItem(modifier.id)
-                console.log(`Removed modifier: ${modifier.name}`)
+            status.duration.current++
+
+            if (status.duration.current === status.duration.max) {
+                this.removeItem(status.id)
+                console.log(`Removed status: ${status.name}`)
                 this.updateCurrentStats(character)
             }
         })
@@ -51,7 +55,7 @@ class Modifiers implements IModifiers {
         character.clearCurrentStats()
         // check and add new modifiers
         this.list.forEach((modifier) => {
-            const mods = Object.entries(modifier.modifiers)
+            const mods = Object.entries(modifier)
             mods.forEach((xxx) => {
                 const statName = Object.values(EStats).find((stat) => stat === xxx[0])
                 if (!statName) {

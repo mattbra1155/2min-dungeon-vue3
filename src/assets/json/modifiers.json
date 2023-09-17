@@ -1,84 +1,11 @@
 [
     {
-        "id": 0,
-        "name": "damage increase - 1",
-        "type": "attack",
-        "owner": "",
-        "target": "",
-        "modifiers": 1,
-        "updateOnBeginning": true,
+        "id": "bleeding",
+        "name": "Bleeding",
         "duration": {
-            "isActive": false,
-            "current": 0,
-            "max": 0
-        }
-    },
-    {
-        "id": 0,
-        "name": "damage increase - 2",
-        "type": "attack",
-        "owner": "",
-        "target": "",
-        "modifiers": 2,
-        "updateOnBeginning": true,
-        "duration": {
-            "isActive": false,
-            "current": 0,
-            "max": 0
-        }
-    },
-    {
-        "id": 0,
-        "name": "Stat increase - hp +10",
-        "type": "passive",
-        "owner": "",
-        "target": "",
-        "modfifiers": {
-            "hp": 10,
-            "melee": 0,
-            "ranged": 0,
-            "dexterity": 0,
-            "strength": 0,
-            "thoughtness": 0,
-            "speed": 0,
-            "initiative": 0,
-            "attacks": 0,
-            "inteligence": 0,
-            "willPower": 0,
-            "charisma": 0
+            "isActive": true,
+            "max": 3
         },
-        "updateOnBeginning": true,
-        "duration": {
-            "isActive": false,
-            "current": 0,
-            "max": 0
-        }
-    },
-    {
-        "id": 0,
-        "name": "Stat increase - melee +10",
-        "type": "passive",
-        "owner": "",
-        "target": "",
-        "modfifiers": {
-            "hp": 0,
-            "melee": 10,
-            "ranged": 0,
-            "dexterity": 0,
-            "strength": 0,
-            "thoughtness": 0,
-            "speed": 0,
-            "initiative": 0,
-            "attacks": 0,
-            "inteligence": 0,
-            "willPower": 0,
-            "charisma": 0
-        },
-        "updateOnBeginning": true,
-        "duration": {
-            "isActive": false,
-            "current": 0,
-            "max": 0
-        }
+        "updateOnBeginning": false
     }
 ]
