@@ -1,15 +1,15 @@
 import { IModifiers } from '@/interfaces/IModifiers'
-import { ModifierDamageOverTime, ModifierItem, ModifierStatus } from '@/assets/models/modifierItemModel'
+import { ModifierItem, ModifierStatus } from '@/assets/models/modifierItemModel'
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { EStats } from '@/enums/EStats'
 
 class Modifiers implements IModifiers {
-    constructor(public list: (ModifierDamageOverTime | ModifierStatus)[] = []) {
+    constructor(public list: (ModifierItem | ModifierStatus)[] = [], public ownerId: string | undefined = undefined) {
         this.list = list
     }
 
-    addItem(item: ModifierStatus | ModifierDamageOverTime) {
+    addItem(item: ModifierStatus | ModifierItem) {
         const itemExists = this.list.find((element) => element.id === item.id)
 
         if (!itemExists) {

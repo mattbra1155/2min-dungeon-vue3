@@ -1,11 +1,11 @@
 import { EModifierTypes } from '@/enums/EModifierTypes'
-import { IModifierDamageOverTime, IModifierItem, IModifierStatus } from '@/interfaces/IModifiers'
+import { IModifierBase, IModifierStatus, IModiferItem } from '@/interfaces/IModifiers'
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { PlayerModel } from './playerModel'
 import { diceRollK100 } from '@/assets/scripts/diceRoll'
 import { statusList } from '@/assets/json/modifiers.json'
 
-class ModifierItem implements IModifierItem {
+class ModifierBase implements IModifierBase {
     constructor(
         public id: string,
         public name: string,
@@ -21,7 +21,7 @@ class ModifierItem implements IModifierItem {
     }
 }
 
-class ModifierStatus extends ModifierItem implements IModifierStatus {
+class ModifierStatus extends ModifierBase implements IModifierStatus {
     constructor(
         public id: string = `status-${self.crypto.randomUUID()}`,
         public name: string,
@@ -42,7 +42,7 @@ class ModifierStatus extends ModifierItem implements IModifierStatus {
     }
 }
 
-class ModifierDamageOverTime extends ModifierItem implements IModifierDamageOverTime {
+class ModifierItem extends ModifierBase implements IModiferItem {
     constructor(
         public id: string,
         public name: string,
@@ -56,7 +56,7 @@ class ModifierDamageOverTime extends ModifierItem implements IModifierDamageOver
         this.chanceToApply = chanceToApply
     }
 
-    private applyEffect(target: PlayerModel | MonsterModel, modifierId: string) {
+    applyEffect(target: PlayerModel | MonsterModel, modifierId: string) {
         const modifierData = statusList.find((mod) => mod.id === modifierId)
         if (!modifierData) {
             console.error('No modifier found')
@@ -92,4 +92,4 @@ class ModifierDamageOverTime extends ModifierItem implements IModifierDamageOver
     }
 }
 
-export { ModifierItem, ModifierDamageOverTime, ModifierStatus }
+export { ModifierItem, ModifierBase, ModifierStatus }

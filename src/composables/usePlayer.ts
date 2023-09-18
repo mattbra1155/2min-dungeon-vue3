@@ -21,6 +21,7 @@ export const usePlayer = () => {
     const setPlayer = async (payload: PlayerModel) => {
         await storePlayerModel()
         state.player = payload
+        console.log(payload, state.player)
         await localforage.setItem('player', JSON.stringify(payload))
         return state.player
     }

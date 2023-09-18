@@ -8,6 +8,14 @@
                 "max": 3
             },
             "updateOnBeginning": false
+        },
+        {
+            "id": "devastating_status",
+            "name": "Devastating",
+            "duration": {
+                "isActive": false
+            },
+            "updateOnBeginning": false
         }
     ],
     "modifierList": [
@@ -16,6 +24,14 @@
             "name": "Bleeding chance",
             "chanceToApply": 50,
             "statusId": "bleeding_status",
+            "type": "attack"
+        },
+        {
+            "id": "devastating_chance",
+            "name": "Devastating",
+            "chanceToApply": 100,
+            "statusId": "devastating_status",
+            "type": "attack"
         }
     ]
 }

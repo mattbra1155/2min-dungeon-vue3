@@ -1,11 +1,14 @@
-import { Weapon, Armor, Potion, Item, Gold } from '@/assets/models/itemsModel'
-import itemMods from '@/assets/json/itemMods.json'
+import { Weapon, Armor, Potion, Gold } from '@/assets/models/itemsModel'
+import itemList from '@/assets/json/items.json'
 import { AllItemTypes, IArmor, IGold, IWeapon } from '@/interfaces/IItem'
 import { EItemCategory } from '@/enums/ItemCategory'
-import { IModifierItem } from '@/interfaces/IModifiers'
+import { ModifierItem } from '../models/modifierItemModel'
+import { modifierList } from '@/assets/json/modifiers.json'
+import { EModifierTypes } from '@/enums/EModifierTypes'
+import { IModiferItem } from '@/interfaces/IModifiers'
 class ItemGenerator {
     private category: EItemCategory | null
-    private quality: IModifierItem | null
+    private quality: ModifierItem | null
     constructor() {
         this.category = null
         this.quality = null
@@ -33,13 +36,13 @@ class ItemGenerator {
             itemObject = new Potion()
         }
 
-        const itemCategory = itemMods[this.category]
+        const itemCategory = itemList[this.category]
         const randomItem = itemCategory.item[Math.floor(Math.random() * itemCategory.item.length)]
 
         if (this.category === EItemCategory.Armor) {
             const armorType =
-                itemMods[this.category].material[
-                    Math.floor(Math.floor(Math.random() * itemMods[this.category].material.length))
+                itemList[this.category].material[
+                    Math.floor(Math.floor(Math.random() * itemList[this.category].material.length))
                 ]
 
             const iii: Partial<IArmor> = {
@@ -72,16 +75,42 @@ class ItemGenerator {
         return `${this.category}-${id}`
     }
 
-    private createModifiers() {
+    private createModifiers(baseItem: AllItemTypes) {
         if (!this.category) {
             throw Error('no category')
         }
-        const id = `modifier-${self.crypto.randomUUID()}`
-        const modifierList: IModifierItem[] = []
 
-        // TO DO MODIFIERS AGAIN
+        const createdModifierList: IModiferItem[] = []
 
-        return modifierList
+        console.log(baseItem)
+        baseItem.modifiers.forEach((itemModifier) => {
+            const modifierData = modifierList.find((mod) => mod.id === itemModifier.id)
+            if (!modifierData) {
+                console.error(`modifier not found`)
+                return
+            }
+
+            const type = Object.values(EModifierTypes).find((cat) => cat === modifierData.type)
+            if (!type) {
+                console.error(`Modifier type incorrect -> ${modifierData.type}`)
+                return
+            }
+
+            const modifier = new ModifierItem(
+                modifierData.id,
+                modifierData.name,
+                type,
+                undefined,
+                undefined,
+                modifierData.chanceToApply,
+                modifierData.statusId
+            )
+
+            console.log(modifier)
+            createdModifierList.push(modifier)
+        })
+
+        return createdModifierList
     }
 
     createGold(amount = 0): Gold {
@@ -115,9 +144,10 @@ class ItemGenerator {
 
         const description = this.createDescription(itemBase)
         const id = this.addId()
-        const modifiers = this.createModifiers()
+        const modifiers = this.createModifiers(itemBase)
         let item = itemBase
 
+        console.log(modifiers)
         switch (category) {
             case EItemCategory.Weapon:
                 item = Object.assign(itemBase as Weapon, {
@@ -125,9 +155,9 @@ class ItemGenerator {
                     id,
                     description,
                     category,
-                    modifiers: modifiers,
+                    modifiers,
                     // damage: TO DO!
-                    // Damage comes now from itemMods json?,
+                    // Damage comes now from itemList json?,
                 })
                 break
             case EItemCategory.Armor:
@@ -136,7 +166,7 @@ class ItemGenerator {
                     id,
                     description,
                     category,
-                    modifiers: modifiers,
+                    modifiers,
                     // armorPoints:  TO DO!
                 })
                 break
@@ -146,7 +176,7 @@ class ItemGenerator {
                     id,
                     description,
                     category,
-                    modifiers: modifiers,
+                    modifiers,
                     // baseValue: TO DO!
                 })
                 break
