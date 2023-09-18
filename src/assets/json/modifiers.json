@@ -7,7 +7,8 @@
                 "isActive": true,
                 "max": 3
             },
-            "updateOnBeginning": false
+            "updateOnBeginning": false,
+            "type": "attack"
         },
         {
             "id": "devastating_status",
@@ -15,7 +16,17 @@
             "duration": {
                 "isActive": false
             },
-            "updateOnBeginning": false
+            "updateOnBeginning": false,
+            "type": "passive"
+        },
+        {
+            "id": "stun_bonus_status",
+            "name": "Stun bonus",
+            "duration": {
+                "isActive": false
+            },
+            "updateOnBeginning": false,
+            "type": "passive"
         }
     ],
     "modifierList": [
@@ -27,10 +38,17 @@
             "type": "attack"
         },
         {
-            "id": "devastating_chance",
+            "id": "devastating_passive",
             "name": "Devastating",
             "chanceToApply": 100,
             "statusId": "devastating_status",
+            "type": "attack"
+        },
+        {
+            "id": "stun_bonus_passive",
+            "name": "stun",
+            "chanceToApply": 100,
+            "statusId": "stun_bonus_status",
             "type": "attack"
         }
     ]

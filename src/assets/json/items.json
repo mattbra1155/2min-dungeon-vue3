@@ -4,14 +4,18 @@
             {
                 "type": "sword",
                 "damage": 0,
-                "modifiers": [],
+                "modifiers": [
+                    "devastating_passive"
+                ],
                 "isTwoHanded": false,
                 "price": 70
             },
             {
                 "type": "axe",
                 "damage": 0,
-                "modifiers": [],
+                "modifiers": [
+                    "devastating_passive"
+                ],
                 "isTwoHanded": false,
                 "price": 70
             },
@@ -19,8 +23,7 @@
                 "type": "two handed sword",
                 "damage": 2,
                 "modifiers": [
-                    "devastating",
-                    "slow"
+                    "devastating_passive"
                 ],
                 "isTwoHanded": true,
                 "price": 70
@@ -29,8 +32,7 @@
                 "type": "two handed axe",
                 "damage": 2,
                 "modifiers": [
-                    "devastating",
-                    "slow"
+                    "devastating_passive"
                 ],
                 "isTwoHanded": true,
                 "price": 70
@@ -45,9 +47,7 @@
             {
                 "type": "spear",
                 "damage": 0,
-                "modifiers": [
-                    "fast"
-                ],
+                "modifiers": [],
                 "isTwoHanded": false,
                 "price": 70
             },
@@ -55,8 +55,7 @@
                 "type": "staff",
                 "damage": -1,
                 "modifiers": [
-                    "stun",
-                    "parry"
+                    "stun_bonus_passive"
                 ],
                 "isTwoHanded": true,
                 "price": 70
@@ -215,6 +214,7 @@
             {
                 "type": "healing",
                 "baseValue": 1,
+                "modifiers": [],
                 "price": 70
             }
         ],
@@ -245,13 +245,15 @@
                 "name": "torch",
                 "baseValue": 0,
                 "type": "light source",
-                "price": 70
+                "price": 70,
+                "modifiers": []
             },
             {
                 "name": "lockpick",
                 "baseValue": 0,
                 "type": "lockpick",
-                "price": 70
+                "price": 70,
+                "modifiers": []
             }
         ],
         "quality": [

@@ -4,8 +4,10 @@ import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { EBodyParts } from '@/enums/EBodyParts'
-import { ModifierItem } from './modifierItemModel'
+import { ModifierItem, ModifierStatus } from './modifierItemModel'
 import { EItemCategory } from '@/enums/ItemCategory'
+import { statusList } from '@/assets/json/modifiers.json'
+import { EModifierTypes } from '@/enums/EModifierTypes'
 
 class Item implements IItem {
     constructor(
@@ -81,18 +83,39 @@ class Weapon extends Item implements IWeapon {
         }
         owner.weapon = this
         this.isEquipped = true
+
         // assign modifier to owner after equipping
         this.modifiers.forEach((modifier) => {
             const foundModifier = !!owner.modifiers.list.find((item) => item.id === modifier.id)
-
             if (foundModifier) {
                 console.log(`Modifier: "${modifier.name}" was already added`)
                 return
-            } else {
-                owner.modifiers.addItem(modifier)
             }
+
+            const statusData = statusList.find((status) => status.id === modifier.statusId)
+
+            if (!statusData) {
+                console.error(`no Status Data`)
+                return
+            }
+            const status = new ModifierStatus(
+                statusData.id,
+                statusData.name,
+                modifier.type,
+                undefined,
+                owner,
+                {
+                    isActive: statusData.duration.isActive,
+                    current: undefined,
+                    max: statusData.duration.max,
+                },
+                statusData.updateOnBeginning
+            )
+
+            owner.modifiers.addItem(status)
         })
-        owner.modifiers.updateCurrentStats(owner)
+        // TO DO apply/update stats
+        // owner.modifiers.updateCurrentStats(owner)
         console.log('wielded', this)
     }
 
@@ -159,15 +182,39 @@ class Armor extends Item implements IArmor {
         this.modifiers.forEach((modifier) => {
             const foundModifier = !!owner.modifiers.list.find((item) => item.id === modifier.id)
 
-            if (foundModifier) {
+            if (!foundModifier) {
                 console.log(`Modifier: "${modifier.name}" was already added`)
                 return
-            } else {
-                owner.modifiers.addItem(modifier)
             }
-            console.log('here')
+
+            if (modifier.type !== EModifierTypes.Passive) {
+                return
+            }
+
+            const statusData = statusList.find((status) => status.id === modifier.statusId)
+
+            if (!statusData) {
+                console.error(`no Status Data`)
+                return
+            }
+            const status = new ModifierStatus(
+                statusData.id,
+                statusData.name,
+                modifier.type,
+                undefined,
+                owner,
+                {
+                    isActive: statusData.duration.isActive,
+                    current: undefined,
+                    max: statusData.duration.max,
+                },
+                statusData.updateOnBeginning
+            )
+
+            owner.modifiers.addItem(status)
         })
-        owner.modifiers.updateCurrentStats(owner)
+        // TO DO apply/update stats
+        // owner.modifiers.updateCurrentStats(owner)
         console.log('Equipped', this)
     }
 

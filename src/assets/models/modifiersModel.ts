@@ -31,6 +31,7 @@ class Modifiers implements IModifiers {
     updateModifiers(character: PlayerModel | MonsterModel, turn: number) {
         // check duration and remove
         this.list.forEach((modifier) => {
+            console.log(modifier)
             const status = modifier as ModifierStatus
             if (!status.duration.isActive) {
                 return
@@ -45,7 +46,8 @@ class Modifiers implements IModifiers {
             if (status.duration.current === status.duration.max) {
                 this.removeItem(status.id)
                 console.log(`Removed status: ${status.name}`)
-                this.updateCurrentStats(character)
+                // TO DO apply/update stats
+                // this.updateCurrentStats(character)
             }
         })
     }

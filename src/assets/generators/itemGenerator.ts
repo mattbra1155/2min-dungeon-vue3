@@ -5,7 +5,7 @@ import { EItemCategory } from '@/enums/ItemCategory'
 import { ModifierItem } from '../models/modifierItemModel'
 import { modifierList } from '@/assets/json/modifiers.json'
 import { EModifierTypes } from '@/enums/EModifierTypes'
-import { IModiferItem } from '@/interfaces/IModifiers'
+import { IModiferItem, IModifierTypes } from '@/interfaces/IModifiers'
 class ItemGenerator {
     private category: EItemCategory | null
     private quality: ModifierItem | null
@@ -81,10 +81,17 @@ class ItemGenerator {
         }
 
         const createdModifierList: IModiferItem[] = []
+        if (this.category === EItemCategory.Gold) {
+            return
+        }
+        const itemCategory = itemList[this.category]
+        const itemModifiersData = itemCategory?.item.find((item) => item.type === baseItem.type)?.modifiers
+        itemModifiersData?.forEach((itemModifier) => {
+            const modifierData = modifierList.find((mod) => {
+                console.log(mod.id, itemModifier)
 
-        console.log(baseItem)
-        baseItem.modifiers.forEach((itemModifier) => {
-            const modifierData = modifierList.find((mod) => mod.id === itemModifier.id)
+                return mod.id === itemModifier
+            })
             if (!modifierData) {
                 console.error(`modifier not found`)
                 return
