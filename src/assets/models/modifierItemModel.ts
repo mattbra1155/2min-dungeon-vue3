@@ -40,6 +40,15 @@ class ModifierStatus extends ModifierBase implements IModifierStatus {
         this.duration = duration
         this.updateOnBeginning = updateOnBeginning
     }
+
+    use() {
+        if (this.type === EModifierTypes.DamageOverTime) {
+            if (!this.target) {
+                return
+            }
+            this.target.currentStats.hp -= 1
+        }
+    }
 }
 
 class ModifierItem extends ModifierBase implements IModiferItem {

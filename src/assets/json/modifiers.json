@@ -8,7 +8,7 @@
                 "max": 3
             },
             "updateOnBeginning": false,
-            "type": "attack"
+            "type": "damageOverTime"
         },
         {
             "id": "devastating_status",
