@@ -2,13 +2,14 @@ import { EModifierTypes } from '@/enums/EModifierTypes'
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { PlayerModel } from './playerModel'
 import { IStatusItem } from '@/interfaces/IStatus'
+import { AllItemTypes } from '@/interfaces/IItem'
 
 class StatusItem implements IStatusItem {
     constructor(
         public id: string = `status-${self.crypto.randomUUID()}`,
         public name: string,
         public type: EModifierTypes,
-        public origin: PlayerModel | MonsterModel | undefined,
+        public origin: PlayerModel | MonsterModel | AllItemTypes | undefined,
         public target: PlayerModel | MonsterModel | undefined,
         public duration: {
             isActive: boolean

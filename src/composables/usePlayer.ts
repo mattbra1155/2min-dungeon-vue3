@@ -7,6 +7,7 @@ import { Inventory } from '@/assets/models/inventoryModel'
 import { IArmor, IPotion, IWeapon } from '@/interfaces/IItem'
 import { ModifierItem } from '@/assets/models/modifierItemModel'
 import { Modifiers } from '@/assets/models/modifiersModel'
+import { Status } from '@/assets/models/statusModel'
 
 interface iPlayerState {
     player: PlayerModel
@@ -62,9 +63,10 @@ export const usePlayer = () => {
                 const inventory = new Inventory()
                 // create new modifiers class
                 const modifiers = new Modifiers()
-
+                const status = new Status()
                 newPlayer.inventory = inventory
                 newPlayer.modifiers = modifiers
+                newPlayer.status = status
 
                 const populateModifiers = () => {
                     console.log(playerData.modifiers)

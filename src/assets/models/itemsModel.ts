@@ -4,7 +4,7 @@ import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { EBodyParts } from '@/enums/EBodyParts'
-import { ModifierItem, ModifierStatus } from './modifierItemModel'
+import { ModifierItem } from './modifierItemModel'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { statusList } from '@/assets/json/modifiers.json'
 import { EModifierTypes } from '@/enums/EModifierTypes'
@@ -92,27 +92,10 @@ class Weapon extends Item implements IWeapon {
                 return
             }
 
-            const statusData = statusList.find((status) => status.id === modifier.statusId)
-
-            if (!statusData) {
-                console.error(`no Status Data`)
+            if (modifier.type !== EModifierTypes.Passive) {
                 return
             }
-            const status = new ModifierStatus(
-                statusData.id,
-                statusData.name,
-                modifier.type,
-                undefined,
-                owner,
-                {
-                    isActive: statusData.duration.isActive,
-                    current: undefined,
-                    max: statusData.duration.max,
-                },
-                statusData.updateOnBeginning
-            )
-
-            owner.modifiers.addItem(status)
+            modifier.use(owner)
         })
         // TO DO apply/update stats
         // owner.modifiers.updateCurrentStats(owner)
@@ -187,31 +170,9 @@ class Armor extends Item implements IArmor {
                 return
             }
 
-            if (modifier.type !== EModifierTypes.Passive) {
-                return
-            }
+            console.log(modifier)
 
-            const statusData = statusList.find((status) => status.id === modifier.statusId)
-
-            if (!statusData) {
-                console.error(`no Status Data`)
-                return
-            }
-            const status = new ModifierStatus(
-                statusData.id,
-                statusData.name,
-                modifier.type,
-                undefined,
-                owner,
-                {
-                    isActive: statusData.duration.isActive,
-                    current: undefined,
-                    max: statusData.duration.max,
-                },
-                statusData.updateOnBeginning
-            )
-
-            owner.modifiers.addItem(status)
+            modifier.use(owner)
         })
         // TO DO apply/update stats
         // owner.modifiers.updateCurrentStats(owner)

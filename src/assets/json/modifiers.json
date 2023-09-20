@@ -42,14 +42,14 @@
             "name": "Devastating",
             "chanceToApply": 100,
             "statusId": "devastating_status",
-            "type": "attack"
+            "type": "passive"
         },
         {
             "id": "stun_bonus_passive",
             "name": "stun",
             "chanceToApply": 100,
             "statusId": "stun_bonus_status",
-            "type": "attack"
+            "type": "passive"
         }
     ]
 }
