@@ -1,15 +1,15 @@
 import { IModifiers } from '@/interfaces/IModifiers'
-import { ModifierItem, ModifierStatus } from '@/assets/models/modifierItemModel'
+import { ModifierItem } from '@/assets/models/modifierItemModel'
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { EStats } from '@/enums/EStats'
 
 class Modifiers implements IModifiers {
-    constructor(public list: (ModifierItem | ModifierStatus)[] = [], public ownerId: string | undefined = undefined) {
+    constructor(public list: ModifierItem[] = []) {
         this.list = list
     }
 
-    addItem(item: ModifierStatus | ModifierItem) {
+    addItem(item: ModifierItem) {
         const itemExists = this.list.find((element) => element.id === item.id)
 
         if (!itemExists) {
@@ -28,48 +28,36 @@ class Modifiers implements IModifiers {
         }
     }
 
-    updateModifiers(character: PlayerModel | MonsterModel, turn: number) {
-        // check duration and remove
-        this.list.forEach((modifier) => {
-            console.log(modifier)
-            const status = modifier as ModifierStatus
-            if (!status.duration.isActive) {
-                return
-            }
-            if (status.duration.max) {
-                status.duration.max = turn + status.duration.max
-            }
-            status.duration.current = turn
+    // updateModifiers(character: PlayerModel | MonsterModel, turn: number) {
+    //     // check duration and remove
+    //     this.list.forEach((modifier) => {
+    //         if (status.duration.current === status.duration.max) {
+    //             this.removeItem(status.id)
+    //             console.log(`Removed status: ${status.name}`)
+    //             // TO DO apply/update stats
+    //             // this.updateCurrentStats(character)
+    //         }
+    //     })
+    // }
 
-            status.duration.current++
-
-            if (status.duration.current === status.duration.max) {
-                this.removeItem(status.id)
-                console.log(`Removed status: ${status.name}`)
-                // TO DO apply/update stats
-                // this.updateCurrentStats(character)
-            }
-        })
-    }
-
-    updateCurrentStats(character: PlayerModel | MonsterModel) {
-        // remove all applied modifiers
-        character.clearCurrentStats()
-        // check and add new modifiers
-        this.list.forEach((modifier) => {
-            const mods = Object.entries(modifier)
-            mods.forEach((xxx) => {
-                const statName = Object.values(EStats).find((stat) => stat === xxx[0])
-                if (!statName) {
-                    throw new Error('No statName')
-                }
-                if (xxx[0] === statName) {
-                    // need to update new acutal stast instead of basic stats
-                    character.currentStats[statName] += xxx[1]
-                }
-            })
-        })
-    }
+    // updateCurrentStats(character: PlayerModel | MonsterModel) {
+    //     // remove all applied modifiers
+    //     character.clearCurrentStats()
+    //     // check and add new modifiers
+    //     this.list.forEach((modifier) => {
+    //         const mods = Object.entries(modifier)
+    //         mods.forEach((xxx) => {
+    //             const statName = Object.values(EStats).find((stat) => stat === xxx[0])
+    //             if (!statName) {
+    //                 throw new Error('No statName')
+    //             }
+    //             if (xxx[0] === statName) {
+    //                 // need to update new acutal stast instead of basic stats
+    //                 character.currentStats[statName] += xxx[1]
+    //             }
+    //         })
+    //     })
+    // }
 }
 
 export { Modifiers }

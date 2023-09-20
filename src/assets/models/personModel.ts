@@ -11,6 +11,7 @@ import { EModifierTypes } from '@/enums/EModifierTypes'
 import { EStats } from '@/enums/EStats'
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { stats as statsModel } from '@/assets/models/statsModel'
+import { Status } from './statusModel'
 
 class PersonModel implements IPerson {
     constructor(
@@ -24,7 +25,8 @@ class PersonModel implements IPerson {
         public description: string = '',
         public inventory: Inventory,
         public isAlive: boolean = true,
-        public modifiers: Modifiers
+        public modifiers: Modifiers = new Modifiers(),
+        public status: Status = new Status()
     ) {}
 
     async clearCurrentStats() {
