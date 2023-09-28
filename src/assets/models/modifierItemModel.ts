@@ -64,6 +64,8 @@ class ModifierItem implements IModifierItem {
         if (!target) {
             return
         }
+        console.log('here')
+
         const roll = diceRollK100()
 
         if (this.chanceToApply && roll <= this.chanceToApply) {
