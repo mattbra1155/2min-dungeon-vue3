@@ -8,7 +8,7 @@
                 "max": 3
             },
             "updateOnBeginning": false,
-            "type": "damageOverTime"
+            "type": "attackBonusDamage"
         },
         {
             "id": "devastating_status",
@@ -17,7 +17,7 @@
                 "isActive": false
             },
             "updateOnBeginning": false,
-            "type": "passive"
+            "type": "attackBonusDamage"
         },
         {
             "id": "stun_bonus_status",
@@ -26,7 +26,7 @@
                 "isActive": false
             },
             "updateOnBeginning": false,
-            "type": "passive"
+            "type": "attackBonusDamage"
         }
     ],
     "modifierList": [

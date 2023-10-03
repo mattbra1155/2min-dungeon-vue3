@@ -95,6 +95,9 @@ class Weapon extends Item implements IWeapon {
             if (modifier.type !== EModifierTypes.Passive) {
                 return
             }
+            console.log(this)
+
+            console.log(modifier)
             modifier.use(owner)
         })
         // TO DO apply/update stats
@@ -106,6 +109,8 @@ class Weapon extends Item implements IWeapon {
         owner.weapon = null
         this.isEquipped = false
         console.log(`unequiped ${this.name}`)
+        // TO DO unequip removes status
+        // owner.status.removeItem()
         console.log(owner.inventory.inventory)
     }
 }

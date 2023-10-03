@@ -1,14 +1,14 @@
-import { IStatus, IStatusItem } from '@/interfaces/IStatus'
+import { IAllStatusTypes, IStatus, IStatusItem } from '@/interfaces/IStatus'
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { EStats } from '@/enums/EStats'
 
 class Status implements IStatus {
-    constructor(public list: IStatusItem[] = []) {
+    constructor(public list: IAllStatusTypes[] = []) {
         this.list = list
     }
 
-    addItem(item: IStatusItem) {
+    addItem(item: IAllStatusTypes) {
         const itemExists = this.list.find((element) => element.id === item.id)
 
         if (!itemExists) {
@@ -30,24 +30,22 @@ class Status implements IStatus {
     updateModifiers(character: PlayerModel | MonsterModel, turn: number) {
         // check duration and remove
         this.list.forEach((modifier) => {
-            console.log(modifier)
-            const status = modifier as IStatusItem
-            if (!status.duration.isActive) {
-                return
-            }
-            if (status.duration.max) {
-                status.duration.max = turn + status.duration.max
-            }
-            status.duration.current = turn
-
-            status.duration.current++
-
-            if (status.duration.current === status.duration.max) {
-                this.removeItem(status.id)
-                console.log(`Removed status: ${status.name}`)
-                // TO DO apply/update stats
-                // this.updateCurrentStats(character)
-            }
+            // console.log(modifier)
+            // const status = modifier as IStatusItem
+            // if (!status.duration.isActive) {
+            //     return
+            // }
+            // if (status.duration.max) {
+            //     status.duration.max = turn + status.duration.max
+            // }
+            // status.duration.current = turn
+            // status.duration.current++
+            // if (status.duration.current === status.duration.max) {
+            //     this.removeItem(status.id)
+            //     console.log(`Removed status: ${status.name}`)
+            //     // TO DO apply/update stats
+            //     // this.updateCurrentStats(character)
+            // }
         })
     }
 

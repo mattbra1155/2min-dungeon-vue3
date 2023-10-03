@@ -3,9 +3,11 @@ import { MonsterModel } from '@/assets/models/monsterModel'
 import { PlayerModel } from './playerModel'
 import { diceRollK100 } from '@/assets/scripts/diceRoll'
 import { EModifierTypes } from '@/enums/EModifierTypes'
-import { StatusItem } from './statusItemModel'
+import { StatusAttackBonusDamage, StatusItem } from './statusItemModel'
 import { statusList } from '@/assets/json/modifiers.json'
 import { AllItemTypes } from '@/interfaces/IItem'
+import { PersonModel } from './personModel'
+import { IAllStatusTypes } from '@/interfaces/IStatus'
 
 class ModifierItem implements IModifierItem {
     constructor(
@@ -26,7 +28,7 @@ class ModifierItem implements IModifierItem {
         this.statusId = statusId
     }
 
-    applyEffect(target: PlayerModel | MonsterModel, statusId: string) {
+    applyEffect(target: PersonModel, statusId: string) {
         const statusData = statusList.find((statusItem) => statusItem.id === statusId)
         console.log('apply')
 
@@ -41,26 +43,30 @@ class ModifierItem implements IModifierItem {
             console.error(`statusType undefined`)
             return
         }
-        console.log('satusType', statusType)
-        const status = new StatusItem(
-            `status-${self.crypto.randomUUID()}`,
-            this.name,
-            statusType,
-            undefined,
-            target,
-            {
-                isActive: statusData.duration.isActive,
-                current: undefined,
-                max: statusData.duration.max,
-            },
-            statusData.updateOnBeginning
-        )
 
+        let status: IAllStatusTypes | undefined = undefined
+        if (statusType === EModifierTypes.AttackBonusDamage) {
+            status = new StatusAttackBonusDamage(
+                `status-${self.crypto.randomUUID()}`,
+                this.name,
+                statusType,
+                undefined,
+                undefined,
+                false,
+                1
+            )
+        }
+        console.log('satusType', statusType)
+
+        if (!status) {
+            console.error('no status created')
+            return
+        }
         target.status.addItem(status)
         console.log(`Applied status: ${status.name}`)
     }
 
-    use(target: PlayerModel | MonsterModel) {
+    use(target: PersonModel) {
         if (!target) {
             return
         }

@@ -12,6 +12,7 @@ import { EStats } from '@/enums/EStats'
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { stats as statsModel } from '@/assets/models/statsModel'
 import { Status } from './statusModel'
+import { StatusAttackBonusDamage } from './statusItemModel'
 
 class PersonModel implements IPerson {
     constructor(
@@ -41,28 +42,18 @@ class PersonModel implements IPerson {
         // set temp character stats for attack
         const attackStats: IStats = JSON.parse(JSON.stringify(this.currentStats))
 
-        const addModifiers = () => {
-            this.modifiers.list.forEach((modifier) => {
-                if (modifier.type !== EModifierTypes.Attack) {
-                    return
-                }
-                if (modifier.modifiers !== EStats) {
-                    return
-                }
-                const mods = Object.entries(modifier.modifiers)
-                mods.forEach((modItem) => {
-                    const statName = Object.values(EStats).find((stat) => stat === modItem[0])
-                    if (!statName) {
-                        throw new Error('No statName')
+        const addBonusStatModifiers = () => {
+            this.inventory.inventory.forEach((item) => {
+                item.modifiers.forEach((itemModifier) => {
+                    if (itemModifier.type !== EModifierTypes.AttackBonusStats) {
+                        return
                     }
-                    if (modItem[0] === statName) {
-                        attackStats[statName] += modItem[1]
-                    }
+                    itemModifier.use(this)
                 })
             })
         }
 
-        addModifiers()
+        addBonusStatModifiers()
 
         // check if attack hits
         if (diceRollHitResult > attackStats.melee) {
@@ -110,33 +101,61 @@ class PersonModel implements IPerson {
                 }
 
                 let baseDamage = 0
-                let modifierDamage = 0
+                // let modifierDamage = 0
 
-                const getModifierDamage = (): number => {
-                    let sum = 0
-                    this.modifiers.list.forEach((modifier) => {
-                        if (typeof modifier.modifiers !== 'number') {
-                            return 0
-                        }
+                // const getModifierDamage = (): number => {
+                //     let sum = 0
+                //     this.modifiers.list.forEach((modifier) => {
+                //         if (typeof modifier.modifiers !== 'number') {
+                //             return 0
+                //         }
 
-                        sum += modifier.modifiers
-                        console.log(this.weapon, modifier.modifiers, sum)
-                    })
-                    return sum
-                }
+                //         sum += modifier.modifiers
+                //         console.log(this.weapon, modifier.modifiers, sum)
+                //     })
+                //     return sum
+                // }
 
                 baseDamage = this.weapon.damage
-                modifierDamage = getModifierDamage()
+                // modifierDamage = getModifierDamage()
 
-                const damage = baseDamage + modifierDamage
-
+                // const damage = baseDamage + modifierDamage
+                const damage = baseDamage
                 return damage
+            }
+
+            const addBonusDamageModifiers = () => {
+                this.inventory.inventory.forEach((item) => {
+                    item.modifiers.forEach((itemModifier) => {
+                        if (itemModifier.type !== EModifierTypes.AttackBonusDamage) {
+                            return
+                        }
+                        itemModifier.use(this)
+                    })
+                })
+            }
+
+            addBonusDamageModifiers()
+
+            const modifierDamage = () => {
+                let damageSum = 0
+                this.status.list.forEach((statusItem) => {
+                    if (statusItem.type !== EModifierTypes.AttackBonusDamage) {
+                        return 0
+                    }
+
+                    const StatusAttackBonusDamage = statusItem as StatusAttackBonusDamage
+
+                    damageSum = StatusAttackBonusDamage.use()
+                })
+                return damageSum
             }
 
             damagePoints += attackStats.strength
             damagePoints += enemyArmorPoints ? enemyArmorPoints : 0
             damagePoints += weaponDamage()
             damagePoints += damageDiceRoll
+            damagePoints += modifierDamage()
             damagePoints -= enemy.currentStats.thoughtness
 
             if (damagePoints < 0) {

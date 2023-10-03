@@ -3,6 +3,7 @@ import { IStats } from '@/interfaces/IStats'
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { ModifierItem } from '@/assets/models/modifierItemModel'
+import { PersonModel } from '@/assets/models/personModel'
 
 export interface IModifierItem {
     id: string
@@ -12,6 +13,8 @@ export interface IModifierItem {
     target: PlayerModel | MonsterModel | undefined
     chanceToApply: number | null
     statusId: string
+
+    use(target: PersonModel): void
 }
 
 export interface IModifiers {
