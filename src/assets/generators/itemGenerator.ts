@@ -1,11 +1,11 @@
 import { Weapon, Armor, Potion, Gold } from '@/assets/models/itemsModel'
 import itemList from '@/assets/json/items.json'
-import { AllItemTypes, IArmor, IGold, IWeapon } from '@/interfaces/IItem'
+import { AllItemTypes, IArmor, IGold } from '@/interfaces/IItem'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { ModifierItem } from '../models/modifierItemModel'
 import { modifierList } from '@/assets/json/modifiers.json'
 import { EModifierTypes } from '@/enums/EModifierTypes'
-import { IModiferItem, IModifierTypes } from '@/interfaces/IModifiers'
+
 class ItemGenerator {
     private category: EItemCategory | null
     private quality: ModifierItem | null
@@ -80,7 +80,7 @@ class ItemGenerator {
             throw Error('no category')
         }
 
-        const createdModifierList: IModiferItem[] = []
+        const createdModifierList: ModifierItem[] = []
         if (this.category === EItemCategory.Gold) {
             return
         }
@@ -103,11 +103,12 @@ class ItemGenerator {
                 return
             }
 
+            console.log(modifierData)
+
             const modifier = new ModifierItem(
                 modifierData.id,
                 modifierData.name,
                 type,
-                undefined,
                 undefined,
                 modifierData.chanceToApply,
                 modifierData.statusId

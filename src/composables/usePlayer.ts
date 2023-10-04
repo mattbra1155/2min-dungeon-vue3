@@ -4,11 +4,10 @@ import { EItemCategory } from '@/enums/ItemCategory'
 import { Armor, Potion, Weapon } from '@/assets/models/itemsModel'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { Inventory } from '@/assets/models/inventoryModel'
-import { AllItemTypes, IArmor, IPotion, IWeapon } from '@/interfaces/IItem'
+import { AllItemTypes } from '@/interfaces/IItem'
 import { ModifierItem } from '@/assets/models/modifierItemModel'
 import { Modifiers } from '@/assets/models/modifiersModel'
 import { Status } from '@/assets/models/statusModel'
-import { EModifierTypes } from '@/enums/EModifierTypes'
 
 interface iPlayerState {
     player: PlayerModel
@@ -105,7 +104,6 @@ export const usePlayer = () => {
                                 itemModifier.name,
                                 itemModifier.type,
                                 itemModifier.owner,
-                                itemModifier.target,
                                 itemModifier.chanceToApply,
                                 itemModifier.statusId
                             )

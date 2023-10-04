@@ -6,7 +6,6 @@ import { PlayerModel } from '@/assets/models/playerModel'
 import { EBodyParts } from '@/enums/EBodyParts'
 import { ModifierItem } from './modifierItemModel'
 import { EItemCategory } from '@/enums/ItemCategory'
-import { statusList } from '@/assets/json/modifiers.json'
 import { EModifierTypes } from '@/enums/EModifierTypes'
 
 class Item implements IItem {
@@ -98,6 +97,7 @@ class Weapon extends Item implements IWeapon {
             console.log(this)
 
             console.log(modifier)
+            modifier.owner = this
             modifier.use(owner)
         })
         // TO DO apply/update stats
@@ -110,6 +110,12 @@ class Weapon extends Item implements IWeapon {
         this.isEquipped = false
         console.log(`unequiped ${this.name}`)
         // TO DO unequip removes status
+
+        owner.status.list.forEach((status) => {
+            if (status.origin === this) {
+                owner.status.removeItem(status.id)
+            }
+        })
         // owner.status.removeItem()
         console.log(owner.inventory.inventory)
     }

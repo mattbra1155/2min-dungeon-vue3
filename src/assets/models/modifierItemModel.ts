@@ -14,8 +14,7 @@ class ModifierItem implements IModifierItem {
         public id: string,
         public name: string,
         public type: EModifierTypes | null,
-        public owner: PlayerModel | MonsterModel | undefined,
-        public target: PlayerModel | MonsterModel | undefined,
+        public owner: PlayerModel | MonsterModel | AllItemTypes | undefined,
         public chanceToApply: number | null,
         public statusId: string
     ) {
@@ -23,7 +22,6 @@ class ModifierItem implements IModifierItem {
         this.name = name
         this.type = type
         this.owner = owner
-        this.target = target
         this.chanceToApply = chanceToApply
         this.statusId = statusId
     }
@@ -46,15 +44,7 @@ class ModifierItem implements IModifierItem {
 
         let status: IAllStatusTypes | undefined = undefined
         if (statusType === EModifierTypes.AttackBonusDamage) {
-            status = new StatusAttackBonusDamage(
-                `status-${self.crypto.randomUUID()}`,
-                this.name,
-                statusType,
-                undefined,
-                undefined,
-                false,
-                1
-            )
+            status = new StatusAttackBonusDamage(this.id, this.name, statusType, this.owner, target, false, 1)
         }
         console.log('satusType', statusType)
 
@@ -70,7 +60,7 @@ class ModifierItem implements IModifierItem {
         if (!target) {
             return
         }
-        console.log('here')
+        console.log('this', this)
 
         const roll = diceRollK100()
 
