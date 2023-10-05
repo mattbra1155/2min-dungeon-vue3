@@ -81,11 +81,8 @@ const selectProfession = (profession: IProfessionPayload) => {
 
 
     })
-    Object.assign(playerObject.value.advancedStats, { hp: 110, melee: 313 })
-
-
-    // TEST
-
+    // TEST of purchased advances - WORKING
+    // Object.assign(playerObject.value.advancedStats, { hp: 110, melee: 313 })
 
     return playerObject.value.profession
 }
