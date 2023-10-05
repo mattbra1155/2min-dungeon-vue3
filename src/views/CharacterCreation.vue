@@ -81,7 +81,7 @@ const selectProfession = (profession: IProfessionPayload) => {
 
 
     })
-    Object.assign(playerObject.value.advancedStats, { hp: 20, melee: 33 })
+    Object.assign(playerObject.value.advancedStats, { hp: 110, melee: 313 })
 
 
     // TEST
