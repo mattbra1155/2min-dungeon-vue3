@@ -3,7 +3,7 @@ import { MonsterModel } from '@/assets/models/monsterModel'
 import { PlayerModel } from './playerModel'
 import { diceRollK100 } from '@/assets/scripts/diceRoll'
 import { EModifierTypes } from '@/enums/EModifierTypes'
-import { StatusAttackBonusDamage, StatusItem } from './statusItemModel'
+import { StatusAttackBonusDamage, StatusBonusStat, StatusItem } from './statusItemModel'
 import { statusList } from '@/assets/json/modifiers.json'
 import { AllItemTypes } from '@/interfaces/IItem'
 import { PersonModel } from './personModel'
@@ -43,11 +43,38 @@ class ModifierItem implements IModifierItem {
         }
 
         let status: IAllStatusTypes | undefined = undefined
-        if (statusType === EModifierTypes.AttackBonusDamage) {
-            status = new StatusAttackBonusDamage(this.id, this.name, statusType, this.owner, target, false, 1)
-        }
-        console.log('satusType', statusType)
 
+        switch (statusType) {
+            case EModifierTypes.BonusStats:
+                status = new StatusBonusStat(
+                    this.id,
+                    this.name,
+                    statusType,
+                    this.owner,
+                    target,
+                    {
+                        isActive: statusData.duration.isActive,
+                        max: statusData.duration.max,
+                        current: undefined,
+                    },
+                    false,
+                    statusData.bonusStatList ? statusData.bonusStatList : undefined
+                )
+                break
+
+            case EModifierTypes.AttackBonusDamage:
+                status = new StatusAttackBonusDamage(
+                    this.id,
+                    this.name,
+                    statusType,
+                    this.owner,
+                    target,
+                    undefined,
+                    false,
+                    1
+                )
+                break
+        }
         if (!status) {
             console.error('no status created')
             return

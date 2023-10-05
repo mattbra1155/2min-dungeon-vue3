@@ -83,7 +83,7 @@ class Weapon extends Item implements IWeapon {
         owner.weapon = this
         this.isEquipped = true
 
-        // assign modifier to owner after equipping
+        // assign PASSIVE modifier to owner after equipping
         this.modifiers.forEach((modifier) => {
             const foundModifier = !!owner.modifiers.list.find((item) => item.id === modifier.id)
             if (foundModifier) {
@@ -91,17 +91,20 @@ class Weapon extends Item implements IWeapon {
                 return
             }
 
+            console.log('modi', modifier)
+
             if (modifier.type !== EModifierTypes.Passive) {
                 return
             }
             console.log(this)
+            console.log(owner)
 
             console.log(modifier)
             modifier.owner = this
             modifier.use(owner)
         })
         // TO DO apply/update stats
-        // owner.modifiers.updateCurrentStats(owner)
+        owner.status.updateCurrentStats(owner)
         console.log('wielded', this)
     }
 

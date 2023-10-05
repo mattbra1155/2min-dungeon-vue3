@@ -5,7 +5,8 @@
                 "type": "sword",
                 "damage": 0,
                 "modifiers": [
-                    "devastating_passive"
+                    "devastating_passive",
+                    "stat_bonus_melee_10"
                 ],
                 "isTwoHanded": false,
                 "price": 70
@@ -14,7 +15,8 @@
                 "type": "axe",
                 "damage": 0,
                 "modifiers": [
-                    "devastating_passive"
+                    "devastating_passive",
+                    "stat_bonus_melee_10"
                 ],
                 "isTwoHanded": false,
                 "price": 70
@@ -23,7 +25,8 @@
                 "type": "two handed sword",
                 "damage": 2,
                 "modifiers": [
-                    "devastating_passive"
+                    "devastating_passive",
+                    "stat_bonus_melee_10"
                 ],
                 "isTwoHanded": true,
                 "price": 70
@@ -32,7 +35,8 @@
                 "type": "two handed axe",
                 "damage": 2,
                 "modifiers": [
-                    "devastating_passive"
+                    "devastating_passive",
+                    "stat_bonus_melee_10"
                 ],
                 "isTwoHanded": true,
                 "price": 70
@@ -40,14 +44,18 @@
             {
                 "type": "dagger",
                 "damage": -2,
-                "modifiers": [],
+                "modifiers": [
+                    "stat_bonus_melee_10"
+                ],
                 "isTwoHanded": false,
                 "price": 2
             },
             {
                 "type": "spear",
                 "damage": 0,
-                "modifiers": [],
+                "modifiers": [
+                    "stat_bonus_melee_10"
+                ],
                 "isTwoHanded": false,
                 "price": 70
             },
@@ -55,7 +63,8 @@
                 "type": "staff",
                 "damage": -1,
                 "modifiers": [
-                    "stun_bonus_passive"
+                    "stun_bonus_passive",
+                    "stat_bonus_melee_10"
                 ],
                 "isTwoHanded": true,
                 "price": 70

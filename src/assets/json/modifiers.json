@@ -27,6 +27,18 @@
             },
             "updateOnBeginning": false,
             "type": "attackBonusDamage"
+        },
+        {
+            "id": "stat_bonus_melee_10_status",
+            "name": "Bonus melee +10",
+            "duration": {
+                "isActive": false
+            },
+            "updateOnBeginning": false,
+            "type": "bonusStats",
+            "bonusStatList": {
+                "melee": 10
+            }
         }
     ],
     "modifierList": [
@@ -35,20 +47,27 @@
             "name": "Bleeding chance",
             "chanceToApply": 50,
             "statusId": "bleeding_status",
-            "type": "attack"
+            "type": "damageApplyEffect"
         },
         {
             "id": "devastating_passive",
             "name": "Devastating",
             "chanceToApply": 100,
             "statusId": "devastating_status",
-            "type": "passive"
+            "type": "attackBonusDamage"
         },
         {
             "id": "stun_bonus_passive",
             "name": "stun",
             "chanceToApply": 100,
             "statusId": "stun_bonus_status",
+            "type": "passive"
+        },
+        {
+            "id": "stat_bonus_melee_10",
+            "name": "add bonus melee +10",
+            "chanceToApply": 100,
+            "statusId": "stat_bonus_melee_10_status",
             "type": "passive"
         }
     ]
