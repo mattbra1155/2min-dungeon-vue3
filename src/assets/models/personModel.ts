@@ -12,6 +12,7 @@ import { MonsterModel } from '@/assets/models/monsterModel'
 import { stats as statsModel } from '@/assets/models/statsModel'
 import { Status } from './statusModel'
 import { StatusAttackBonusDamage } from './statusItemModel'
+import { toRaw } from 'vue'
 
 class PersonModel implements IPerson {
     constructor(
@@ -30,7 +31,27 @@ class PersonModel implements IPerson {
     ) {}
 
     async clearCurrentStats() {
-        this.currentStats = JSON.parse(JSON.stringify(this.stats))
+        const baseStats = structuredClone(toRaw(this.stats))
+
+        this.currentStats = baseStats
+        if (this instanceof PlayerModel) {
+            const advancedStats = structuredClone(toRaw(this.advancedStats))
+
+            const ttt = Object.entries(this.currentStats).reduce((acc, key) => {
+                console.log('acc:', acc, 'key:', key)
+
+                acc.forEach((item) => {
+                    if (item[0] === key[0]) {
+                        console.log('here', item[1], key[1])
+
+                        item[1] += key[1]
+                    }
+                })
+                return acc
+            }, Object.entries(advancedStats))
+
+            console.log(ttt)
+        }
     }
 
     attack(enemy: MonsterModel | PlayerModel) {
