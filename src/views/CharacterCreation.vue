@@ -77,15 +77,9 @@ const selectProfession = (profession: IProfessionPayload) => {
         if (key && statName === key && playerObject.value.profession) {
             playerObject.value.profession.statsDevelopment[key] = value
         }
-        console.log(key, value);
-
-
     })
-    Object.assign(playerObject.value.advancedStats, { hp: 110, melee: 313 })
-
-
-    // TEST
-
+    // TEST of purchased advances - WORKING
+    // Object.assign(playerObject.value.advancedStats, { hp: 110, melee: 313 })
 
     return playerObject.value.profession
 }

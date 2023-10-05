@@ -35,6 +35,8 @@ class PersonModel implements IPerson {
         const baseStats = structuredClone(toRaw(this.stats))
 
         this.currentStats = baseStats
+
+        // Add already advanced stats from professions to current stats
         if (this instanceof PlayerModel) {
             const advancedStats = structuredClone(toRaw(this.advancedStats))
 
@@ -53,8 +55,6 @@ class PersonModel implements IPerson {
 
                 return foundStat
             })
-
-            console.log('result', this.currentStats)
         }
     }
 
