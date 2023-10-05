@@ -4,9 +4,10 @@ import { EItemCategory } from '@/enums/ItemCategory'
 import { Armor, Potion, Weapon } from '@/assets/models/itemsModel'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { Inventory } from '@/assets/models/inventoryModel'
-import { IArmor, IPotion, IWeapon } from '@/interfaces/IItem'
+import { AllItemTypes } from '@/interfaces/IItem'
 import { ModifierItem } from '@/assets/models/modifierItemModel'
 import { Modifiers } from '@/assets/models/modifiersModel'
+import { Status } from '@/assets/models/statusModel'
 
 interface iPlayerState {
     player: PlayerModel
@@ -21,6 +22,7 @@ export const usePlayer = () => {
     const setPlayer = async (payload: PlayerModel) => {
         await storePlayerModel()
         state.player = payload
+        console.log(payload, state.player)
         await localforage.setItem('player', JSON.stringify(payload))
         return state.player
     }
@@ -61,9 +63,10 @@ export const usePlayer = () => {
                 const inventory = new Inventory()
                 // create new modifiers class
                 const modifiers = new Modifiers()
-
+                const status = new Status()
                 newPlayer.inventory = inventory
                 newPlayer.modifiers = modifiers
+                newPlayer.status = status
 
                 const populateModifiers = () => {
                     console.log(playerData.modifiers)
@@ -75,25 +78,38 @@ export const usePlayer = () => {
                     if (!playerData.inventory) {
                         return
                     }
-                    newPlayer.inventory.inventory = playerData.inventory.inventory.map(
-                        (item: Weapon | Armor | Potion) => {
-                            if (item.category === EItemCategory.Weapon) {
-                                const weapon = new Weapon()
-                                const newWeapon = Object.assign(weapon, item)
-                                return newWeapon as IWeapon
-                            } else if (item.category === EItemCategory.Armor) {
-                                const armor = new Armor()
-                                const newArmor = Object.assign(armor, item)
-                                return newArmor as IArmor
-                            } else if (item.category === EItemCategory.Potion) {
-                                const potion = new Potion()
-                                const newPotion = Object.assign(potion, item)
-                                return newPotion as IPotion
-                            } else {
-                                return item
-                            }
+                    newPlayer.inventory.inventory = playerData.inventory.inventory.map((item: AllItemTypes) => {
+                        if (item.category === EItemCategory.Weapon) {
+                            const weapon = new Weapon()
+                            const newWeapon = Object.assign(weapon, item)
+                            return newWeapon as Weapon
+                        } else if (item.category === EItemCategory.Armor) {
+                            const armor = new Armor()
+                            const newArmor = Object.assign(armor, item)
+                            return newArmor as Armor
+                        } else if (item.category === EItemCategory.Potion) {
+                            const potion = new Potion()
+                            const newPotion = Object.assign(potion, item)
+                            return newPotion as Potion
+                        } else {
+                            return item
                         }
-                    )
+                    })
+
+                    // recreate ModifierItem class
+                    newPlayer.inventory.inventory.forEach((item) => {
+                        item.modifiers = item.modifiers.map((itemModifier) => {
+                            const modifier = new ModifierItem(
+                                itemModifier.id,
+                                itemModifier.name,
+                                itemModifier.type,
+                                itemModifier.owner,
+                                itemModifier.chanceToApply,
+                                itemModifier.statusId
+                            )
+                            return modifier
+                        })
+                    })
                 }
                 populateInventoryItemClasses()
                 populateModifiers()

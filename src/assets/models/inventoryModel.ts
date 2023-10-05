@@ -11,11 +11,12 @@ class Inventory implements IInventory {
     addItem(item: AllItemTypes | Gold, ownerId: string | undefined): void {
         if (item instanceof Gold) {
             this.gold += item.amount
-            return console.log(`${item.amount} gold added`)
+            console.log(`${item.amount} gold added`)
+            return
         }
 
         this.inventory.push(item)
-        console.log(this.inventory)
+
         item.ownerId = ownerId
     }
     removeItem(itemId: string): void {

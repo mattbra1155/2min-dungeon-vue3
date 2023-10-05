@@ -1,8 +1,8 @@
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { iBodyPart } from './BodyParts'
 import { PlayerModel } from '@/assets/models/playerModel'
-import { ModifierItem } from '@/assets/models/modifierItemModel'
 import { Armor, Potion, Weapon } from '@/assets/models/itemsModel'
+import { ModifierItem } from '@/assets/models/modifierItemModel'
 
 export interface IItem {
     id: string | undefined
