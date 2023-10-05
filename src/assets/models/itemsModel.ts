@@ -91,19 +91,12 @@ class Weapon extends Item implements IWeapon {
                 return
             }
 
-            console.log('modi', modifier)
-
             if (modifier.type !== EModifierTypes.Passive) {
                 return
             }
-            console.log(this)
-            console.log(owner)
-
-            console.log(modifier)
             modifier.owner = this
             modifier.use(owner)
         })
-        // TO DO apply/update stats
         owner.status.updateCurrentStats(owner)
         console.log('wielded', this)
     }
@@ -112,15 +105,12 @@ class Weapon extends Item implements IWeapon {
         owner.weapon = null
         this.isEquipped = false
         console.log(`unequiped ${this.name}`)
-        // TO DO unequip removes status
-
         owner.status.list.forEach((status) => {
             if (status.origin === this) {
                 owner.status.removeItem(status.id)
             }
         })
-        // owner.status.removeItem()
-        console.log(owner.inventory.inventory)
+        owner.status.updateCurrentStats(owner)
     }
 }
 

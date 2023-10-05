@@ -55,7 +55,6 @@ class ItemGenerator {
         const finalItem: AllItemTypes = Object.assign(itemObject, randomItem, {
             category: itemCategory,
         })
-        console.log(finalItem)
         return finalItem
     }
 
@@ -88,8 +87,6 @@ class ItemGenerator {
         const itemModifiersData = itemCategory?.item.find((item) => item.type === baseItem.type)?.modifiers
         itemModifiersData?.forEach((itemModifier) => {
             const modifierData = modifierList.find((mod) => {
-                console.log(mod.id, itemModifier)
-
                 return mod.id === itemModifier
             })
             if (!modifierData) {
@@ -103,8 +100,6 @@ class ItemGenerator {
                 return
             }
 
-            console.log(modifierData)
-
             const modifier = new ModifierItem(
                 modifierData.id,
                 modifierData.name,
@@ -114,7 +109,6 @@ class ItemGenerator {
                 modifierData.statusId
             )
 
-            console.log(modifier)
             createdModifierList.push(modifier)
         })
 
@@ -124,7 +118,6 @@ class ItemGenerator {
     createGold(amount = 0): Gold {
         this.category = EItemCategory.Gold
         const goldBase = this.createItemBase(EItemCategory.Gold)
-        console.log(goldBase)
         const gold: IGold = {
             id: 'gold',
             description: 'Gold coins with the face of our King',
@@ -133,10 +126,8 @@ class ItemGenerator {
             name: EItemCategory.Gold,
             amount,
         }
-        console.log(gold)
 
         const result = Object.assign(goldBase, gold)
-        console.log(result)
 
         return result
     }
@@ -155,7 +146,6 @@ class ItemGenerator {
         const modifiers = this.createModifiers(itemBase)
         let item = itemBase
 
-        console.log(modifiers)
         switch (category) {
             case EItemCategory.Weapon:
                 item = Object.assign(itemBase as Weapon, {

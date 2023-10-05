@@ -16,14 +16,11 @@ const init = async () => {
     if (activeGameState.value === EGameState.Init) {
         const player: PlayerModel | undefined = await fetchPlayer()
         if (player) {
-            console.log(player)
             await setPlayer(player)
             updateGameState(EGameState.Battle)
-            console.log(player)
             router.push({ name: 'home' })
             return player
         } else {
-            console.log(player)
             updateGameState(EGameState.CreateChar)
             router.push({ name: 'characterCreation' })
         }
