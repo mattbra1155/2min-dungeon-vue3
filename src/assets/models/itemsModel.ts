@@ -99,6 +99,7 @@ class Weapon extends Item implements IWeapon {
         })
         owner.status.updateCurrentStats(owner)
         console.log('wielded', this)
+        console.log('owner', owner)
     }
 
     unequip(owner: PlayerModel | MonsterModel) {
@@ -181,6 +182,7 @@ class Armor extends Item implements IArmor {
         // TO DO apply/update stats
         // owner.modifiers.updateCurrentStats(owner)
         console.log('Equipped', this)
+        console.log('CHar', owner)
     }
 
     unequip(owner: PlayerModel | MonsterModel) {

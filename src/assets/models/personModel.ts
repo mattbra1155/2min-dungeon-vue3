@@ -11,7 +11,7 @@ import { EModifierTypes } from '@/enums/EModifierTypes'
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { stats as statsModel } from '@/assets/models/statsModel'
 import { Status } from './statusModel'
-import { StatusAttackBonusDamage } from './statusItemModel'
+import { StatusAttackBonusDamage, StatusDamageOverTime } from './statusItemModel'
 import { toRaw } from 'vue'
 import { EStats } from '@/enums/EStats'
 
@@ -198,6 +198,24 @@ class PersonModel implements IPerson {
             }) */
 
         const finalDamage = damage()
+
+        const applyAttackStatusEffects = () => {
+            this.inventory.inventory.forEach((item) => {
+                if (!item.isEquipped) {
+                    return
+                }
+                item.modifiers.forEach((modifier) => {
+                    if (modifier.type === EModifierTypes.DamageApplyEffect) {
+                        console.log('hrrrrrer', modifier)
+
+                        modifier.use(enemy)
+                        return
+                    }
+                })
+            })
+        }
+
+        applyAttackStatusEffects()
 
         console.log(`${enemy.name} took ${finalDamage} damage`)
         enemy.currentStats.hp -= finalDamage

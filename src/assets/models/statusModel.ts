@@ -2,7 +2,7 @@ import { IAllStatusTypes, IStatus, IStatusItem } from '@/interfaces/IStatus'
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { EStats } from '@/enums/EStats'
-import { StatusBonusStat } from './statusItemModel'
+import { StatusBonusStat, StatusDamageOverTime } from './statusItemModel'
 import { EModifierTypes } from '@/enums/EModifierTypes'
 
 class Status implements IStatus {
@@ -22,6 +22,8 @@ class Status implements IStatus {
         const itemToRemove = this.list.find((element) => element.id === itemId)
         if (itemToRemove) {
             const itemIndex = this.list.findIndex((element) => element.id === itemToRemove.id)
+            console.log(itemToRemove, itemIndex)
+
             this.list.splice(itemIndex)
             console.log('Removed modifier from list:', this.list)
         } else {
@@ -33,6 +35,7 @@ class Status implements IStatus {
         // check duration and remove
         this.list.forEach((status) => {
             if (!status.duration) {
+                this.removeItem(status.id)
                 return
             }
             if (!status.duration.isActive) {
@@ -49,8 +52,11 @@ class Status implements IStatus {
                 this.removeItem(status.id)
                 console.log(`Removed status: ${status.name}`)
                 // apply/update stats
-                this.updateCurrentStats(character)
             }
+            if (status instanceof StatusDamageOverTime) {
+                status.use()
+            }
+            this.updateCurrentStats(character)
         })
     }
 

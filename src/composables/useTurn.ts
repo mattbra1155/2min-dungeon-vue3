@@ -68,7 +68,9 @@ export const useTurn = () => {
                             console.log(player.value.isAlive)
                             return
                         }
+
                         state.activeCharacter = enemy
+                        enemy.status.updateStatusList(player.value, state.turn)
                         console.log(`${enemy.name} attacks`)
                         state.activeCharacter.attack(player.value)
                         checkIfDead()

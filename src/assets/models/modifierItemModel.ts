@@ -3,7 +3,7 @@ import { MonsterModel } from '@/assets/models/monsterModel'
 import { PlayerModel } from './playerModel'
 import { diceRollK100 } from '@/assets/scripts/diceRoll'
 import { EModifierTypes } from '@/enums/EModifierTypes'
-import { StatusAttackBonusDamage, StatusBonusStat, StatusItem } from './statusItemModel'
+import { StatusAttackBonusDamage, StatusBonusStat, StatusDamageOverTime, StatusItem } from './statusItemModel'
 import { statusList } from '@/assets/json/modifiers.json'
 import { AllItemTypes } from '@/interfaces/IItem'
 import { PersonModel } from './personModel'
@@ -43,12 +43,16 @@ class ModifierItem implements IModifierItem {
         }
 
         let status: IAllStatusTypes | undefined = undefined
+        console.log(statusData)
 
         switch (statusType) {
             case EModifierTypes.BonusStats:
+                if (!statusData.bonusStatList) {
+                    return
+                }
                 status = new StatusBonusStat(
-                    this.id,
-                    this.name,
+                    statusData.id,
+                    statusData.name,
                     statusType,
                     this.owner,
                     target,
@@ -58,14 +62,14 @@ class ModifierItem implements IModifierItem {
                         current: undefined,
                     },
                     false,
-                    statusData.bonusStatList ? statusData.bonusStatList : undefined
+                    statusData.bonusStatList
                 )
                 break
 
             case EModifierTypes.AttackBonusDamage:
                 status = new StatusAttackBonusDamage(
-                    this.id,
-                    this.name,
+                    statusData.id,
+                    statusData.name,
                     statusType,
                     this.owner,
                     target,
@@ -74,26 +78,39 @@ class ModifierItem implements IModifierItem {
                     1
                 )
                 break
+            case EModifierTypes.DamageApplyEffect:
+                status = new StatusDamageOverTime(
+                    statusData.id,
+                    statusData.name,
+                    statusType,
+                    this.owner,
+                    target,
+                    {
+                        isActive: true,
+                        max: statusData.duration ? statusData.duration.max : undefined,
+                        current: undefined,
+                    },
+                    false
+                )
         }
         if (!status) {
             console.error('no status created')
             return
         }
         target.status.addItem(status)
-        console.log(`Applied status: ${status.name}`)
+        console.log(`Applied status: ${statusData.name}`)
     }
 
     use(target: PersonModel) {
         if (!target) {
             return
         }
-        console.log('this', this)
-
         const roll = diceRollK100()
+        console.log('roll', roll)
 
-        if (this.chanceToApply && roll <= this.chanceToApply) {
-            this.applyEffect(target, this.statusId)
-        }
+        // if (this.chanceToApply && roll <= this.chanceToApply) {
+        this.applyEffect(target, this.statusId)
+        // }
     }
 }
 

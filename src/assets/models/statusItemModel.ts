@@ -81,8 +81,9 @@ class StatusDamageOverTime extends StatusItem implements IStatusDamageOverTime {
         super(id, name, type, origin, target, duration, updateOnBeginning)
         this.duration = duration
     }
-    use(target: PlayerModel | MonsterModel) {
-        target.stats.hp - 1
+    use() {
+        this.target.stats.hp - 1
+        console.log(`${this.target.name} is bleeding for 1 hp`)
     }
 }
 
