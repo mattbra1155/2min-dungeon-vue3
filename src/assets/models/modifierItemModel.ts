@@ -57,6 +57,7 @@ class ModifierItem implements IModifierItem {
                     this.owner,
                     target,
                     {
+                        isInfinite: statusData.duration.isInfinite,
                         isActive: statusData.duration.isActive,
                         max: statusData.duration.max,
                         current: undefined,
@@ -73,12 +74,17 @@ class ModifierItem implements IModifierItem {
                     statusType,
                     this.owner,
                     target,
-                    undefined,
+                    {
+                        isInfinite: true,
+                        isActive: statusData.duration.isActive,
+                        max: statusData.duration.max,
+                        current: undefined,
+                    },
                     false,
                     1
                 )
                 break
-            case EModifierTypes.DamageApplyEffect:
+            case EModifierTypes.DamageOverTime:
                 status = new StatusDamageOverTime(
                     statusData.id,
                     statusData.name,
@@ -86,6 +92,7 @@ class ModifierItem implements IModifierItem {
                     this.owner,
                     target,
                     {
+                        isInfinite: statusData.duration?.isInfinite,
                         isActive: true,
                         max: statusData.duration ? statusData.duration.max : undefined,
                         current: undefined,

@@ -25,29 +25,26 @@ class Status implements IStatus {
             console.log(itemToRemove, itemIndex)
 
             this.list.splice(itemIndex)
-            console.log('Removed modifier from list:', this.list)
+            console.log('Removed status from list:', itemToRemove.name)
         } else {
-            console.log('Modifier to remove not found')
+            console.log('Status to remove not found')
         }
     }
 
     updateStatusList(character: PlayerModel | MonsterModel, turn: number) {
         // check duration and remove
         this.list.forEach((status) => {
-            if (!status.duration) {
-                this.removeItem(status.id)
-                return
-            }
             if (!status.duration.isActive) {
                 return
             }
             console.log(status)
 
-            if (status.duration.max) {
-                status.duration.max = turn + status.duration.max
-            }
+            // TO DO fix - now adds each time the func is called
+            // if (status.duration.max) {
+            //     status.duration.max = turn + status.duration.max
+            // }
             status.duration.current = turn
-            status.duration.current++
+            // status.duration.current++
             if (status.duration.current === status.duration.max) {
                 this.removeItem(status.id)
                 console.log(`Removed status: ${status.name}`)

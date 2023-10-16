@@ -11,22 +11,16 @@ export interface IStatusItem {
     type: EModifierTypes | null
     origin: PlayerModel | MonsterModel | AllItemTypes | undefined
     target: PersonModel | undefined
-    duration:
-        | {
-              isActive: boolean
-              current: number | undefined
-              max: number | undefined
-          }
-        | undefined
-    updateOnBeginning: boolean
-}
-
-export interface IStatusDamageOverTime extends IStatusItem {
     duration: {
+        isInfinite: boolean
         isActive: boolean
         current: number | undefined
         max: number | undefined
     }
+    updateOnBeginning: boolean
+}
+
+export interface IStatusDamageOverTime extends IStatusItem {
     use(target: PersonModel | MonsterModel): number | void
 }
 

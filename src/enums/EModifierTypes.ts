@@ -6,7 +6,7 @@ export enum EModifierTypes {
     AttackBonusDamage = 'attackBonusDamage',
     AttackApplyEffect = 'attackApplyEffect',
     BonusStats = 'bonusStats',
-    BonusDamage = 'bonusDamage',
+    // BonusDamage = 'bonusDamage',
     DamageOverTime = 'damageOverTime',
     DamageApplyEffect = 'damageApplyEffect',
 }

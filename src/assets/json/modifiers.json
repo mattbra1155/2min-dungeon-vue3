@@ -4,22 +4,28 @@
             "id": "bleeding_status",
             "name": "Bleeding",
             "duration": {
+                "isInfinite": false,
                 "isActive": true,
                 "max": 3
             },
-            "updateOnBeginning": false,
-            "type": "attackBonusDamage"
+            "updateOnBeginning": true,
+            "type": "damageOverTime"
         },
         {
             "id": "devastating_status",
             "name": "Devastating",
             "updateOnBeginning": false,
-            "type": "attackBonusDamage"
+            "type": "attackBonusDamage",
+            "duration": {
+                "isActive": true,
+                "isInfinite": true
+            }
         },
         {
             "id": "stun_bonus_status",
             "name": "Stun bonus",
             "duration": {
+                "isInfinite": true,
                 "isActive": true
             },
             "updateOnBeginning": false,
@@ -29,6 +35,7 @@
             "id": "stat_bonus_melee_10_status",
             "name": "Bonus melee +10",
             "duration": {
+                "isInfinite": true,
                 "isActive": true
             },
             "updateOnBeginning": false,

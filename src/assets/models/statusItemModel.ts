@@ -15,13 +15,12 @@ class StatusItem implements IStatusItem {
         public type: EModifierTypes,
         public origin: PlayerModel | MonsterModel | AllItemTypes | undefined,
         public target: PersonModel | undefined,
-        public duration:
-            | {
-                  isActive: boolean
-                  current: number | undefined
-                  max: number | undefined
-              }
-            | undefined,
+        public duration: {
+            isInfinite: boolean
+            isActive: boolean
+            current: number | undefined
+            max: number | undefined
+        },
         public updateOnBeginning: boolean
     ) {
         this.id = id
@@ -36,13 +35,12 @@ class StatusBonusStat extends StatusItem implements IStatusBonusStats {
         public type: EModifierTypes,
         public origin: PlayerModel | MonsterModel | AllItemTypes | undefined,
         public target: PersonModel,
-        public duration:
-            | {
-                  isActive: boolean
-                  current: number | undefined
-                  max: number | undefined
-              }
-            | undefined,
+        public duration: {
+            isInfinite: boolean
+            isActive: boolean
+            current: number | undefined
+            max: number | undefined
+        },
         public updateOnBeginning: boolean,
         public bonusStatList: Partial<IStats>
     ) {
@@ -72,6 +70,7 @@ class StatusDamageOverTime extends StatusItem implements IStatusDamageOverTime {
         public origin: PlayerModel | MonsterModel | AllItemTypes | undefined,
         public target: PersonModel,
         public duration: {
+            isInfinite: boolean
             isActive: boolean
             current: number | undefined
             max: number | undefined
@@ -94,13 +93,12 @@ class StatusAttackBonusDamage extends StatusItem implements IStatusBonusDamage {
         public type: EModifierTypes,
         public origin: PlayerModel | MonsterModel | AllItemTypes | undefined,
         public target: PersonModel | undefined,
-        public duration:
-            | {
-                  isActive: boolean
-                  current: number | undefined
-                  max: number | undefined
-              }
-            | undefined,
+        public duration: {
+            isInfinite: boolean
+            isActive: boolean
+            current: number | undefined
+            max: number | undefined
+        },
         public updateOnBeginning: boolean,
         public bonusDamage: number
     ) {
