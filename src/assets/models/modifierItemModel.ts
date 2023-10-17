@@ -26,7 +26,7 @@ class ModifierItem implements IModifierItem {
         this.statusId = statusId
     }
 
-    applyEffect(target: PersonModel, statusId: string) {
+    applyEffect(target: PlayerModel | MonsterModel, statusId: string) {
         const statusData = statusList.find((statusItem) => statusItem.id === statusId)
         console.log('apply')
 
@@ -104,11 +104,11 @@ class ModifierItem implements IModifierItem {
             console.error('no status created')
             return
         }
-        target.status.addItem(status)
+        target.status.addItem(status, target)
         console.log(`Applied status: ${statusData.name}`)
     }
 
-    use(target: PersonModel) {
+    use(target: PlayerModel | MonsterModel) {
         if (!target) {
             return
         }

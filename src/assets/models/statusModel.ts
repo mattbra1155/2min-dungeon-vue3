@@ -1,31 +1,32 @@
-import { IAllStatusTypes, IStatus, IStatusItem } from '@/interfaces/IStatus'
+import { IAllStatusTypes, IStatus } from '@/interfaces/IStatus'
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { EStats } from '@/enums/EStats'
 import { StatusBonusStat, StatusDamageOverTime } from './statusItemModel'
-import { EModifierTypes } from '@/enums/EModifierTypes'
 
 class Status implements IStatus {
     constructor(public list: IAllStatusTypes[] = []) {
         this.list = list
     }
 
-    addItem(item: IAllStatusTypes) {
-        const itemExists = this.list.find((element) => element.id === item.id)
+    addItem(status: IAllStatusTypes, character: PlayerModel | MonsterModel) {
+        const itemExists = this.list.find((element) => element.id === status.id)
 
         if (!itemExists) {
-            this.list.push(item)
+            this.list.push(status)
+            this.updateCurrentStats(status, character, false)
         }
     }
 
-    removeItem(itemId: string) {
-        const itemToRemove = this.list.find((element) => element.id === itemId)
-        if (itemToRemove) {
-            const itemIndex = this.list.findIndex((element) => element.id === itemToRemove.id)
-            console.log(itemToRemove, itemIndex)
+    removeItem(statusId: string, character: PlayerModel | MonsterModel) {
+        const statusToRemove = this.list.find((element) => element.id === statusId)
+        if (statusToRemove) {
+            const itemIndex = this.list.findIndex((element) => element.id === statusToRemove.id)
 
             this.list.splice(itemIndex)
-            console.log('Removed status from list:', itemToRemove.name)
+            this.updateCurrentStats(statusToRemove, character, true)
+
+            console.log('Removed status from list:', statusToRemove.name)
         } else {
             console.log('Status to remove not found')
         }
@@ -38,7 +39,6 @@ class Status implements IStatus {
                 return
             }
             console.log(status)
-
             // TO DO fix - now adds each time the func is called
             // if (status.duration.max) {
             //     status.duration.max = turn + status.duration.max
@@ -46,35 +46,34 @@ class Status implements IStatus {
             status.duration.current = turn
             // status.duration.current++
             if (status.duration.current === status.duration.max) {
-                this.removeItem(status.id)
+                this.removeItem(status.id, character)
                 console.log(`Removed status: ${status.name}`)
-                // apply/update stats
             }
             if (status instanceof StatusDamageOverTime) {
                 status.use()
             }
-            this.updateCurrentStats(character)
         })
     }
 
-    updateCurrentStats(character: PlayerModel | MonsterModel) {
-        // remove all applied modifiers
-        character.clearCurrentStats()
-        // check and add new modifiers
-        this.list.forEach((status) => {
-            if (status instanceof StatusBonusStat) {
-                Object.entries(status.bonusStatList).forEach((statusItem) => {
-                    const statName = Object.values(EStats).find((stat) => stat === statusItem[0])
-                    if (!statName) {
-                        throw new Error('No statName')
-                    }
-                    if (statusItem[0] === statName) {
-                        // need to update new acutal stast instead of basic stats
+    updateCurrentStats(status: IAllStatusTypes, character: PlayerModel | MonsterModel, isNegative: boolean) {
+        if (status instanceof StatusBonusStat) {
+            Object.entries(status.bonusStatList).forEach((statusItem) => {
+                const statName = Object.values(EStats).find((stat) => stat === statusItem[0])
+                if (!statName) {
+                    throw new Error('No statName')
+                }
+                if (statusItem[0] === statName) {
+                    console.log(isNegative)
+
+                    // need to update new acutal stast instead of basic stats
+                    if (isNegative) {
+                        character.currentStats[statName] -= statusItem[1]
+                    } else {
                         character.currentStats[statName] += statusItem[1]
                     }
-                })
-            }
-        })
+                }
+            })
+        }
     }
 }
 

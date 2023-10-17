@@ -97,7 +97,7 @@ class Weapon extends Item implements IWeapon {
             modifier.owner = this
             modifier.use(owner)
         })
-        owner.status.updateCurrentStats(owner)
+        // owner.status.updateCurrentStats(owner)
         console.log('wielded', this)
         console.log('owner', owner)
     }
@@ -108,10 +108,10 @@ class Weapon extends Item implements IWeapon {
         console.log(`unequiped ${this.name}`)
         owner.status.list.forEach((status) => {
             if (status.origin === this) {
-                owner.status.removeItem(status.id)
+                owner.status.removeItem(status.id, owner)
             }
         })
-        owner.status.updateCurrentStats(owner)
+        // owner.status.updateCurrentStats(owner)
     }
 }
 
