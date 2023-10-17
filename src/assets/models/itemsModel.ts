@@ -85,12 +85,6 @@ class Weapon extends Item implements IWeapon {
 
         // assign PASSIVE modifier to owner after equipping
         this.modifiers.forEach((modifier) => {
-            // const foundModifier = !!owner.modifiers.list.find((item) => item.id === modifier.id)
-            // if (foundModifier) {
-            //     console.log(`Modifier: "${modifier.name}" was already added`)
-            //     return
-            // }
-
             if (modifier.type !== EModifierTypes.Passive) {
                 return
             }
@@ -111,7 +105,6 @@ class Weapon extends Item implements IWeapon {
                 owner.status.removeItem(status.id, owner)
             }
         })
-        // owner.status.updateCurrentStats(owner)
     }
 }
 

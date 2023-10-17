@@ -54,6 +54,7 @@ export const useTurn = () => {
                 break
             case ETurnState.PlayerAttack:
                 console.log('<====>')
+
                 player.value.status.updateStatusList(player.value, state.turn)
                 console.log(player.value)
 
@@ -68,9 +69,8 @@ export const useTurn = () => {
                             console.log(player.value.isAlive)
                             return
                         }
-
-                        state.activeCharacter = enemy
                         enemy.status.updateStatusList(enemy, state.turn)
+                        state.activeCharacter = enemy
                         console.log(`${enemy.name} attacks`)
                         state.activeCharacter.attack(player.value)
                         checkIfDead()

@@ -38,18 +38,24 @@ class Status implements IStatus {
             if (!status.duration.isActive) {
                 return
             }
-            console.log(status)
+            if (status.duration.isInfinite) {
+                return
+            }
+            console.log('here', status)
             // TO DO fix - now adds each time the func is called
-            // if (status.duration.max) {
-            //     status.duration.max = turn + status.duration.max
-            // }
+            if (!status.duration.max) {
+                return
+            }
             status.duration.current = turn
             // status.duration.current++
-            if (status.duration.current === status.duration.max) {
+            if (status.duration.current >= status.duration.max) {
                 this.removeItem(status.id, character)
                 console.log(`Removed status: ${status.name}`)
             }
-            if (status instanceof StatusDamageOverTime) {
+
+            console.log(status instanceof StatusDamageOverTime, status.updateOnBeginning)
+
+            if (status instanceof StatusDamageOverTime && status.updateOnBeginning) {
                 status.use()
             }
         })
@@ -63,8 +69,6 @@ class Status implements IStatus {
                     throw new Error('No statName')
                 }
                 if (statusItem[0] === statName) {
-                    console.log(isNegative)
-
                     // need to update new acutal stast instead of basic stats
                     if (isNegative) {
                         character.currentStats[statName] -= statusItem[1]

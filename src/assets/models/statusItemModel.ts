@@ -81,7 +81,7 @@ class StatusDamageOverTime extends StatusItem implements IStatusDamageOverTime {
         this.duration = duration
     }
     use() {
-        this.target.stats.hp - 1
+        this.target.currentStats.hp -= 1
         console.log(`${this.target.name} is bleeding for 1 hp`)
     }
 }

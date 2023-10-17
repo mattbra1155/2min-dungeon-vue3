@@ -62,7 +62,7 @@ class ModifierItem implements IModifierItem {
                         max: statusData.duration.max,
                         current: undefined,
                     },
-                    false,
+                    statusData.updateOnBeginning,
                     statusData.bonusStatList
                 )
                 break
@@ -75,12 +75,12 @@ class ModifierItem implements IModifierItem {
                     this.owner,
                     target,
                     {
-                        isInfinite: true,
+                        isInfinite: statusData.duration.isInfinite,
                         isActive: statusData.duration.isActive,
                         max: statusData.duration.max,
                         current: undefined,
                     },
-                    false,
+                    statusData.updateOnBeginning,
                     1
                 )
                 break
@@ -93,11 +93,11 @@ class ModifierItem implements IModifierItem {
                     target,
                     {
                         isInfinite: statusData.duration?.isInfinite,
-                        isActive: true,
+                        isActive: statusData.duration.isActive,
                         max: statusData.duration ? statusData.duration.max : undefined,
                         current: undefined,
                     },
-                    false
+                    statusData.updateOnBeginning
                 )
         }
         if (!status) {
