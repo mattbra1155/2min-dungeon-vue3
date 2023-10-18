@@ -3,7 +3,6 @@ import { MonsterModel } from '@/assets/models/monsterModel'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { EStats } from '@/enums/EStats'
 import { StatusBonusStat, StatusDamageOverTime } from './statusItemModel'
-
 class Status implements IStatus {
     constructor(public list: IAllStatusTypes[] = []) {
         this.list = list
@@ -38,9 +37,9 @@ class Status implements IStatus {
             if (!status.duration.isActive) {
                 return
             }
-            if (status.duration.isInfinite) {
-                return
-            }
+            // if (status.duration.isInfinite) {
+            //     return
+            // }
             console.log('here', status)
             // TO DO fix - now adds each time the func is called
             if (!status.duration.max) {
@@ -51,6 +50,7 @@ class Status implements IStatus {
             if (status.duration.current >= status.duration.max) {
                 this.removeItem(status.id, character)
                 console.log(`Removed status: ${status.name}`)
+                return
             }
 
             console.log(status instanceof StatusDamageOverTime, status.updateOnBeginning)

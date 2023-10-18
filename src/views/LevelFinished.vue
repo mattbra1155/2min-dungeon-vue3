@@ -7,8 +7,8 @@ import { useRouter } from 'vue-router'
 import { AllItemTypes } from '@/interfaces/IItem'
 import { Gold } from '@/assets/models/itemsModel'
 
-const { updateTurnStateMachine } = useTurn()
-updateTurnStateMachine(ETurnState.Init)
+const { turnModel } = useTurn()
+turnModel.value.updateTurnStateMachine(ETurnState.Init)
 const router = useRouter()
 const { player } = usePlayer()
 const { lootList, generateLoot } = useLoot()

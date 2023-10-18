@@ -77,9 +77,7 @@ const selectProfession = (profession: IProfessionPayload) => {
         if (key && statName === key && playerObject.value.profession) {
             playerObject.value.profession.statsDevelopment[key] = value
         }
-        console.log(key, value);
-
-
+        console.log(key, value)
     })
     // TEST of purchased advances - WORKING
     // Object.assign(playerObject.value.advancedStats, { hp: 110, melee: 313 })
@@ -118,13 +116,24 @@ const savePlayer = async () => {
                     <h2 class="o-characterGenerator__header">Race</h2>
                     <div class="o-characterGenerator__item">
                         <label for="human">Human</label>
-                        <input type="radio" name="playerRace" value="human" class="item__input" checked="true"
-                            v-model="playerObject.race" />
+                        <input
+                            type="radio"
+                            name="playerRace"
+                            value="human"
+                            class="item__input"
+                            checked="true"
+                            v-model="playerObject.race"
+                        />
                     </div>
                     <div class="o-characterGenerator__item">
                         <label for="dwarf">Dwarf</label>
-                        <input type="radio" name="playerRace" value="dwarf" class="item__input"
-                            v-model="playerObject.race" />
+                        <input
+                            type="radio"
+                            name="playerRace"
+                            value="dwarf"
+                            class="item__input"
+                            v-model="playerObject.race"
+                        />
                     </div>
                 </div>
                 <div class="m-form__column">
@@ -138,20 +147,33 @@ const savePlayer = async () => {
             <div class="m-form__row o-characterGenerator__row">
                 <div class="m-form__column">
                     <label for="bio" class="o-characterGenerator__header">Bio</label>
-                    <textarea type="text" name="bio" id="characterBio" rows="5"
-                        v-model="playerObject.description"></textarea>
+                    <textarea
+                        type="text"
+                        name="bio"
+                        id="characterBio"
+                        rows="5"
+                        v-model="playerObject.description"
+                    ></textarea>
                 </div>
             </div>
             <div class="m-form__row o-characterGenerator__row">
                 <div class="m-form__column">
                     <h2 class="o-characterGenerator__header">Stats</h2>
-                    <button type="button" @click="rollStats()" @click.once="createInventoryItems()" id="generateStatsButton"
-                        class="button action__button">
+                    <button
+                        type="button"
+                        @click="rollStats()"
+                        @click.once="createInventoryItems()"
+                        id="generateStatsButton"
+                        class="button action__button"
+                    >
                         Roll dice
                     </button>
                     <div id="statList" class="o-characterGenerator__statList">
-                        <div v-for="(value, key, index) in playerObject.stats" class="o-characterGenerator__statItem"
-                            :key="index">
+                        <div
+                            v-for="(value, key, index) in playerObject.stats"
+                            class="o-characterGenerator__statItem"
+                            :key="index"
+                        >
                             <p class="a-text">
                                 {{ key }}
                             </p>
@@ -163,8 +185,12 @@ const savePlayer = async () => {
             <div class="m-form__row o-characterGenerator__row">
                 <div class="m-form__column">
                     <h2 class="o-characterGenerator__header">Inventory</h2>
-                    <div id="charInventory" class="o-characterGenerator__inventory"
-                        v-for="item in playerObject.inventory.inventory" :key="item.id">
+                    <div
+                        id="charInventory"
+                        class="o-characterGenerator__inventory"
+                        v-for="item in playerObject.inventory.inventory"
+                        :key="item.id"
+                    >
                         <div class="o-characterGenerator__inventory">
                             {{ item.name }}
                             <!-- TO DO MODIFIER NAME -->
@@ -183,12 +209,20 @@ const savePlayer = async () => {
                 <div class="m-form__row">
                     <h2 class="o-characterGenerator__header">Profession</h2>
                     <form class="m-form__column">
-                        <div v-for="profession in professions.warrior" :key="profession.id"
-                            class="m-form__item m-form__item--column">
+                        <div
+                            v-for="profession in professions.warrior"
+                            :key="profession.id"
+                            class="m-form__item m-form__item--column"
+                        >
                             <label :for="profession.name">
                                 {{ profession.name }}
-                                <input type="radio" class="item__input" name="profession" :value="profession"
-                                    @change="selectProfession(profession as IProfessionPayload)" />
+                                <input
+                                    type="radio"
+                                    class="item__input"
+                                    name="profession"
+                                    :value="profession"
+                                    @change="selectProfession(profession as IProfessionPayload)"
+                                />
                             </label>
                             {{ selectedProfession }}
                             <div class="o-characterGenerator__statList">

@@ -13,7 +13,7 @@ import LayoutTopBar from '@/components/layout/LayoutTopBar.vue'
 
 const { activeGameState } = useGameStateManager()
 const { createScene } = useSceneManager()
-const { updateTurnStateMachine, turnOrder } = useTurn()
+const { turnModel } = useTurn()
 const { player } = usePlayer()
 const router = useRouter()
 
@@ -22,7 +22,7 @@ if (history.state.nextLevel) {
 }
 
 if (activeGameState.value === EGameState.Battle) {
-    updateTurnStateMachine(ETurnState.Init)
+    turnModel.value.updateTurnStateMachine(ETurnState.Init)
 }
 
 watch(player.value, () => {
@@ -31,8 +31,8 @@ watch(player.value, () => {
     }
 })
 
-watch(turnOrder.value, () => {
-    if (!turnOrder.value.length) {
+watch(turnModel.value.turnOrder, () => {
+    if (!turnModel.value.turnOrder.length) {
         router.push({ name: 'levelFinished' })
     }
 })
