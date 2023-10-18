@@ -6,23 +6,24 @@ import { EGameState } from './enums/EGameState'
 import InventoryPanel from './components/InventoryPanel.vue'
 import CharacterScreen from './components/CharacterScreen.vue'
 import { PlayerModel } from './assets/models/playerModel'
-import { TurnModel } from './assets/models/turnModel'
-import { useTurn } from '@/composables/useTurn'
+import { turnModel } from './assets/models/turnModel'
 const { fetchPlayer, setPlayer } = usePlayer()
 const { activeGameState, updateGameState } = useGameStateManager()
-const { turnModel: savedTurnModel } = useTurn()
+// const { turnModel: savedTurnModel } = useTurn()
 const router = useRouter()
 
 const init = async () => {
-    const turnModel = new TurnModel()
-    savedTurnModel.value = turnModel
+    // const turnModel = new TurnModel()
+    // savedTurnModel.value = turnModel
+
+    console.log(turnModel);
+
 
     // turn.value = turnModel.turn
     // turnOrder.value = turnModel.turnOrder
     // activeCharacter.value = turnModel.activeCharacter
     // activeTurnState.value = turnModel.activeTurnState
 
-    console.log(savedTurnModel.value)
 
     updateGameState(EGameState.Init)
     if (activeGameState.value === EGameState.Init) {

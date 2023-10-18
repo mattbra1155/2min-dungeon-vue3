@@ -120,4 +120,5 @@ class TurnModel implements ITurn {
     }
 }
 
-export { TurnModel }
+const turnModel = new TurnModel()
+export { turnModel, TurnModel }

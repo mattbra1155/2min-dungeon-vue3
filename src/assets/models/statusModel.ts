@@ -12,6 +12,11 @@ class Status implements IStatus {
         const itemExists = this.list.find((element) => element.id === status.id)
 
         if (!itemExists) {
+            // TO DO get current turn to add
+
+            // if (turnModel.turn && status.duration.max) {
+            //     status.duration.max = turnModel.turn + status.duration.max
+            // }
             this.list.push(status)
             this.updateCurrentStats(status, character, false)
         }

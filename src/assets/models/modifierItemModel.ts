@@ -6,7 +6,6 @@ import { EModifierTypes } from '@/enums/EModifierTypes'
 import { StatusAttackBonusDamage, StatusBonusStat, StatusDamageOverTime, StatusItem } from './statusItemModel'
 import { statusList } from '@/assets/json/modifiers.json'
 import { AllItemTypes } from '@/interfaces/IItem'
-import { PersonModel } from './personModel'
 import { IAllStatusTypes } from '@/interfaces/IStatus'
 
 class ModifierItem implements IModifierItem {
