@@ -103,7 +103,7 @@ export const usePlayer = () => {
                                 itemModifier.id,
                                 itemModifier.name,
                                 itemModifier.type,
-                                itemModifier.owner,
+                                itemModifier.ownerId,
                                 itemModifier.chanceToApply,
                                 itemModifier.statusId
                             )

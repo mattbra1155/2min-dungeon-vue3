@@ -1,6 +1,4 @@
 import { ETurnState } from '@/enums/ETurnState'
-import { MonsterModel } from './monsterModel'
-import { PlayerModel } from './playerModel'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { usePlayer } from '@/composables/usePlayer'
 import { useSceneManager } from '@/composables/useSceneManager'
@@ -12,25 +10,25 @@ const { updateGameState } = useGameStateManager()
 
 interface ITurn {
     turn: number
-    turnOrder: Array<MonsterModel | PlayerModel>
+    turnOrder: string[]
     activeTurnState: ETurnState
-    activeCharacter: PlayerModel | MonsterModel
+    activeCharacterId: string
 }
 
 class TurnModel implements ITurn {
     constructor(
         public turn: number = 0,
-        public turnOrder: Array<MonsterModel | PlayerModel> = [],
+        public turnOrder: string[] = [],
         public activeTurnState: ETurnState = ETurnState.Init,
-        public activeCharacter: PlayerModel | MonsterModel = player.value
+        public activeCharacterId: string = ''
     ) {}
 
     sortTurnOrder = () => {
         if (!scene.value) {
             return new Error('No scene')
         }
-        const sorted = scene.value.enemy.sort((a, b) => b.currentStats.initiative - a.currentStats.initiative)
-        this.turnOrder = sorted
+        const sorted = scene.value.entityList.sort((a, b) => b.currentStats.initiative - a.currentStats.initiative)
+        this.turnOrder = sorted.map((entitiy) => entitiy.id)
         return sorted
     }
 
@@ -54,24 +52,29 @@ class TurnModel implements ITurn {
             case ETurnState.PlayerAttack:
                 console.log('<====>')
 
-                player.value.status.updateStatusList(player.value, this.turn)
+                player.value.status.updateStatusList(player.value.id, this.turn)
                 console.log(player.value)
 
                 console.log('TURN STATE:', ETurnState.PlayerAttack)
-                this.activeCharacter = player.value
+                this.activeCharacterId = player.value.id
                 break
             case ETurnState.EnemyAttack: {
                 console.log('TURN STATE:', ETurnState.EnemyAttack)
                 const enemyAttack = () => {
-                    this.turnOrder.forEach((enemy) => {
+                    this.turnOrder.forEach((enemyId) => {
                         if (player.value.isAlive === false) {
                             console.log(player.value.isAlive)
                             return
                         }
-                        enemy.status.updateStatusList(enemy, this.turn)
-                        this.activeCharacter = enemy
+
+                        const enemy = scene.value?.entityList.find((entity) => entity.id === enemyId)
+                        if (!enemy) {
+                            return
+                        }
+                        enemy.status.updateStatusList(enemy.id, this.turn)
+                        this.activeCharacterId = enemy.id
                         console.log(`${enemy.name} attacks`)
-                        this.activeCharacter.attack(player.value)
+                        enemy.attack(player.value.id)
                         this.checkIfDead()
                     })
                     this.updateTurnStateMachine(ETurnState.EndTurn)
@@ -97,11 +100,15 @@ class TurnModel implements ITurn {
 
     checkIfDead = () => {
         console.log('checking who is dead...')
-        this.turnOrder.forEach((enemy) => {
-            console.log(enemy)
+        this.turnOrder.forEach((enemyId) => {
+            console.log(enemyId)
+            const enemy = scene.value?.entityList.find((entity) => entity.id === enemyId)
+            if (!enemy) {
+                return
+            }
             if (enemy.currentStats.hp <= 0) {
                 console.log(`${enemy.name} is dead`)
-                this.removeDeadFromOrder(enemy)
+                this.removeDeadFromOrder(enemy.id)
             }
         })
         if (player.value && player.value.currentStats.hp <= 0) {
@@ -112,8 +119,8 @@ class TurnModel implements ITurn {
         }
     }
 
-    removeDeadFromOrder = (dead: MonsterModel | PlayerModel) => {
-        const deadPerson = this.turnOrder.find((character) => character === dead)
+    removeDeadFromOrder = (id: string) => {
+        const deadPerson = this.turnOrder.find((entityId) => entityId === id)
         const deadPersonIndex = this.turnOrder.findIndex((character) => character === deadPerson)
         const updatedTurnOrder = this.turnOrder.splice(deadPersonIndex, 1)
         return updatedTurnOrder

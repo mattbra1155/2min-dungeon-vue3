@@ -1,13 +1,17 @@
 // import { SceneGenerator } from '@/assets/generators/sceneGenerator.js'
 import { reactive, toRefs } from 'vue'
 import { monsterGenerator } from '@/assets/generators/monsterGenerator'
-import { iScene } from '@/interfaces/Scene'
+import { IScene } from '@/interfaces/IScene'
 import { MonsterModel } from '@/assets/models/monsterModel'
-
+import { Scene } from '@/assets/models/sceneModel'
+import { usePlayer } from './usePlayer'
+import { PlayerModel } from '@/assets/models/playerModel'
+import { IMonster } from '@/interfaces/IMonster'
+const { player } = usePlayer()
 interface iStateUseSceneManager {
     currentId: number
-    sceneList: iScene[]
-    scene: iScene | null
+    sceneList: IScene[]
+    scene: IScene | null
 }
 
 const state: iStateUseSceneManager = reactive({
@@ -25,25 +29,27 @@ export const useSceneManager = () => {
     const createScene = (numberOfEnemies = 1, levelName?: string) => {
         console.log('create')
 
-        const enemyList: MonsterModel[] = []
+        const enemyList: string[] = []
         const createEnemyList = (enemiesToCreate = numberOfEnemies) => {
             let createdEnemies = 0
             while (createdEnemies < enemiesToCreate) {
                 createdEnemies++
                 const enemy = createMonster()
-                enemyList.push(enemy)
+                scene.addEntity(enemy)
             }
         }
-        const scene: iScene = {
-            id: state.currentId++,
-            name: levelName || `level ${state.currentId}`,
-            enemy: enemyList,
-        }
+
+        const scene: Scene = new Scene(state.currentId++, levelName || `level ${state.currentId}`, enemyList)
 
         createEnemyList()
+
+        scene.addEntity(player.value)
+
+        console.log(scene)
+
         setScene(scene)
     }
-    const setScene = (scene: iScene) => {
+    const setScene = (scene: Scene) => {
         state.scene = scene
     }
 

@@ -1,20 +1,17 @@
 import { EModifierTypes } from '@/enums/EModifierTypes'
-import { MonsterModel } from '@/assets/models/monsterModel'
-import { PlayerModel } from './playerModel'
 import { IStatusBonusDamage, IStatusBonusStats, IStatusDamageOverTime, IStatusItem } from '@/interfaces/IStatus'
-import { AllItemTypes } from '@/interfaces/IItem'
-import { PersonModel } from './personModel'
-import { stats as StatsModel } from '@/assets/models/statsModel'
 import { EStats } from '@/enums/EStats'
 import { IStats } from '@/interfaces/IStats'
+import { useSceneManager } from '@/composables/useSceneManager'
 
+const { scene } = useSceneManager()
 class StatusItem implements IStatusItem {
     constructor(
         public id: string = `status-${self.crypto.randomUUID()}`,
         public name: string,
         public type: EModifierTypes,
-        public origin: PlayerModel | MonsterModel | AllItemTypes | undefined,
-        public target: PersonModel | undefined,
+        public originId: string | undefined,
+        public targetId: string | undefined,
         public duration: {
             isInfinite: boolean
             isActive: boolean
@@ -33,8 +30,8 @@ class StatusBonusStat extends StatusItem implements IStatusBonusStats {
         public id: string,
         public name: string,
         public type: EModifierTypes,
-        public origin: PlayerModel | MonsterModel | AllItemTypes | undefined,
-        public target: PersonModel,
+        public originId: string | undefined,
+        public targetId: string,
         public duration: {
             isInfinite: boolean
             isActive: boolean
@@ -44,9 +41,14 @@ class StatusBonusStat extends StatusItem implements IStatusBonusStats {
         public updateOnBeginning: boolean,
         public bonusStatList: Partial<IStats>
     ) {
-        super(id, name, type, origin, target, duration, updateOnBeginning)
+        super(id, name, type, origin, targetId, duration, updateOnBeginning)
     }
-    use(target: PlayerModel | MonsterModel) {
+    use(targetId: string) {
+        const target = scene.value?.entityList.find((entity) => entity.id === targetId)
+        if (!target) {
+            console.error('No target found')
+            return
+        }
         Object.entries(this.bonusStatList).forEach((bonusStat) => {
             const statName = Object.values(EStats).find((stat) => stat === bonusStat[0])
             console.log('PASSIVE', statName, bonusStat)
@@ -67,8 +69,8 @@ class StatusDamageOverTime extends StatusItem implements IStatusDamageOverTime {
         public id: string,
         public name: string,
         public type: EModifierTypes,
-        public origin: PlayerModel | MonsterModel | AllItemTypes | undefined,
-        public target: PersonModel,
+        public originId: string | undefined,
+        public targetId: string,
         public duration: {
             isInfinite: boolean
             isActive: boolean
@@ -77,12 +79,17 @@ class StatusDamageOverTime extends StatusItem implements IStatusDamageOverTime {
         },
         public updateOnBeginning: boolean
     ) {
-        super(id, name, type, origin, target, duration, updateOnBeginning)
+        super(id, name, type, originId, targetId, duration, updateOnBeginning)
         this.duration = duration
     }
     use() {
-        this.target.currentStats.hp -= 1
-        console.log(`${this.target.name} is bleeding for 1 hp`)
+        const target = scene.value?.entityList.find((entity) => entity.id === this.targetId)
+        if (!target) {
+            console.error('No target found')
+            return
+        }
+        target.currentStats.hp -= 1
+        console.log(`${target.name} is bleeding for 1 hp`)
     }
 }
 
@@ -91,8 +98,8 @@ class StatusAttackBonusDamage extends StatusItem implements IStatusBonusDamage {
         public id: string,
         public name: string,
         public type: EModifierTypes,
-        public origin: PlayerModel | MonsterModel | AllItemTypes | undefined,
-        public target: PersonModel | undefined,
+        public originId: string | undefined,
+        public targetId: string | undefined,
         public duration: {
             isInfinite: boolean
             isActive: boolean
@@ -102,7 +109,7 @@ class StatusAttackBonusDamage extends StatusItem implements IStatusBonusDamage {
         public updateOnBeginning: boolean,
         public bonusDamage: number
     ) {
-        super(id, name, type, origin, target, duration, updateOnBeginning)
+        super(id, name, type, origin, targetId, duration, updateOnBeginning)
         this.bonusDamage = bonusDamage
     }
 

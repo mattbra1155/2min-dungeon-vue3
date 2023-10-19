@@ -1,14 +1,15 @@
 import { IAllStatusTypes, IStatus } from '@/interfaces/IStatus'
-import { MonsterModel } from '@/assets/models/monsterModel'
-import { PlayerModel } from '@/assets/models/playerModel'
 import { EStats } from '@/enums/EStats'
 import { StatusBonusStat, StatusDamageOverTime } from './statusItemModel'
+import { useSceneManager } from '@/composables/useSceneManager'
+
+const { scene } = useSceneManager()
 class Status implements IStatus {
     constructor(public list: IAllStatusTypes[] = []) {
         this.list = list
     }
 
-    addItem(status: IAllStatusTypes, character: PlayerModel | MonsterModel) {
+    addItem(status: IAllStatusTypes, characterId: string) {
         const itemExists = this.list.find((element) => element.id === status.id)
 
         if (!itemExists) {
@@ -18,17 +19,17 @@ class Status implements IStatus {
             //     status.duration.max = turnModel.turn + status.duration.max
             // }
             this.list.push(status)
-            this.updateCurrentStats(status, character, false)
+            this.updateCurrentStats(status, characterId, false)
         }
     }
 
-    removeItem(statusId: string, character: PlayerModel | MonsterModel) {
+    removeItem(statusId: string, characterId: string) {
         const statusToRemove = this.list.find((element) => element.id === statusId)
         if (statusToRemove) {
             const itemIndex = this.list.findIndex((element) => element.id === statusToRemove.id)
 
             this.list.splice(itemIndex)
-            this.updateCurrentStats(statusToRemove, character, true)
+            this.updateCurrentStats(statusToRemove, characterId, true)
 
             console.log('Removed status from list:', statusToRemove.name)
         } else {
@@ -36,7 +37,7 @@ class Status implements IStatus {
         }
     }
 
-    updateStatusList(character: PlayerModel | MonsterModel, turn: number) {
+    updateStatusList(characterId: string, turn: number) {
         // check duration and remove
         this.list.forEach((status) => {
             if (!status.duration.isActive) {
@@ -53,7 +54,7 @@ class Status implements IStatus {
             status.duration.current = turn
             // status.duration.current++
             if (status.duration.current >= status.duration.max) {
-                this.removeItem(status.id, character)
+                this.removeItem(status.id, characterId)
                 console.log(`Removed status: ${status.name}`)
                 return
             }
@@ -66,7 +67,12 @@ class Status implements IStatus {
         })
     }
 
-    updateCurrentStats(status: IAllStatusTypes, character: PlayerModel | MonsterModel, isNegative: boolean) {
+    updateCurrentStats(status: IAllStatusTypes, characterId: string, isNegative: boolean) {
+        const character = scene.value?.entityList.find((entity) => entity.id === characterId)
+        if (!character) {
+            console.error('No character found')
+            return
+        }
         if (status instanceof StatusBonusStat) {
             Object.entries(status.bonusStatList).forEach((statusItem) => {
                 const statName = Object.values(EStats).find((stat) => stat === statusItem[0])

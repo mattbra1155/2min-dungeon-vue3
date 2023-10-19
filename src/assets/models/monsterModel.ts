@@ -1,4 +1,3 @@
-import { PersonModel } from '@/assets/models/personModel'
 import { iBodyPart } from '@/interfaces/BodyParts'
 import { IMonster } from '@/interfaces/IMonster'
 import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
@@ -7,6 +6,7 @@ import { Modifiers } from '@/assets/models/modifiersModel'
 import { Weapon } from '@/assets/models/itemsModel'
 import { stats as statsModel } from '@/assets/models/statsModel'
 import { IStats } from '@/interfaces/IStats'
+import { PersonModel } from '@/assets/models/personModel'
 
 class MonsterModel extends PersonModel implements IMonster {
     constructor(

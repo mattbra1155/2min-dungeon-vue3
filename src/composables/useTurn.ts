@@ -1,16 +1,5 @@
-import { MonsterModel } from '@/assets/models/monsterModel'
-import { usePlayer } from '@/composables/usePlayer'
 import { reactive, toRefs } from 'vue'
-import { ETurnState } from '@/enums/ETurnState'
-import { useSceneManager } from '@/composables/useSceneManager'
-import { useGameStateManager } from '@/composables/useGameStateManager'
-import { EGameState } from '@/enums/EGameState'
-import { PlayerModel } from '@/assets/models/playerModel'
 import { TurnModel } from '@/assets/models/turnModel'
-
-const { scene } = useSceneManager()
-const { player } = usePlayer()
-const { updateGameState } = useGameStateManager()
 
 interface iTurn {
     turnModel: TurnModel

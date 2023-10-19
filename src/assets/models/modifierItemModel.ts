@@ -1,31 +1,30 @@
 import { IModifierItem } from '@/interfaces/IModifiers'
-import { MonsterModel } from '@/assets/models/monsterModel'
-import { PlayerModel } from './playerModel'
 import { diceRollK100 } from '@/assets/scripts/diceRoll'
 import { EModifierTypes } from '@/enums/EModifierTypes'
-import { StatusAttackBonusDamage, StatusBonusStat, StatusDamageOverTime, StatusItem } from './statusItemModel'
+import { StatusAttackBonusDamage, StatusBonusStat, StatusDamageOverTime } from './statusItemModel'
 import { statusList } from '@/assets/json/modifiers.json'
-import { AllItemTypes } from '@/interfaces/IItem'
 import { IAllStatusTypes } from '@/interfaces/IStatus'
+import { useSceneManager } from '@/composables/useSceneManager'
 
+const { scene } = useSceneManager()
 class ModifierItem implements IModifierItem {
     constructor(
         public id: string,
         public name: string,
         public type: EModifierTypes | null,
-        public owner: PlayerModel | MonsterModel | AllItemTypes | undefined,
+        public ownerId: string | undefined,
         public chanceToApply: number | null,
         public statusId: string
     ) {
         this.id = id
         this.name = name
         this.type = type
-        this.owner = owner
+        this.ownerId = ownerId
         this.chanceToApply = chanceToApply
         this.statusId = statusId
     }
 
-    applyEffect(target: PlayerModel | MonsterModel, statusId: string) {
+    applyEffect(targetId: string, statusId: string) {
         const statusData = statusList.find((statusItem) => statusItem.id === statusId)
         console.log('apply')
 
@@ -44,6 +43,11 @@ class ModifierItem implements IModifierItem {
         let status: IAllStatusTypes | undefined = undefined
         console.log(statusData)
 
+        const target = scene.value?.entityList.find((entity) => entity.id === targetId)
+        if (!target) {
+            console.error('No target found')
+            return
+        }
         switch (statusType) {
             case EModifierTypes.BonusStats:
                 if (!statusData.bonusStatList) {
@@ -53,8 +57,8 @@ class ModifierItem implements IModifierItem {
                     statusData.id,
                     statusData.name,
                     statusType,
-                    this.owner,
-                    target,
+                    this.ownerId,
+                    targetId,
                     {
                         isInfinite: statusData.duration.isInfinite,
                         isActive: statusData.duration.isActive,
@@ -71,8 +75,8 @@ class ModifierItem implements IModifierItem {
                     statusData.id,
                     statusData.name,
                     statusType,
-                    this.owner,
-                    target,
+                    this.ownerId,
+                    targetId,
                     {
                         isInfinite: statusData.duration.isInfinite,
                         isActive: statusData.duration.isActive,
@@ -88,8 +92,8 @@ class ModifierItem implements IModifierItem {
                     statusData.id,
                     statusData.name,
                     statusType,
-                    this.owner,
-                    target,
+                    this.ownerId,
+                    targetId,
                     {
                         isInfinite: statusData.duration?.isInfinite,
                         isActive: statusData.duration.isActive,
@@ -103,19 +107,19 @@ class ModifierItem implements IModifierItem {
             console.error('no status created')
             return
         }
-        target.status.addItem(status, target)
+        target.status.addItem(status, targetId)
         console.log(`Applied status: ${statusData.name}`)
     }
 
-    use(target: PlayerModel | MonsterModel) {
-        if (!target) {
+    use(targetId: string) {
+        if (!targetId) {
             return
         }
         const roll = diceRollK100()
         console.log('roll', roll)
 
         // if (this.chanceToApply && roll <= this.chanceToApply) {
-        this.applyEffect(target, this.statusId)
+        this.applyEffect(targetId, this.statusId)
         // }
     }
 }

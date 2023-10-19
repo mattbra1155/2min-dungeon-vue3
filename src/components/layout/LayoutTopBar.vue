@@ -32,6 +32,6 @@ const { player } = usePlayer()
 const { scene } = useSceneManager()
 const { turnModel } = useTurn()
 
-const enemyList = computed(() => (scene.value ? scene.value.enemy : null))
+const enemyList = computed(() => (scene.value ? scene.value.enemyList : null))
 
 </script>

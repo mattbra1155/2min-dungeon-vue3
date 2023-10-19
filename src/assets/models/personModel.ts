@@ -8,14 +8,16 @@ import { Weapon } from '@/assets/models//itemsModel'
 import { Modifiers } from '@/assets/models/modifiersModel'
 import { IStats } from '@/interfaces/IStats'
 import { EModifierTypes } from '@/enums/EModifierTypes'
-import { MonsterModel } from '@/assets/models/monsterModel'
 import { stats as statsModel } from '@/assets/models/statsModel'
 import { Status } from './statusModel'
-import { StatusAttackBonusDamage, StatusDamageOverTime } from './statusItemModel'
+import { StatusAttackBonusDamage } from './statusItemModel'
 import { toRaw } from 'vue'
 import { EStats } from '@/enums/EStats'
+import { useSceneManager } from '@/composables/useSceneManager'
 
-class PersonModel implements IPerson {
+const { scene } = useSceneManager()
+
+abstract class PersonModel implements IPerson {
     constructor(
         public id: string = self.crypto.randomUUID(),
         public name: string = '',
@@ -58,7 +60,12 @@ class PersonModel implements IPerson {
         }
     }
 
-    attack(enemy: MonsterModel | PlayerModel) {
+    attack(enemyId: string) {
+        const enemy = scene.value?.entityList.find((entity) => entity.id === enemyId)
+        if (!enemy) {
+            console.error('No target found')
+            return
+        }
         // dice roll
         const diceRollHitResult = diceRollK100()
         console.log(`Dice roll: ${diceRollHitResult}`)
@@ -72,7 +79,7 @@ class PersonModel implements IPerson {
                     if (itemModifier.type !== EModifierTypes.AttackBonusStats) {
                         return
                     }
-                    itemModifier.use(this)
+                    itemModifier.use(this.id)
                 })
             })
         }
@@ -154,7 +161,7 @@ class PersonModel implements IPerson {
                         if (itemModifier.type !== EModifierTypes.AttackBonusDamage) {
                             return
                         }
-                        itemModifier.use(this)
+                        itemModifier.use(this.id)
                     })
                 })
             }
@@ -208,7 +215,7 @@ class PersonModel implements IPerson {
                     if (modifier.type === EModifierTypes.DamageApplyEffect) {
                         console.log('hrrrrrer', modifier)
 
-                        modifier.use(enemy)
+                        modifier.use(enemy.id)
                         return
                     }
                 })
