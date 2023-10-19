@@ -13,9 +13,7 @@ import { Status } from './statusModel'
 import { StatusAttackBonusDamage } from './statusItemModel'
 import { toRaw } from 'vue'
 import { EStats } from '@/enums/EStats'
-import { useSceneManager } from '@/composables/useSceneManager'
-
-const { scene } = useSceneManager()
+import { sceneManager } from './SceneManager'
 
 abstract class PersonModel implements IPerson {
     constructor(
@@ -38,30 +36,30 @@ abstract class PersonModel implements IPerson {
 
         this.currentStats = baseStats
 
-        // Add already advanced stats from professions to current stats
-        if (this instanceof PlayerModel) {
-            const advancedStats = structuredClone(toRaw(this.advancedStats))
+        // // Add already advanced stats from professions to current stats
+        // if (this) {
+        //     const advancedStats = structuredClone(toRaw(this.advancedStats))
 
-            Object.entries(advancedStats).forEach((statItem) => {
-                const foundStat = Object.entries(this.currentStats).find((stat) => stat[0] === statItem[0])
-                if (!foundStat) {
-                    return
-                }
-                const statName = Object.values(EStats).find((stat) => stat === foundStat[0])
+        //     Object.entries(advancedStats).forEach((statItem) => {
+        //         const foundStat = Object.entries(this.currentStats).find((stat) => stat[0] === statItem[0])
+        //         if (!foundStat) {
+        //             return
+        //         }
+        //         const statName = Object.values(EStats).find((stat) => stat === foundStat[0])
 
-                if (!statName) {
-                    return
-                }
-                foundStat[1] += statItem[1]
-                this.currentStats[statName] = foundStat[1]
+        //         if (!statName) {
+        //             return
+        //         }
+        //         foundStat[1] += statItem[1]
+        //         this.currentStats[statName] = foundStat[1]
 
-                return foundStat
-            })
-        }
+        //         return foundStat
+        //     })
+        // }
     }
 
     attack(enemyId: string) {
-        const enemy = scene.value?.entityList.find((entity) => entity.id === enemyId)
+        const enemy = sceneManager.scene?.entityList.find((entity) => entity.id === enemyId)
         if (!enemy) {
             console.error('No target found')
             return

@@ -1,14 +1,14 @@
-// import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
+import { PersonModel } from './personModel'
 import { iBodyPart } from '@/interfaces/BodyParts'
 import { Inventory } from './inventoryModel'
 import { bodyPartsModel } from './bodyPartsModel'
 import { IPlayer } from '@/interfaces/IPlayer'
-import { PersonModel } from './personModel'
 import { Modifiers } from './modifiersModel'
 import { Weapon } from './itemsModel'
 import { IStats } from '@/interfaces/IStats'
 import { Profession } from './professionModel'
 import { stats as statsModel } from '@/assets/models/statsModel'
+import { Status } from './statusModel'
 
 class PlayerModel extends PersonModel implements IPlayer {
     constructor(
@@ -25,7 +25,8 @@ class PlayerModel extends PersonModel implements IPlayer {
         public inventory: Inventory = new Inventory(),
         public isAlive: boolean = true,
         public player: boolean = true,
-        public modifiers: Modifiers = new Modifiers()
+        public modifiers: Modifiers = new Modifiers(),
+        public status: Status = new Status()
     ) {
         super(id, name, race, stats, currentStats, bodyParts, weapon, description, inventory, isAlive, modifiers)
     }

@@ -1,6 +1,22 @@
+
+<script setup lang="ts">
+import { sceneManager } from '@/assets/models/SceneManager';
+import { useAttack } from '@/composables/useAttack'
+import { useTurn } from '@/composables/useTurn'
+import { computed } from 'vue'
+
+const { targetToAttack, setTargetToAttack } = useAttack()
+import { player } from '@/assets/models/playerManager';
+const { turnModel } = useTurn()
+
+const enemyList = computed(() => (sceneManager.scene ? sceneManager.scene.enemyList : null))
+
+</script>
+
+
 <template>
     <div id="top-bar">
-        <h2 v-if="scene" id="levelName" class="level__name">{{ scene.name }}</h2>
+        <h2 v-if="sceneManager.scene" id="levelName" class="level__name">{{ sceneManager.scene.name }}</h2>
         <p style="text-align: center">{{ turnModel.activeTurnState }}</p>
         <p style="text-align: center">Turn: {{ turnModel.turn }}</p>
         <h3 id="turnNumber" class="text--center"></h3>
@@ -20,18 +36,3 @@
     </div>
 </template>
 
-<script setup lang="ts">
-import { useAttack } from '@/composables/useAttack'
-import { usePlayer } from '@/composables/usePlayer'
-import { useSceneManager } from '@/composables/useSceneManager'
-import { useTurn } from '@/composables/useTurn'
-import { computed } from 'vue'
-
-const { targetToAttack, setTargetToAttack } = useAttack()
-const { player } = usePlayer()
-const { scene } = useSceneManager()
-const { turnModel } = useTurn()
-
-const enemyList = computed(() => (scene.value ? scene.value.enemyList : null))
-
-</script>

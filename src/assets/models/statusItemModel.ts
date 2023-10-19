@@ -2,9 +2,7 @@ import { EModifierTypes } from '@/enums/EModifierTypes'
 import { IStatusBonusDamage, IStatusBonusStats, IStatusDamageOverTime, IStatusItem } from '@/interfaces/IStatus'
 import { EStats } from '@/enums/EStats'
 import { IStats } from '@/interfaces/IStats'
-import { useSceneManager } from '@/composables/useSceneManager'
 
-const { scene } = useSceneManager()
 class StatusItem implements IStatusItem {
     constructor(
         public id: string = `status-${self.crypto.randomUUID()}`,
@@ -44,23 +42,22 @@ class StatusBonusStat extends StatusItem implements IStatusBonusStats {
         super(id, name, type, origin, targetId, duration, updateOnBeginning)
     }
     use(targetId: string) {
-        const target = scene.value?.entityList.find((entity) => entity.id === targetId)
-        if (!target) {
-            console.error('No target found')
-            return
-        }
-        Object.entries(this.bonusStatList).forEach((bonusStat) => {
-            const statName = Object.values(EStats).find((stat) => stat === bonusStat[0])
-            console.log('PASSIVE', statName, bonusStat)
-
-            if (!statName) {
-                throw new Error('No statName')
-            }
-            if (bonusStat[0] === statName) {
-                // need to update new acutal stast instead of basic stats
-                target.currentStats[statName] += bonusStat[1]
-            }
-        })
+        // const target = scene.value?.entityList.find((entity) => entity.id === targetId)
+        // if (!target) {
+        //     console.error('No target found')
+        //     return
+        // }
+        // Object.entries(this.bonusStatList).forEach((bonusStat) => {
+        //     const statName = Object.values(EStats).find((stat) => stat === bonusStat[0])
+        //     console.log('PASSIVE', statName, bonusStat)
+        //     if (!statName) {
+        //         throw new Error('No statName')
+        //     }
+        //     if (bonusStat[0] === statName) {
+        //         // need to update new acutal stast instead of basic stats
+        //         target.currentStats[statName] += bonusStat[1]
+        //     }
+        // })
     }
 }
 
@@ -83,13 +80,13 @@ class StatusDamageOverTime extends StatusItem implements IStatusDamageOverTime {
         this.duration = duration
     }
     use() {
-        const target = scene.value?.entityList.find((entity) => entity.id === this.targetId)
-        if (!target) {
-            console.error('No target found')
-            return
-        }
-        target.currentStats.hp -= 1
-        console.log(`${target.name} is bleeding for 1 hp`)
+        // const target = scene.value?.entityList.find((entity) => entity.id === this.targetId)
+        // if (!target) {
+        //     console.error('No target found')
+        //     return
+        // }
+        // target.currentStats.hp -= 1
+        // console.log(`${target.name} is bleeding for 1 hp`)
     }
 }
 

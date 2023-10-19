@@ -1,23 +1,21 @@
 <script setup lang="ts">
-import { usePlayer } from './composables/usePlayer'
 import { useRouter } from 'vue-router'
 import { useGameStateManager } from './composables/useGameStateManager'
 import { EGameState } from './enums/EGameState'
 import InventoryPanel from './components/InventoryPanel.vue'
 import CharacterScreen from './components/CharacterScreen.vue'
-import { PlayerModel } from './assets/models/playerModel'
-const { fetchPlayer, setPlayer } = usePlayer()
+import { playerManager } from './assets/models/playerManager'
+import { IPlayer } from './interfaces/IPlayer'
+
 const { activeGameState, updateGameState } = useGameStateManager()
-// const { turnModel: savedTurnModel } = useTurn()
 const router = useRouter()
 
 const init = async () => {
-
     updateGameState(EGameState.Init)
     if (activeGameState.value === EGameState.Init) {
-        const player: PlayerModel | undefined = await fetchPlayer()
+        const player: IPlayer | undefined = await playerManager.fetchPlayer()
         if (player) {
-            await setPlayer(player)
+            await playerManager.setPlayer(player)
             updateGameState(EGameState.Battle)
             router.push({ name: 'home' })
             return player

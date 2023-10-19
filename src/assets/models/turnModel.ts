@@ -1,11 +1,9 @@
 import { ETurnState } from '@/enums/ETurnState'
 import { useGameStateManager } from '@/composables/useGameStateManager'
-import { usePlayer } from '@/composables/usePlayer'
-import { useSceneManager } from '@/composables/useSceneManager'
 import { EGameState } from '@/enums/EGameState'
+import { sceneManager } from './SceneManager'
+import { player } from './playerManager'
 
-const { scene } = useSceneManager()
-const { player } = usePlayer()
 const { updateGameState } = useGameStateManager()
 
 interface ITurn {
@@ -24,16 +22,18 @@ class TurnModel implements ITurn {
     ) {}
 
     sortTurnOrder = () => {
-        if (!scene.value) {
+        if (!sceneManager.scene) {
             return new Error('No scene')
         }
-        const sorted = scene.value.entityList.sort((a, b) => b.currentStats.initiative - a.currentStats.initiative)
+        const sorted = sceneManager.scene.entityList.sort(
+            (a, b) => b.currentStats.initiative - a.currentStats.initiative
+        )
         this.turnOrder = sorted.map((entitiy) => entitiy.id)
         return sorted
     }
 
     updateTurnStateMachine = (newTurnState: ETurnState) => {
-        if (!player.value.isAlive) {
+        if (!player.isAlive) {
             return
         }
         this.activeTurnState = newTurnState
@@ -52,29 +52,29 @@ class TurnModel implements ITurn {
             case ETurnState.PlayerAttack:
                 console.log('<====>')
 
-                player.value.status.updateStatusList(player.value.id, this.turn)
-                console.log(player.value)
+                player.status.updateStatusList(player.id, this.turn)
+                console.log(player)
 
                 console.log('TURN STATE:', ETurnState.PlayerAttack)
-                this.activeCharacterId = player.value.id
+                this.activeCharacterId = player.id
                 break
             case ETurnState.EnemyAttack: {
                 console.log('TURN STATE:', ETurnState.EnemyAttack)
                 const enemyAttack = () => {
                     this.turnOrder.forEach((enemyId) => {
-                        if (player.value.isAlive === false) {
-                            console.log(player.value.isAlive)
+                        if (player.isAlive === false) {
+                            console.log(player.isAlive)
                             return
                         }
 
-                        const enemy = scene.value?.entityList.find((entity) => entity.id === enemyId)
+                        const enemy = sceneManager.scene?.entityList.find((entity) => entity.id === enemyId)
                         if (!enemy) {
                             return
                         }
                         enemy.status.updateStatusList(enemy.id, this.turn)
                         this.activeCharacterId = enemy.id
                         console.log(`${enemy.name} attacks`)
-                        enemy.attack(player.value.id)
+                        enemy.attack(player.id)
                         this.checkIfDead()
                     })
                     this.updateTurnStateMachine(ETurnState.EndTurn)
@@ -102,7 +102,7 @@ class TurnModel implements ITurn {
         console.log('checking who is dead...')
         this.turnOrder.forEach((enemyId) => {
             console.log(enemyId)
-            const enemy = scene.value?.entityList.find((entity) => entity.id === enemyId)
+            const enemy = sceneManager.scene?.entityList.find((entity) => entity.id === enemyId)
             if (!enemy) {
                 return
             }
@@ -111,9 +111,9 @@ class TurnModel implements ITurn {
                 this.removeDeadFromOrder(enemy.id)
             }
         })
-        if (player.value && player.value.currentStats.hp <= 0) {
+        if (player && player.currentStats.hp <= 0) {
             console.log('Player dead')
-            player.value.isAlive = false
+            player.isAlive = false
             updateGameState(EGameState.PlayerDead)
             return
         }

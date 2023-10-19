@@ -1,9 +1,8 @@
 import { IAllStatusTypes, IStatus } from '@/interfaces/IStatus'
-import { EStats } from '@/enums/EStats'
 import { StatusBonusStat, StatusDamageOverTime } from './statusItemModel'
-import { useSceneManager } from '@/composables/useSceneManager'
+import { sceneManager } from './SceneManager'
+import { EStats } from '@/enums/EStats'
 
-const { scene } = useSceneManager()
 class Status implements IStatus {
     constructor(public list: IAllStatusTypes[] = []) {
         this.list = list
@@ -43,9 +42,7 @@ class Status implements IStatus {
             if (!status.duration.isActive) {
                 return
             }
-            // if (status.duration.isInfinite) {
-            //     return
-            // }
+
             console.log('here', status)
             // TO DO fix - now adds each time the func is called
             if (!status.duration.max) {
@@ -68,27 +65,27 @@ class Status implements IStatus {
     }
 
     updateCurrentStats(status: IAllStatusTypes, characterId: string, isNegative: boolean) {
-        const character = scene.value?.entityList.find((entity) => entity.id === characterId)
-        if (!character) {
-            console.error('No character found')
-            return
-        }
-        if (status instanceof StatusBonusStat) {
-            Object.entries(status.bonusStatList).forEach((statusItem) => {
-                const statName = Object.values(EStats).find((stat) => stat === statusItem[0])
-                if (!statName) {
-                    throw new Error('No statName')
-                }
-                if (statusItem[0] === statName) {
-                    // need to update new acutal stast instead of basic stats
-                    if (isNegative) {
-                        character.currentStats[statName] -= statusItem[1]
-                    } else {
-                        character.currentStats[statName] += statusItem[1]
-                    }
-                }
-            })
-        }
+        // const character = sceneManager.scene?.entityList.find((entity) => entity.id === characterId)
+        // if (!character) {
+        //     console.error('No character found')
+        //     return
+        // }
+        // if (status instanceof StatusBonusStat) {
+        //     Object.entries(status.bonusStatList).forEach((statusItem) => {
+        //         const statName = Object.values(EStats).find((stat) => stat === statusItem[0])
+        //         if (!statName) {
+        //             throw new Error('No statName')
+        //         }
+        //         if (statusItem[0] === statName) {
+        //             // need to update new acutal stast instead of basic stats
+        //             if (isNegative) {
+        //                 character.currentStats[statName] -= statusItem[1]
+        //             } else {
+        //                 character.currentStats[statName] += statusItem[1]
+        //             }
+        //         }
+        //     })
+        // }
     }
 }
 

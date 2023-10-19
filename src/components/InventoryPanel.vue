@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { usePlayer } from '@/composables/usePlayer'
 import { useInventory } from '@/composables/useInventory'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { getTotalDamage } from '@/helpers/getTotalDamage'
@@ -8,8 +7,8 @@ import { getTotalArmorPoints } from '@/helpers/getTotalArmorPoints'
 import { Armor, Weapon } from '@/assets/models/itemsModel'
 import InventoryItem from '@/components/InventoryItem.vue'
 import { AllItemTypes } from '@/interfaces/IItem'
+import { player } from '@/assets/models/playerManager'
 
-const { player } = usePlayer()
 const { activeItemId, isOpen, toggleInventory, setactiveItemId } = useInventory()
 
 const getButtonType = (item: AllItemTypes) => {
@@ -55,9 +54,9 @@ const getItemValue = (item: AllItemTypes) => {
 
 const submitAction = (item: AllItemTypes) => {
     if (item instanceof Weapon) {
-        item.wield(player.value)
+        item.wield(player.id)
     } else if (item instanceof Armor) {
-        item.equip(player.value)
+        item.equip(player.id)
     }
 }
 
@@ -67,7 +66,7 @@ const closeItemDetails = () => {
 
 const unequip = (item: AllItemTypes) => {
     if (item instanceof Weapon || item instanceof Armor) {
-        item.unequip(player.value)
+        item.unequip(player.id)
     }
 }
 </script>
@@ -79,12 +78,8 @@ const unequip = (item: AllItemTypes) => {
             <button v-if="activeItemId" class="a-button --secondary o-inventory__close" @click="closeItemDetails">
                 Back
             </button>
-            <button
-                v-else
-                id="inventoryCloseButton"
-                class="a-button --secondary o-inventory__close"
-                @click="toggleInventory"
-            >
+            <button v-else id="inventoryCloseButton" class="a-button --secondary o-inventory__close"
+                @click="toggleInventory">
                 Close
             </button>
         </div>

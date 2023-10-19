@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useLoot } from '@/composables/useLoot'
-import { usePlayer } from '@/composables/usePlayer'
 import { useTurn } from '@/composables/useTurn'
 import { ETurnState } from '@/enums/ETurnState'
 import { useRouter } from 'vue-router'
@@ -10,11 +9,11 @@ import { Gold } from '@/assets/models/itemsModel'
 const { turnModel } = useTurn()
 turnModel.value.updateTurnStateMachine(ETurnState.Init)
 const router = useRouter()
-const { player } = usePlayer()
+import { player } from '@/assets/models/playerManager'
 const { lootList, generateLoot } = useLoot()
 
 const takeItem = (lootItem: AllItemTypes | Gold) => {
-    player.value.inventory.addItem(lootItem, player.value.id)
+    player.inventory.addItem(lootItem, player.id)
     const indexOfItem = lootList.value.findIndex((item) => item.id === lootItem.id)
     lootList.value.splice(indexOfItem, 1)
 }

@@ -1,18 +1,16 @@
 <script setup lang="ts">
 import { Armor, Weapon } from '@/assets/models/itemsModel'
-import { usePlayer } from '@/composables/usePlayer'
 import { EItemCategory } from '@/enums/ItemCategory'
-import { IArmor } from '@/interfaces/IItem'
 import { getTotalDamage } from '@/helpers/getTotalDamage'
 import { getTotalArmorPoints } from '@/helpers/getTotalArmorPoints'
 import { computed } from 'vue'
+import { player } from '@/assets/models/playerManager'
 
-const { player } = usePlayer()
 const props = defineProps<{
     itemId: string
 }>()
 
-const item = computed(() => player.value.inventory.inventory.find((inventoryItem) => inventoryItem.id === props.itemId))
+const item = computed(() => player.inventory.inventory.find((inventoryItem) => inventoryItem.id === props.itemId))
 </script>
 
 <template>

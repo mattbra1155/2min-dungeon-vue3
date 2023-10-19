@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { useCharacterScreen } from '@/composables/useCharacterScreen'
-import { usePlayer } from '@/composables/usePlayer'
 const { isOpen, toggleCharacterScreen } = useCharacterScreen()
-const { player } = usePlayer()
+import { player } from '@/assets/models/playerManager';
 </script>
 
 <template>
@@ -25,10 +24,10 @@ const { player } = usePlayer()
         <div class="o-characterScreen__statsWrapper">
             <h2 class="a-text">Profession advancement:</h2>
             <div class="o-characterScreen__statList">
-                <template v-for="item in player.profession?.statsDevelopment" :key="item.name">
-                    <div v-if="item.value" class="o-characterScreen__statItem">
-                        <p class="a-text">{{ item.name }}</p>
-                        <p class="a-text">+{{ item.value }}</p>
+                <template v-for="(value, key) in player.profession?.statsDevelopment" :key="key">
+                    <div v-if="key" class="o-characterScreen__statItem">
+                        <p class="a-text">{{ key }}</p>
+                        <p class="a-text">+{{ value }}</p>
                     </div>
                 </template>
             </div>
@@ -39,19 +38,18 @@ const { player } = usePlayer()
                 <template v-for="(value, key) in player.currentStats" :key="key">
                     <div v-if="value" class="o-characterScreen__statItem">
                         <p class="a-text">{{ key }}</p>
-                        <p class="a-text">{{ value.value }}</p>
+                        <p class="a-text">{{ value }}</p>
                     </div>
                 </template>
             </div>
         </div>
-        <div class="o-characterScreen__modifiersWrapper">
+        <!-- <div class="o-characterScreen__modifiersWrapper">
             <h2 class="a-text">Modifiers</h2>
-            <p v-for="modifierItem in player.modifiers.list" :key="modifierItem.id">
+            <p v-for="modifierItem in player.status.list" :key="modifierItem.id">
                 <span class="a-text">{{ modifierItem.name }} </span>&nbsp; &rarr; &nbsp;
-                <span v-for="(value, key) in modifierItem.modifiers" :key="key">
-                    {{ key }}: {{ Math.sign(value!) ? `+${value}` : `${value}` }}</span
-                >
+                <span v-for="(value, key) in modifierItem." :key="key">
+                    {{ key }}: {{ Math.sign(value!) ? `+${value}` : `${value}` }}</span>
             </p>
-        </div>
+        </div> -->
     </div>
 </template>

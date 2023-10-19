@@ -4,9 +4,7 @@ import { EModifierTypes } from '@/enums/EModifierTypes'
 import { StatusAttackBonusDamage, StatusBonusStat, StatusDamageOverTime } from './statusItemModel'
 import { statusList } from '@/assets/json/modifiers.json'
 import { IAllStatusTypes } from '@/interfaces/IStatus'
-import { useSceneManager } from '@/composables/useSceneManager'
 
-const { scene } = useSceneManager()
 class ModifierItem implements IModifierItem {
     constructor(
         public id: string,
@@ -43,11 +41,11 @@ class ModifierItem implements IModifierItem {
         let status: IAllStatusTypes | undefined = undefined
         console.log(statusData)
 
-        const target = scene.value?.entityList.find((entity) => entity.id === targetId)
-        if (!target) {
-            console.error('No target found')
-            return
-        }
+        // const target = scene.value?.entityList.find((entity) => entity.id === targetId)
+        // if (!target) {
+        //     console.error('No target found')
+        //     return
+        // }
         switch (statusType) {
             case EModifierTypes.BonusStats:
                 if (!statusData.bonusStatList) {
@@ -107,7 +105,7 @@ class ModifierItem implements IModifierItem {
             console.error('no status created')
             return
         }
-        target.status.addItem(status, targetId)
+        // target.status.addItem(status, targetId)
         console.log(`Applied status: ${statusData.name}`)
     }
 

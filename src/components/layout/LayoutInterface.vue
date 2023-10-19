@@ -2,17 +2,16 @@
 import { useAttack } from '@/composables/useAttack'
 import { useTurn } from '@/composables/useTurn'
 import { ETurnState } from '@/enums/ETurnState'
-import { usePlayer } from '@/composables/usePlayer'
 import { useInventory } from '@/composables/useInventory'
 import { useCharacterScreen } from '@/composables/useCharacterScreen'
+import { player } from '@/assets/models/playerManager'
 const { turnModel } = useTurn()
 const { targetToAttack } = useAttack()
-const { player } = usePlayer()
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
 const playerAttack = () => {
     if (targetToAttack.value) {
-        player.value.attack(targetToAttack.value.id)
+        player.attack(targetToAttack.value)
         turnModel.value.checkIfDead()
         turnModel.value.updateTurnStateMachine(ETurnState.EnemyAttack)
     }

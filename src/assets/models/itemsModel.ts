@@ -1,12 +1,11 @@
 import { iBodyPart } from '@/interfaces/BodyParts'
 import { IArmor, IGold, IItem, IPotion, IWeapon } from '@/interfaces/IItem'
 import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
-import { MonsterModel } from '@/assets/models/monsterModel'
-import { PlayerModel } from '@/assets/models/playerModel'
 import { EBodyParts } from '@/enums/EBodyParts'
 import { ModifierItem } from './modifierItemModel'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { EModifierTypes } from '@/enums/EModifierTypes'
+import { sceneManager } from './SceneManager'
 
 class Item implements IItem {
     constructor(
@@ -72,13 +71,18 @@ class Weapon extends Item implements IWeapon {
         this.ownerId = ownerId
     }
 
-    wield(owner: PlayerModel | MonsterModel) {
+    wield(ownerId: string) {
         if (!this) {
             console.error(`no weapon to wield!!`)
             return
         }
+        const owner = sceneManager.scene?.entityList.find((entity) => entity.id === ownerId)
+        if (!owner) {
+            console.error('No target found')
+            return
+        }
         if (owner.weapon) {
-            owner.weapon?.unequip(owner)
+            owner.weapon?.unequip(ownerId)
         }
         owner.weapon = this
         this.isEquipped = true
@@ -88,21 +92,26 @@ class Weapon extends Item implements IWeapon {
             if (modifier.type !== EModifierTypes.Passive) {
                 return
             }
-            modifier.owner = this
-            modifier.use(owner)
+            modifier.ownerId = this.id
+            modifier.use(owner.id)
         })
         // owner.status.updateCurrentStats(owner)
         console.log('wielded', this)
         console.log('owner', owner)
     }
 
-    unequip(owner: PlayerModel | MonsterModel) {
+    unequip(ownerId: string) {
+        const owner = sceneManager.scene?.entityList.find((entity) => entity.id === ownerId)
+        if (!owner) {
+            console.error('No target found')
+            return
+        }
         owner.weapon = null
         this.isEquipped = false
         console.log(`unequiped ${this.name}`)
         owner.status.list.forEach((status) => {
-            if (status.origin === this) {
-                owner.status.removeItem(status.id, owner)
+            if (status.originId === this.id) {
+                owner.status.removeItem(status.id, ownerId)
             }
         })
     }
@@ -135,9 +144,15 @@ class Armor extends Item implements IArmor {
         this.traits = []
     }
 
-    equip(owner: PlayerModel | MonsterModel) {
+    equip(ownerId: string) {
         if (!this) {
             console.log('no item to equip')
+            return
+        }
+
+        const owner = sceneManager.scene?.entityList.find((entity) => entity.id === ownerId)
+        if (!owner) {
+            console.error('No target found')
             return
         }
         // Find where the item should be worn
@@ -151,7 +166,7 @@ class Armor extends Item implements IArmor {
             return
         }
         //unequip current item
-        owner.bodyParts[itemSlot].armor.item?.unequip(owner)
+        owner.bodyParts[itemSlot].armor.item?.unequip(ownerId)
         console.log(`unequipped ${this.name}`)
 
         // equip the item
@@ -170,7 +185,7 @@ class Armor extends Item implements IArmor {
 
             console.log(modifier)
 
-            modifier.use(owner)
+            modifier.use(ownerId)
         })
         // TO DO apply/update stats
         // owner.modifiers.updateCurrentStats(owner)
@@ -178,7 +193,12 @@ class Armor extends Item implements IArmor {
         console.log('CHar', owner)
     }
 
-    unequip(owner: PlayerModel | MonsterModel) {
+    unequip(ownerId: string) {
+        const owner = sceneManager.scene?.entityList.find((entity) => entity.id === ownerId)
+        if (!owner) {
+            console.error('No target found')
+            return
+        }
         const itemSlot: EBodyParts | undefined = Object.values(EBodyParts).find((bodyPart) => {
             if (bodyPart === this.bodyPart.toString()) {
                 return bodyPart
