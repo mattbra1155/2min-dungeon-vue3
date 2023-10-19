@@ -2,9 +2,11 @@ import { ETurnState } from '@/enums/ETurnState'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { EGameState } from '@/enums/EGameState'
 import { sceneManager } from './SceneManager'
-import { player } from './playerManager'
+import { playerManager } from './playerManager'
 
 const { updateGameState } = useGameStateManager()
+
+const { player } = playerManager
 
 interface ITurn {
     turn: number
@@ -25,7 +27,7 @@ class TurnModel implements ITurn {
         if (!sceneManager.scene) {
             return new Error('No scene')
         }
-        const sorted = sceneManager.scene.entityList.sort(
+        const sorted = sceneManager.scene.enemyList.sort(
             (a, b) => b.currentStats.initiative - a.currentStats.initiative
         )
         this.turnOrder = sorted.map((entitiy) => entitiy.id)
@@ -67,13 +69,15 @@ class TurnModel implements ITurn {
                             return
                         }
 
-                        const enemy = sceneManager.scene?.entityList.find((entity) => entity.id === enemyId)
+                        const enemy = sceneManager.scene?.enemyList.find((entity) => entity.id === enemyId)
                         if (!enemy) {
                             return
                         }
                         enemy.status.updateStatusList(enemy.id, this.turn)
                         this.activeCharacterId = enemy.id
                         console.log(`${enemy.name} attacks`)
+                        console.log(player.id)
+
                         enemy.attack(player.id)
                         this.checkIfDead()
                     })
@@ -101,14 +105,16 @@ class TurnModel implements ITurn {
     checkIfDead = () => {
         console.log('checking who is dead...')
         this.turnOrder.forEach((enemyId) => {
-            console.log(enemyId)
             const enemy = sceneManager.scene?.entityList.find((entity) => entity.id === enemyId)
             if (!enemy) {
                 return
             }
+            console.log(enemy)
+
             if (enemy.currentStats.hp <= 0) {
                 console.log(`${enemy.name} is dead`)
                 this.removeDeadFromOrder(enemy.id)
+                return
             }
         })
         if (player && player.currentStats.hp <= 0) {

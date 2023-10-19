@@ -2,6 +2,8 @@
 import { IScene } from '@/interfaces/IScene'
 import { Scene } from '@/assets/models/sceneModel'
 import { monsterGenerator } from '../generators/monsterGenerator'
+import { player, playerManager } from './playerManager'
+import { MonsterModel } from './monsterModel'
 
 interface iStateUseSceneManager {
     currentId: number
@@ -27,12 +29,13 @@ class SceneManager implements iStateUseSceneManager {
     createScene = (numberOfEnemies = 1, levelName?: string) => {
         console.log('create')
 
-        const enemyList: string[] = []
+        const enemyList: MonsterModel[] = []
         const createEnemyList = (enemiesToCreate = numberOfEnemies) => {
             let createdEnemies = 0
             while (createdEnemies < enemiesToCreate) {
                 createdEnemies++
                 const enemy = this.createMonster()
+                enemyList.push(enemy)
                 scene.addEntity(enemy)
             }
         }
@@ -41,7 +44,9 @@ class SceneManager implements iStateUseSceneManager {
 
         createEnemyList()
 
-        // scene.addEntity(player.value)
+        console.log(player.id, playerManager.player.id)
+
+        scene.addEntity(player)
 
         console.log(scene)
 

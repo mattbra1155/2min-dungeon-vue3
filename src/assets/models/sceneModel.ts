@@ -6,7 +6,7 @@ class Scene implements IScene {
     constructor(
         public id: number = 0,
         public name: string = '',
-        public enemyList: string[] = [],
+        public enemyList: MonsterModel[] = [],
         public entityList: Array<PlayerModel | MonsterModel> = []
     ) {
         this.id = id

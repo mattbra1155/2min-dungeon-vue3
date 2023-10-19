@@ -19,24 +19,26 @@ class PlayerManager {
     createPlayer = (payload: PlayerModel | null) => {
         if (payload) {
             this.player = Object.assign(this.player, payload)
-            this.player.stats = structuredClone(this.player.stats)
-
+            this.player.stats = structuredClone(this.initPlayer.stats)
+            this.player.currentStats = structuredClone(this.initPlayer.stats)
             this.player.isAlive = true
 
-            localforage.setItem('player', this.player)
+            console.log(this.player)
+
+            localforage.setItem('player', JSON.stringify(this.player))
             return this.player
         }
     }
 
     setPlayer = async (payload: PlayerModel) => {
+        this.player = payload
         await this.storePlayerModel()
-        await localforage.setItem('player', payload)
-        return this.player
+        await localforage.setItem('player', JSON.stringify(payload))
     }
 
     storePlayerModel = async () => {
         try {
-            const result = await localforage.setItem('initPlayer', this.player)
+            const result = await localforage.setItem('initPlayer', JSON.stringify(this.player))
             return result
         } catch (error: any) {
             throw Error(error)
@@ -48,11 +50,14 @@ class PlayerManager {
             const result: string | null = await localforage.getItem('player')
 
             if (result) {
-                const playerData = JSON.parse(result)
-                //create new EMPTY player class
-                const playerClass = new PlayerModel()
+                const playerData: PlayerModel = JSON.parse(result)
+                console.log(this.player)
+                const playerClass = this.player
                 // assign data to player class
                 const newPlayer: PlayerModel = Object.assign(playerClass, playerData)
+                console.log(this.player.id, newPlayer.id)
+
+                console.log(newPlayer)
                 // create new inventory class
                 const inventory = new Inventory()
                 // create new modifiers class
@@ -107,7 +112,10 @@ class PlayerManager {
                 }
                 populateInventoryItemClasses()
                 populateModifiers()
-                return newPlayer
+                console.log('pl', newPlayer)
+
+                this.player = newPlayer
+                return this.player
             }
         } catch (error: any) {
             throw Error(error)

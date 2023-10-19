@@ -23,11 +23,11 @@ if (activeGameState.value === EGameState.Battle) {
     turnModel.value.updateTurnStateMachine(ETurnState.Init)
 }
 
-watch(player, () => {
-    if (player.isAlive === false) {
-        router.push({ name: 'playerDead' })
-    }
-})
+// watch(player, () => {
+//     if (player.isAlive === false) {
+//         router.push({ name: 'playerDead' })
+//     }
+// })
 
 watch(turnModel.value.turnOrder, () => {
     if (!turnModel.value.turnOrder.length) {

@@ -59,7 +59,15 @@ abstract class PersonModel implements IPerson {
     }
 
     attack(enemyId: string) {
-        const enemy = sceneManager.scene?.entityList.find((entity) => entity.id === enemyId)
+        console.log('enemm', enemyId, sceneManager.scene?.entityList)
+
+        const enemy = sceneManager.scene?.entityList.find((entity) => {
+            console.log(entity.id, enemyId)
+
+            return entity.id === enemyId
+        })
+        console.log(enemy)
+
         if (!enemy) {
             console.error('No target found')
             return

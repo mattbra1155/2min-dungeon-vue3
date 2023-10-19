@@ -5,7 +5,7 @@ import { EGameState } from './enums/EGameState'
 import InventoryPanel from './components/InventoryPanel.vue'
 import CharacterScreen from './components/CharacterScreen.vue'
 import { playerManager } from './assets/models/playerManager'
-import { IPlayer } from './interfaces/IPlayer'
+import { PlayerModel } from './assets/models/playerModel'
 
 const { activeGameState, updateGameState } = useGameStateManager()
 const router = useRouter()
@@ -13,7 +13,7 @@ const router = useRouter()
 const init = async () => {
     updateGameState(EGameState.Init)
     if (activeGameState.value === EGameState.Init) {
-        const player: IPlayer | undefined = await playerManager.fetchPlayer()
+        const player: PlayerModel | undefined = await playerManager.fetchPlayer()
         if (player) {
             await playerManager.setPlayer(player)
             updateGameState(EGameState.Battle)
