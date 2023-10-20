@@ -7,7 +7,8 @@ import { StatusAttackBonusDamage, StatusBonusStat, StatusDamageOverTime, StatusI
 import { statusList } from '@/assets/json/modifiers.json'
 import { AllItemTypes } from '@/interfaces/IItem'
 import { IAllStatusTypes } from '@/interfaces/IStatus'
-
+import { useTurn } from '@/composables/useTurn'
+const { turnModel } = useTurn()
 class ModifierItem implements IModifierItem {
     constructor(
         public id: string,
@@ -93,12 +94,13 @@ class ModifierItem implements IModifierItem {
                     {
                         isInfinite: statusData.duration?.isInfinite,
                         isActive: statusData.duration.isActive,
-                        max: statusData.duration ? statusData.duration.max : undefined,
+                        max: statusData.duration.max ? statusData.duration.max + turnModel.value.turn : undefined,
                         current: undefined,
                     },
                     statusData.updateOnBeginning
                 )
         }
+
         if (!status) {
             console.error('no status created')
             return
@@ -107,7 +109,7 @@ class ModifierItem implements IModifierItem {
         console.log(`Applied status: ${statusData.name}`)
     }
 
-    use(target: PlayerModel | MonsterModel) {
+    use(target: any) {
         if (!target) {
             return
         }

@@ -6,8 +6,8 @@ import { EItemCategory } from '@/enums/ItemCategory'
 import { getTotalDamage } from '@/helpers/getTotalDamage'
 import { getTotalArmorPoints } from '@/helpers/getTotalArmorPoints'
 import { Armor, Weapon } from '@/assets/models/itemsModel'
-import InventoryItem from '@/components/InventoryItem.vue'
 import { AllItemTypes } from '@/interfaces/IItem'
+import InventoryItem from './InventoryItem.vue'
 
 const { player } = usePlayer()
 const { activeItemId, isOpen, toggleInventory, setactiveItemId } = useInventory()

@@ -8,10 +8,6 @@ import { EGameState } from '@/enums/EGameState'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { TurnModel } from '@/assets/models/turnModel'
 
-const { scene } = useSceneManager()
-const { player } = usePlayer()
-const { updateGameState } = useGameStateManager()
-
 interface iTurn {
     turnModel: TurnModel
 }

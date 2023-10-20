@@ -7,14 +7,13 @@ import { useSceneManager } from '@/composables/useSceneManager'
 import { EGameState } from '@/enums/EGameState'
 
 const { scene } = useSceneManager()
-const { player } = usePlayer()
 const { updateGameState } = useGameStateManager()
 
 interface ITurn {
     turn: number
     turnOrder: Array<MonsterModel | PlayerModel>
     activeTurnState: ETurnState
-    activeCharacter: PlayerModel | MonsterModel
+    activeCharacter: PlayerModel | MonsterModel | undefined
 }
 
 class TurnModel implements ITurn {
@@ -22,7 +21,7 @@ class TurnModel implements ITurn {
         public turn: number = 0,
         public turnOrder: Array<MonsterModel | PlayerModel> = [],
         public activeTurnState: ETurnState = ETurnState.Init,
-        public activeCharacter: PlayerModel | MonsterModel = player.value
+        public activeCharacter: PlayerModel | MonsterModel | undefined = undefined
     ) {}
 
     sortTurnOrder = () => {
@@ -35,6 +34,8 @@ class TurnModel implements ITurn {
     }
 
     updateTurnStateMachine = (newTurnState: ETurnState) => {
+        const { player } = usePlayer()
+
         if (!player.value.isAlive) {
             return
         }
@@ -96,6 +97,7 @@ class TurnModel implements ITurn {
     }
 
     checkIfDead = () => {
+        const { player } = usePlayer()
         console.log('checking who is dead...')
         this.turnOrder.forEach((enemy) => {
             console.log(enemy)

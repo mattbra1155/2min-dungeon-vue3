@@ -123,29 +123,7 @@ class PersonModel implements IPerson {
                 if (!this.weapon) {
                     return 0
                 }
-
-                let baseDamage = 0
-                // let modifierDamage = 0
-
-                // const getModifierDamage = (): number => {
-                //     let sum = 0
-                //     this.modifiers.list.forEach((modifier) => {
-                //         if (typeof modifier.modifiers !== 'number') {
-                //             return 0
-                //         }
-
-                //         sum += modifier.modifiers
-                //         console.log(this.weapon, modifier.modifiers, sum)
-                //     })
-                //     return sum
-                // }
-
-                baseDamage = this.weapon.damage
-                // modifierDamage = getModifierDamage()
-
-                // const damage = baseDamage + modifierDamage
-                const damage = baseDamage
-                return damage
+                return this.weapon.damage
             }
 
             const addBonusDamageModifiers = () => {
