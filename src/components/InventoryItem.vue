@@ -29,7 +29,14 @@ console.log(item.value)
                 Material: {{ (item as Armor).material }}
             </p>
             <p class="a-text m-inventoryItem__detailsItem --fullWidth" v-if="item.category === EItemCategory.Armor">
-                Slot: {{ (item as Armor).bodyPart }}
+                Slot:
+                {{
+                    (item as Armor).bodyPart
+                        .toString()
+                        .replace(/([A-Z])/g, ' $1')
+                        .trim()
+                        .toLowerCase()
+                }}
             </p>
             <p class="a-text m-inventoryItem__detailsItem" v-if="item.category === EItemCategory.Weapon">
                 Damage: {{ getTotalDamage(item as Weapon) }}

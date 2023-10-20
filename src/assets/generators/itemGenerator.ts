@@ -139,7 +139,22 @@ class ItemGenerator {
             throw Error('no category')
         }
 
-        const itemBase = this.createItemBase(EItemCategory.Weapon)
+        const getItemBase = () => {
+            let itemBase: AllItemTypes | undefined = undefined
+            if (category === EItemCategory.Weapon) {
+                itemBase = this.createItemBase(category)
+            } else if (category === EItemCategory.Armor) {
+                itemBase = this.createItemBase(category)
+            } else  (category === EItemCategory.Potion) {
+                itemBase = this.createItemBase(Potion)
+            }
+            if (!itemBase) {
+                return
+            }
+            return itemBase
+        }
+
+        const itemBase = getItemBase()
 
         const description = this.createDescription(itemBase)
         const id = this.addId()
@@ -154,28 +169,24 @@ class ItemGenerator {
                     description,
                     category,
                     modifiers,
-                    // damage: TO DO!
-                    // Damage comes now from itemList json?,
                 })
                 break
             case EItemCategory.Armor:
-                item = Object.assign(itemBase, {
-                    name: ` ${itemBase.type}`,
+                item = Object.assign(itemBase as Armor, {
+                    name: `${(itemBase as Armor).material}${itemBase.type}`,
                     id,
                     description,
                     category,
                     modifiers,
-                    // armorPoints:  TO DO!
                 })
                 break
             case EItemCategory.Potion:
                 item = Object.assign(itemBase, {
-                    name: ` ${itemBase.name}`,
+                    name: `Potion of ${itemBase.type}`,
                     id,
                     description,
                     category,
                     modifiers,
-                    // baseValue: TO DO!
                 })
                 break
         }

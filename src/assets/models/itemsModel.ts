@@ -142,7 +142,9 @@ class Armor extends Item implements IArmor {
         }
         // Find where the item should be worn
         const itemSlot: EBodyParts | undefined = Object.values(EBodyParts).find((bodyPart) => {
-            if (bodyPart === this.bodyPart.toString()) {
+            console.log(bodyPart.replaceAll(' ', ''), this.bodyPart.toString().toLowerCase())
+
+            if (bodyPart.replaceAll(' ', '').toLowerCase() === this.bodyPart.toString().toLowerCase()) {
                 return bodyPart
             }
         })
@@ -150,6 +152,8 @@ class Armor extends Item implements IArmor {
             console.log('item slot not found')
             return
         }
+        console.log(itemSlot.replace(/([A-Z])/g, ' $1').trim())
+
         //unequip current item
         owner.bodyParts[itemSlot].armor.item?.unequip(owner)
         console.log(`unequipped ${this.name}`)
