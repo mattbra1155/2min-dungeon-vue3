@@ -3,10 +3,9 @@ import { usePlayer } from './composables/usePlayer'
 import { useRouter } from 'vue-router'
 import { useGameStateManager } from './composables/useGameStateManager'
 import { EGameState } from './enums/EGameState'
-import InventoryPanel from './components/InventoryPanel.vue'
-import CharacterScreen from './components/CharacterScreen.vue'
 import { PlayerModel } from './assets/models/playerModel'
-
+import InventoryPanel from '@/components/InventoryPanel.vue'
+import CharacterScreen from './components/CharacterScreen.vue'
 const { fetchPlayer, setPlayer } = usePlayer()
 const { activeGameState, updateGameState } = useGameStateManager()
 const router = useRouter()
@@ -18,11 +17,9 @@ const init = async () => {
         if (player) {
             await setPlayer(player)
             updateGameState(EGameState.Battle)
-            console.log(player)
             router.push({ name: 'home' })
             return player
         } else {
-            console.log(player)
             updateGameState(EGameState.CreateChar)
             router.push({ name: 'characterCreation' })
         }
@@ -39,7 +36,8 @@ init()
             <router-link to="/">Main</router-link>
             <router-link to="/character-creation/">Create</router-link>
         </nav>
-        <router-view />
+
+        <router-view class="o-page" />
         <inventory-panel />
         <character-screen />
     </div>

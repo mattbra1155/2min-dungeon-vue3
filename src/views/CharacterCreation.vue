@@ -6,18 +6,23 @@ import { EGameState } from '@/enums/EGameState'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { ref } from 'vue'
-
+import { ItemGenerator } from '@/assets/generators/itemGenerator'
+import { EItemCategory } from '@/enums/ItemCategory'
+import professions from '@/assets/json/professions.json'
+import { EStats } from '@/enums/EStats'
+import { IProfessionPayload } from '@/interfaces/IProfession'
+import { Profession } from '@/assets/models/professionModel'
 const router = useRouter()
 const { initPlayer, createPlayer, resetPlayer } = usePlayer()
 const { updateGameState } = useGameStateManager()
 const playerObject = ref<PlayerModel>(initPlayer.value)
-
+const selectedProfession = ref<IProfessionPayload>()
 const rollStats = () => {
     if (!playerObject.value) {
         throw new Error('No Player object to roll stats')
     }
     if (playerObject.value.race === 'human') {
-        Object.assign(playerObject.value?.stats, {
+        const updated = {
             hp: diceRollK3() + 4,
             melee: diceRollK10() * 2 + 20,
             ranged: diceRollK10() * 2 + 20,
@@ -30,11 +35,16 @@ const rollStats = () => {
             inteligence: diceRollK10() * 2 + 20,
             willPower: diceRollK10() * 2 + 20,
             charisma: diceRollK10() * 2 + 2,
+        }
+
+        Object.entries(updated).forEach(([key, stat]) => {
+            const statName: EStats = Object.values(EStats).find((item) => item === key) as EStats
+            if (!statName) return
+            playerObject.value.stats[statName] = stat
         })
     }
-
     if (playerObject.value.race === 'dwarf') {
-        Object.assign(playerObject.value.stats, {
+        const updated = {
             hp: diceRollK3() + 5,
             melee: diceRollK10() * 2 + 30,
             ranged: diceRollK10() * 2 + 10,
@@ -47,8 +57,39 @@ const rollStats = () => {
             inteligence: diceRollK10() * 2 + 20,
             willPower: diceRollK10() * 2 + 40,
             charisma: diceRollK10() * 2 + 1,
+        }
+        Object.entries(updated).forEach(([key, stat]) => {
+            const statName: EStats = Object.values(EStats).find((item) => item === key) as EStats
+            if (!statName) return
+            playerObject.value.stats[statName] = stat
         })
     }
+}
+
+const selectProfession = (profession: IProfessionPayload) => {
+    playerObject.value.profession = undefined
+    playerObject.value.profession = new Profession(profession.id, profession.name, profession.description)
+    Object.entries(profession.statsDevelopment).forEach(([key, value]) => {
+        const statName = Object.values(EStats).find((stat) => stat === key)
+        if (!statName) {
+            throw new Error('No statName')
+        }
+        if (key && statName === key && playerObject.value.profession) {
+            playerObject.value.profession.statsDevelopment[key] = value
+        }
+        console.log(key, value)
+    })
+    // TEST of purchased advances - WORKING
+    // Object.assign(playerObject.value.advancedStats, { hp: 110, melee: 313 })
+
+    return playerObject.value.profession
+}
+
+const createInventoryItems = () => {
+    const weapon = new ItemGenerator().createItem(EItemCategory.Weapon)
+    const armor = new ItemGenerator().createItem(EItemCategory.Armor)
+    playerObject.value.inventory.addItem(weapon, playerObject.value.id)
+    playerObject.value.inventory.addItem(armor, playerObject.value.id)
 }
 const savePlayer = async () => {
     if (playerObject.value) {
@@ -104,35 +145,6 @@ const savePlayer = async () => {
                 </div>
             </div>
             <div class="m-form__row o-characterGenerator__row">
-                <h2 class="o-characterGenerator__header">Class</h2>
-                <div class="m-form__column">
-                    <div class="m-form__item">
-                        <label for="class">
-                            Warrior
-                            <input
-                                type="radio"
-                                name="class"
-                                value="warrior"
-                                class="item__input"
-                                v-model="playerObject.profession"
-                            />
-                        </label>
-                    </div>
-                    <div class="m-form__item">
-                        <label for="class">
-                            Mage
-                            <input
-                                type="radio"
-                                name="class"
-                                value="mage"
-                                class="item__input"
-                                v-model="playerObject.profession"
-                            />
-                        </label>
-                    </div>
-                </div>
-            </div>
-            <div class="m-form__row o-characterGenerator__row">
                 <div class="m-form__column">
                     <label for="bio" class="o-characterGenerator__header">Bio</label>
                     <textarea
@@ -147,7 +159,13 @@ const savePlayer = async () => {
             <div class="m-form__row o-characterGenerator__row">
                 <div class="m-form__column">
                     <h2 class="o-characterGenerator__header">Stats</h2>
-                    <button type="button" @click="rollStats" id="generateStatsButton" class="button action__button">
+                    <button
+                        type="button"
+                        @click="rollStats()"
+                        @click.once="createInventoryItems()"
+                        id="generateStatsButton"
+                        class="button action__button"
+                    >
                         Roll dice
                     </button>
                     <div id="statList" class="o-characterGenerator__statList">
@@ -167,15 +185,61 @@ const savePlayer = async () => {
             <div class="m-form__row o-characterGenerator__row">
                 <div class="m-form__column">
                     <h2 class="o-characterGenerator__header">Inventory</h2>
-                    <div id="charInventory" class="o-characterGenerator__inventory"></div>
+                    <div
+                        id="charInventory"
+                        class="o-characterGenerator__inventory"
+                        v-for="item in playerObject.inventory.inventory"
+                        :key="item.id"
+                    >
+                        <div class="o-characterGenerator__inventory">
+                            {{ item.name }}
+                            <!-- TO DO MODIFIER NAME -->
+                            <!-- {{
+                                item.prefix.modifier !== 0
+                                    ? Math.sign(item.prefix.modifier)
+                                        ? `+${item.prefix.modifier}`
+                                        : `${item.prefix.modifier}`
+                                    : ''
+                            }} -->
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="m-form__row o-characterGenerator__row">
-                <div class="m-form__column">
-                    <h2 class="o-characterGenerator__header">Weapon</h2>
-                    <div id="charWeapon" class="weapon"></div>
+                <div class="m-form__row">
+                    <h2 class="o-characterGenerator__header">Profession</h2>
+                    <form class="m-form__column">
+                        <div
+                            v-for="profession in professions.warrior"
+                            :key="profession.id"
+                            class="m-form__item m-form__item--column"
+                        >
+                            <label :for="profession.name">
+                                {{ profession.name }}
+                                <input
+                                    type="radio"
+                                    class="item__input"
+                                    name="profession"
+                                    :value="profession"
+                                    @change="selectProfession(profession as IProfessionPayload)"
+                                />
+                            </label>
+                            {{ selectedProfession }}
+                            <div class="o-characterGenerator__statList">
+                                <template v-for="[key, value] in Object.entries(profession.statsDevelopment)">
+                                    <div v-if="value !== 0" :key="key" class="o-characterGenerator__statItem">
+                                        <p class="a-text">
+                                            {{ key }}
+                                        </p>
+                                        <p class="a-text">+{{ value }}</p>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
+
             <div class="m-form__row o-characterGenerator__row">
                 <div class="m-form__column">
                     <button type="submit" id="createPlayerButton" class="button action__button">Create</button>

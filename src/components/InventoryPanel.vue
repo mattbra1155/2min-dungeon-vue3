@@ -5,13 +5,14 @@ import { useInventory } from '@/composables/useInventory'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { getTotalDamage } from '@/helpers/getTotalDamage'
 import { getTotalArmorPoints } from '@/helpers/getTotalArmorPoints'
-import { Armor, Potion, Weapon } from '@/assets/models/itemsModel'
-import InventoryItem from '@/components/InventoryItem.vue'
+import { Armor, Weapon } from '@/assets/models/itemsModel'
+import { AllItemTypes } from '@/interfaces/IItem'
+import InventoryItem from './InventoryItem.vue'
 
 const { player } = usePlayer()
 const { activeItemId, isOpen, toggleInventory, setactiveItemId } = useInventory()
 
-const getButtonType = (item: Weapon | Armor | Potion) => {
+const getButtonType = (item: AllItemTypes) => {
     if (item.category === EItemCategory.Weapon) {
         return 'Wield'
     } else if (item.category === EItemCategory.Armor) {
@@ -23,7 +24,7 @@ const getButtonType = (item: Weapon | Armor | Potion) => {
     }
 }
 
-const getItemValue = (item: Weapon | Armor | Potion) => {
+const getItemValue = (item: AllItemTypes) => {
     const value = ref<string | number>()
     switch (item.category) {
         case EItemCategory.Weapon:
@@ -52,7 +53,7 @@ const getItemValue = (item: Weapon | Armor | Potion) => {
     return value.value
 }
 
-const submitAction = (item: Weapon | Armor | Potion) => {
+const submitAction = (item: AllItemTypes) => {
     if (item instanceof Weapon) {
         item.wield(player.value)
     } else if (item instanceof Armor) {
@@ -64,7 +65,7 @@ const closeItemDetails = () => {
     activeItemId.value = null
 }
 
-const unequip = (item: Weapon | Armor | Potion) => {
+const unequip = (item: AllItemTypes) => {
     if (item instanceof Weapon || item instanceof Armor) {
         item.unequip(player.value)
     }
@@ -88,11 +89,17 @@ const unequip = (item: Weapon | Armor | Potion) => {
             </button>
         </div>
         <div class="o-inventory__content">
+            <div class="o-inventory__goldWrapper">
+                <p>Gold: {{ player.inventory.gold }}</p>
+            </div>
+            ---
+            <hr />
+            ---
             <template v-if="!activeItemId">
                 <h3 class="a-text">Equipped</h3>
-                <ul class="o-inventory__list">
+                <ul class="o-inventory__list --noScroll">
                     <template v-for="item in player?.inventory.inventory" :key="item.id">
-                        <li v-if="item.isEquipped" class="o-inventory__item --equipped">
+                        <li v-if="item && item.id && item.isEquipped" class="o-inventory__item --equipped">
                             <p class="a-text" v-if="item instanceof Armor">{{ item.bodyPart }}</p>
                             <p class="a-text" v-if="item instanceof Weapon">weapon</p>
                             <p @click="setactiveItemId(item.id)">
@@ -117,11 +124,10 @@ const unequip = (item: Weapon | Armor | Potion) => {
             <InventoryItem v-if="activeItemId" :item-id="activeItemId" />
             <ul v-else id="inventoryList" class="o-inventory__list">
                 <template v-for="item in player?.inventory.inventory" :key="item.id">
-                    <li v-if="!item.isEquipped" class="o-inventory__item">
+                    <li v-if="item && item.id && !item.isEquipped" class="o-inventory__item">
                         <p @click="setactiveItemId(item.id)">
                             {{ item.name }}
                             {{ getItemValue(item) }}
-                            {{ item instanceof Weapon }}
                         </p>
                         <button class="a-button --primary" @click="submitAction(item)">
                             {{ getButtonType(item) }}

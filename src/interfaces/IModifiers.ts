@@ -1,22 +1,22 @@
 import { EModifierTypes } from '@/enums/EModifierTypes'
 import { IStats } from '@/interfaces/IStats'
-import { IMonster } from './IMonster'
+import { MonsterModel } from '@/assets/models/monsterModel'
 import { PlayerModel } from '@/assets/models/playerModel'
+import { ModifierItem } from '@/assets/models/modifierItemModel'
+import { PersonModel } from '@/assets/models/personModel'
+import { AllItemTypes } from './IItem'
 
 export interface IModifierItem {
     id: string
     name: string
     type: EModifierTypes | null
-    modifiers: Partial<IStats>
-    owner: PlayerModel | IMonster | undefined
-    target: PlayerModel | IMonster | undefined
-    duration: {
-        current: number | undefined
-        max: number | undefined
-    }
-    updateOnBeginning: boolean
+    owner: PlayerModel | MonsterModel | AllItemTypes | undefined
+    chanceToApply: number | null
+    statusId: string
+
+    use(target: PersonModel): void
 }
 
 export interface IModifiers {
-    list: IModifierItem[]
+    list: ModifierItem[]
 }

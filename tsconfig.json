@@ -25,7 +25,6 @@
       "dom",
       "dom.iterable",
       "scripthost",
-      "ES6"
     ]
   },
   "include": [
