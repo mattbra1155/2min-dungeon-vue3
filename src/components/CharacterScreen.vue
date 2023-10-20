@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { StatusBonusStat, StatusDamageOverTime } from '@/assets/models/statusItemModel'
 import { useCharacterScreen } from '@/composables/useCharacterScreen'
 import { usePlayer } from '@/composables/usePlayer'
 const { isOpen, toggleCharacterScreen } = useCharacterScreen()
@@ -25,10 +26,11 @@ const { player } = usePlayer()
         <div class="o-characterScreen__statsWrapper">
             <h2 class="a-text">Profession advancement:</h2>
             <div class="o-characterScreen__statList">
-                <template v-for="item in player.profession?.statsDevelopment" :key="item.name">
-                    <div v-if="item.value" class="o-characterScreen__statItem">
-                        <p class="a-text">{{ item.name }}</p>
-                        <p class="a-text">+{{ item.value }}</p>
+                <template v-for="(value, key) in player.profession?.statsDevelopment" :key="key">
+                    <!-- {{ key }} -->
+                    <div v-if="value > 0" class="o-characterScreen__statItem">
+                        <p class="a-text">{{ key }}</p>
+                        <p class="a-text">+{{ value }}</p>
                     </div>
                 </template>
             </div>
@@ -39,19 +41,22 @@ const { player } = usePlayer()
                 <template v-for="(value, key) in player.currentStats" :key="key">
                     <div v-if="value" class="o-characterScreen__statItem">
                         <p class="a-text">{{ key }}</p>
-                        <p class="a-text">{{ value.value }}</p>
+                        <p class="a-text">{{ value }}</p>
                     </div>
                 </template>
             </div>
         </div>
         <div class="o-characterScreen__modifiersWrapper">
-            <h2 class="a-text">Modifiers</h2>
-            <p v-for="modifierItem in player.modifiers.list" :key="modifierItem.id">
-                <span class="a-text">{{ modifierItem.name }} </span>&nbsp; &rarr; &nbsp;
-                <span v-for="(value, key) in modifierItem.modifiers" :key="key">
-                    {{ key }}: {{ Math.sign(value!) ? `+${value}` : `${value}` }}</span
-                >
-            </p>
+            <h2 class="a-text">Active Statuses</h2>
+            <template v-for="status in player.status.list" :key="status.id">
+                <p v-if="status instanceof StatusBonusStat">
+                    <span class="a-text">{{ status.name }} </span>&nbsp; &rarr; &nbsp;
+                    <span class="a-text" v-for="(value, key) in status.bonusStatList" :key="key">
+                        {{ key }}: {{ Math.sign(value!) ? `+${value}` : `${value}` }}</span
+                    >
+                </p>
+                <p class="a-text" v-else>{{ status.name }}</p>
+            </template>
         </div>
     </div>
 </template>
