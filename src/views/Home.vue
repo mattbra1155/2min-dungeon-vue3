@@ -12,7 +12,7 @@ import { sceneManager } from '@/assets/models/SceneManager'
 
 const { activeGameState } = useGameStateManager()
 const { turnModel } = useTurn()
-import { player } from '@/assets/models/playerManager'
+
 const router = useRouter()
 
 if (history.state.nextLevel) {
@@ -29,7 +29,9 @@ if (activeGameState.value === EGameState.Battle) {
 //     }
 // })
 
-watch(turnModel.value.turnOrder, () => {
+watch(turnModel.value.turnOrder, (tt) => {
+    console.log(tt)
+
     if (!turnModel.value.turnOrder.length) {
         router.push({ name: 'levelFinished' })
     }

@@ -9,9 +9,12 @@ const { turnModel } = useTurn()
 const { targetToAttack } = useAttack()
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
+console.log(turnModel.value)
+
 const playerAttack = () => {
     if (targetToAttack.value) {
         console.log(targetToAttack.value)
+        console.log(turnModel.value)
 
         player.attack(targetToAttack.value)
         turnModel.value.checkIfDead()

@@ -126,9 +126,15 @@ class TurnModel implements ITurn {
     }
 
     removeDeadFromOrder = (id: string) => {
-        const deadPerson = this.turnOrder.find((entityId) => entityId === id)
-        const deadPersonIndex = this.turnOrder.findIndex((character) => character === deadPerson)
-        const updatedTurnOrder = this.turnOrder.splice(deadPersonIndex, 1)
+        const deadPersonId = this.turnOrder.find((entityId) => entityId === id)
+        console.log(deadPersonId)
+
+        const deadPersonIndex = this.turnOrder.findIndex((characterId) => characterId === deadPersonId)
+        console.log(deadPersonIndex)
+
+        const updatedTurnOrder = this.turnOrder.splice(deadPersonIndex, 123)
+        console.log(updatedTurnOrder, this.turnOrder)
+
         return updatedTurnOrder
     }
 }

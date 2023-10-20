@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { useLoot } from '@/composables/useLoot'
-import { useTurn } from '@/composables/useTurn'
+import { turnModel } from '@/assets/models/turnModel'
 import { ETurnState } from '@/enums/ETurnState'
 import { useRouter } from 'vue-router'
 import { AllItemTypes } from '@/interfaces/IItem'
 import { Gold } from '@/assets/models/itemsModel'
 
-const { turnModel } = useTurn()
-turnModel.value.updateTurnStateMachine(ETurnState.Init)
+turnModel.updateTurnStateMachine(ETurnState.Init)
 const router = useRouter()
 import { player } from '@/assets/models/playerManager'
 const { lootList, generateLoot } = useLoot()
