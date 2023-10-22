@@ -163,7 +163,7 @@ class ItemGenerator {
                 break
             case EItemCategory.Armor:
                 item = Object.assign(itemBase as Armor, {
-                    name: `${(itemBase as Armor).material}${itemBase.type}`,
+                    name: `${(itemBase as Armor).material} ${itemBase.type}`,
                     id,
                     description,
                     category,

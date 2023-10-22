@@ -6,12 +6,17 @@ import { ETurnState } from '@/enums/ETurnState'
 import { useRouter } from 'vue-router'
 import { AllItemTypes } from '@/interfaces/IItem'
 import { Gold } from '@/assets/models/itemsModel'
+import { useGameStateManager } from '@/composables/useGameStateManager'
+import { EGameState } from '@/enums/EGameState'
 
 const { turnModel } = useTurn()
 turnModel.value.updateTurnStateMachine(ETurnState.Init)
 const router = useRouter()
 const { player } = usePlayer()
 const { lootList, generateLoot } = useLoot()
+const { activeGameState } = useGameStateManager()
+
+activeGameState.value = EGameState.LevelCleared
 
 const takeItem = (lootItem: AllItemTypes | Gold) => {
     player.value.inventory.addItem(lootItem, player.value.id)
