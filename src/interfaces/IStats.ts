@@ -1,4 +1,10 @@
-export interface iStats {
+export interface IStat {
+    name: string
+    symbol: string
+    value: number
+}
+
+export interface IStats {
     hp: number
     melee: number
     ranged: number

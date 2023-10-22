@@ -1,7 +1,7 @@
-import { IMonster } from '@/interfaces/IMonster'
+import { MonsterModel } from '@/assets/models/monsterModel'
 
 export interface iScene {
     id: number
     name: string
-    enemy: IMonster[]
+    enemy: MonsterModel[]
 }

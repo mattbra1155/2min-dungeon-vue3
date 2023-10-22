@@ -1,136 +1,47 @@
 import { reactive, toRefs } from 'vue'
 import localforage from 'localforage'
-import { IPlayer } from '@/interfaces/IPlayer'
-import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
-const { head, leftArm, rightArm, torso, leftLeg, rightLeg } = bodyPartsModel
-
-const playerModel: IPlayer = {
-    id: 0,
-    name: 'Charname',
-    race: 'dwarf',
-    profession: '',
-    stats: {
-        hp: 0,
-        melee: 0,
-        ranged: 0,
-        dexterity: 0,
-        strength: 0,
-        thoughtness: 0,
-        speed: 0,
-        initiative: 0,
-        attacks: 0,
-        inteligence: 0,
-        willPower: 0,
-        charisma: 0,
-    },
-    bodyParts: {
-        head,
-        leftArm,
-        rightArm,
-        torso,
-        leftLeg,
-        rightLeg,
-    },
-    weapon: null,
-    description: '',
-    inventory: [],
-    isAlive: true,
-    player: true,
-}
+import { EItemCategory } from '@/enums/ItemCategory'
+import { Armor, Potion, Weapon } from '@/assets/models/itemsModel'
+import { PlayerModel } from '@/assets/models/playerModel'
+import { Inventory } from '@/assets/models/inventoryModel'
+import { AllItemTypes } from '@/interfaces/IItem'
+import { ModifierItem } from '@/assets/models/modifierItemModel'
+import { Modifiers } from '@/assets/models/modifiersModel'
+import { Status } from '@/assets/models/statusModel'
 
 interface iPlayerState {
-    player: IPlayer
-    initPlayer: IPlayer
+    player: PlayerModel
+    initPlayer: PlayerModel
 }
 const state: iPlayerState = reactive({
-    initPlayer: {
-        id: 0,
-        name: 'Charname',
-        race: 'dwarf',
-        profession: '',
-        stats: {
-            hp: 0,
-            melee: 0,
-            ranged: 0,
-            dexterity: 0,
-            strength: 0,
-            thoughtness: 0,
-            speed: 0,
-            initiative: 0,
-            attacks: 0,
-            inteligence: 0,
-            willPower: 0,
-            charisma: 0,
-        },
-        bodyParts: {
-            head,
-            leftArm,
-            rightArm,
-            torso,
-            leftLeg,
-            rightLeg,
-        },
-        weapon: null,
-        description: '',
-        inventory: [],
-        isAlive: true,
-        player: true,
-    },
-    player: {
-        id: 0,
-        name: 'Charname',
-        race: 'dwarf',
-        profession: '',
-        stats: {
-            hp: 0,
-            melee: 0,
-            ranged: 0,
-            dexterity: 0,
-            strength: 0,
-            thoughtness: 0,
-            speed: 0,
-            initiative: 0,
-            attacks: 0,
-            inteligence: 0,
-            willPower: 0,
-            charisma: 0,
-        },
-        bodyParts: {
-            head,
-            leftArm,
-            rightArm,
-            torso,
-            leftLeg,
-            rightLeg,
-        },
-        weapon: null,
-        description: '',
-        inventory: [],
-        isAlive: true,
-        player: true,
-    },
+    initPlayer: new PlayerModel(),
+    player: new PlayerModel(),
 })
 
 export const usePlayer = () => {
-    const setPlayer = async (payload: IPlayer) => {
+    const setPlayer = async (payload: PlayerModel) => {
         await storePlayerModel()
         state.player = payload
-
         await localforage.setItem('player', JSON.stringify(payload))
         return state.player
     }
 
-    const createPlayer = (payload: IPlayer | null) => {
+    const createPlayer = (payload: PlayerModel | null) => {
         if (payload) {
             state.player = Object.assign(state.player, payload)
+            state.player.currentStats = JSON.parse(JSON.stringify(state.player.stats))
+
             state.player.isAlive = true
-            localforage.setItem('player', JSON.stringify(state.player))
+
+            const stringifiedPlayer = JSON.stringify(state.player)
+            localforage.setItem('player', stringifiedPlayer)
+            return state.player
         }
     }
 
     const storePlayerModel = async () => {
         try {
-            const result = await localforage.setItem('initPlayer', playerModel)
+            const result = await localforage.setItem('initPlayer', JSON.stringify(state.initPlayer))
             return result
         } catch (error: any) {
             throw Error(error)
@@ -140,9 +51,66 @@ export const usePlayer = () => {
     const fetchPlayer = async () => {
         try {
             const result: string | null = await localforage.getItem('player')
+
             if (result) {
-                const player: IPlayer = JSON.parse(result)
-                return player
+                const playerData = JSON.parse(result)
+                //create new EMPTY player class
+                const playerClass = new PlayerModel()
+                // assign data to player class
+                const newPlayer: PlayerModel = Object.assign(playerClass, playerData)
+                // create new inventory class
+                const inventory = new Inventory()
+                // create new modifiers class
+                const modifiers = new Modifiers()
+                const status = new Status()
+                newPlayer.inventory = inventory
+                newPlayer.modifiers = modifiers
+                newPlayer.status = status
+
+                const populateModifiers = () => {
+                    playerData.modifiers.list.forEach((modifier: ModifierItem) => newPlayer.modifiers.addItem(modifier))
+                }
+
+                const populateInventoryItemClasses = () => {
+                    if (!playerData.inventory) {
+                        return
+                    }
+                    newPlayer.inventory.inventory = playerData.inventory.inventory.map((item: AllItemTypes) => {
+                        if (item.category === EItemCategory.Weapon) {
+                            const weapon = new Weapon()
+                            const newWeapon = Object.assign(weapon, item)
+                            return newWeapon as Weapon
+                        } else if (item.category === EItemCategory.Armor) {
+                            const armor = new Armor()
+                            const newArmor = Object.assign(armor, item)
+                            return newArmor as Armor
+                        } else if (item.category === EItemCategory.Potion) {
+                            const potion = new Potion()
+                            const newPotion = Object.assign(potion, item)
+                            return newPotion as Potion
+                        } else {
+                            return item
+                        }
+                    })
+
+                    // recreate ModifierItem class
+                    newPlayer.inventory.inventory.forEach((item) => {
+                        item.modifiers = item.modifiers.map((itemModifier) => {
+                            const modifier = new ModifierItem(
+                                itemModifier.id,
+                                itemModifier.name,
+                                itemModifier.type,
+                                itemModifier.owner,
+                                itemModifier.chanceToApply,
+                                itemModifier.statusId
+                            )
+                            return modifier
+                        })
+                    })
+                }
+                populateInventoryItemClasses()
+                populateModifiers()
+                return newPlayer
             }
         } catch (error: any) {
             throw Error(error)
@@ -150,7 +118,14 @@ export const usePlayer = () => {
     }
 
     const resetPlayer = async () => {
-        state.player = (await localforage.getItem('initPlayer')) as IPlayer
+        const payload: string | null = await localforage.getItem('initPlayer')
+        if (payload) {
+            const playerData = JSON.parse(payload)
+            Object.assign(state.player, playerData)
+            console.log('Player reset')
+        } else {
+            console.log('Player reset: Cant get initPlayer from storage')
+        }
     }
 
     const deadPlayer = () => {

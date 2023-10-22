@@ -1,28 +1,23 @@
-import { iBodyParts } from '@/interfaces/BodyParts'
-import { iArmor, iPotion, iUtility, iWeapon } from '@/interfaces/Item'
-import { IMonster } from './IMonster'
-import { IPlayer } from './IPlayer'
+import { iBodyPart } from '@/interfaces/BodyParts'
+import { IWeapon } from '@/interfaces/IItem'
+import { Inventory } from '@/assets/models/inventoryModel'
+import { Modifiers } from '@/assets/models/modifiersModel'
+import { IStats } from '@/interfaces/IStats'
+import { PlayerModel } from '@/assets/models/playerModel'
+import { MonsterModel } from '@/assets/models/monsterModel'
 
-export interface iPerson {
+export interface IPerson {
+    id: string
     name: string
     race: string
-    stats: {
-        hp: number
-        melee: number
-        ranged: number
-        dexterity: number
-        strength: number
-        thoughtness: number
-        speed: number
-        initiative: number
-        attacks: number
-        inteligence: number
-        willPower: number
-        charisma: number
-    }
-    weapon: iWeapon | null
+    stats: IStats
+    currentStats: IStats
+    weapon: IWeapon | null
     description: string
-    inventory: Array<iWeapon | iArmor | iPotion | iUtility>
-    bodyParts: iBodyParts
+    inventory: Inventory
+    bodyParts: iBodyPart
     isAlive: boolean
+    modifiers: Modifiers
+    clearCurrentStats(): void
+    attack(enemy: PlayerModel | MonsterModel): number | undefined
 }

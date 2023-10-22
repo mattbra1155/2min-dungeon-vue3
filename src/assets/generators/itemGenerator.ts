@@ -1,102 +1,188 @@
-import { Weapon, Armor, Potion } from '@/assets/models/itemsModel'
-import itemMods from '@/assets/json/itemMods.json'
-import { iWeapon, iArmor, iPotion, iItemPrefix } from '@/interfaces/Item'
-import { useItemGenerator } from '@/composables/useItemGenerator'
+import { Weapon, Armor, Potion, Gold } from '@/assets/models/itemsModel'
+import itemList from '@/assets/json/items.json'
+import { AllItemTypes, IArmor, IGold } from '@/interfaces/IItem'
 import { EItemCategory } from '@/enums/ItemCategory'
+import { ModifierItem } from '../models/modifierItemModel'
+import { modifierList } from '@/assets/json/modifiers.json'
+import { EModifierTypes } from '@/enums/EModifierTypes'
 
 class ItemGenerator {
-    createItemBase(category: EItemCategory) {
-        let itemObject: iWeapon | iArmor | iPotion
-        switch (category) {
-            case EItemCategory.Weapon:
-                itemObject = new Weapon()
-                break
-            case EItemCategory.Armor:
-                itemObject = new Armor()
-                break
-            case EItemCategory.Potion:
-                itemObject = new Potion()
-                break
+    private category: EItemCategory.Weapon | EItemCategory.Armor | EItemCategory.Potion | null
+    private quality: ModifierItem | null
+    constructor() {
+        this.category = null
+        this.quality = null
+    }
+
+    private createItemBase(category: EItemCategory.Weapon): Weapon
+    private createItemBase(category: EItemCategory.Armor): Armor
+    private createItemBase(category: EItemCategory.Potion): Potion
+    private createItemBase(category: any): any {
+        if (!this.category) {
+            throw Error('no category')
         }
-        interface iRandomItem {
-            name: string
-            type?: string | string[]
+
+        let itemObject: AllItemTypes = new Weapon()
+
+        if (this.category === EItemCategory.Weapon) {
+            itemObject = new Weapon()
+        } else if (this.category === EItemCategory.Armor) {
+            itemObject = new Armor()
+        } else if (this.category === EItemCategory.Potion) {
+            itemObject = new Potion()
         }
-        const itemCategory = itemMods[category]
-        const randomItem: iRandomItem = itemCategory.item[Math.floor(Math.random() * itemCategory.item.length)]
-        const itemType = (item: iRandomItem) => {
-            if (Array.isArray(item.type)) {
-                return item.type[Math.floor(Math.random() * item.type.length)]
-            } else {
-                return item.type
+
+        const itemCategory = itemList[this.category]
+        const randomItem = itemCategory.item[Math.floor(Math.random() * itemCategory.item.length)]
+
+        if (this.category === EItemCategory.Armor) {
+            const armorType =
+                itemList[this.category].material[
+                    Math.floor(Math.floor(Math.random() * itemList[this.category].material.length))
+                ]
+
+            const iii: Partial<IArmor> = {
+                material: armorType.name,
+                armorPoints: (itemObject as Armor).armorPoints + armorType.armorPoints,
             }
+
+            itemObject = Object.assign(itemObject, iii)
         }
-        const finalItem: iWeapon | iArmor | iPotion = Object.assign(itemObject, randomItem, {
+        const finalItem: AllItemTypes = Object.assign(itemObject, randomItem, {
             category: itemCategory,
-            type: itemType(randomItem),
         })
         return finalItem
     }
 
-    createPrefix(category: EItemCategory) {
-        const itemCategory = itemMods[category]
-        const prefix = itemCategory.prefix[Math.floor(Math.random() * itemCategory.prefix.length)]
-        return prefix
-    }
-
-    createDescription(baseItem: iWeapon | iArmor | iPotion, prefix: iItemPrefix) {
-        if (prefix.name === 'used') {
-            return `This is a ${baseItem.name}. Nothing out of the ordinary`
+    private createDescription(baseItem: AllItemTypes) {
+        if (!this.quality) {
+            return `This is a ${baseItem.type}. Nothing out of the ordinary`
         } else {
-            return `This is a ${baseItem.name}. It's ${prefix.name}`
+            return `This is a ${baseItem.type}. It's ${this.quality.name}`
         }
     }
 
-    addId(category: EItemCategory) {
-        const { incrementItemId } = useItemGenerator()
-        const id = incrementItemId(category)
-
-        return id
+    private addId() {
+        if (!this.category) {
+            throw Error('no category')
+        }
+        const id = self.crypto.randomUUID()
+        return `${this.category}-${id}`
     }
 
-    createItem(category: EItemCategory) {
-        const itemBase = this.createItemBase(category)
-        const prefix = this.createPrefix(category)
-        const description = this.createDescription(itemBase, prefix)
-        const id = this.addId(category)
+    private createModifiers(baseItem: AllItemTypes) {
+        if (!this.category) {
+            throw Error('no category')
+        }
+
+        const createdModifierList: ModifierItem[] = []
+        const itemCategory = itemList[this.category]
+        const itemModifiersData = itemCategory?.item.find((item) => item.type === baseItem.type)?.modifiers
+        itemModifiersData?.forEach((itemModifier) => {
+            const modifierData = modifierList.find((mod) => {
+                return mod.id === itemModifier
+            })
+            if (!modifierData) {
+                console.error(`modifier not found`)
+                return
+            }
+
+            const type = Object.values(EModifierTypes).find((cat) => cat === modifierData.type)
+            if (!type) {
+                console.error(`Modifier type incorrect -> ${modifierData.type}`)
+                return
+            }
+
+            const modifier = new ModifierItem(
+                modifierData.id,
+                modifierData.name,
+                type,
+                undefined,
+                modifierData.chanceToApply,
+                modifierData.statusId
+            )
+
+            createdModifierList.push(modifier)
+        })
+
+        return createdModifierList
+    }
+
+    createGold(amount = 0): Gold {
+        const goldBase = new Gold()
+        const gold: IGold = {
+            id: 'gold',
+            description: 'Gold coins with the face of our King',
+            category: 'gold',
+            ownerId: undefined,
+            name: 'gold',
+            amount,
+        }
+
+        const result = Object.assign(goldBase, gold)
+
+        return result
+    }
+
+    createItem(category: EItemCategory, tier = 1): AllItemTypes {
+        this.category = category
+
+        if (!this.category) {
+            throw Error('no category')
+        }
+
+        const getItemBase = (): AllItemTypes => {
+            let itemBase: AllItemTypes = this.createItemBase(EItemCategory.Weapon)
+            if (category === EItemCategory.Weapon) {
+                itemBase = this.createItemBase(category)
+            } else if (category === EItemCategory.Armor) {
+                itemBase = this.createItemBase(category)
+            } else if (category === EItemCategory.Potion) {
+                itemBase = this.createItemBase(category)
+            }
+
+            return itemBase
+        }
+
+        const itemBase = getItemBase()
+
+        const description = this.createDescription(itemBase)
+        const id = this.addId()
+        const modifiers = this.createModifiers(itemBase)
         let item = itemBase
+
         switch (category) {
             case EItemCategory.Weapon:
-                item = Object.assign(itemBase, {
-                    name: `${prefix.name} ${itemBase.name}`,
-                    prefix,
+                item = Object.assign(itemBase as Weapon, {
+                    name: `${itemBase.type} ${itemBase.name}`,
                     id,
                     description,
                     category,
-                    damage: prefix.modifier + itemBase.modifier,
+                    modifiers,
                 })
                 break
             case EItemCategory.Armor:
-                item = Object.assign(itemBase, {
-                    name: `${prefix.name} ${itemBase.name}`,
-                    prefix,
+                item = Object.assign(itemBase as Armor, {
+                    name: `${(itemBase as Armor).material} ${itemBase.type}`,
                     id,
                     description,
                     category,
-                    armorPoints: prefix.modifier + itemBase.modifier,
+                    modifiers,
                 })
                 break
             case EItemCategory.Potion:
                 item = Object.assign(itemBase, {
-                    name: `${prefix.name} ${itemBase.name}`,
-                    prefix,
+                    name: `Potion of ${itemBase.type}`,
                     id,
                     description,
                     category,
-                    baseValue: prefix.modifier + itemBase.modifier,
+                    modifiers,
                 })
                 break
         }
+
+        this.category = null
+        this.quality = null
 
         return item
     }
