@@ -66,10 +66,6 @@ export const useLoot = () => {
         } else if (rollForItemType > state.baseChanceForArmor && rollForItemType <= state.baseChanceForPotion) {
             console.log('roll Potion')
             return itemGenerator.createItem(EItemCategory.Potion)
-            // } else if (rollForItemType > state.baseChanceForPotion && rollForItemType <= state.baseChanceForGold) {
-            //     console.log('roll Gold')
-            //     return itemGenerator.createItem(EItemCategory.Gold)
-            // }
         } else {
             console.log('roll Gold')
             return itemGenerator.createGold(diceRollK4())

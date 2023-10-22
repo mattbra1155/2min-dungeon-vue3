@@ -100,7 +100,15 @@ const unequip = (item: AllItemTypes) => {
                 <ul class="o-inventory__list --noScroll">
                     <template v-for="item in player?.inventory.inventory" :key="item.id">
                         <li v-if="item && item.id && item.isEquipped" class="o-inventory__item --equipped">
-                            <p class="a-text" v-if="item instanceof Armor">{{ item.bodyPart }}</p>
+                            <p class="a-text" v-if="item instanceof Armor">
+                                {{
+                                    item.bodyPart
+                                        .toString()
+                                        .replace(/([A-Z])/g, ' $1')
+                                        .trim()
+                                        .toLowerCase()
+                                }}
+                            </p>
                             <p class="a-text" v-if="item instanceof Weapon">weapon</p>
                             <p @click="setactiveItemId(item.id)">
                                 {{ item.name }}

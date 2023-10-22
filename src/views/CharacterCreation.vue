@@ -88,8 +88,10 @@ const selectProfession = (profession: IProfessionPayload) => {
 const createInventoryItems = () => {
     const weapon = new ItemGenerator().createItem(EItemCategory.Weapon)
     const armor = new ItemGenerator().createItem(EItemCategory.Armor)
+    const potion = new ItemGenerator().createItem(EItemCategory.Potion)
     playerObject.value.inventory.addItem(weapon, playerObject.value.id)
     playerObject.value.inventory.addItem(armor, playerObject.value.id)
+    playerObject.value.inventory.addItem(potion, playerObject.value.id)
 }
 const savePlayer = async () => {
     if (playerObject.value) {
