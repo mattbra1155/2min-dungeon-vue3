@@ -3,6 +3,7 @@ import { reactive, toRefs } from 'vue'
 import { monsterGenerator } from '@/assets/generators/monsterGenerator'
 import { iScene } from '@/interfaces/Scene'
 import { MonsterModel } from '@/assets/models/monsterModel'
+import { Room } from '@/assets/models/RoomModel'
 
 interface iStateUseSceneManager {
     currentId: number
@@ -34,6 +35,7 @@ export const useSceneManager = () => {
                 enemyList.push(enemy)
             }
         }
+
         const scene: iScene = {
             id: state.currentId++,
             name: levelName || `level ${state.currentId}`,
