@@ -21,13 +21,21 @@ const playerAttack = () => {
 
 <template>
     <div class="o-interface">
-        <button id="attackButtonOne" type="button" class="action__button" @click="playerAttack"
-            :disbaled="turnModel.activeTurnState !== ETurnState.PlayerAttack" :disabled="!player.isAlive">
+        <button
+            id="attackButtonOne"
+            type="button"
+            class="action__button"
+            @click="playerAttack"
+            :disbaled="turnModel.activeTurnState !== ETurnState.PlayerAttack"
+            :disabled="!player.isAlive"
+        >
             Attack
         </button>
         <button id="inventoryButton" type="button" class="action__button" @click="toggleInventory">Inventory</button>
-        <button :disabled="turnModel.activeTurnState !== ETurnState.Init"
-            @click="turnModel.updateTurnStateMachine(ETurnState.Init)">
+        <button
+            :disabled="turnModel.activeTurnState !== ETurnState.Init"
+            @click="turnModel.updateTurnStateMachine(ETurnState.Init)"
+        >
             start BATTLE
         </button>
         <button class="action__button" @click="toggleCharacterScreen">Character Screen</button>

@@ -7,23 +7,19 @@ import { modifierList } from '@/assets/json/modifiers.json'
 import { EModifierTypes } from '@/enums/EModifierTypes'
 
 class ItemGenerator {
-    private category: EItemCategory | null
+    private category: EItemCategory.Weapon | EItemCategory.Armor | EItemCategory.Potion | null
     private quality: ModifierItem | null
     constructor() {
         this.category = null
         this.quality = null
     }
+
     private createItemBase(category: EItemCategory.Weapon): Weapon
     private createItemBase(category: EItemCategory.Armor): Armor
     private createItemBase(category: EItemCategory.Potion): Potion
-    private createItemBase(category: EItemCategory.Gold): Gold
     private createItemBase(category: any): any {
         if (!this.category) {
             throw Error('no category')
-        }
-
-        if (this.category === EItemCategory.Gold) {
-            return new Gold()
         }
 
         let itemObject: AllItemTypes = new Weapon()
@@ -80,9 +76,6 @@ class ItemGenerator {
         }
 
         const createdModifierList: ModifierItem[] = []
-        if (this.category === EItemCategory.Gold) {
-            return
-        }
         const itemCategory = itemList[this.category]
         const itemModifiersData = itemCategory?.item.find((item) => item.type === baseItem.type)?.modifiers
         itemModifiersData?.forEach((itemModifier) => {
@@ -116,14 +109,13 @@ class ItemGenerator {
     }
 
     createGold(amount = 0): Gold {
-        this.category = EItemCategory.Gold
-        const goldBase = this.createItemBase(EItemCategory.Gold)
+        const goldBase = new Gold()
         const gold: IGold = {
             id: 'gold',
             description: 'Gold coins with the face of our King',
-            category: EItemCategory.Gold,
+            category: 'gold',
             ownerId: undefined,
-            name: EItemCategory.Gold,
+            name: 'gold',
             amount,
         }
 
@@ -139,18 +131,16 @@ class ItemGenerator {
             throw Error('no category')
         }
 
-        const getItemBase = () => {
-            let itemBase: AllItemTypes | undefined = undefined
+        const getItemBase = (): AllItemTypes => {
+            let itemBase: AllItemTypes = this.createItemBase(EItemCategory.Weapon)
             if (category === EItemCategory.Weapon) {
                 itemBase = this.createItemBase(category)
             } else if (category === EItemCategory.Armor) {
                 itemBase = this.createItemBase(category)
-            } else  (category === EItemCategory.Potion) {
-                itemBase = this.createItemBase(Potion)
+            } else if (category === EItemCategory.Potion) {
+                itemBase = this.createItemBase(category)
             }
-            if (!itemBase) {
-                return
-            }
+
             return itemBase
         }
 

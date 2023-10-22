@@ -35,15 +35,15 @@ class Gold implements IGold {
     public id = 'gold'
     public name = 'Gold'
     public description = 'Coins made of gold'
-    public type: EItemCategory.Gold
-    public category: EItemCategory.Gold
+    public type = 'gold'
+    public category = 'gold'
     public ownerId: string | undefined
     public amount: number
 
     constructor(amount = 0, ownerId: string | undefined = undefined) {
         this.description
-        this.category = EItemCategory.Gold
-        this.type = EItemCategory.Gold
+        this.category
+        this.type
         this.ownerId = ownerId
         this.amount = amount
     }
