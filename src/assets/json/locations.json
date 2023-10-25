@@ -1,0 +1,143 @@
+[
+    {
+        "id": 0,
+        "name": "Castle Drakenhof",
+        "entityList": [],
+        "links": [
+            1
+        ],
+        "roomList": [
+            {
+                "id": 0,
+                "description": "",
+                "entityList": [],
+                "name": "Entry Gate",
+                "exits": [
+                    -1,
+                    -1,
+                    1,
+                    2
+                ]
+            },
+            {
+                "id": 1,
+                "description": "",
+                "entityList": [],
+                "name": "Guard Post",
+                "exits": [
+                    0,
+                    -1,
+                    -1,
+                    3
+                ]
+            },
+            {
+                "id": 2,
+                "description": "",
+                "entityList": [],
+                "name": "Guest Room",
+                "exits": [
+                    -1,
+                    0,
+                    -1,
+                    -1
+                ]
+            },
+            {
+                "id": 3,
+                "description": "",
+                "entityList": [],
+                "name": "Great Stairs",
+                "exits": [
+                    -1,
+                    2,
+                    -1,
+                    -1
+                ]
+            }
+        ]
+    },
+    {
+        "id": 1,
+        "description": "",
+        "name": "Castle Drakenhof - dungeon",
+        "entityList": [],
+        "links": [
+            0
+        ],
+        "roomList": [
+            {
+                "id": 0,
+                "description": "",
+                "entityList": [],
+                "name": "Entrence",
+                "exits": [
+                    -1,
+                    -1,
+                    1,
+                    -1
+                ]
+            },
+            {
+                "id": 1,
+                "description": "",
+                "entityList": [],
+                "name": "Jailer room",
+                "exits": [
+                    1,
+                    -1,
+                    2,
+                    -1
+                ]
+            },
+            {
+                "id": 2,
+                "description": "",
+                "entityList": [],
+                "name": "Corridor",
+                "exits": [
+                    1,
+                    3,
+                    4,
+                    5
+                ]
+            },
+            {
+                "id": 3,
+                "description": "",
+                "entityList": [],
+                "name": "Cell A",
+                "exits": [
+                    -1,
+                    -1,
+                    2,
+                    -1
+                ]
+            },
+            {
+                "id": 4,
+                "description": "",
+                "entityList": [],
+                "name": "Cell B",
+                "exits": [
+                    2,
+                    -1,
+                    -1,
+                    -1
+                ]
+            },
+            {
+                "id": 5,
+                "description": "",
+                "entityList": [],
+                "name": "Corridor",
+                "exits": [
+                    -1,
+                    2,
+                    -1,
+                    -1
+                ]
+            }
+        ]
+    }
+]

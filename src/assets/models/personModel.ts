@@ -14,6 +14,8 @@ import { Status } from './statusModel'
 import { StatusAttackBonusDamage, StatusDamageOverTime } from './statusItemModel'
 import { toRaw } from 'vue'
 import { EStats } from '@/enums/EStats'
+import { useSceneManager } from '@/composables/useSceneManager'
+import { Scene } from './sceneModel'
 
 class PersonModel implements IPerson {
     constructor(
@@ -56,6 +58,16 @@ class PersonModel implements IPerson {
                 return foundStat
             })
         }
+    }
+
+    moveTo(roomId: number) {
+        // const { scene } = useSceneManager()
+        //
+        // if (!scene.value) {
+        // return
+        // }
+        //
+        // scene.value.changeCurrentRoom(roomId)
     }
 
     attack(enemy: MonsterModel | PlayerModel) {

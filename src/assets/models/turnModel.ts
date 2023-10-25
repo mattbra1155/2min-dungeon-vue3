@@ -28,7 +28,7 @@ class TurnModel implements ITurn {
         if (!scene.value) {
             return new Error('No scene')
         }
-        const sorted = scene.value.enemy.sort((a, b) => b.currentStats.initiative - a.currentStats.initiative)
+        const sorted = scene.value.entityList.sort((a, b) => b.currentStats.initiative - a.currentStats.initiative)
         this.turnOrder = sorted
         return sorted
     }
