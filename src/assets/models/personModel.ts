@@ -11,13 +11,13 @@ import { EModifierTypes } from '@/enums/EModifierTypes'
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { stats as statsModel } from '@/assets/models/statsModel'
 import { Status } from './statusModel'
-import { StatusAttackBonusDamage, StatusDamageOverTime } from './statusItemModel'
+import { StatusAttackBonusDamage } from './statusItemModel'
 import { toRaw } from 'vue'
 import { EStats } from '@/enums/EStats'
-import { useSceneManager } from '@/composables/useSceneManager'
-import { Scene } from './sceneModel'
+import { sceneManager } from '@/assets/models/sceneManager'
+import { Room } from './RoomModel'
 
-class PersonModel implements IPerson {
+abstract class PersonModel implements IPerson {
     constructor(
         public id: string = self.crypto.randomUUID(),
         public name: string = '',
@@ -60,16 +60,14 @@ class PersonModel implements IPerson {
         }
     }
 
-    moveTo(roomId: number) {
-        // const { scene } = useSceneManager()
-        //
-        // if (!scene.value) {
-        // return
-        // }
-        //
-        // scene.value.changeCurrentRoom(roomId)
-    }
+    moveTo(room: Room) {
+        const scene = sceneManager.scene
+        if (!scene) {
+            return
+        }
 
+        scene.changeCurrentRoom(room)
+    }
     attack(enemy: MonsterModel | PlayerModel) {
         // dice roll
         const diceRollHitResult = diceRollK100()

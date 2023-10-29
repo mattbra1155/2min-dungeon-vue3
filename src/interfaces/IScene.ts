@@ -6,7 +6,7 @@ export interface IScene {
     id: number
     name: string
     entityList: Array<PlayerModel | MonsterModel>
-    currentRoomId: number | undefined
+    currentRoom: Room | undefined
     roomList: Room[]
     description: string
     links: number[]

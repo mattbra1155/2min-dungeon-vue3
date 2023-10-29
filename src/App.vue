@@ -1,3 +1,11 @@
+<script lang="ts">
+import { MonsterGenerator } from './assets/generators/monsterGenerator'
+
+const monsterGenerator = new MonsterGenerator()
+
+export { monsterGenerator }
+</script>
+
 <script setup lang="ts">
 import { usePlayer } from './composables/usePlayer'
 import { useRouter } from 'vue-router'
@@ -16,7 +24,7 @@ const init = async () => {
         const player: PlayerModel | undefined = await fetchPlayer()
         if (player) {
             await setPlayer(player)
-            updateGameState(EGameState.Battle)
+            updateGameState(EGameState.Travel)
             router.push({ name: 'home' })
             return player
         } else {

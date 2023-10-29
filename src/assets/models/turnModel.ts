@@ -3,10 +3,9 @@ import { MonsterModel } from './monsterModel'
 import { PlayerModel } from './playerModel'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { usePlayer } from '@/composables/usePlayer'
-import { useSceneManager } from '@/composables/useSceneManager'
+import { sceneManager } from '@/assets/models/sceneManager'
 import { EGameState } from '@/enums/EGameState'
 
-const { scene } = useSceneManager()
 const { updateGameState } = useGameStateManager()
 
 interface ITurn {
@@ -25,10 +24,12 @@ class TurnModel implements ITurn {
     ) {}
 
     sortTurnOrder = () => {
-        if (!scene.value) {
+        if (!sceneManager.scene) {
             return new Error('No scene')
         }
-        const sorted = scene.value.entityList.sort((a, b) => b.currentStats.initiative - a.currentStats.initiative)
+        const sorted = sceneManager.scene.entityList.sort(
+            (a, b) => b.currentStats.initiative - a.currentStats.initiative
+        )
         this.turnOrder = sorted
         return sorted
     }

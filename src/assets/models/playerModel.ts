@@ -9,6 +9,7 @@ import { Weapon } from './itemsModel'
 import { IStats } from '@/interfaces/IStats'
 import { Profession } from './professionModel'
 import { stats as statsModel } from '@/assets/models/statsModel'
+import { sceneManager } from './sceneManager'
 
 class PlayerModel extends PersonModel implements IPlayer {
     constructor(

@@ -97,7 +97,6 @@ const savePlayer = async () => {
     if (playerObject.value) {
         await resetPlayer()
         createPlayer(playerObject.value)
-        updateGameState(EGameState.Battle)
         router.push({ name: 'home' })
     }
 }

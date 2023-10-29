@@ -2,6 +2,8 @@ import { AllItemTypes } from '@/interfaces/IItem'
 import { MonsterModel } from './monsterModel'
 import { Gold } from './itemsModel'
 import { EDirections } from '@/enums/EDirections'
+import monsterGenerator from '@/App.vue'
+import { Scene } from './sceneModel'
 
 interface IRoom {
     id: number
@@ -27,6 +29,31 @@ class Room implements IRoom {
         this.exits = exits
         this.monsterList = monsterList
         this.lootList = lootList
+    }
+
+    createMonster = () => {
+        const monster = monsterGenerator.create()
+        return monster
+    }
+
+    createScene = (numberOfEnemies = 1, levelName?: string) => {
+        const enemyList: MonsterModel[] = []
+        const createEnemyList = (enemiesToCreate = numberOfEnemies) => {
+            let createdEnemies = 0
+            while (createdEnemies < enemiesToCreate) {
+                createdEnemies++
+                const enemy = this.createMonster()
+                enemyList.push(enemy)
+            }
+        }
+
+        const scene: Scene = new Scene()
+
+        scene.fetchSceneDetails(0)
+
+        console.log(scene)
+
+        // this.setScene(scene)
     }
 }
 

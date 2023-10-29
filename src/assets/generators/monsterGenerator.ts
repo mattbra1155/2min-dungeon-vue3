@@ -37,6 +37,4 @@ class MonsterGenerator {
     }
 }
 
-const monsterGenerator = new MonsterGenerator()
-
-export { monsterGenerator }
+export { MonsterGenerator }

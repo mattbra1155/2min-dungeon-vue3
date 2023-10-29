@@ -27,14 +27,14 @@
 <script setup lang="ts">
 import { useAttack } from '@/composables/useAttack'
 import { usePlayer } from '@/composables/usePlayer'
-import { useSceneManager } from '@/composables/useSceneManager'
+import { sceneManager } from '@/assets/models/sceneManager'
 import { useTurn } from '@/composables/useTurn'
 import { computed } from 'vue'
 
 const { targetToAttack, setTargetToAttack } = useAttack()
 const { player } = usePlayer()
-const { scene } = useSceneManager()
+const scene = sceneManager.scene
 const { turnModel } = useTurn()
 
-const enemyList = computed(() => (scene.value ? scene.value.enemy : null))
+const enemyList = computed(() => (scene ? scene.entityList : null))
 </script>

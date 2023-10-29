@@ -8,7 +8,7 @@ class Scene implements IScene {
         public id: number = 0,
         public name: string = '',
         public entityList: Array<PlayerModel | MonsterModel> = [],
-        public currentRoomId: number | undefined = undefined,
+        public currentRoom: Room | undefined = undefined,
         public roomList: Room[] = [],
         public description: string = '',
         public links: number[] = []
@@ -16,14 +16,14 @@ class Scene implements IScene {
         this.id = id
         this.name = name
         this.entityList = entityList
-        this.currentRoomId = currentRoomId
+        this.currentRoom = currentRoom
         this.roomList = roomList
         this.description = description
         this.links = links
     }
 
-    changeCurrentRoom(roomId: number) {
-        this.currentRoomId = roomId
+    changeCurrentRoom(room: Room) {
+        this.currentRoom = room
     }
 
     fetchSceneDetails(id: number): Scene | undefined {
