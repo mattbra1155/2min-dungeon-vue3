@@ -37,4 +37,5 @@ class MonsterGenerator {
     }
 }
 
+// const monsterGenerator = new MonsterGenerator()
 export { MonsterGenerator }

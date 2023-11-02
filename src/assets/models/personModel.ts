@@ -14,8 +14,8 @@ import { Status } from './statusModel'
 import { StatusAttackBonusDamage } from './statusItemModel'
 import { toRaw } from 'vue'
 import { EStats } from '@/enums/EStats'
-import { sceneManager } from '@/assets/models/sceneManager'
 import { Room } from './RoomModel'
+import { useSceneManager } from '@/composables/useSceneManager'
 
 abstract class PersonModel implements IPerson {
     constructor(
@@ -61,7 +61,8 @@ abstract class PersonModel implements IPerson {
     }
 
     moveTo(room: Room) {
-        const scene = sceneManager.scene
+        const { activeScene } = useSceneManager()
+        const scene = activeScene.value
         if (!scene) {
             return
         }

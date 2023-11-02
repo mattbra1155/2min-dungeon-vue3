@@ -8,12 +8,14 @@ import { useCharacterScreen } from '@/composables/useCharacterScreen'
 import { onMounted } from 'vue'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { EGameState } from '@/enums/EGameState'
+
 const { activeGameState } = useGameStateManager()
 const { turnModel } = useTurn()
 const { targetToAttack } = useAttack()
 const { player } = usePlayer()
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
+
 const playerAttack = () => {
     if (targetToAttack.value) {
         player.value.attack(targetToAttack.value)

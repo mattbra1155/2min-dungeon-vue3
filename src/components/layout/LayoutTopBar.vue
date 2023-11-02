@@ -1,29 +1,25 @@
 <script setup lang="ts">
 import { useAttack } from '@/composables/useAttack'
 import { usePlayer } from '@/composables/usePlayer'
-import { sceneManager } from '@/assets/models/sceneManager'
+// import { sceneManager } from '@/assets/models/sceneManager'
+
 import { useTurn } from '@/composables/useTurn'
 import { computed, onMounted, ref } from 'vue'
 import { Scene } from '@/assets/models/sceneModel'
+import { useSceneManager } from '@/composables/useSceneManager'
 
 const { targetToAttack, setTargetToAttack } = useAttack()
 const { player } = usePlayer()
-const scene = sceneManager.scene
+const { activeScene } = useSceneManager()
 const { turnModel } = useTurn()
 
-const enemyList = computed(() => (scene ? scene.entityList : null))
-
-const ttt = computed(() => sceneManager.scene)
-
-onMounted(() => {
-    console.log('here', ttt.value?.currentRoom)
-})
+const enemyList = computed(() => (activeScene.value ? activeScene.value.entityList : null))
 </script>
 
 <template>
     <div id="top-bar">
-        <h2 v-if="scene" id="levelName" class="level__name">{{ scene.name }}</h2>
-        <p style="text-align: center">Room: {{ scene?.currentRoom?.name }} {{ ttt?.currentRoom?.name }}</p>
+        <h2 v-if="activeScene" id="levelName" class="level__name">{{ activeScene.name }}</h2>
+        <p style="text-align: center">Room: {{ activeScene?.currentRoom?.name }}</p>
         <p style="text-align: center">{{ turnModel.activeTurnState }}</p>
         <p style="text-align: center">Turn: {{ turnModel.turn }}</p>
         <h3 id="turnNumber" class="text--center"></h3>
