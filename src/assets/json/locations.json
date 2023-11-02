@@ -50,7 +50,7 @@
                 "name": "Great Stairs",
                 "exits": [
                     -1,
-                    -1,
+                    1,
                     -1,
                     -1
                 ]

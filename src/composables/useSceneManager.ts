@@ -35,8 +35,6 @@ export const useSceneManager = () => {
 
         scene.fetchSceneDetails(0)
 
-        console.log(scene)
-
         setScene(scene)
     }
     const setScene = (scene: Scene) => {

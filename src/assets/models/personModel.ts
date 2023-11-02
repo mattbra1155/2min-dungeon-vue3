@@ -59,16 +59,6 @@ abstract class PersonModel implements IPerson {
             })
         }
     }
-
-    moveTo(room: Room) {
-        const { activeScene } = useSceneManager()
-        const scene = activeScene.value
-        if (!scene) {
-            return
-        }
-
-        scene.changeCurrentRoom(room)
-    }
     attack(enemy: MonsterModel | PlayerModel) {
         // dice roll
         const diceRollHitResult = diceRollK100()

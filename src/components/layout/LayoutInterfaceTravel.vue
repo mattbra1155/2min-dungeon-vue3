@@ -63,18 +63,26 @@ onMounted(() => {
 
 <template>
     <div class="o-interface">
-        <template v-for="(direction, index) in activeScene?.currentRoom?.exits" :key="index">
-            <button v-if="direction !== -1" class="action__button" @click="moveRoom(direction)">
-                {{ Object.entries(EDirections).find((dir) => dir[1] === direction)?.[0] }}
-            </button>
-        </template>
-        <button id="inventoryButton" type="button" class="action__button" @click="toggleInventory">Inventory</button>
         <button
+            v-if="activeScene?.entityList.length"
             :disabled="turnModel.activeTurnState !== ETurnState.Init"
             @click="turnModel.updateTurnStateMachine(ETurnState.Init)"
+            class="a-button"
         >
             start BATTLE
         </button>
-        <button class="action__button" @click="toggleCharacterScreen">Character Screen</button>
+        <div class="o-interface__row o-interface__directionWrapper">
+            <template v-for="(direction, index) in activeScene?.currentRoom?.exits" :key="index">
+                <button v-if="direction !== -1" class="a-button action__button" @click="moveRoom(direction)">
+                    {{ Object.entries(EDirections).find((dir) => dir[1] === direction)?.[0] }}
+                </button>
+            </template>
+        </div>
+        <div class="o-interface__row">
+            <button id="inventoryButton" type="button" class="a-button action__button" @click="toggleInventory">
+                Inventory
+            </button>
+            <button class="a-button action__button" @click="toggleCharacterScreen">Character Screen</button>
+        </div>
     </div>
 </template>
