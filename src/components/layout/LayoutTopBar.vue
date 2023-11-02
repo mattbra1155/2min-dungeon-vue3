@@ -1,27 +1,24 @@
 <script setup lang="ts">
 import { useAttack } from '@/composables/useAttack'
 import { usePlayer } from '@/composables/usePlayer'
-// import { sceneManager } from '@/assets/models/sceneManager'
-
 import { useTurn } from '@/composables/useTurn'
-import { computed, onMounted, ref } from 'vue'
-import { Scene } from '@/assets/models/sceneModel'
+import { computed } from 'vue'
 import { useSceneManager } from '@/composables/useSceneManager'
 
 const { targetToAttack, setTargetToAttack } = useAttack()
 const { player } = usePlayer()
 const { activeScene } = useSceneManager()
-const { turnModel } = useTurn()
+const { activeTurnState, turnNumber } = useTurn()
 
-const enemyList = computed(() => (activeScene.value ? activeScene.value.entityList : null))
+const enemyList = computed(() => activeScene.value?.currentRoom?.monsterList)
 </script>
 
 <template>
     <div id="top-bar">
         <h2 v-if="activeScene" id="levelName" class="level__name">{{ activeScene.name }}</h2>
         <p style="text-align: center">Room: {{ activeScene?.currentRoom?.name }}</p>
-        <p style="text-align: center">{{ turnModel.activeTurnState }}</p>
-        <p style="text-align: center">Turn: {{ turnModel.turn }}</p>
+        <p style="text-align: center">{{ activeTurnState }}</p>
+        <p style="text-align: center">Turn: {{ turnNumber }}</p>
         <h3 id="turnNumber" class="text--center"></h3>
         <div class="health__display">
             <div class="player-hp">

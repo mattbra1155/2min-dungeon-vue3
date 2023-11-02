@@ -8,12 +8,12 @@ import { ETurnState } from '@/enums/ETurnState'
 
 const { deadPlayer } = usePlayer()
 const router = useRouter()
-const { turnModel } = useTurn()
+const { activeCharacter, updateTurnStateMachine } = useTurn()
 const { createScene, resetScene } = useSceneManager()
 
 onMounted(() => {
     deadPlayer()
-    turnModel.value.updateTurnStateMachine(ETurnState.Init)
+    updateTurnStateMachine(ETurnState.Init)
     resetScene()
     createScene()
 })
@@ -25,7 +25,7 @@ onMounted(() => {
             <h1 class="o-playerDead__title">YOU DIED</h1>
             <p class="o-playerDead__text">
                 you were killed by:<br />
-                {{ turnModel.activeCharacter.name }} with a {{ turnModel.activeCharacter.weapon?.name }}
+                {{ activeCharacter?.name }} with a {{ activeCharacter?.weapon?.name }}
             </p>
             <button @click="router.push({ name: 'characterCreation' })" class="a-button">Try again</button>
         </div>

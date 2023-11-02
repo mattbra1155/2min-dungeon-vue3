@@ -3,6 +3,10 @@ import { IScene } from '@/interfaces/IScene'
 import { Room } from './RoomModel'
 import { PlayerModel } from './playerModel'
 import locations from '@/assets/json/locations.json'
+import { monsterGenerator } from '@/App.vue'
+import { EGameState } from '@/enums/EGameState'
+import { useGameStateManager } from '@/composables/useGameStateManager'
+import { MonsterGenerator } from '../generators/monsterGenerator'
 class Scene implements IScene {
     constructor(
         public id: number = 0,
@@ -24,9 +28,34 @@ class Scene implements IScene {
 
     changeCurrentRoom(room: Room) {
         this.currentRoom = room
+
+        if (!this.currentRoom.monsterList.length) {
+            return
+        }
+        this.createEnemyList(this.currentRoom.monsterList.length)
+        const { updateGameState } = useGameStateManager()
+        updateGameState(EGameState.Battle)
     }
 
-    fetchSceneDetails(id: number): Scene | undefined {
+    createMonster = () => {
+        const monster = monsterGenerator.create()
+        return monster
+    }
+
+    createEnemyList = (enemiesToCreate: number) => {
+        let createdEnemies = 0
+        const enemyList = []
+        while (createdEnemies < enemiesToCreate) {
+            createdEnemies++
+            const enemy = this.createMonster()
+            // this.entityList.push(enemy)
+            enemyList.push(enemy)
+        }
+
+        return enemyList
+    }
+
+    fetchSceneDetails(id?: number): Scene | undefined {
         const sceneDetails = locations.find((scene) => scene.id === id)
 
         if (!sceneDetails) {
@@ -37,9 +66,16 @@ class Scene implements IScene {
         this.name = sceneDetails.name
         this.entityList = sceneDetails.entityList
 
-        sceneDetails.roomList.forEach((room) =>
-            this.roomList.push(new Room(room.id, room.name, room.description, [], [], room.exits))
-        )
+        sceneDetails.roomList.forEach((room) => {
+            // const monsterList = room.entityList.map((entity) => {
+            //     const monster = new MonsterModel(entity)
+            //     return monster
+            // })
+            const monsterList = this.createEnemyList(room.entityList.length)
+
+            this.roomList.push(new Room(room.id, room.name, room.description, monsterList, room.lootList, room.exits))
+        })
+
         console.log(sceneDetails)
         return this
     }

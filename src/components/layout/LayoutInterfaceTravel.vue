@@ -11,7 +11,7 @@ import { Room } from '@/assets/models/RoomModel'
 import { useSceneManager } from '@/composables/useSceneManager'
 
 const { activeScene } = useSceneManager()
-const { turnModel } = useTurn()
+const { turnNumber, updateTurnStateMachine, activeTurnState } = useTurn()
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
 const { player } = usePlayer()
@@ -65,8 +65,8 @@ onMounted(() => {
     <div class="o-interface">
         <button
             v-if="activeScene?.entityList.length"
-            :disabled="turnModel.activeTurnState !== ETurnState.Init"
-            @click="turnModel.updateTurnStateMachine(ETurnState.Init)"
+            :disabled="activeTurnState !== ETurnState.Init"
+            @click="updateTurnStateMachine(ETurnState.Init)"
             class="a-button"
         >
             start BATTLE

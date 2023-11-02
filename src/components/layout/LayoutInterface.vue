@@ -10,7 +10,7 @@ import { useGameStateManager } from '@/composables/useGameStateManager'
 import { EGameState } from '@/enums/EGameState'
 
 const { activeGameState } = useGameStateManager()
-const { turnModel } = useTurn()
+const { activeTurnState, checkIfDead, updateTurnStateMachine } = useTurn()
 const { targetToAttack } = useAttack()
 const { player } = usePlayer()
 const { toggleInventory } = useInventory()
@@ -19,8 +19,8 @@ const { toggleCharacterScreen } = useCharacterScreen()
 const playerAttack = () => {
     if (targetToAttack.value) {
         player.value.attack(targetToAttack.value)
-        turnModel.value.checkIfDead()
-        turnModel.value.updateTurnStateMachine(ETurnState.EnemyAttack)
+        checkIfDead()
+        updateTurnStateMachine(ETurnState.EnemyAttack)
     }
 }
 const addKeybindings = () => {
@@ -49,20 +49,23 @@ onMounted(() => {
         <button
             id="attackButtonOne"
             type="button"
-            class="action__button"
+            class="a-button action__button"
             @click="playerAttack"
-            :disbaled="turnModel.activeTurnState !== ETurnState.PlayerAttack"
+            :disbaled="activeTurnState !== ETurnState.PlayerAttack"
             :disabled="!player.isAlive"
         >
             Attack
         </button>
-        <button id="inventoryButton" type="button" class="action__button" @click="toggleInventory">Inventory</button>
+        <button id="inventoryButton" type="button" class="a-button action__button" @click="toggleInventory">
+            Inventory
+        </button>
         <button
-            :disabled="turnModel.activeTurnState !== ETurnState.Init"
-            @click="turnModel.updateTurnStateMachine(ETurnState.Init)"
+            v-if="activeGameState === EGameState.Battle"
+            :disabled="activeTurnState !== ETurnState.Init"
+            @click="updateTurnStateMachine(ETurnState.Init)"
         >
             start BATTLE
         </button>
-        <button class="action__button" @click="toggleCharacterScreen">Character Screen</button>
+        <button class="a-button action__button" @click="toggleCharacterScreen">Character Screen</button>
     </div>
 </template>

@@ -1,8 +1,12 @@
 import { EGameState } from '@/enums/EGameState'
 import { reactive, toRefs } from 'vue'
 import { useSceneManager } from './useSceneManager'
+import { ETurnState } from '@/enums/ETurnState'
+import { TurnModel } from '@/assets/models/turnModel'
+// import { useTurn } from '@/composables/useTurn'
 // import { sceneManager } from '@/assets/models/sceneManager'
 
+// const { turnModel } = useTurn()
 const { createScene } = useSceneManager()
 
 interface IGameStateState {

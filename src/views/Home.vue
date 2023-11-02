@@ -14,7 +14,7 @@ import { useSceneManager } from '@/composables/useSceneManager'
 
 const { activeScene, createScene } = useSceneManager()
 const { activeGameState } = useGameStateManager()
-const { turnModel } = useTurn()
+const { updateTurnStateMachine, turnOrder } = useTurn()
 const { player } = usePlayer()
 const router = useRouter()
 
@@ -23,7 +23,7 @@ if (history.state.nextLevel) {
 }
 
 if (activeGameState.value === EGameState.Battle) {
-    turnModel.value.updateTurnStateMachine(ETurnState.Init)
+    updateTurnStateMachine(ETurnState.Init)
 }
 
 watch(player.value, () => {
@@ -32,8 +32,8 @@ watch(player.value, () => {
     }
 })
 
-watch(turnModel.value.turnOrder, () => {
-    if (!turnModel.value.turnOrder.length) {
+watch(turnOrder, () => {
+    if (!turnOrder.value?.length) {
         router.push({ name: 'levelFinished' })
     }
 })

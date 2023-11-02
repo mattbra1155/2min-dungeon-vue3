@@ -66,10 +66,16 @@ class TurnModel implements ITurn {
                 console.log('TURN STATE:', ETurnState.EnemyAttack)
                 const enemyAttack = () => {
                     this.turnOrder.forEach((enemy) => {
+                        console.log('here', this.turnOrder)
+
                         if (player.value.isAlive === false) {
                             console.log(player.value.isAlive)
                             return
                         }
+                        console.log('here')
+
+                        console.log(enemy.name)
+
                         enemy.status.updateStatusList(enemy, this.turn)
                         this.activeCharacter = enemy
                         console.log(`${enemy.name} attacks`)
@@ -123,5 +129,4 @@ class TurnModel implements ITurn {
     }
 }
 
-const turnModel = new TurnModel()
-export { turnModel, TurnModel }
+export { TurnModel }

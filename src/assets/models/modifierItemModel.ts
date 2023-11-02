@@ -8,7 +8,7 @@ import { statusList } from '@/assets/json/modifiers.json'
 import { AllItemTypes } from '@/interfaces/IItem'
 import { IAllStatusTypes } from '@/interfaces/IStatus'
 import { useTurn } from '@/composables/useTurn'
-const { turnModel } = useTurn()
+const { turnNumber } = useTurn()
 class ModifierItem implements IModifierItem {
     constructor(
         public id: string,
@@ -94,7 +94,7 @@ class ModifierItem implements IModifierItem {
                     {
                         isInfinite: statusData.duration?.isInfinite,
                         isActive: statusData.duration.isActive,
-                        max: statusData.duration.max ? statusData.duration.max + turnModel.value.turn : undefined,
+                        max: statusData.duration.max ? statusData.duration.max + turnNumber.value : undefined,
                         current: undefined,
                     },
                     statusData.updateOnBeginning

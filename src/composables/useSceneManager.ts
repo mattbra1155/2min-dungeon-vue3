@@ -15,26 +15,9 @@ const state: iStateUseSceneManager = reactive({
 })
 
 export const useSceneManager = () => {
-    const createMonster = () => {
-        const monster = monsterGenerator.create()
-        return monster
-    }
-
     const createScene = (numberOfEnemies = 1, levelName?: string) => {
-        const enemyList: MonsterModel[] = []
-        const createEnemyList = (enemiesToCreate = numberOfEnemies) => {
-            let createdEnemies = 0
-            while (createdEnemies < enemiesToCreate) {
-                createdEnemies++
-                const enemy = createMonster()
-                enemyList.push(enemy)
-            }
-        }
-
         const scene: Scene = new Scene()
-
         scene.fetchSceneDetails(0)
-
         setScene(scene)
     }
     const setScene = (scene: Scene) => {

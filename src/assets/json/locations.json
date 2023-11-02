@@ -3,6 +3,9 @@
         "id": 0,
         "name": "Castle Drakenhof",
         "entityList": [],
+        "lootList": [
+            "gold"
+        ],
         "links": [
             1
         ],
@@ -11,6 +14,9 @@
                 "id": 0,
                 "description": "",
                 "entityList": [],
+                "lootList": [
+                    "gold"
+                ],
                 "name": "Entry Gate",
                 "exits": [
                     -1,
@@ -22,7 +28,12 @@
             {
                 "id": 1,
                 "description": "",
-                "entityList": [],
+                "entityList": [
+                    "lesserGoblin"
+                ],
+                "lootList": [
+                    "gold"
+                ],
                 "name": "Guard Post",
                 "exits": [
                     0,
@@ -35,6 +46,9 @@
                 "id": 2,
                 "description": "",
                 "entityList": [],
+                "lootList": [
+                    "gold"
+                ],
                 "name": "Guest Room",
                 "exits": [
                     -1,
@@ -47,6 +61,9 @@
                 "id": 3,
                 "description": "",
                 "entityList": [],
+                "lootList": [
+                    "gold"
+                ],
                 "name": "Great Stairs",
                 "exits": [
                     -1,
@@ -62,6 +79,9 @@
         "description": "",
         "name": "Castle Drakenhof - dungeon",
         "entityList": [],
+        "lootList": [
+            "gold"
+        ],
         "links": [
             0
         ],
@@ -70,6 +90,9 @@
                 "id": 0,
                 "description": "",
                 "entityList": [],
+                "lootList": [
+                    "gold"
+                ],
                 "name": "Entrence",
                 "exits": [
                     -1,
@@ -82,6 +105,9 @@
                 "id": 1,
                 "description": "",
                 "entityList": [],
+                "lootList": [
+                    "gold"
+                ],
                 "name": "Jailer room",
                 "exits": [
                     1,
@@ -94,6 +120,9 @@
                 "id": 2,
                 "description": "",
                 "entityList": [],
+                "lootList": [
+                    "gold"
+                ],
                 "name": "Corridor",
                 "exits": [
                     1,
@@ -106,6 +135,9 @@
                 "id": 3,
                 "description": "",
                 "entityList": [],
+                "lootList": [
+                    "gold"
+                ],
                 "name": "Cell A",
                 "exits": [
                     -1,
@@ -118,6 +150,9 @@
                 "id": 4,
                 "description": "",
                 "entityList": [],
+                "lootList": [
+                    "gold"
+                ],
                 "name": "Cell B",
                 "exits": [
                     2,
@@ -130,6 +165,9 @@
                 "id": 5,
                 "description": "",
                 "entityList": [],
+                "lootList": [
+                    "gold"
+                ],
                 "name": "Corridor",
                 "exits": [
                     -1,
