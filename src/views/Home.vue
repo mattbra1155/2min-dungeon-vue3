@@ -11,20 +11,27 @@ import { useRouter } from 'vue-router'
 import LayoutTopBar from '@/components/layout/LayoutTopBar.vue'
 import LayoutInterfaceTravel from '@/components/layout/LayoutInterfaceTravel.vue'
 import { useSceneManager } from '@/composables/useSceneManager'
+import { Scene } from '@/assets/models/sceneModel'
+import localforage from 'localforage'
 
-const { activeScene, createScene } = useSceneManager()
+const { loadScene } = useSceneManager()
 const { activeGameState } = useGameStateManager()
 const { updateTurnStateMachine, turnOrder } = useTurn()
 const { player } = usePlayer()
 const router = useRouter()
 
-if (history.state.nextLevel) {
-    createScene()
-}
-
 if (activeGameState.value === EGameState.Battle) {
     updateTurnStateMachine(ETurnState.Init)
 }
+
+watch(
+    () => activeGameState.value,
+    (state) => {
+        if (state === EGameState.Battle) {
+            updateTurnStateMachine(ETurnState.Init)
+        }
+    }
+)
 
 watch(player.value, () => {
     if (player.value.isAlive === false) {
@@ -32,23 +39,17 @@ watch(player.value, () => {
     }
 })
 
-watch(turnOrder, () => {
-    if (!turnOrder.value?.length) {
-        router.push({ name: 'levelFinished' })
+watch(
+    () => turnOrder.value?.length,
+    () => {
+        if (!turnOrder.value?.length) {
+            router.push({ name: 'levelFinished' })
+        }
     }
-})
+)
 
-onMounted(() => {
-    if (!activeScene.value) {
-        return
-    }
-    const entry = activeScene.value.roomList.find((room) => room.id === 0)
-
-    if (!entry) {
-        return
-    }
-    activeScene.value.changeCurrentRoom(entry)
-    console.log(activeScene.value)
+onMounted(async () => {
+    await loadScene()
 })
 </script>
 

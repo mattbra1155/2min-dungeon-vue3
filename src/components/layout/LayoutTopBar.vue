@@ -9,6 +9,7 @@ const { targetToAttack, setTargetToAttack } = useAttack()
 const { player } = usePlayer()
 const { activeScene } = useSceneManager()
 const { activeTurnState, turnNumber } = useTurn()
+console.log(activeScene.value)
 
 const enemyList = computed(() => activeScene.value?.currentRoom?.monsterList)
 </script>

@@ -1,12 +1,7 @@
 import { EGameState } from '@/enums/EGameState'
 import { reactive, toRefs } from 'vue'
 import { useSceneManager } from './useSceneManager'
-import { ETurnState } from '@/enums/ETurnState'
-import { TurnModel } from '@/assets/models/turnModel'
-// import { useTurn } from '@/composables/useTurn'
-// import { sceneManager } from '@/assets/models/sceneManager'
 
-// const { turnModel } = useTurn()
 const { createScene } = useSceneManager()
 
 interface IGameStateState {
@@ -24,7 +19,7 @@ export const useGameStateManager = () => {
             case EGameState.Init:
                 console.log('GAME STATE: Init')
                 // changeActiveTurnState(ETurnState.Init)
-                createScene()
+                // createScene()
                 break
             case EGameState.CreateChar:
                 console.log('GAME STATE: Create Character')

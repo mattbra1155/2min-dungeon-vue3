@@ -24,17 +24,18 @@ const playerAttack = () => {
     }
 }
 const addKeybindings = () => {
-    window.addEventListener('keydown', (event) => {
-        console.log(event.code)
-
+    window.addEventListener('keyup', (event) => {
         if (event.key === 'i') {
             toggleInventory()
+            return
         }
         if (event.key === 'c') {
             toggleCharacterScreen()
+            return
         }
         if (activeGameState.value === EGameState.Battle && event.code === 'Space') {
             playerAttack()
+            return
         }
     })
 }

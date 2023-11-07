@@ -9,6 +9,7 @@ import { EDirections } from '@/enums/EDirections'
 import { Scene } from '@/assets/models/sceneModel'
 import { Room } from '@/assets/models/RoomModel'
 import { useSceneManager } from '@/composables/useSceneManager'
+import localforage from 'localforage'
 
 const { activeScene } = useSceneManager()
 const { turnNumber, updateTurnStateMachine, activeTurnState } = useTurn()
@@ -54,6 +55,10 @@ const moveRoom = (roomId: EDirections) => {
         return
     }
     activeScene.value.changeCurrentRoom(room)
+
+    console.log(activeScene.value)
+
+    localforage.setItem('activeScene', JSON.stringify(activeScene.value))
 }
 
 onMounted(() => {

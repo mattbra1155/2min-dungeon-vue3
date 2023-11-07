@@ -27,15 +27,18 @@ const state: ITurn = reactive({
 export const useTurn = () => {
     const sortTurnOrder = (entityList: Array<PlayerModel | MonsterModel>) => {
         const sorted = entityList.sort((a, b) => b.currentStats.initiative - a.currentStats.initiative)
+        console.log('logn', sorted)
+
         state.turnOrder = sorted
         return sorted
     }
 
     const updateTurnStateMachine = (newTurnState: ETurnState) => {
         const { player } = usePlayer()
+
         const monsterList = activeScene.value?.currentRoom?.monsterList
 
-        console.log(monsterList)
+        console.log(activeScene.value?.currentRoom?.monsterList)
 
         if (!player.value.isAlive) {
             return
@@ -67,6 +70,10 @@ export const useTurn = () => {
                 player.value.status.updateStatusList(player.value, state.turnNumber)
                 console.log(player.value)
 
+                if (state.turnOrder?.length === 0) {
+                    console.log('turn Order empty')
+                    return
+                }
                 console.log('TURN STATE:', ETurnState.PlayerAttack)
                 state.activeCharacter = player.value
                 break
@@ -78,15 +85,11 @@ export const useTurn = () => {
                         return
                     }
                     state.turnOrder.forEach((enemy) => {
-                        console.log('here', state.turnOrder)
-
                         if (player.value.isAlive === false) {
                             console.log(player.value.isAlive)
                             return
                         }
-                        console.log('here')
-
-                        console.log(enemy.name)
+                        console.log(enemy)
 
                         enemy.status.updateStatusList(enemy, state.turnNumber)
                         state.activeCharacter = enemy
@@ -142,6 +145,8 @@ export const useTurn = () => {
             console.error('No turn order')
             return
         }
+        console.log('dead')
+
         const deadPerson = state.turnOrder.find((character) => character === dead)
         const deadPersonIndex = state.turnOrder.findIndex((character) => character === deadPerson)
         const updatedTurnOrder = state.turnOrder.splice(deadPersonIndex, 1)

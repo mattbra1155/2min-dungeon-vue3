@@ -39,6 +39,8 @@ class Scene implements IScene {
 
     createMonster = () => {
         const monster = monsterGenerator.create()
+        console.log(monster)
+
         return monster
     }
 

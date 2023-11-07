@@ -8,15 +8,19 @@ import { AllItemTypes } from '@/interfaces/IItem'
 import { Gold } from '@/assets/models/itemsModel'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { EGameState } from '@/enums/EGameState'
+import localforage from 'localforage'
+import { Scene } from '@/assets/models/sceneModel'
+import { useSceneManager } from '@/composables/useSceneManager'
 
 const { updateTurnStateMachine } = useTurn()
-updateTurnStateMachine(ETurnState.Init)
 const router = useRouter()
 const { player } = usePlayer()
 const { lootList, generateLoot } = useLoot()
+const { setScene } = useSceneManager()
 const { updateGameState } = useGameStateManager()
 
 updateGameState(EGameState.LevelCleared)
+updateTurnStateMachine(ETurnState.Init)
 
 const takeItem = (lootItem: AllItemTypes | Gold) => {
     player.value.inventory.addItem(lootItem, player.value.id)
@@ -24,9 +28,9 @@ const takeItem = (lootItem: AllItemTypes | Gold) => {
     lootList.value.splice(indexOfItem, 1)
 }
 
-const nextLevel = () => {
-    lootList.value = []
+const closeScreen = async () => {
     router.push({ name: 'home', state: { nextLevel: true } })
+    updateGameState(EGameState.Travel)
 }
 </script>
 
@@ -46,7 +50,7 @@ const nextLevel = () => {
                     <button @click="takeItem(lootItem)">take</button>
                 </div>
             </template>
-            <button @click="nextLevel" class="a-button">Next level</button>
+            <button @click="closeScreen" class="a-button">Continue</button>
         </div>
     </div>
 </template>

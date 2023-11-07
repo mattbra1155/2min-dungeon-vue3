@@ -32,7 +32,6 @@ class MonsterGenerator {
             monster.currentStats[statName] = value
         })
         monster.inventory.gold = diceRollK6()
-
         return monster
     }
 }
