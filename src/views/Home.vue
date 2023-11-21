@@ -27,8 +27,14 @@ if (activeGameState.value === EGameState.Battle) {
 watch(
     () => activeGameState.value,
     (state) => {
+        console.log(state)
+
         if (state === EGameState.Battle) {
             updateTurnStateMachine(ETurnState.Init)
+        }
+
+        if (state === EGameState.LevelCleared) {
+            router.push({ name: 'levelFinished' })
         }
     }
 )
@@ -38,15 +44,6 @@ watch(player.value, () => {
         router.push({ name: 'playerDead' })
     }
 })
-
-watch(
-    () => turnOrder.value?.length,
-    () => {
-        if (!turnOrder.value?.length) {
-            router.push({ name: 'levelFinished' })
-        }
-    }
-)
 
 onMounted(async () => {
     await loadScene()

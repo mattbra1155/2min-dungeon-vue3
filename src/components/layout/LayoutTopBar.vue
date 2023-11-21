@@ -2,16 +2,14 @@
 import { useAttack } from '@/composables/useAttack'
 import { usePlayer } from '@/composables/usePlayer'
 import { useTurn } from '@/composables/useTurn'
-import { computed } from 'vue'
 import { useSceneManager } from '@/composables/useSceneManager'
 
 const { targetToAttack, setTargetToAttack } = useAttack()
 const { player } = usePlayer()
 const { activeScene } = useSceneManager()
-const { activeTurnState, turnNumber } = useTurn()
-console.log(activeScene.value)
+const { activeTurnState, turnNumber, turnOrder } = useTurn()
 
-const enemyList = computed(() => activeScene.value?.currentRoom?.monsterList)
+const enemyList = turnOrder.value
 </script>
 
 <template>
@@ -26,17 +24,16 @@ const enemyList = computed(() => activeScene.value?.currentRoom?.monsterList)
                 <h2>{{ player?.name }}</h2>
                 <p id="playerHp" class="health--player">{{ player.currentStats.hp ? player.currentStats.hp : 0 }}</p>
             </div>
-            <div
-                v-for="enemy in enemyList"
-                class="monster-hp"
-                :class="{ 'monster-hp--active': targetToAttack === enemy }"
-                :key="enemy.id"
-            >
-                <h2 @click="setTargetToAttack(enemy)" id="monsterName">
-                    {{ enemy.name ? enemy.name : 'placeholder enemy' }}
-                </h2>
-                <p id="monsterHp" class="health--monster">{{ enemy.currentStats.hp ? enemy.currentStats.hp : 0 }}</p>
-            </div>
+            <template v-for="enemy in enemyList" :key="enemy.id">
+                <div v-if="enemy.isAlive" class="monster-hp" :class="{ 'monster-hp--active': targetToAttack === enemy }">
+                    <h2 @click="setTargetToAttack(enemy)" id="monsterName">
+                        {{ enemy.name ? enemy.name : 'placeholder enemy' }}
+                    </h2>
+                    <p id="monsterHp" class="health--monster">
+                        {{ enemy.currentStats.hp ? enemy.currentStats.hp : 0 }}
+                    </p>
+                </div>
+            </template>
         </div>
     </div>
 </template>

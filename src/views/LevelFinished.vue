@@ -11,12 +11,13 @@ import { EGameState } from '@/enums/EGameState'
 import localforage from 'localforage'
 import { Scene } from '@/assets/models/sceneModel'
 import { useSceneManager } from '@/composables/useSceneManager'
+import { onMounted } from 'vue'
 
 const { updateTurnStateMachine } = useTurn()
 const router = useRouter()
 const { player } = usePlayer()
 const { lootList, generateLoot } = useLoot()
-const { setScene } = useSceneManager()
+const { activeScene } = useSceneManager()
 const { updateGameState } = useGameStateManager()
 
 updateGameState(EGameState.LevelCleared)

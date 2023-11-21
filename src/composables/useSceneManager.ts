@@ -3,6 +3,8 @@ import { IScene } from '@/interfaces/IScene'
 import { Scene } from '@/assets/models/sceneModel'
 import localforage from 'localforage'
 import { MonsterModel } from '@/assets/models/monsterModel'
+import { ModifierItem } from '@/assets/models/modifierItemModel'
+import { Status } from '@/assets/models/statusModel'
 
 interface iStateUseSceneManager {
     sceneList: IScene[]
@@ -18,8 +20,7 @@ export const useSceneManager = () => {
     const createScene = (numberOfEnemies = 1, levelName?: string) => {
         const scene: Scene = new Scene()
         scene.fetchSceneDetails(0)
-        console.log(scene)
-
+        state.sceneList.push(scene)
         setScene(scene)
     }
     const setScene = (scene: Scene) => {
@@ -36,7 +37,6 @@ export const useSceneManager = () => {
     const loadScene = async () => {
         const data = (await localforage.getItem('activeScene')) as string
         const savedScene = JSON.parse(data)
-        console.log(saveScene)
 
         if (!savedScene) {
             createScene()
@@ -52,9 +52,16 @@ export const useSceneManager = () => {
         }
         const scene: Scene = Object.assign(new Scene(), savedScene)
         scene.roomList.forEach((room) => {
-            room.monsterList = room.monsterList.map((monster) => (monster = Object.assign(new MonsterModel(), monster)))
+            room.monsterList = room.monsterList.map((monster) => {
+                monster = Object.assign(new MonsterModel(), monster)
+                monster.status = new Status()
+                console.log(monster)
+
+                return monster
+            })
         })
-        console.log(scene.roomList)
+
+        console.log(state)
 
         setScene(scene)
     }

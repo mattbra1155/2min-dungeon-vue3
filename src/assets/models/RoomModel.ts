@@ -26,6 +26,9 @@ class Room implements IRoom {
         this.monsterList = monsterList
         this.lootList = lootList
     }
+    unaliveMonsters = () => {
+        this.monsterList.map((monster) => (monster.isAlive = false))
+    }
 }
 
 export { Room }
