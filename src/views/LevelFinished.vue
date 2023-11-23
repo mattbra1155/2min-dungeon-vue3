@@ -8,12 +8,10 @@ import { AllItemTypes } from '@/interfaces/IItem'
 import { Gold } from '@/assets/models/itemsModel'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { EGameState } from '@/enums/EGameState'
-import localforage from 'localforage'
-import { Scene } from '@/assets/models/sceneModel'
 import { useSceneManager } from '@/composables/useSceneManager'
-import { onMounted } from 'vue'
+import localforage from 'localforage'
 
-const { updateTurnStateMachine } = useTurn()
+const { updateTurnStateMachine, resetTurn } = useTurn()
 const router = useRouter()
 const { player } = usePlayer()
 const { lootList, generateLoot } = useLoot()
@@ -22,6 +20,18 @@ const { updateGameState } = useGameStateManager()
 
 updateGameState(EGameState.LevelCleared)
 updateTurnStateMachine(ETurnState.Init)
+
+const setRoomExploredStatus = () => {
+    if (!activeScene.value) {
+        return
+    }
+    if (!activeScene.value.currentRoom) {
+        return
+    }
+    activeScene.value.currentRoom.isExplored = true
+    localforage.setItem('activeScene', JSON.stringify(activeScene.value))
+    resetTurn()
+}
 
 const takeItem = (lootItem: AllItemTypes | Gold) => {
     player.value.inventory.addItem(lootItem, player.value.id)
@@ -33,6 +43,8 @@ const closeScreen = async () => {
     router.push({ name: 'home', state: { nextLevel: true } })
     updateGameState(EGameState.Travel)
 }
+
+setRoomExploredStatus()
 </script>
 
 <template>

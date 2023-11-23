@@ -29,9 +29,19 @@ class Scene implements IScene {
     changeCurrentRoom(room: Room) {
         this.currentRoom = room
 
-        if (!this.currentRoom.monsterList.length) {
+        console.log('here ROOM', room)
+        console.log('roomList', this.roomList)
+
+        // If Room is explored - monster defeated before - don't create another one
+        if (this.currentRoom.isExplored) {
             return
         }
+        // If Room is not explored and there is no monsters present - set Room as explored
+        if (!this.currentRoom.monsterList.length) {
+            this.currentRoom.isExplored = true
+            return
+        }
+
         this.createEnemyList(this.currentRoom.monsterList.length)
         const { updateGameState } = useGameStateManager()
         updateGameState(EGameState.Battle)

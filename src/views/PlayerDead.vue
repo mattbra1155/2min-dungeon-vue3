@@ -5,18 +5,24 @@ import { useRouter } from 'vue-router'
 import { usePlayer } from '@/composables/usePlayer'
 import { useSceneManager } from '@/composables/useSceneManager'
 import { ETurnState } from '@/enums/ETurnState'
+import { useGameStateManager } from '@/composables/useGameStateManager'
+import { EGameState } from '@/enums/EGameState'
 
 const { deadPlayer } = usePlayer()
 const router = useRouter()
-const { activeCharacter, updateTurnStateMachine } = useTurn()
-const { createScene, resetScene } = useSceneManager()
+const { activeCharacter, resetTurn } = useTurn()
+const { resetScene } = useSceneManager()
+const { updateGameState } = useGameStateManager()
 
-onMounted(() => {
+const init = () => {
     deadPlayer()
-    updateTurnStateMachine(ETurnState.Init)
+    resetTurn()
+    updateGameState(EGameState.PlayerDead)
     resetScene()
-    createScene()
-})
+    // createScene()
+}
+
+init()
 </script>
 
 <template>

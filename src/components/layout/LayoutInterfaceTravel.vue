@@ -40,7 +40,7 @@ const addKeybindings = () => {
     })
 }
 
-const moveRoom = (roomId: EDirections) => {
+const moveToRoom = (roomId: EDirections) => {
     if (!activeScene.value) {
         return
     }
@@ -48,6 +48,7 @@ const moveRoom = (roomId: EDirections) => {
         console.log('wall')
         return
     }
+
     const getRoom = () => activeScene.value?.roomList.find((room) => room.id === roomId)
 
     const room = getRoom()
@@ -55,11 +56,11 @@ const moveRoom = (roomId: EDirections) => {
         return
     }
     activeScene.value.changeCurrentRoom(room)
-
-    console.log(activeScene.value)
-
     localforage.setItem('activeScene', JSON.stringify(activeScene.value))
 }
+
+const directionButton = (direction: number) =>
+    Object.entries(EDirections).find((dir) => dir[0] === direction.toString())?.[1]
 
 onMounted(() => {
     addKeybindings()
@@ -78,8 +79,8 @@ onMounted(() => {
         </button>
         <div class="o-interface__row o-interface__directionWrapper">
             <template v-for="(direction, index) in activeScene?.currentRoom?.exits" :key="index">
-                <button v-if="direction !== -1" class="a-button action__button" @click="moveRoom(direction)">
-                    {{ Object.entries(EDirections).find((dir) => dir[1] === direction)?.[0] }}
+                <button v-if="direction !== -1" class="a-button action__button" @click="moveToRoom(direction)">
+                    {{ directionButton(direction) }}
                 </button>
             </template>
         </div>

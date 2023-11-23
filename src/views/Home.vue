@@ -11,12 +11,10 @@ import { useRouter } from 'vue-router'
 import LayoutTopBar from '@/components/layout/LayoutTopBar.vue'
 import LayoutInterfaceTravel from '@/components/layout/LayoutInterfaceTravel.vue'
 import { useSceneManager } from '@/composables/useSceneManager'
-import { Scene } from '@/assets/models/sceneModel'
-import localforage from 'localforage'
 
 const { loadScene } = useSceneManager()
 const { activeGameState } = useGameStateManager()
-const { updateTurnStateMachine, turnOrder } = useTurn()
+const { updateTurnStateMachine } = useTurn()
 const { player } = usePlayer()
 const router = useRouter()
 
@@ -27,12 +25,12 @@ if (activeGameState.value === EGameState.Battle) {
 watch(
     () => activeGameState.value,
     (state) => {
-        console.log(state)
-
+        if (state === EGameState.Travel) {
+            updateTurnStateMachine(ETurnState.Disabled)
+        }
         if (state === EGameState.Battle) {
             updateTurnStateMachine(ETurnState.Init)
         }
-
         if (state === EGameState.LevelCleared) {
             router.push({ name: 'levelFinished' })
         }

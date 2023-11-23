@@ -5,6 +5,7 @@ import localforage from 'localforage'
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { ModifierItem } from '@/assets/models/modifierItemModel'
 import { Status } from '@/assets/models/statusModel'
+import { Inventory } from '@/assets/models/inventoryModel'
 
 interface iStateUseSceneManager {
     sceneList: IScene[]
@@ -29,14 +30,18 @@ export const useSceneManager = () => {
 
     const resetScene = () => {
         state.activeScene = null
+        localforage.removeItem('activeScene')
     }
 
     const saveScene = () => {
-        localforage.setItem('activeScene', state.activeScene)
+        localforage.setItem('activeScene', JSON.stringify(state.activeScene))
+        localforage.setItem('sceneList', JSON.stringify(state.sceneList))
     }
     const loadScene = async () => {
         const data = (await localforage.getItem('activeScene')) as string
-        const savedScene = JSON.parse(data)
+        const savedScene = await JSON.parse(data)
+
+        console.log('SAVED SCENE', savedScene)
 
         if (!savedScene) {
             createScene()
@@ -53,11 +58,14 @@ export const useSceneManager = () => {
         const scene: Scene = Object.assign(new Scene(), savedScene)
         scene.roomList.forEach((room) => {
             room.monsterList = room.monsterList.map((monster) => {
-                monster = Object.assign(new MonsterModel(), monster)
-                monster.status = new Status()
-                console.log(monster)
+                const ttt = new MonsterModel()
+                const newMonster = Object.assign(ttt, monster)
+                newMonster.inventory = new Inventory()
+                newMonster.inventory = monster.inventory
+                newMonster.status = new Status()
+                console.log(newMonster, new MonsterModel())
 
-                return monster
+                return newMonster
             })
         })
 

@@ -5,4 +5,5 @@ export enum ETurnState {
     EnemyAttack = 'Enemy attack',
     CalculateDamage = 'Calculating damage',
     EndTurn = 'End turn',
+    Disabled = 'Disabled',
 }

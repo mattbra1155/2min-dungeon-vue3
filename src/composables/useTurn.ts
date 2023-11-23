@@ -45,6 +45,14 @@ export const useTurn = () => {
         }
         state.activeTurnState = newTurnState
         switch (state.activeTurnState) {
+            case ETurnState.Disabled: {
+                state.turnNumber = 0
+                state.turnOrder = undefined
+                state.activeCharacter = undefined
+                console.log('turn state: ', state)
+
+                break
+            }
             case ETurnState.Init: {
                 console.log('TURN STATE:', ETurnState.Init)
                 state.turnNumber = 1
@@ -53,7 +61,7 @@ export const useTurn = () => {
             }
             case ETurnState.SortOrder:
                 console.log('TURN STATE:', ETurnState.SortOrder)
-
+                state.turnOrder = undefined
                 console.log(monsterList)
                 if (!monsterList) {
                     console.error('no monster list')
@@ -148,6 +156,12 @@ export const useTurn = () => {
         }
     }
 
+    const resetTurn = () => {
+        console.log('here')
+
+        updateTurnStateMachine(ETurnState.Disabled)
+    }
+
     // const removeDeadFromOrder = (dead: MonsterModel | PlayerModel) => {
     //     if (!state.turnOrder) {
     //         console.error('No turn order')
@@ -163,7 +177,7 @@ export const useTurn = () => {
     return {
         ...toRefs(state),
         updateTurnStateMachine,
-        // removeDeadFromOrder,
+        resetTurn,
         checkIfDead,
     }
 }
