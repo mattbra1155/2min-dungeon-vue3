@@ -6,7 +6,7 @@ import locations from '@/assets/json/locations.json'
 import { monsterGenerator } from '@/App.vue'
 import { EGameState } from '@/enums/EGameState'
 import { useGameStateManager } from '@/composables/useGameStateManager'
-import { MonsterGenerator } from '../generators/monsterGenerator'
+
 class Scene implements IScene {
     constructor(
         public id: number = 0,
@@ -28,9 +28,6 @@ class Scene implements IScene {
 
     changeCurrentRoom(room: Room) {
         this.currentRoom = room
-
-        console.log('here ROOM', room)
-        console.log('roomList', this.roomList)
 
         // If Room is explored - monster defeated before - don't create another one
         if (this.currentRoom.isExplored) {

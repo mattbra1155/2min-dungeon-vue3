@@ -10,6 +10,7 @@ import { useGameStateManager } from '@/composables/useGameStateManager'
 import { EGameState } from '@/enums/EGameState'
 import { useSceneManager } from '@/composables/useSceneManager'
 import localforage from 'localforage'
+import { onMounted } from 'vue'
 
 const { updateTurnStateMachine, resetTurn } = useTurn()
 const router = useRouter()
@@ -28,9 +29,11 @@ const setRoomExploredStatus = () => {
     if (!activeScene.value.currentRoom) {
         return
     }
-    activeScene.value.currentRoom.isExplored = true
-    localforage.setItem('activeScene', JSON.stringify(activeScene.value))
     resetTurn()
+    activeScene.value.currentRoom.isExplored = true
+    console.log(activeScene.value)
+
+    localforage.setItem('activeScene', JSON.stringify(activeScene.value))
 }
 
 const takeItem = (lootItem: AllItemTypes | Gold) => {
@@ -44,7 +47,9 @@ const closeScreen = async () => {
     updateGameState(EGameState.Travel)
 }
 
-setRoomExploredStatus()
+onMounted(() => {
+    setRoomExploredStatus()
+})
 </script>
 
 <template>

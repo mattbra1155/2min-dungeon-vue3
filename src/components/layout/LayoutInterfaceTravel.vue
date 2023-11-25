@@ -10,6 +10,7 @@ import { Scene } from '@/assets/models/sceneModel'
 import { Room } from '@/assets/models/RoomModel'
 import { useSceneManager } from '@/composables/useSceneManager'
 import localforage from 'localforage'
+import { ERoomTypes } from '@/enums/ERoomTypes'
 
 const { activeScene } = useSceneManager()
 const { turnNumber, updateTurnStateMachine, activeTurnState } = useTurn()
@@ -82,6 +83,7 @@ onMounted(() => {
                 <button v-if="direction !== -1" class="a-button action__button" @click="moveToRoom(direction)">
                     {{ directionButton(direction) }}
                 </button>
+                <button v-if="activeScene?.currentRoom?.type === ERoomTypes.Exit">exit</button>
             </template>
         </div>
         <div class="o-interface__row">

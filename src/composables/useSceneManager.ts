@@ -63,8 +63,6 @@ export const useSceneManager = () => {
                 newMonster.inventory = new Inventory()
                 newMonster.inventory = monster.inventory
                 newMonster.status = new Status()
-                console.log(newMonster, new MonsterModel())
-
                 return newMonster
             })
         })
