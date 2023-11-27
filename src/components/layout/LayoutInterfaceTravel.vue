@@ -108,7 +108,7 @@ onMounted(() => {
                     v-if="activeScene?.currentRoom?.type === ERoomTypes.Exit"
                     @click="moveToScene(sceneId)"
                 >
-                    exit
+                    Next Area
                 </button>
             </template>
         </div>
