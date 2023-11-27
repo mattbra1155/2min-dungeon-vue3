@@ -13,8 +13,8 @@ interface IRoom {
     isExplored: boolean
 }
 
-interface IRoomExit extends IRoom {
-    sceneLinks: number[]
+export interface IRoomExit extends IRoom {
+    sceneLinks?: number[]
 }
 
 class Room implements IRoom {
@@ -25,8 +25,8 @@ class Room implements IRoom {
         public monsterList: Array<PlayerModel | MonsterModel> = [],
         public lootList: string[] = [],
         public exits: number[] = [],
-        public type: ERoomTypes = ERoomTypes.Empty,
-        public isExplored: boolean = false
+        public isExplored: boolean = false,
+        public type: ERoomTypes = ERoomTypes.Empty
     ) {
         this.id
         this.name = name
@@ -52,9 +52,9 @@ class RoomExit extends Room implements IRoomExit {
         public exits: number[] = [],
         public type: ERoomTypes = ERoomTypes.Empty,
         public isExplored: boolean = false,
-        public sceneLinks: number[]
+        public sceneLinks: [] | undefined = []
     ) {
-        super(id, name, description, monsterList, lootList, exits, type, isExplored)
+        super(id, name, description, monsterList, lootList, exits, isExplored, type)
         this.sceneLinks = sceneLinks
     }
 }

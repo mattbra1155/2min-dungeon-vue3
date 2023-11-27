@@ -7,12 +7,13 @@ import { computed, onMounted, reactive, ref } from 'vue'
 import { usePlayer } from '@/composables/usePlayer'
 import { EDirections } from '@/enums/EDirections'
 import { Scene } from '@/assets/models/sceneModel'
-import { Room } from '@/assets/models/RoomModel'
+import { Room, RoomExit } from '@/assets/models/RoomModel'
 import { useSceneManager } from '@/composables/useSceneManager'
 import localforage from 'localforage'
 import { ERoomTypes } from '@/enums/ERoomTypes'
+import localtions from '@/assets/json/locations.json'
 
-const { activeScene } = useSceneManager()
+const { activeScene, setScene } = useSceneManager()
 const { turnNumber, updateTurnStateMachine, activeTurnState } = useTurn()
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
@@ -41,7 +42,7 @@ const addKeybindings = () => {
     })
 }
 
-const moveToRoom = (roomId: EDirections) => {
+const moveToRoom = async (roomId: EDirections) => {
     if (!activeScene.value) {
         return
     }
@@ -57,7 +58,23 @@ const moveToRoom = (roomId: EDirections) => {
         return
     }
     activeScene.value.changeCurrentRoom(room)
-    localforage.setItem('activeScene', JSON.stringify(activeScene.value))
+    console.log('active room', activeScene.value.currentRoom)
+
+    await localforage.setItem('activeScene', JSON.stringify(activeScene.value))
+}
+
+const moveToScene = (sceneId: number) => {
+    activeScene.value?.currentRoom
+    const sceneData = localtions.find((scene) => scene.id === sceneId)
+
+    if (!sceneData) {
+        console.error('no Scene found')
+        return
+    }
+
+    const scene = Object.assign(new Scene(), sceneData)
+
+    setScene(scene)
 }
 
 const directionButton = (direction: number) =>
@@ -69,7 +86,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="o-interface">
+    <div v-if="activeScene" class="o-interface">
         <button
             v-if="activeScene?.entityList.length"
             :disabled="activeTurnState !== ETurnState.Init"
@@ -79,11 +96,20 @@ onMounted(() => {
             start BATTLE
         </button>
         <div class="o-interface__row o-interface__directionWrapper">
-            <template v-for="(direction, index) in activeScene?.currentRoom?.exits" :key="index">
+            <template v-for="(direction, index) in activeScene.currentRoom?.exits" :key="index">
                 <button v-if="direction !== -1" class="a-button action__button" @click="moveToRoom(direction)">
                     {{ directionButton(direction) }}
                 </button>
-                <button v-if="activeScene?.currentRoom?.type === ERoomTypes.Exit">exit</button>
+            </template>
+
+            <template v-for="sceneId in (activeScene.currentRoom as RoomExit)?.sceneLinks" :key="sceneId">
+                <button
+                    class="a-button action__button"
+                    v-if="activeScene?.currentRoom?.type === ERoomTypes.Exit"
+                    @click="moveToScene(sceneId)"
+                >
+                    exit
+                </button>
             </template>
         </div>
         <div class="o-interface__row">

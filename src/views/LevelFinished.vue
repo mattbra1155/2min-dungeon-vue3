@@ -22,18 +22,18 @@ const { updateGameState } = useGameStateManager()
 updateGameState(EGameState.LevelCleared)
 updateTurnStateMachine(ETurnState.Init)
 
-const setRoomExploredStatus = () => {
+const setRoomExploredStatus = async () => {
     if (!activeScene.value) {
         return
     }
     if (!activeScene.value.currentRoom) {
         return
     }
-    resetTurn()
     activeScene.value.currentRoom.isExplored = true
     console.log(activeScene.value)
 
-    localforage.setItem('activeScene', JSON.stringify(activeScene.value))
+    await localforage.setItem('activeScene', JSON.stringify(activeScene.value))
+    resetTurn()
 }
 
 const takeItem = (lootItem: AllItemTypes | Gold) => {
@@ -47,8 +47,8 @@ const closeScreen = async () => {
     updateGameState(EGameState.Travel)
 }
 
-onMounted(() => {
-    setRoomExploredStatus()
+onMounted(async () => {
+    await setRoomExploredStatus()
 })
 </script>
 

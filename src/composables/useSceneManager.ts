@@ -18,9 +18,9 @@ const state: iStateUseSceneManager = reactive({
 })
 
 export const useSceneManager = () => {
-    const createScene = (numberOfEnemies = 1, levelName?: string) => {
+    const createScene = (sceneId = 0, numberOfEnemies = 1, levelName?: string) => {
         const scene: Scene = new Scene()
-        scene.fetchSceneDetails(0)
+        scene.fetchSceneDetails(sceneId)
         state.sceneList.push(scene)
         setScene(scene)
     }
@@ -33,9 +33,9 @@ export const useSceneManager = () => {
         localforage.removeItem('activeScene')
     }
 
-    const saveScene = () => {
-        localforage.setItem('activeScene', JSON.stringify(state.activeScene))
-        localforage.setItem('sceneList', JSON.stringify(state.sceneList))
+    const saveScene = async () => {
+        await localforage.setItem('activeScene', JSON.stringify(state.activeScene))
+        // localforage.setItem('sceneList', JSON.stringify(state.sceneList))
     }
     const loadScene = async () => {
         const data = (await localforage.getItem('activeScene')) as string

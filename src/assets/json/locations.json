@@ -68,7 +68,7 @@
                     "gold"
                 ],
                 "name": "Great Stairs",
-                "type": "exit",
+                "type": "Exit",
                 "sceneLinks": [
                     1
                 ],

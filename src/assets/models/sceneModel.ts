@@ -1,11 +1,12 @@
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { IScene } from '@/interfaces/IScene'
-import { Room } from './RoomModel'
+import { IRoomExit, Room, RoomExit } from './RoomModel'
 import { PlayerModel } from './playerModel'
 import locations from '@/assets/json/locations.json'
 import { monsterGenerator } from '@/App.vue'
 import { EGameState } from '@/enums/EGameState'
 import { useGameStateManager } from '@/composables/useGameStateManager'
+import { ERoomTypes } from '@/enums/ERoomTypes'
 
 class Scene implements IScene {
     constructor(
@@ -80,7 +81,27 @@ class Scene implements IScene {
             //     const monster = new MonsterModel(entity)
             //     return monster
             // })
+
             const monsterList = this.createEnemyList(room.entityList.length)
+
+            if (room.type === ERoomTypes.Exit) {
+                const roomExitData = room as unknown as RoomExit
+
+                console.log('roomExitData', roomExitData)
+
+                const roomExit = new RoomExit(
+                    roomExitData.id,
+                    roomExitData.name,
+                    roomExitData.description,
+                    monsterList,
+                    roomExitData.lootList,
+                    roomExitData.exits,
+                    roomExitData.type,
+                    false,
+                    roomExitData.sceneLinks
+                )
+                this.roomList.push(roomExit)
+            }
 
             this.roomList.push(new Room(room.id, room.name, room.description, monsterList, room.lootList, room.exits))
         })
