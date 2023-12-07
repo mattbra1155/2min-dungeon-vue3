@@ -49,7 +49,7 @@ class Merchant extends Shop {
         public id: string = 'merchant',
         public name: string = 'merchant',
         public description: string = 'lorem ipsum',
-        public inventory: AllItemTypes[]
+        public inventory: AllItemTypes[] = []
     ) {
         super(id, name, description, inventory)
     }

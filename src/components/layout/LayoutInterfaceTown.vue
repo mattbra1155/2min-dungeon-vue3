@@ -9,10 +9,12 @@ import { ERoomTypes } from '@/enums/ERoomTypes'
 import localtions from '@/assets/json/locations.json'
 import router from '@/router'
 import { Town } from '@/assets/models/sceneTownModel'
+import { useShop } from '@/composables/useShop'
 
 const { activeScene, setScene } = useSceneManager()
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
+const { setActiveShop } = useShop()
 
 const town = new Town()
 
@@ -84,6 +86,7 @@ const moveToScene = (sceneId: string) => {
 
 const enterShop = (shopId: string) => {
     town.activeShopId = shopId
+    setActiveShop(shopId)
 }
 
 onMounted(() => {
