@@ -12,6 +12,7 @@ import { useSceneManager } from '@/composables/useSceneManager'
 import localforage from 'localforage'
 import { ERoomTypes } from '@/enums/ERoomTypes'
 import localtions from '@/assets/json/locations.json'
+import router from '@/router'
 
 const { activeScene, setScene } = useSceneManager()
 const { turnNumber, updateTurnStateMachine, activeTurnState } = useTurn()
@@ -51,7 +52,7 @@ const moveToRoom = async (roomId: EDirections) => {
         return
     }
 
-    const getRoom = () => activeScene.value?.roomList.find((room) => room.id === roomId)
+    const getRoom = () => activeScene.value?.roomList.find((room) => parseInt(room.id) === roomId)
 
     const room = getRoom()
     if (!room) {
@@ -63,7 +64,7 @@ const moveToRoom = async (roomId: EDirections) => {
     await localforage.setItem('activeScene', JSON.stringify(activeScene.value))
 }
 
-const moveToScene = (sceneId: number) => {
+const moveToScene = (sceneId: string) => {
     activeScene.value?.currentRoom
     const sceneData = localtions.find((scene) => scene.id === sceneId)
 
@@ -74,7 +75,14 @@ const moveToScene = (sceneId: number) => {
 
     const scene = Object.assign(new Scene(), sceneData)
 
+    console.log(scene)
+
     setScene(scene)
+
+    if (sceneId === 'town') {
+        router.push({ name: 'town' })
+        return
+    }
 }
 
 const directionButton = (direction: number) =>
@@ -108,6 +116,7 @@ onMounted(() => {
                     v-if="activeScene?.currentRoom?.type === ERoomTypes.Exit"
                     @click="moveToScene(sceneId)"
                 >
+                    {{ sceneId }}
                     Next Area
                 </button>
             </template>

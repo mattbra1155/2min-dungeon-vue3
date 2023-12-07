@@ -1,7 +1,9 @@
+import { AllItemTypes } from '@/interfaces/IItem'
+
 interface Shop {
     id: string
     name: string
-    // inventory?
+    inventory: AllItemTypes[] | []
 }
 
 interface Town {
@@ -9,10 +11,22 @@ interface Town {
     name: string
     description: string
     shops: Shop[]
+    activeShopId: string | undefined
 }
 
 class Town {
-    // constructor() {}
+    public shops: Shop[]
+    constructor() {
+        this.id = 'town'
+        this.name = 'Oakwood'
+        this.description = 'Nice town'
+        this.shops = [{ id: 'merchant', name: 'merchant', inventory: [] }]
+        this.activeShopId = undefined
+    }
+
+    enterMerchantShop() {
+        this.activeShopId = 'merchant'
+    }
 }
 
 export { Town }

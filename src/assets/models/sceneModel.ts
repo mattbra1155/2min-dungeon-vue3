@@ -10,7 +10,7 @@ import { ERoomTypes } from '@/enums/ERoomTypes'
 
 class Scene implements IScene {
     constructor(
-        public id: number = 0,
+        public id: string = '0',
         public name: string = '',
         public entityList: Array<PlayerModel | MonsterModel> = [],
         public currentRoom: Room | undefined = undefined,
@@ -65,7 +65,7 @@ class Scene implements IScene {
         return enemyList
     }
 
-    fetchSceneDetails(id?: number): Scene | undefined {
+    fetchSceneDetails(id: string): Scene | undefined {
         const sceneDetails = locations.find((scene) => scene.id === id)
 
         if (!sceneDetails) {
@@ -74,9 +74,9 @@ class Scene implements IScene {
         }
         this.id = sceneDetails.id
         this.name = sceneDetails.name
-        this.entityList = sceneDetails.entityList
+        // this.entityList = sceneDetails.entityList
 
-        sceneDetails.roomList.forEach((room) => {
+        sceneDetails?.roomList?.forEach((room) => {
             // const monsterList = room.entityList.map((entity) => {
             //     const monster = new MonsterModel(entity)
             //     return monster

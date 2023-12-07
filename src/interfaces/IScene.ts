@@ -3,7 +3,7 @@ import { MonsterModel } from '@/assets/models/monsterModel'
 import { PlayerModel } from '@/assets/models/playerModel'
 
 export interface IScene {
-    id: number
+    id: string
     name: string
     entityList: Array<PlayerModel | MonsterModel>
     currentRoom: Room | undefined
