@@ -6,6 +6,7 @@ import { onMounted, reactive, ref } from 'vue'
 import { useShop } from '@/composables/useShop'
 import localforage from 'localforage'
 import { AllItemTypes } from '@/interfaces/IItem'
+// import { writeAnimation } from '@/utils/writeAnimation'
 const { player } = usePlayer()
 const { setActiveShop } = useShop()
 
@@ -13,6 +14,7 @@ const words = ref<string>('')
 const merchant = reactive(new Merchant())
 merchant.fillInventory(diceRollK10())
 
+// Move this to a standalone function
 const writeAnimation = (text: string) => {
     let i = 0
     const txt = text
@@ -26,6 +28,7 @@ const writeAnimation = (text: string) => {
             setTimeout(typeWriter, speed)
         }
     }
+
     typeWriter()
 }
 
@@ -71,15 +74,12 @@ onMounted(() => {
         <div class="o-merchant__table">
             <div class="o-merchant__itemList">
                 SELL:
-                <button
-                    v-for="item in player.inventory.inventory"
-                    :key="item.id"
-                    class="a-button o-merchant__item"
-                    @click="sellItem(item)"
-                >
-                    <p class="o-merchant__itemName">{{ item.name }}</p>
-                    <p class="o-merchant__itemPrice">{{ item.price }} GC</p>
-                </button>
+                <template v-for="item in player.inventory.inventory" :key="item.id">
+                    <button v-if="!item.isEquipped" class="a-button o-merchant__item" @click="sellItem(item)">
+                        <p class="o-merchant__itemName">{{ item.name }}</p>
+                        <p class="o-merchant__itemPrice">{{ item.price }} GC</p>
+                    </button>
+                </template>
             </div>
             <div class="o-merchant__itemList">
                 BUY:
