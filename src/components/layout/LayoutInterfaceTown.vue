@@ -1,22 +1,28 @@
 <script setup lang="ts">
 import { useInventory } from '@/composables/useInventory'
 import { useCharacterScreen } from '@/composables/useCharacterScreen'
-import { onMounted } from 'vue'
+import { computed, onMounted, toRefs } from 'vue'
 import { Scene } from '@/assets/models/sceneModel'
-import { RoomExit } from '@/assets/models/RoomModel'
 import { useSceneManager } from '@/composables/useSceneManager'
-import { ERoomTypes } from '@/enums/ERoomTypes'
 import localtions from '@/assets/json/locations.json'
 import router from '@/router'
-import { Town } from '@/assets/models/sceneTownModel'
 import { useShop } from '@/composables/useShop'
+import { EGameState } from '@/enums/EGameState'
+import { useGameStateManager } from '@/composables/useGameStateManager'
+import { Town } from '@/assets/models/sceneTownModel'
 
-const { activeScene, setScene } = useSceneManager()
+const { activeScene, setScene, sceneList } = useSceneManager()
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
 const { setActiveShop } = useShop()
+const { activeGameState } = useGameStateManager()
 
-const town = new Town()
+const props = defineProps<{
+    town: Town
+}>()
+
+const { town } = toRefs(props)
+const lastScene = computed(() => sceneList.value.findLast((el) => el))
 
 const addKeybindings = () => {
     window.addEventListener('keydown', (event) => {
@@ -79,13 +85,18 @@ const moveToScene = (sceneId: string) => {
         return
     }
 
+    console.log('here')
+    activeGameState.value = EGameState.Travel
+    town.value.activeShopId = undefined
+    router.push({ name: 'home' })
+
     const scene = Object.assign(new Scene(), sceneData)
 
     setScene(scene)
 }
 
 const enterShop = (shopId: string) => {
-    town.activeShopId = shopId
+    town.value.activeShopId = shopId
     setActiveShop(shopId)
 }
 
@@ -95,16 +106,8 @@ onMounted(() => {
 </script>
 
 <template>
-    <div v-if="activeScene" class="o-interface">
-        <template v-for="sceneId in (activeScene.currentRoom as RoomExit)?.sceneLinks" :key="sceneId">
-            <button
-                class="a-button action__button"
-                v-if="activeScene?.currentRoom?.type === ERoomTypes.Exit"
-                @click="moveToScene(sceneId)"
-            >
-                Next Area
-            </button>
-        </template>
+    <div v-if="activeScene" class="o-interface --town">
+        <button class="a-button action__button" v-if="lastScene" @click="moveToScene(lastScene.id)">Leave Town</button>
         <div class="o-interface__row">
             <button
                 v-for="shop in town.shops"

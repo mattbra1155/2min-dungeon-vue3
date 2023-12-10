@@ -52,7 +52,7 @@ const buyItem = (item: AllItemTypes) => {
         console.log('SHOP: Player doesnt have enough gold')
         return
     }
-    writeAnimation(`The ${item.name} will help you greatly`)
+    writeAnimation(`This ${item.name} will help you greatly`)
     merchant.sellItem(item.id)
 }
 
