@@ -17,7 +17,8 @@ class Item implements IItem {
         public category: string,
         public isEquipped: boolean = false,
         public ownerId: string | undefined = undefined,
-        public modifiers: ModifierItem[] = []
+        public modifiers: ModifierItem[] = [],
+        public price: number = 0
     ) {
         this.name = name
         this.description = description

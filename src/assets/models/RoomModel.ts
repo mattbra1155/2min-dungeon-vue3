@@ -3,7 +3,7 @@ import { PlayerModel } from '@/assets/models/playerModel'
 import { ERoomTypes } from '@/enums/ERoomTypes'
 
 interface IRoom {
-    id: number
+    id: string
     name: string
     description: string
     monsterList: Array<PlayerModel | MonsterModel>
@@ -14,12 +14,12 @@ interface IRoom {
 }
 
 export interface IRoomExit extends IRoom {
-    sceneLinks?: number[]
+    sceneLinks?: string[]
 }
 
 class Room implements IRoom {
     constructor(
-        public id: number = 0,
+        public id: string = '0',
         public name: string = `Room - ${id}`,
         public description: string = '',
         public monsterList: Array<PlayerModel | MonsterModel> = [],
@@ -44,7 +44,7 @@ class Room implements IRoom {
 
 class RoomExit extends Room implements IRoomExit {
     constructor(
-        public id: number = 0,
+        public id: string = '0',
         public name: string = `Room - ${id}`,
         public description: string = '',
         public monsterList: Array<PlayerModel | MonsterModel> = [],
@@ -52,7 +52,7 @@ class RoomExit extends Room implements IRoomExit {
         public exits: number[] = [],
         public type: ERoomTypes = ERoomTypes.Empty,
         public isExplored: boolean = false,
-        public sceneLinks: [] | undefined = []
+        public sceneLinks: string[] | undefined = []
     ) {
         super(id, name, description, monsterList, lootList, exits, isExplored, type)
         this.sceneLinks = sceneLinks

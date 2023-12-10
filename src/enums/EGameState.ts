@@ -7,4 +7,5 @@ export enum EGameState {
     Playing = 'Playing',
     PlayerDead = 'Player dead',
     LevelCleared = 'Level cleared',
+    Town = 'Town',
 }

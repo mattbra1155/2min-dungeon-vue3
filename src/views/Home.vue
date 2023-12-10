@@ -53,6 +53,6 @@ onMounted(async () => {
         <LayoutTopBar />
         <LayoutFeed />
         <LayoutInterface v-if="activeGameState === EGameState.Battle" />
-        <LayoutInterfaceTravel v-else />
+        <LayoutInterfaceTravel v-if="activeGameState === EGameState.Travel" />
     </div>
 </template>

@@ -18,7 +18,7 @@ const state: iStateUseSceneManager = reactive({
 })
 
 export const useSceneManager = () => {
-    const createScene = (sceneId = 0, numberOfEnemies = 1, levelName?: string) => {
+    const createScene = (sceneId = '0', numberOfEnemies = 1, levelName?: string) => {
         const scene: Scene = new Scene()
         scene.fetchSceneDetails(sceneId)
         state.sceneList.push(scene)
@@ -48,7 +48,9 @@ export const useSceneManager = () => {
             if (!state.activeScene) {
                 return
             }
-            const entry = state.activeScene.roomList.find((room) => room.id === 0)
+            console.log('DEBUG', state.activeScene)
+
+            const entry = state.activeScene.roomList.find((room) => room.id === '0')
             if (!entry) {
                 return
             }
