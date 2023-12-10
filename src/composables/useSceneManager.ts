@@ -48,6 +48,8 @@ export const useSceneManager = () => {
             if (!state.activeScene) {
                 return
             }
+            console.log('DEBUG', state.activeScene)
+
             const entry = state.activeScene.roomList.find((room) => room.id === '0')
             if (!entry) {
                 return

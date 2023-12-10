@@ -34,6 +34,8 @@ class Shop implements IShop {
             console.error('SHOP: no item found')
             return
         }
+        console.log(foundItem)
+
         this.inventory.findIndex((inventoryItem) => inventoryItem.id === foundItem.id)
         this.gold = this.gold + foundItem.price
     }

@@ -3,7 +3,7 @@ import { usePlayer } from '@/composables/usePlayer'
 import { Merchant } from '@/assets/models/shopModel'
 import { diceRollK10 } from '@/assets/scripts/diceRoll'
 import GoldCoin from '@/components/icons/GoldCoin.vue'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useShop } from '@/composables/useShop'
 const { player } = usePlayer()
 const { setActiveShop } = useShop()
@@ -11,6 +11,15 @@ const { setActiveShop } = useShop()
 const merchant = new Merchant()
 
 merchant.fillInventory(diceRollK10())
+
+const merchantGold = computed(() => merchant.gold)
+
+watch(
+    () => merchantGold.value,
+    (ttt) => {
+        console.log(ttt)
+    }
+)
 
 const words = ref<string>('')
 
