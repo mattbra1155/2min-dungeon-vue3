@@ -1,3 +1,12 @@
+<script lang="ts">
+import { MonsterGenerator } from './assets/generators/monsterGenerator'
+import { useSceneManager } from './composables/useSceneManager'
+
+const monsterGenerator = new MonsterGenerator()
+
+export { monsterGenerator }
+</script>
+
 <script setup lang="ts">
 import { usePlayer } from './composables/usePlayer'
 import { useRouter } from 'vue-router'
@@ -6,6 +15,8 @@ import { EGameState } from './enums/EGameState'
 import { PlayerModel } from './assets/models/playerModel'
 import InventoryPanel from '@/components/InventoryPanel.vue'
 import CharacterScreen from './components/CharacterScreen.vue'
+
+const { createScene } = useSceneManager()
 const { fetchPlayer, setPlayer } = usePlayer()
 const { activeGameState, updateGameState } = useGameStateManager()
 const router = useRouter()
@@ -16,8 +27,9 @@ const init = async () => {
         const player: PlayerModel | undefined = await fetchPlayer()
         if (player) {
             await setPlayer(player)
-            updateGameState(EGameState.Battle)
+            updateGameState(EGameState.Travel)
             router.push({ name: 'home' })
+            createScene()
             return player
         } else {
             updateGameState(EGameState.CreateChar)

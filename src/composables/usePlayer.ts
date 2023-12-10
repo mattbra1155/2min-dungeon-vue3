@@ -26,7 +26,7 @@ export const usePlayer = () => {
         return state.player
     }
 
-    const createPlayer = (payload: PlayerModel | null) => {
+    const createPlayer = async (payload: PlayerModel | null) => {
         if (payload) {
             state.player = Object.assign(state.player, payload)
             state.player.currentStats = JSON.parse(JSON.stringify(state.player.stats))
@@ -34,7 +34,7 @@ export const usePlayer = () => {
             state.player.isAlive = true
 
             const stringifiedPlayer = JSON.stringify(state.player)
-            localforage.setItem('player', stringifiedPlayer)
+            await localforage.setItem('player', stringifiedPlayer)
             return state.player
         }
     }

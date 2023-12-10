@@ -31,6 +31,12 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/LevelFinished.vue'),
         props: { default: true },
     },
+    {
+        path: '/town',
+        name: 'town',
+        component: () => import('../views/Town.vue'),
+        props: { default: true },
+    },
 ]
 
 const router = createRouter({

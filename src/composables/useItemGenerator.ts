@@ -37,8 +37,8 @@ export const useItemGenerator = () => {
         saveItemIdState()
         return state.ids[category]
     }
-    const saveItemIdState = () => {
-        localforage.setItem('itemIdState', JSON.stringify(state.ids))
+    const saveItemIdState = async () => {
+        await localforage.setItem('itemIdState', JSON.stringify(state.ids))
     }
     const getItemIdState = async () => {
         const response: string | null = await localforage.getItem('itemIdState')

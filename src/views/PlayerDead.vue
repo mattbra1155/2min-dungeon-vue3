@@ -5,18 +5,24 @@ import { useRouter } from 'vue-router'
 import { usePlayer } from '@/composables/usePlayer'
 import { useSceneManager } from '@/composables/useSceneManager'
 import { ETurnState } from '@/enums/ETurnState'
+import { useGameStateManager } from '@/composables/useGameStateManager'
+import { EGameState } from '@/enums/EGameState'
 
 const { deadPlayer } = usePlayer()
 const router = useRouter()
-const { turnModel } = useTurn()
-const { createScene, resetScene } = useSceneManager()
+const { activeCharacter, resetTurn } = useTurn()
+const { resetScene } = useSceneManager()
+const { updateGameState } = useGameStateManager()
 
-onMounted(() => {
+const init = () => {
     deadPlayer()
-    turnModel.value.updateTurnStateMachine(ETurnState.Init)
+    resetTurn()
+    updateGameState(EGameState.PlayerDead)
     resetScene()
-    createScene()
-})
+    // createScene()
+}
+
+init()
 </script>
 
 <template>
@@ -25,7 +31,7 @@ onMounted(() => {
             <h1 class="o-playerDead__title">YOU DIED</h1>
             <p class="o-playerDead__text">
                 you were killed by:<br />
-                {{ turnModel.activeCharacter.name }} with a {{ turnModel.activeCharacter.weapon?.name }}
+                {{ activeCharacter?.name }} with a {{ activeCharacter?.weapon?.name }}
             </p>
             <button @click="router.push({ name: 'characterCreation' })" class="a-button">Try again</button>
         </div>

@@ -1,5 +1,6 @@
 const bestiary = [
     {
+        id: 'lesserGoblin',
         name: 'Lesser Goblin',
         stats: {
             hp: 5,
@@ -22,6 +23,7 @@ const bestiary = [
             'Goblins are by far the most common of the goblinoid races (i.e., lesser Goblins, Hobgoblins, Orcs, Black Orcs, and Snotlings). They love to inflict pain and suffering on other creatures, and squabble amongst themselves if they have no one else to fight. Lacking fighting discipline, they make very poor warriors and often run away at the first opportunity. In spite of their numbers, Goblins are so disunited and undisciplined that they rarely present anything other than a transitory threat to Human settlements. Their favorite mounts are Wolves or Boars.',
     },
     {
+        id: 'goblin',
         name: 'Goblin',
         stats: {
             hp: 7,
@@ -44,6 +46,7 @@ const bestiary = [
             'Goblins are by far the most common of the goblinoid races (i.e., lesser Goblins, Hobgoblins, Orcs, Black Orcs, and Snotlings). They love to inflict pain and suffering on other creatures, and squabble amongst themselves if they have no one else to fight. Lacking fighting discipline, they make very poor warriors and often run away at the first opportunity. In spite of their numbers, Goblins are so disunited and undisciplined that they rarely present anything other than a transitory threat to Human settlements. Their favorite mounts are Wolves or Boars.',
     },
     {
+        id: 'orc',
         name: 'Orc',
         stats: {
             hp: 7,
@@ -66,6 +69,7 @@ const bestiary = [
             'Orcs are powerful warriors - the toughest of the goblinoid races - and often install themselves as leaders of their weaker cousins. They are repulsive monsters who love inflicting pain and delight in cruelty and slaughter. Orcs are always fighting and, if they cannot find enemies to fight, they will fight each other. The whole of Orc technology and culture is geared towards conflict. They are dangerous individual foes, but lack the organisation or motivation to present any real long-term threat to humanity. Orcs speak the common Goblin tongue, usually about four octaves lower than any Goblin.',
     },
     {
+        id: 'ogr',
         name: 'Ogr',
         stats: {
             hp: 17,
@@ -88,6 +92,7 @@ const bestiary = [
             'Ogres are gross, ugly humanoids who love to fight and kill. However, they are not particularly discriminating and will hire their services out to the higest bidder. They are not an overly cruel race, but they are brutal and have little respect for the weak or helpless.',
     },
     {
+        id: 'skeleton',
         name: 'Skeleton',
         stats: {
             hp: 5,
@@ -110,6 +115,7 @@ const bestiary = [
             'A Skeleton is magically formed from the remains of a long-dead humanoid. Skeletons lack strong wills of their own and are sustained only by magic.',
     },
     {
+        id: 'liche',
         name: 'Liche',
         stats: {
             hp: 25,

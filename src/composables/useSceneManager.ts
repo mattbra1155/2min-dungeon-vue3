@@ -1,59 +1,85 @@
-// import { SceneGenerator } from '@/assets/generators/sceneGenerator.js'
 import { reactive, toRefs } from 'vue'
-import { monsterGenerator } from '@/assets/generators/monsterGenerator'
-import { iScene } from '@/interfaces/Scene'
+import { IScene } from '@/interfaces/IScene'
+import { Scene } from '@/assets/models/sceneModel'
+import localforage from 'localforage'
 import { MonsterModel } from '@/assets/models/monsterModel'
+import { ModifierItem } from '@/assets/models/modifierItemModel'
+import { Status } from '@/assets/models/statusModel'
+import { Inventory } from '@/assets/models/inventoryModel'
 
 interface iStateUseSceneManager {
-    currentId: number
-    sceneList: iScene[]
-    scene: iScene | null
+    sceneList: IScene[]
+    activeScene: Scene | null
 }
 
 const state: iStateUseSceneManager = reactive({
-    currentId: 0,
-    scene: null,
+    activeScene: null,
     sceneList: [],
 })
 
 export const useSceneManager = () => {
-    const createMonster = () => {
-        const monster = monsterGenerator.create()
-        return monster
-    }
-
-    const createScene = (numberOfEnemies = 1, levelName?: string) => {
-        console.log('create')
-
-        const enemyList: MonsterModel[] = []
-        const createEnemyList = (enemiesToCreate = numberOfEnemies) => {
-            let createdEnemies = 0
-            while (createdEnemies < enemiesToCreate) {
-                createdEnemies++
-                const enemy = createMonster()
-                enemyList.push(enemy)
-            }
-        }
-        const scene: iScene = {
-            id: state.currentId++,
-            name: levelName || `level ${state.currentId}`,
-            enemy: enemyList,
-        }
-
-        createEnemyList()
+    const createScene = (sceneId = '0', numberOfEnemies = 1, levelName?: string) => {
+        const scene: Scene = new Scene()
+        scene.fetchSceneDetails(sceneId)
+        state.sceneList.push(scene)
         setScene(scene)
     }
-    const setScene = (scene: iScene) => {
-        state.scene = scene
+    const setScene = (scene: Scene) => {
+        state.activeScene = scene
     }
 
     const resetScene = () => {
-        state.currentId = 0
+        state.activeScene = null
+        localforage.removeItem('activeScene')
+    }
+
+    const saveScene = async () => {
+        await localforage.setItem('activeScene', JSON.stringify(state.activeScene))
+        // localforage.setItem('sceneList', JSON.stringify(state.sceneList))
+    }
+    const loadScene = async () => {
+        const data = (await localforage.getItem('activeScene')) as string
+        const savedScene = await JSON.parse(data)
+
+        console.log('SAVED SCENE', savedScene)
+
+        if (!savedScene) {
+            createScene()
+            if (!state.activeScene) {
+                return
+            }
+            console.log('DEBUG', state.activeScene)
+
+            const entry = state.activeScene.roomList.find((room) => room.id === '0')
+            if (!entry) {
+                return
+            }
+            state.activeScene.changeCurrentRoom(entry)
+            return
+        }
+        const scene: Scene = Object.assign(new Scene(), savedScene)
+        scene.roomList.forEach((room) => {
+            room.monsterList = room.monsterList.map((monster) => {
+                const ttt = new MonsterModel()
+                const newMonster = Object.assign(ttt, monster)
+                newMonster.inventory = new Inventory()
+                newMonster.inventory = monster.inventory
+                newMonster.status = new Status()
+                return newMonster
+            })
+        })
+
+        console.log(state)
+
+        setScene(scene)
     }
 
     return {
         ...toRefs(state),
         createScene,
+        setScene,
         resetScene,
+        saveScene,
+        loadScene,
     }
 }

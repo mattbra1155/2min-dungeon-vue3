@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { usePlayer } from '@/composables/usePlayer'
-import { diceRollK2, diceRollK3, diceRollK10 } from '@/assets/scripts/diceRoll'
+import { diceRollK2, diceRollK3, diceRollK10, diceRollK6 } from '@/assets/scripts/diceRoll'
 import { useRouter } from 'vue-router'
 import { EGameState } from '@/enums/EGameState'
 import { useGameStateManager } from '@/composables/useGameStateManager'
@@ -12,6 +12,7 @@ import professions from '@/assets/json/professions.json'
 import { EStats } from '@/enums/EStats'
 import { IProfessionPayload } from '@/interfaces/IProfession'
 import { Profession } from '@/assets/models/professionModel'
+import { AllItemTypes } from '@/interfaces/IItem'
 const router = useRouter()
 const { initPlayer, createPlayer, resetPlayer } = usePlayer()
 const { updateGameState } = useGameStateManager()
@@ -86,18 +87,27 @@ const selectProfession = (profession: IProfessionPayload) => {
 }
 
 const createInventoryItems = () => {
+    playerObject.value.inventory.inventory = []
+    const itemList = []
     const weapon = new ItemGenerator().createItem(EItemCategory.Weapon)
     const armor = new ItemGenerator().createItem(EItemCategory.Armor)
     const potion = new ItemGenerator().createItem(EItemCategory.Potion)
-    playerObject.value.inventory.addItem(weapon, playerObject.value.id)
-    playerObject.value.inventory.addItem(armor, playerObject.value.id)
-    playerObject.value.inventory.addItem(potion, playerObject.value.id)
+
+    itemList.push(weapon, armor, potion)
+
+    itemList.forEach((item) => playerObject.value.inventory.addItem(item, playerObject.value.id))
 }
+
+const rollForGold = () => {
+    const sum = diceRollK6() * 2
+    playerObject.value.inventory.gold = sum
+}
+
 const savePlayer = async () => {
     if (playerObject.value) {
         await resetPlayer()
         createPlayer(playerObject.value)
-        updateGameState(EGameState.Battle)
+        updateGameState(EGameState.Travel)
         router.push({ name: 'home' })
     }
 }
@@ -163,8 +173,7 @@ const savePlayer = async () => {
                     <h2 class="o-characterGenerator__header">Stats</h2>
                     <button
                         type="button"
-                        @click="rollStats()"
-                        @click.once="createInventoryItems()"
+                        @click="rollStats(), rollForGold(), createInventoryItems()"
                         id="generateStatsButton"
                         class="button action__button"
                     >
@@ -183,6 +192,9 @@ const savePlayer = async () => {
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="m-form__row o-characterGenerator__row">
+                <div class="m-form__column">GOLD: {{ playerObject.inventory.gold }}</div>
             </div>
             <div class="m-form__row o-characterGenerator__row">
                 <div class="m-form__column">

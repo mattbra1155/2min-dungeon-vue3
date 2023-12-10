@@ -32,11 +32,9 @@ class MonsterGenerator {
             monster.currentStats[statName] = value
         })
         monster.inventory.gold = diceRollK6()
-
         return monster
     }
 }
 
-const monsterGenerator = new MonsterGenerator()
-
-export { monsterGenerator }
+// const monsterGenerator = new MonsterGenerator()
+export { MonsterGenerator }

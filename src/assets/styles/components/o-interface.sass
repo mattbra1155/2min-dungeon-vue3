@@ -1,7 +1,17 @@
 .o-interface
     display: flex
+    flex-direction: column
     justify-content: center
     align-items: center
-    flex-flow: row wrap
     text-align: center
     z-index: 100
+    gap: 2rem
+    padding: 1rem
+    &.--travel
+        margin-top: auto
+    &__directionWrapper
+        display: flex
+        gap: 1rem
+    &__row
+        display: flex
+        gap: 1rem

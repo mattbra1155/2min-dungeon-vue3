@@ -13,6 +13,7 @@ export interface IItem {
     isEquipped: boolean
     ownerId: string | undefined
     modifiers: ModifierItem[]
+    price: number
 }
 
 export interface IWeapon extends IItem {
