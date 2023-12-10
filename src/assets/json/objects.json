@@ -1,0 +1,23 @@
+{
+    "containers": [
+        {
+            "id": "chest",
+            "name": "chest",
+            "description": "lorem ipsuim chest descriptin",
+            "items": []
+        },
+        {
+            "id": "bookshelf",
+            "name": "bookshelf",
+            "description": "bookshelf lorem ipsum",
+            "items": []
+        },
+        {
+            "id": "desk",
+            "name": "desk",
+            "description": "desk lorem ipsum",
+            "items": []
+        }
+    ],
+    "doors": {}
+}
