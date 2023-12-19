@@ -29,10 +29,10 @@ const setRoomExploredStatus = async () => {
     if (!activeScene.value.currentRoom) {
         return
     }
-    activeScene.value.currentRoom.isExplored = true
-    console.log(activeScene.value)
 
-    await saveScene(activeScene.value.id, activeScene.value.currentRoom.id)
+    activeScene.value.currentRoom.isExplored = true
+    console.log(activeScene.value.currentRoom.isExplored)
+    await saveScene(activeScene.value.id, activeScene.value.currentRoom.id, activeScene.value.roomList)
     resetTurn()
 }
 

@@ -35,6 +35,8 @@ class Scene implements IScene {
             return
         }
 
+        console.log('CURRENT', this.currentRoom)
+
         this.currentRoom = currentRoom
         // If Room is explored - monster defeated before - don't create another one
         if (this.currentRoom.isExplored) {

@@ -66,7 +66,7 @@ const moveToRoom = async (roomId: EDirections) => {
         return
     }
 
-    await saveScene(activeScene.value.id, activeScene.value.currentRoom.id)
+    await saveScene(activeScene.value.id, activeScene.value.currentRoom.id, activeScene.value.roomList)
 }
 
 const moveToScene = (sceneId: string) => {

@@ -7,6 +7,7 @@ import { ModifierItem } from '@/assets/models/modifierItemModel'
 import { Status } from '@/assets/models/statusModel'
 import { Inventory } from '@/assets/models/inventoryModel'
 import locations from '@/assets/json/locations.json'
+import { Room } from '@/assets/models/RoomModel'
 interface iStateUseSceneManager {
     sceneList: IScene[]
     activeScene: Scene | null
@@ -33,8 +34,8 @@ export const useSceneManager = () => {
         localforage.removeItem('activeScene')
     }
 
-    const saveScene = async (sceneId: string, currentRoomId: string) => {
-        await localforage.setItem('activeScene', { sceneId, currentRoom: currentRoomId })
+    const saveScene = async (sceneId: string, currentRoomId: string, roomList: Room[]) => {
+        await localforage.setItem('activeScene', JSON.stringify({ sceneId, currentRoom: currentRoomId, roomList }))
         // localforage.setItem('sceneList', JSON.stringify(state.sceneList))
     }
     const loadScene = async () => {
@@ -42,8 +43,9 @@ export const useSceneManager = () => {
             id: string
             currentRoom: string
         }
-        const savedScene: payload = (await localforage.getItem('activeScene')) as payload
+        const data: string = (await localforage.getItem('activeScene')) as string
 
+        const savedScene: payload = JSON.parse(data)
         console.log('SAVED SCENE', savedScene)
 
         if (!savedScene) {
