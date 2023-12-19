@@ -6,7 +6,7 @@ import { MonsterModel } from '@/assets/models/monsterModel'
 import { ModifierItem } from '@/assets/models/modifierItemModel'
 import { Status } from '@/assets/models/statusModel'
 import { Inventory } from '@/assets/models/inventoryModel'
-
+import locations from '@/assets/json/locations.json'
 interface iStateUseSceneManager {
     sceneList: IScene[]
     activeScene: Scene | null
@@ -33,13 +33,16 @@ export const useSceneManager = () => {
         localforage.removeItem('activeScene')
     }
 
-    const saveScene = async () => {
-        await localforage.setItem('activeScene', JSON.stringify(state.activeScene))
+    const saveScene = async (sceneId: string, currentRoomId: string) => {
+        await localforage.setItem('activeScene', { sceneId, currentRoom: currentRoomId })
         // localforage.setItem('sceneList', JSON.stringify(state.sceneList))
     }
     const loadScene = async () => {
-        const data = (await localforage.getItem('activeScene')) as string
-        const savedScene = await JSON.parse(data)
+        interface payload {
+            id: string
+            currentRoom: string
+        }
+        const savedScene: payload = (await localforage.getItem('activeScene')) as payload
 
         console.log('SAVED SCENE', savedScene)
 
@@ -54,11 +57,21 @@ export const useSceneManager = () => {
             if (!entry) {
                 return
             }
-            state.activeScene.changeCurrentRoom(entry)
+            state.activeScene.changeCurrentRoom(entry.id)
             return
         }
-        const scene: Scene = Object.assign(new Scene(), savedScene)
+
+        const scene: Scene = new Scene()
+
+        scene.fetchSceneDetails(scene.id)
+
+        scene.currentRoom = scene.roomList.find((room) => room.id === savedScene.currentRoom)
+
+        // TO FIX: set explored room OR store whole room list
         scene.roomList.forEach((room) => {
+            if (!room.monsterList) {
+                return
+            }
             room.monsterList = room.monsterList.map((monster) => {
                 const ttt = new MonsterModel()
                 const newMonster = Object.assign(ttt, monster)

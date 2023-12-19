@@ -27,9 +27,15 @@ class Scene implements IScene {
         this.links = links
     }
 
-    changeCurrentRoom(room: Room) {
-        this.currentRoom = room
+    changeCurrentRoom(roomId: string) {
+        const currentRoom = this.roomList.find((room) => room.id === roomId)
 
+        if (!currentRoom) {
+            console.error('No Room found')
+            return
+        }
+
+        this.currentRoom = currentRoom
         // If Room is explored - monster defeated before - don't create another one
         if (this.currentRoom.isExplored) {
             return
