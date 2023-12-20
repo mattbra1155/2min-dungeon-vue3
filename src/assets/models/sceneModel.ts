@@ -35,13 +35,14 @@ class Scene implements IScene {
             return
         }
 
-        console.log('CURRENT', this.currentRoom)
-
         this.currentRoom = currentRoom
+        console.log(this.currentRoom.isExplored)
+
         // If Room is explored - monster defeated before - don't create another one
         if (this.currentRoom.isExplored) {
             return
         }
+
         // If Room is not explored and there is no monsters present - set Room as explored
         if (!this.currentRoom.monsterList.length) {
             this.currentRoom.isExplored = true
@@ -55,8 +56,6 @@ class Scene implements IScene {
 
     createMonster = () => {
         const monster = monsterGenerator.create()
-        console.log(monster)
-
         return monster
     }
 
@@ -94,9 +93,6 @@ class Scene implements IScene {
 
             if (room.type === ERoomTypes.Exit) {
                 const roomExitData = room as unknown as RoomExit
-
-                console.log('roomExitData', roomExitData)
-
                 const roomExit = new RoomExit(
                     roomExitData.id,
                     roomExitData.name,
@@ -113,26 +109,8 @@ class Scene implements IScene {
 
             this.roomList.push(new Room(room.id, room.name, room.description, monsterList, room.lootList, room.exits))
         })
-
-        console.log(sceneDetails)
         return this
     }
-
-    // creatRandomRoomList(amount: number) {
-    //     let currentAmount = 0
-    //     const entryRoom = new Room('', 'entry', 'Room desc', [], [], [-1, -1, 1, 2])
-
-    //     console.log(entryRoom.exits)
-
-    //     while (currentAmount < amount) {
-    //         currentAmount++
-    //         const exitAmount = entryRoom.exits.length
-
-    //         const room = Math.floor(Math.random() * exitAmount)
-
-    //         console.log(room)
-    //     }
-    // }
 }
 
 export { Scene }

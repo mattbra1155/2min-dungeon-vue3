@@ -52,9 +52,15 @@ const moveToRoom = async (roomId: EDirections) => {
         return
     }
 
+    activeScene.value.roomList.forEach((room) => {
+        console.log(room.name, room.isExplored)
+    })
+
     const getRoom = () => activeScene.value?.roomList.find((room) => parseInt(room.id) === roomId)
 
     const room = getRoom()
+    console.log(room)
+
     if (!room) {
         return
     }
@@ -65,7 +71,6 @@ const moveToRoom = async (roomId: EDirections) => {
         console.error('No current Room')
         return
     }
-
     await saveScene(activeScene.value.id, activeScene.value.currentRoom.id, activeScene.value.roomList)
 }
 

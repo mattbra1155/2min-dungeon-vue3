@@ -45,7 +45,6 @@ class Status implements IStatus {
             // if (status.duration.isInfinite) {
             //     return
             // }
-            console.log('here', status)
             // TO DO fix - now adds each time the func is called
             if (!status.duration.max) {
                 return

@@ -97,15 +97,13 @@ export const useTurn = () => {
 
                     if (isCleared) {
                         updateGameState(EGameState.LevelCleared)
+                        return
                     }
                     state.turnOrder.forEach((enemy) => {
                         if (player.value.isAlive === false) {
                             console.log(player.value.isAlive)
                             return
                         }
-
-                        console.log(enemy)
-
                         enemy.status.updateStatusList(enemy, state.turnNumber)
                         state.activeCharacter = enemy
                         console.log(`${enemy.name} attacks`)

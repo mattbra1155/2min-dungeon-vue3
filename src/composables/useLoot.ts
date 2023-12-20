@@ -42,7 +42,6 @@ export const useLoot = () => {
 
         for (let x = 1; x <= lootAmount; x++) {
             const generatedItem = generateLootItem(1)
-            console.log(generatedItem)
             state.lootList.push(generatedItem)
         }
     }

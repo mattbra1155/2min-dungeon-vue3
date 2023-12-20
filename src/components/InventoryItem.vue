@@ -13,7 +13,6 @@ const props = defineProps<{
 }>()
 
 const item = computed(() => player.value.inventory.inventory.find((inventoryItem) => inventoryItem.id === props.itemId))
-console.log(item.value)
 </script>
 
 <template>
