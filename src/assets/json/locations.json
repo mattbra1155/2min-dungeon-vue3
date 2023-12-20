@@ -113,11 +113,13 @@
         "roomList": [
             {
                 "id": "0",
-                "objects": [
-                    {}
-                ],
                 "description": "",
-                "entityList": [],
+                "objects": [
+                    "chest"
+                ],
+                "entityList": [
+                    "chest"
+                ],
                 "lootList": [
                     "gold"
                 ],
