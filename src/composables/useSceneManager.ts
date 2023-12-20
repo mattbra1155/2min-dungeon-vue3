@@ -37,7 +37,7 @@ export const useSceneManager = () => {
     const saveScene = async (sceneId: string, currentRoomId: string, roomList?: Room[]) => {
         console.log(roomList)
         const seen: any = []
-        const val: any = {}
+        // save and remove cyclic objects from store
         await localforage.setItem(
             'activeScene',
             JSON.stringify({ sceneId, currentRoom: currentRoomId, roomList }, function (key, val) {
