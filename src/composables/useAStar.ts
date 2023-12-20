@@ -15,8 +15,6 @@ easystar.setGrid(grid)
 easystar.setAcceptableTiles([0])
 
 easystar.findPath(0, 0, 4, 4, function (path: any) {
-    console.log(path)
-
     if (path === null) {
         alert('Path was not found.')
     } else {

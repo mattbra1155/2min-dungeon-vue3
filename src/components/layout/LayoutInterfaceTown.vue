@@ -47,27 +47,6 @@ const addKeybindings = () => {
     })
 }
 
-// const moveToRoom = async (roomId: EDirections) => {
-//     if (!activeScene.value) {
-//         return
-//     }
-//     if (roomId === EDirections.Wall) {
-//         console.log('wall')
-//         return
-//     }
-
-//     const getRoom = () => activeScene.value?.roomList.find((room) => parseInt(room.id) === roomId)
-
-//     const room = getRoom()
-//     if (!room) {
-//         return
-//     }
-//     activeScene.value.changeCurrentRoom(room)
-//     console.log('active room', activeScene.value.currentRoom)
-
-//     await localforage.setItem('activeScene', JSON.stringify(activeScene.value))
-// }
-
 const moveToScene = (sceneId: string) => {
     const sceneData = localtions.find((scene) => scene.id === sceneId)
 
@@ -85,7 +64,6 @@ const moveToScene = (sceneId: string) => {
         return
     }
 
-    console.log('here')
     activeGameState.value = EGameState.Travel
     town.value.activeShopId = undefined
     router.push({ name: 'home' })

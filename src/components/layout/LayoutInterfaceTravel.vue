@@ -14,7 +14,7 @@ import { ERoomTypes } from '@/enums/ERoomTypes'
 import localtions from '@/assets/json/locations.json'
 import router from '@/router'
 
-const { activeScene, setScene } = useSceneManager()
+const { activeScene, setScene, saveScene } = useSceneManager()
 const { turnNumber, updateTurnStateMachine, activeTurnState } = useTurn()
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
@@ -52,16 +52,26 @@ const moveToRoom = async (roomId: EDirections) => {
         return
     }
 
+    activeScene.value.roomList.forEach((room) => {
+        console.log(room.name, room.isExplored)
+    })
+
     const getRoom = () => activeScene.value?.roomList.find((room) => parseInt(room.id) === roomId)
 
     const room = getRoom()
+    console.log(room)
+
     if (!room) {
         return
     }
-    activeScene.value.changeCurrentRoom(room)
+    activeScene.value.changeCurrentRoom(room.id)
     console.log('active room', activeScene.value.currentRoom)
 
-    await localforage.setItem('activeScene', JSON.stringify(activeScene.value))
+    if (!activeScene.value.currentRoom) {
+        console.error('No current Room')
+        return
+    }
+    await saveScene(activeScene.value.id, activeScene.value.currentRoom.id, activeScene.value.roomList)
 }
 
 const moveToScene = (sceneId: string) => {

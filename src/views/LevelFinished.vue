@@ -16,7 +16,7 @@ const { updateTurnStateMachine, resetTurn } = useTurn()
 const router = useRouter()
 const { player } = usePlayer()
 const { lootList, generateLoot } = useLoot()
-const { activeScene } = useSceneManager()
+const { activeScene, saveScene } = useSceneManager()
 const { updateGameState } = useGameStateManager()
 
 updateGameState(EGameState.LevelCleared)
@@ -29,10 +29,10 @@ const setRoomExploredStatus = async () => {
     if (!activeScene.value.currentRoom) {
         return
     }
-    activeScene.value.currentRoom.isExplored = true
-    console.log(activeScene.value)
 
-    await localforage.setItem('activeScene', JSON.stringify(activeScene.value))
+    activeScene.value.currentRoom.isExplored = true
+
+    await saveScene(activeScene.value.id, activeScene.value.currentRoom.id, activeScene.value.roomList)
     resetTurn()
 }
 

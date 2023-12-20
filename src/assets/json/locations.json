@@ -18,6 +18,9 @@
         "roomList": [
             {
                 "id": "0",
+                "objects": [
+                    "chest"
+                ],
                 "description": "",
                 "entityList": [],
                 "lootList": [
@@ -34,6 +37,9 @@
             },
             {
                 "id": "1",
+                "objects": [
+                    {}
+                ],
                 "description": "",
                 "entityList": [
                     "lesserGoblin"
@@ -52,6 +58,9 @@
             },
             {
                 "id": "2",
+                "objects": [
+                    {}
+                ],
                 "description": "",
                 "entityList": [],
                 "lootList": [
@@ -68,6 +77,9 @@
             },
             {
                 "id": "3",
+                "objects": [
+                    {}
+                ],
                 "description": "",
                 "entityList": [],
                 "lootList": [
@@ -101,6 +113,9 @@
         "roomList": [
             {
                 "id": "0",
+                "objects": [
+                    {}
+                ],
                 "description": "",
                 "entityList": [],
                 "lootList": [
@@ -117,6 +132,9 @@
             },
             {
                 "id": "1",
+                "objects": [
+                    {}
+                ],
                 "description": "",
                 "entityList": [],
                 "lootList": [
@@ -133,6 +151,9 @@
             },
             {
                 "id": "2",
+                "objects": [
+                    {}
+                ],
                 "description": "",
                 "entityList": [],
                 "lootList": [
@@ -149,6 +170,9 @@
             },
             {
                 "id": "3",
+                "objects": [
+                    {}
+                ],
                 "description": "",
                 "entityList": [],
                 "lootList": [
@@ -165,6 +189,9 @@
             },
             {
                 "id": "4",
+                "objects": [
+                    {}
+                ],
                 "description": "",
                 "entityList": [],
                 "lootList": [
@@ -181,6 +208,9 @@
             },
             {
                 "id": "5",
+                "objects": [
+                    {}
+                ],
                 "description": "",
                 "entityList": [],
                 "lootList": [
