@@ -59,12 +59,10 @@ export const useSceneManager = () => {
             roomList: Room[]
         }
         const data: string = (await localforage.getItem('activeScene')) as string
-
         const savedScene: payload = JSON.parse(data)
 
         if (!savedScene) {
             console.log('CRATE SCENE: No saved scene')
-
             createScene()
             if (!state.activeScene) {
                 return
@@ -78,19 +76,13 @@ export const useSceneManager = () => {
         }
 
         const scene: Scene = new Scene()
-
         scene.fetchSceneDetails(scene.id)
-
         scene.currentRoom = scene.roomList.find((room) => room.id === savedScene.currentRoom)
-
         scene.roomList = scene.roomList.map((room) => {
             const roomData = savedScene.roomList.find((roomData) => roomData.id === room.id)
-
             if (roomData) {
                 room = roomData
-                room.isExplored = roomData.isExplored
             }
-
             room.monsterList = room.monsterList.map((monster) => {
                 const ttt = new MonsterModel()
                 const newMonster = Object.assign(ttt, monster)
@@ -101,9 +93,6 @@ export const useSceneManager = () => {
             })
             return room
         })
-
-        console.log('SCENE', scene)
-
         setScene(scene)
     }
 
