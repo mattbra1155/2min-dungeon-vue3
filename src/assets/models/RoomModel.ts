@@ -14,6 +14,7 @@ interface IRoom {
     type: ERoomTypes
     isExplored: boolean
     isSearched: boolean
+    searchRoom(): void
 }
 
 export interface IRoomExit extends IRoom {
@@ -46,6 +47,9 @@ class Room implements IRoom {
     }
     unaliveMonsters = () => {
         this.monsterList.map((monster) => (monster.isAlive = false))
+    }
+    searchRoom() {
+        this.isSearched = true
     }
 }
 

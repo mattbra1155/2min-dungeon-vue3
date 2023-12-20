@@ -120,8 +120,6 @@ class Scene implements IScene {
 
                     list.push(createdObject)
                 })
-                console.log(list)
-
                 return list
             }
 
@@ -157,8 +155,6 @@ class Scene implements IScene {
                 )
             )
         })
-        console.log(this)
-
         return this
     }
 }

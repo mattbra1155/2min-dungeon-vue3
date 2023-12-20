@@ -91,7 +91,7 @@ export const useSceneManager = () => {
                 newMonster.status = new Status()
                 return newMonster
             })
-            return room
+            return Object.assign(new Room(), room)
         })
         setScene(scene)
     }

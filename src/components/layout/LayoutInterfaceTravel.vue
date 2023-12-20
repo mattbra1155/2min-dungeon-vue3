@@ -20,6 +20,8 @@ const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
 const { player } = usePlayer()
 
+const isSearched = computed(() => activeScene.value?.currentRoom?.isSearched)
+
 const addKeybindings = () => {
     window.addEventListener('keydown', (event) => {
         if (event.key === 'i') {
@@ -98,6 +100,13 @@ const moveToScene = (sceneId: string) => {
 const directionButton = (direction: number) =>
     Object.entries(EDirections).find((dir) => dir[0] === direction.toString())?.[1]
 
+const searchRoom = () => {
+    if (!activeScene.value || !activeScene.value.currentRoom) {
+        console.error('SEARCH ROOM: no current room')
+        return
+    }
+    activeScene.value.currentRoom.searchRoom()
+}
 onMounted(() => {
     addKeybindings()
 })
@@ -113,6 +122,8 @@ onMounted(() => {
         >
             start BATTLE
         </button>
+        is searched: {{ isSearched }}
+        <button class="a-button action__button" v-if="!isSearched" @click="searchRoom">Search Room</button>
         <div class="o-interface__row o-interface__directionWrapper">
             <template v-for="(direction, index) in activeScene.currentRoom?.exits" :key="index">
                 <button v-if="direction !== -1" class="a-button action__button" @click="moveToRoom(direction)">
