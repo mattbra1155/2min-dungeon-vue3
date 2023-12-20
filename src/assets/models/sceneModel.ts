@@ -113,6 +113,8 @@ class Scene implements IScene {
 
                     const createdObject = new RoomObject(
                         objectData.id,
+                        objectData.image,
+                        objectData.imageSearched,
                         objectData.name,
                         objectData.description,
                         getItems()

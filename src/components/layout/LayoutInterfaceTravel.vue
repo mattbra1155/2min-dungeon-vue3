@@ -61,13 +61,12 @@ const moveToRoom = async (roomId: EDirections) => {
     const getRoom = () => activeScene.value?.roomList.find((room) => parseInt(room.id) === roomId)
 
     const room = getRoom()
-    console.log(room)
 
     if (!room) {
         return
     }
+
     activeScene.value.changeCurrentRoom(room.id)
-    console.log('active room', activeScene.value.currentRoom)
 
     if (!activeScene.value.currentRoom) {
         console.error('No current Room')

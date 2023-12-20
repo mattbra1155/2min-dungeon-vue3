@@ -2,6 +2,8 @@
     "containers": [
         {
             "id": "chest",
+            "image": "images/Treasure Chest closed 254x254.png",
+            "imageSearched": "images/Treasure Chest open 254x254.png",
             "name": "chest",
             "description": "lorem ipsuim chest descriptin",
             "items": [
