@@ -3,11 +3,10 @@ import { IScene } from '@/interfaces/IScene'
 import { Scene } from '@/assets/models/sceneModel'
 import localforage from 'localforage'
 import { MonsterModel } from '@/assets/models/monsterModel'
-import { ModifierItem } from '@/assets/models/modifierItemModel'
 import { Status } from '@/assets/models/statusModel'
 import { Inventory } from '@/assets/models/inventoryModel'
-import locations from '@/assets/json/locations.json'
 import { Room } from '@/assets/models/RoomModel'
+import { RoomObject } from '@/assets/models/RoomObjectModel'
 interface iStateUseSceneManager {
     sceneList: IScene[]
     activeScene: Scene | null
@@ -90,6 +89,11 @@ export const useSceneManager = () => {
                 newMonster.inventory = monster.inventory
                 newMonster.status = new Status()
                 return newMonster
+            })
+            room.roomObjects = room.roomObjects.map((objectItem) => {
+                const itemClass = new RoomObject()
+                const newObject = Object.assign(itemClass, objectItem)
+                return newObject
             })
             return Object.assign(new Room(), room)
         })

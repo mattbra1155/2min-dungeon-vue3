@@ -118,14 +118,18 @@ export const usePlayer = () => {
     }
 
     const resetPlayer = async () => {
-        const payload: string | null = await localforage.getItem('initPlayer')
-        if (payload) {
-            const playerData = JSON.parse(payload)
-            Object.assign(state.player, playerData)
-            console.log('Player reset')
-        } else {
-            console.log('Player reset: Cant get initPlayer from storage')
-        }
+        const player = new PlayerModel()
+        Object.assign(state.player, player)
+        console.log(state.player)
+
+        //     const payload: string | null = await localforage.getItem('initPlayer')
+        //     if (payload) {
+        //         const playerData = JSON.parse(payload)
+        //         Object.assign(state.player, playerData)
+        //         console.log('Player reset')
+        //     } else {
+        //         console.log('Player reset: Cant get initPlayer from storage')
+        //     }
     }
 
     const deadPlayer = () => {
