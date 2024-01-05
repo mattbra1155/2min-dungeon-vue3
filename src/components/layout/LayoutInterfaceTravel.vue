@@ -13,7 +13,10 @@ import localforage from 'localforage'
 import { ERoomTypes } from '@/enums/ERoomTypes'
 import localtions from '@/assets/json/locations.json'
 import router from '@/router'
+import { RoomObject } from '@/assets/models/RoomObjectModel'
+import { useFeed } from '@/composables/useFeed'
 
+const { activeRoomObject, setActiveRoomObject } = useFeed()
 const { activeScene, setScene, saveScene } = useSceneManager()
 const { turnNumber, updateTurnStateMachine, activeTurnState } = useTurn()
 const { toggleInventory } = useInventory()
@@ -106,6 +109,10 @@ const searchRoom = () => {
     }
     activeScene.value.currentRoom.searchRoom()
 }
+
+const searchObject = (item: RoomObject) => {
+    setActiveRoomObject(item)
+}
 onMounted(() => {
     addKeybindings()
 })
@@ -113,15 +120,20 @@ onMounted(() => {
 
 <template>
     <div v-if="activeScene" class="o-interface">
-        <button
-            v-if="activeScene?.entityList.length"
-            :disabled="activeTurnState !== ETurnState.Init"
-            @click="updateTurnStateMachine(ETurnState.Init)"
-            class="a-button"
-        >
-            start BATTLE
-        </button>
-        is searched: {{ isSearched }}
+        <div class="o-interface__row o-interface__objectActions">
+            <template v-for="roomObject in activeScene.currentRoom?.roomObjects" :key="roomObject.id">
+                <button
+                    v-if="activeRoomObject?.id !== roomObject.id"
+                    class="a-button action__button"
+                    @click="searchObject(roomObject)"
+                >
+                    Search {{ roomObject.name }}
+                </button>
+            </template>
+            <button class="a-button action__button" v-if="activeRoomObject" @click="setActiveRoomObject(null)">
+                Room description
+            </button>
+        </div>
         <button class="a-button action__button" v-if="!isSearched" @click="searchRoom">Search Room</button>
         <div class="o-interface__row o-interface__directionWrapper">
             <template v-for="(direction, index) in activeScene.currentRoom?.exits" :key="index">
