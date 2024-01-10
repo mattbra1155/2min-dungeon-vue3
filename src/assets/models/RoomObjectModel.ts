@@ -3,7 +3,7 @@ import { IRoomObject } from '@/interfaces/IRoomObject'
 
 class RoomObject implements IRoomObject {
     constructor(
-        public id: string = '',
+        public id: string = crypto.randomUUID(),
         public image: string = '',
         public imageSearched: string = '',
         public name: string = '',
