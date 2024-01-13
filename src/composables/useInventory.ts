@@ -19,6 +19,8 @@ export const useInventory = () => {
         }
     }
     const toggleInventory = () => {
+        console.log(state.isOpen)
+
         if (state.isOpen) {
             state.isOpen = false
             state.activeItemId = null

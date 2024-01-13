@@ -7,6 +7,9 @@ import { EBodyParts } from '@/enums/EBodyParts'
 import { ModifierItem } from './modifierItemModel'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { EModifierTypes } from '@/enums/EModifierTypes'
+import { EPotionTypes } from '@/enums/EPotionTypes'
+import { diceRollK6 } from '../scripts/diceRoll'
+import { EDice } from '@/enums/EDice'
 
 class Item implements IItem {
     constructor(
@@ -203,6 +206,7 @@ class Potion extends Item implements IPotion {
         public id: string = '',
         public name: string = '',
         public modifier: number = 0,
+        public baseValue: EDice = EDice.k6,
         public description: string = '',
         public type: string = '',
         public category: string = '',
@@ -212,6 +216,25 @@ class Potion extends Item implements IPotion {
         this.id = id
         this.item = item
         this.modifier = modifier
+        this.baseValue = baseValue
+    }
+
+    quaff(person: PlayerModel | MonsterModel) {
+        if (this.type === EPotionTypes.health) {
+            if (person.currentStats.hp === person.stats.hp) {
+                console.log(`${person.name} is max health`)
+                return
+            }
+            const diceRoll = diceRollK6()
+            const hpSum = person.currentStats.hp + diceRoll
+            if (hpSum > person.stats.hp) {
+                person.currentStats.hp = person.stats.hp
+                console.log(`${person.name} has now ${person.currentStats.hp} hp`)
+            }
+            person.currentStats.hp += diceRoll
+            person.inventory.removeItem(this.id)
+            console.log(`${person.name} has now ${hpSum} hp`)
+        }
     }
 }
 

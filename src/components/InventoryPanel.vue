@@ -5,7 +5,7 @@ import { useInventory } from '@/composables/useInventory'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { getTotalDamage } from '@/helpers/getTotalDamage'
 import { getTotalArmorPoints } from '@/helpers/getTotalArmorPoints'
-import { Armor, Weapon } from '@/assets/models/itemsModel'
+import { Armor, Potion, Weapon } from '@/assets/models/itemsModel'
 import { AllItemTypes } from '@/interfaces/IItem'
 import InventoryItem from './InventoryItem.vue'
 
@@ -46,8 +46,6 @@ const getItemValue = (item: AllItemTypes) => {
             }
             break
         case EItemCategory.Potion:
-            // TO DO: add potion func
-            console.log('potion switch case not implementd')
             break
     }
     return value.value
@@ -58,6 +56,8 @@ const submitAction = (item: AllItemTypes) => {
         item.wield(player.value)
     } else if (item instanceof Armor) {
         item.equip(player.value)
+    } else if (item instanceof Potion) {
+        item.quaff(player.value)
     }
 }
 

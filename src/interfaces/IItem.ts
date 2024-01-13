@@ -3,6 +3,7 @@ import { iBodyPart } from './BodyParts'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { Armor, Potion, Weapon } from '@/assets/models/itemsModel'
 import { ModifierItem } from '@/assets/models/modifierItemModel'
+import { EDice } from '@/enums/EDice'
 
 export interface IItem {
     id: string | undefined
@@ -35,6 +36,7 @@ export interface IArmor extends IItem {
 export interface IPotion extends IItem {
     item: string
     modifier: number
+    baseValue: EDice
 }
 
 export interface IGold {

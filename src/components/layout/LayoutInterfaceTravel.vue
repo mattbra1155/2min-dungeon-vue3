@@ -1,24 +1,20 @@
 <script setup lang="ts">
-import { useTurn } from '@/composables/useTurn'
-import { ETurnState } from '@/enums/ETurnState'
 import { useInventory } from '@/composables/useInventory'
 import { useCharacterScreen } from '@/composables/useCharacterScreen'
-import { computed, onMounted, reactive, ref } from 'vue'
-import { usePlayer } from '@/composables/usePlayer'
+import { computed, onMounted } from 'vue'
 import { EDirections } from '@/enums/EDirections'
 import { Scene } from '@/assets/models/sceneModel'
-import { Room, RoomExit } from '@/assets/models/RoomModel'
 import { useSceneManager } from '@/composables/useSceneManager'
-import localforage from 'localforage'
-import { ERoomTypes } from '@/enums/ERoomTypes'
 import localtions from '@/assets/json/locations.json'
 import router from '@/router'
+import { RoomObject } from '@/assets/models/RoomObjectModel'
+import { useFeed } from '@/composables/useFeed'
 
+const { activeRoomObject, setActiveRoomObject } = useFeed()
 const { activeScene, setScene, saveScene } = useSceneManager()
-const { turnNumber, updateTurnStateMachine, activeTurnState } = useTurn()
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
-const { player } = usePlayer()
+const isSearched = computed(() => activeScene.value?.currentRoom?.isSearched)
 
 const addKeybindings = () => {
     window.addEventListener('keydown', (event) => {
@@ -59,13 +55,12 @@ const moveToRoom = async (roomId: EDirections) => {
     const getRoom = () => activeScene.value?.roomList.find((room) => parseInt(room.id) === roomId)
 
     const room = getRoom()
-    console.log(room)
 
     if (!room) {
         return
     }
+
     activeScene.value.changeCurrentRoom(room.id)
-    console.log('active room', activeScene.value.currentRoom)
 
     if (!activeScene.value.currentRoom) {
         console.error('No current Room')
@@ -98,6 +93,17 @@ const moveToScene = (sceneId: string) => {
 const directionButton = (direction: number) =>
     Object.entries(EDirections).find((dir) => dir[0] === direction.toString())?.[1]
 
+const searchRoom = () => {
+    if (!activeScene.value || !activeScene.value.currentRoom) {
+        console.error('SEARCH ROOM: no current room')
+        return
+    }
+    activeScene.value.currentRoom.searchRoom()
+}
+
+const searchObject = (item: RoomObject) => {
+    setActiveRoomObject(item)
+}
 onMounted(() => {
     addKeybindings()
 })
@@ -105,14 +111,21 @@ onMounted(() => {
 
 <template>
     <div v-if="activeScene" class="o-interface">
-        <button
-            v-if="activeScene?.entityList.length"
-            :disabled="activeTurnState !== ETurnState.Init"
-            @click="updateTurnStateMachine(ETurnState.Init)"
-            class="a-button"
-        >
-            start BATTLE
-        </button>
+        <div class="o-interface__row o-interface__objectActions">
+            <template v-for="roomObject in activeScene.currentRoom?.roomObjects" :key="roomObject.id">
+                <button
+                    v-if="activeRoomObject?.id !== roomObject.id"
+                    class="a-button action__button"
+                    @click="searchObject(roomObject)"
+                >
+                    Search {{ roomObject.name }}
+                </button>
+            </template>
+            <button class="a-button action__button" v-if="activeRoomObject" @click="setActiveRoomObject(null)">
+                Room description
+            </button>
+        </div>
+        <button class="a-button action__button" v-if="!isSearched" @click="searchRoom">Search Room</button>
         <div class="o-interface__row o-interface__directionWrapper">
             <template v-for="(direction, index) in activeScene.currentRoom?.exits" :key="index">
                 <button v-if="direction !== -1" class="a-button action__button" @click="moveToRoom(direction)">
@@ -120,7 +133,7 @@ onMounted(() => {
                 </button>
             </template>
 
-            <template v-for="sceneId in (activeScene.currentRoom as RoomExit)?.sceneLinks" :key="sceneId">
+            <!-- <template v-for="(sceneId, index) in activeScene.currentRoom?.sceneLinks" :key="index">
                 <button
                     class="a-button action__button"
                     v-if="activeScene?.currentRoom?.type === ERoomTypes.Exit"
@@ -129,7 +142,7 @@ onMounted(() => {
                     {{ sceneId }}
                     Next Area
                 </button>
-            </template>
+            </template> -->
         </div>
         <div class="o-interface__row">
             <button id="inventoryButton" type="button" class="a-button action__button" @click="toggleInventory">

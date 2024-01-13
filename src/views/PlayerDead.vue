@@ -16,10 +16,14 @@ const { updateGameState } = useGameStateManager()
 
 const init = () => {
     deadPlayer()
-    resetTurn()
     updateGameState(EGameState.PlayerDead)
     resetScene()
     // createScene()
+}
+
+const closeView = () => {
+    resetTurn()
+    router.push({ name: 'characterCreation' })
 }
 
 init()
@@ -33,7 +37,7 @@ init()
                 you were killed by:<br />
                 {{ activeCharacter?.name }} with a {{ activeCharacter?.weapon?.name }}
             </p>
-            <button @click="router.push({ name: 'characterCreation' })" class="a-button">Try again</button>
+            <button @click="closeView" class="a-button">Try again</button>
         </div>
     </div>
 </template>

@@ -225,8 +225,8 @@
     "potion": {
         "item": [
             {
-                "type": "healing",
-                "baseValue": 1,
+                "type": "health",
+                "baseValue": "k6",
                 "modifiers": [],
                 "price": 70
             }
