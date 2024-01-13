@@ -5,7 +5,6 @@ import { computed, onMounted } from 'vue'
 import { EDirections } from '@/enums/EDirections'
 import { Scene } from '@/assets/models/sceneModel'
 import { useSceneManager } from '@/composables/useSceneManager'
-import { ERoomTypes } from '@/enums/ERoomTypes'
 import localtions from '@/assets/json/locations.json'
 import router from '@/router'
 import { RoomObject } from '@/assets/models/RoomObjectModel'
@@ -15,7 +14,6 @@ const { activeRoomObject, setActiveRoomObject } = useFeed()
 const { activeScene, setScene, saveScene } = useSceneManager()
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
-
 const isSearched = computed(() => activeScene.value?.currentRoom?.isSearched)
 
 const addKeybindings = () => {
@@ -135,7 +133,7 @@ onMounted(() => {
                 </button>
             </template>
 
-            <template v-for="(sceneId, index) in activeScene.currentRoom?.sceneLinks" :key="index">
+            <!-- <template v-for="(sceneId, index) in activeScene.currentRoom?.sceneLinks" :key="index">
                 <button
                     class="a-button action__button"
                     v-if="activeScene?.currentRoom?.type === ERoomTypes.Exit"
@@ -144,7 +142,7 @@ onMounted(() => {
                     {{ sceneId }}
                     Next Area
                 </button>
-            </template>
+            </template> -->
         </div>
         <div class="o-interface__row">
             <button id="inventoryButton" type="button" class="a-button action__button" @click="toggleInventory">

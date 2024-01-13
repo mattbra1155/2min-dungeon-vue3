@@ -92,6 +92,7 @@ const createInventoryItems = () => {
     const weapon = new ItemGenerator().createItem(EItemCategory.Weapon)
     const armor = new ItemGenerator().createItem(EItemCategory.Armor)
     const potion = new ItemGenerator().createItem(EItemCategory.Potion)
+    console.log(potion)
 
     itemList.push(weapon, armor, potion)
 

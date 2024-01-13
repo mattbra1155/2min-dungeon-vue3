@@ -1,6 +1,8 @@
 <script lang="ts">
 import { MonsterGenerator } from './assets/generators/monsterGenerator'
 import { useSceneManager } from './composables/useSceneManager'
+import InventoryPanel from './components/InventoryPanel.vue'
+import CharacterScreen from './components/CharacterScreen.vue'
 
 const monsterGenerator = new MonsterGenerator()
 
@@ -13,8 +15,6 @@ import { useRouter } from 'vue-router'
 import { useGameStateManager } from './composables/useGameStateManager'
 import { EGameState } from './enums/EGameState'
 import { PlayerModel } from './assets/models/playerModel'
-import InventoryPanel from '@/components/InventoryPanel.vue'
-import CharacterScreen from './components/CharacterScreen.vue'
 
 const { createScene } = useSceneManager()
 const { fetchPlayer, setPlayer } = usePlayer()
