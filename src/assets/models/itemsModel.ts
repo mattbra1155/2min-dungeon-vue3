@@ -221,11 +221,19 @@ class Potion extends Item implements IPotion {
 
     quaff(person: PlayerModel | MonsterModel) {
         if (this.type === EPotionTypes.health) {
-            const currentHp = person.currentStats.hp + diceRollK6()
-            if (currentHp > person.stats.hp) {
-                person.currentStats.hp = person.stats.hp
+            if (person.currentStats.hp === person.stats.hp) {
+                console.log(`${person.name} is max health`)
+                return
             }
+            const diceRoll = diceRollK6()
+            const hpSum = person.currentStats.hp + diceRoll
+            if (hpSum > person.stats.hp) {
+                person.currentStats.hp = person.stats.hp
+                console.log(`${person.name} has now ${person.currentStats.hp} hp`)
+            }
+            person.currentStats.hp += diceRoll
             person.inventory.removeItem(this.id)
+            console.log(`${person.name} has now ${hpSum} hp`)
         }
     }
 }
