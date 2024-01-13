@@ -4,17 +4,19 @@
     background: lightgray
     &__container
         display: flex
-        flex-flow: column wrap
+        flex-flow: column
         justify-content: center
         align-content: center
         height: 50vh
         text-align: left
         background: lightgray
         overflow-y: scroll
+        gap: 1rem
+        padding: 1rem
     &__item
-        text-decoration: none
-        list-style: none
-        padding: 1% 5%
-        width: 90%
-        color: white
-        line-height: 30px
+        display: flex
+        flex-direction: column
+        place-items: center
+        gap: 1rem
+    &__image
+        max-width: 100px
