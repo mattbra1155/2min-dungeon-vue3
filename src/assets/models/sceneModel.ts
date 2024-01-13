@@ -11,6 +11,7 @@ import roomObjects from '@/assets/json/roomObjects.json'
 import { RoomObject } from './RoomObjectModel'
 import { ItemGenerator } from '@/assets/generators/itemGenerator'
 import { EItemCategory } from '@/enums/ItemCategory'
+import { useFeed } from '@/composables/useFeed'
 class Scene implements IScene {
     constructor(
         public id: string = '0',
@@ -31,6 +32,7 @@ class Scene implements IScene {
     }
 
     changeCurrentRoom(roomId: string) {
+        const { setActiveRoomObject } = useFeed()
         const currentRoom = this.roomList.find((room) => room.id === roomId)
 
         if (!currentRoom) {
@@ -38,6 +40,7 @@ class Scene implements IScene {
             return
         }
 
+        setActiveRoomObject(null)
         this.currentRoom = currentRoom
         console.log(this.currentRoom.isExplored)
 

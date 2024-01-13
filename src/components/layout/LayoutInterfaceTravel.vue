@@ -1,15 +1,10 @@
 <script setup lang="ts">
-import { useTurn } from '@/composables/useTurn'
-import { ETurnState } from '@/enums/ETurnState'
 import { useInventory } from '@/composables/useInventory'
 import { useCharacterScreen } from '@/composables/useCharacterScreen'
-import { computed, onMounted, reactive, ref } from 'vue'
-import { usePlayer } from '@/composables/usePlayer'
+import { computed, onMounted } from 'vue'
 import { EDirections } from '@/enums/EDirections'
 import { Scene } from '@/assets/models/sceneModel'
-import { Room, RoomExit } from '@/assets/models/RoomModel'
 import { useSceneManager } from '@/composables/useSceneManager'
-import localforage from 'localforage'
 import { ERoomTypes } from '@/enums/ERoomTypes'
 import localtions from '@/assets/json/locations.json'
 import router from '@/router'
@@ -18,10 +13,8 @@ import { useFeed } from '@/composables/useFeed'
 
 const { activeRoomObject, setActiveRoomObject } = useFeed()
 const { activeScene, setScene, saveScene } = useSceneManager()
-const { turnNumber, updateTurnStateMachine, activeTurnState } = useTurn()
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
-const { player } = usePlayer()
 
 const isSearched = computed(() => activeScene.value?.currentRoom?.isSearched)
 
@@ -142,7 +135,7 @@ onMounted(() => {
                 </button>
             </template>
 
-            <template v-for="sceneId in (activeScene.currentRoom as RoomExit)?.sceneLinks" :key="sceneId">
+            <template v-for="(sceneId, index) in activeScene.currentRoom?.sceneLinks" :key="index">
                 <button
                     class="a-button action__button"
                     v-if="activeScene?.currentRoom?.type === ERoomTypes.Exit"
