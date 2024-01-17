@@ -17,7 +17,7 @@ class Scene implements IScene {
         public id: string = '0',
         public name: string = '',
         public entityList: Array<PlayerModel | MonsterModel> = [],
-        public currentRoom: Room | undefined = undefined,
+        public currentRoom: Room | RoomExit | undefined = undefined,
         public roomList: Room[] = [],
         public description: string = '',
         public links: number[] = []
@@ -87,14 +87,8 @@ class Scene implements IScene {
         }
         this.id = sceneDetails.id
         this.name = sceneDetails.name
-        // this.entityList = sceneDetails.entityList
 
         sceneDetails?.roomList?.forEach((roomData) => {
-            // const monsterList = roomData.entityList.map((entity) => {
-            //     const monster = new MonsterModel(entity)
-            //     return monster
-            // })
-
             const monsterList = this.createEnemyList(roomData.entityList.length)
             const createObjects = () => {
                 const list: any = []
@@ -106,9 +100,7 @@ class Scene implements IScene {
                     const getItems = () => {
                         const items = objectData.items.map((item) => {
                             const itemGenerator = new ItemGenerator()
-
                             const itemCategory = Object.values(EItemCategory).find((eItem) => eItem === item)
-
                             return itemGenerator.createItem(itemCategory!)
                         })
                         return items

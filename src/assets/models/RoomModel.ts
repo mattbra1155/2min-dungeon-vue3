@@ -12,7 +12,7 @@ interface IRoom {
     monsterList: Array<PlayerModel | MonsterModel>
     roomObjects: IRoomObject[]
     lootList: string[]
-    exits: number[]
+    exits: Array<string | number>
     type: ERoomTypes
     isExplored: boolean
     isSearched: boolean
@@ -31,7 +31,7 @@ class Room implements IRoom {
         public monsterList: Array<PlayerModel | MonsterModel> = [],
         public roomObjects: IRoomObject[] = [],
         public lootList: string[] = [],
-        public exits: number[] = [],
+        public exits: Array<string | number> = [],
         public isExplored: boolean = false,
         public isSearched: boolean = false,
         public type: ERoomTypes = ERoomTypes.Empty
@@ -71,7 +71,7 @@ class RoomExit extends Room implements IRoomExit {
         public monsterList: Array<PlayerModel | MonsterModel> = [],
         public roomObjects: IRoomObject[] = [],
         public lootList: string[] = [],
-        public exits: number[] = [],
+        public exits: Array<string | number> = [],
         public type: ERoomTypes = ERoomTypes.Empty,
         public isExplored: boolean = false,
         public isSearched: boolean = false,

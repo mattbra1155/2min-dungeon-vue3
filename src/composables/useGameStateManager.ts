@@ -26,7 +26,7 @@ export const useGameStateManager = () => {
                 break
             case EGameState.CreateLevel:
                 console.log('GAME STATE: Create Level')
-                createScene()
+                createScene('0')
                 break
             case EGameState.Travel:
                 console.log('GAME STATE: Travel')

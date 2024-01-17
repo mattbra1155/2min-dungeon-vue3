@@ -11,7 +11,7 @@ import { RoomObject } from '@/assets/models/RoomObjectModel'
 import { useFeed } from '@/composables/useFeed'
 
 const { activeRoomObject, setActiveRoomObject } = useFeed()
-const { activeScene, setScene, saveScene } = useSceneManager()
+const { activeScene, setScene, saveScene, createScene } = useSceneManager()
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
 const isSearched = computed(() => activeScene.value?.currentRoom?.isSearched)
@@ -78,11 +78,11 @@ const moveToScene = (sceneId: string) => {
         return
     }
 
-    const scene = Object.assign(new Scene(), sceneData)
+    createScene(sceneId)
 
-    console.log(scene)
+    // const scene = Object.assign(new Scene(), sceneData)
 
-    setScene(scene)
+    // console.log(scene)
 
     if (sceneId === 'town') {
         router.push({ name: 'town' })
@@ -128,21 +128,20 @@ onMounted(() => {
         <button class="a-button action__button" v-if="!isSearched" @click="searchRoom">Search Room</button>
         <div class="o-interface__row o-interface__directionWrapper">
             <template v-for="(direction, index) in activeScene.currentRoom?.exits" :key="index">
-                <button v-if="direction !== -1" class="a-button action__button" @click="moveToRoom(direction)">
+                <button
+                    v-if="direction !== -1 && typeof direction === 'number'"
+                    class="a-button action__button"
+                    @click="moveToRoom(direction)"
+                >
                     {{ directionButton(direction) }}
                 </button>
             </template>
 
-            <!-- <template v-for="(sceneId, index) in activeScene.currentRoom?.sceneLinks" :key="index">
-                <button
-                    class="a-button action__button"
-                    v-if="activeScene?.currentRoom?.type === ERoomTypes.Exit"
-                    @click="moveToScene(sceneId)"
-                >
-                    {{ sceneId }}
-                    Next Area
+            <template v-for="(roomId, index) in activeScene.currentRoom?.exits" :key="index">
+                <button class="a-button action__button" v-if="typeof roomId === 'string'" @click="moveToScene(roomId)">
+                    {{ roomId }}
                 </button>
-            </template> -->
+            </template>
         </div>
         <div class="o-interface__row">
             <button id="inventoryButton" type="button" class="a-button action__button" @click="toggleInventory">

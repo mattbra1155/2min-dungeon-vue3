@@ -42,9 +42,7 @@
                     {}
                 ],
                 "description": "",
-                "entityList": [
-                    "lesserGoblin"
-                ],
+                "entityList": [],
                 "lootList": [
                     "gold"
                 ],
@@ -88,14 +86,12 @@
                 ],
                 "name": "Great Stairs",
                 "type": "Exit",
-                "sceneLinks": [
-                    "town"
-                ],
+                "sceneLinks": [],
                 "exits": [
                     -1,
                     1,
-                    -1,
-                    -1
+                    "1",
+                    "town"
                 ]
             }
         ]
@@ -108,9 +104,6 @@
         "lootList": [
             "gold"
         ],
-        "links": [
-            0
-        ],
         "roomList": [
             {
                 "id": "0",
@@ -118,9 +111,7 @@
                 "objects": [
                     "chest"
                 ],
-                "entityList": [
-                    "chest"
-                ],
+                "entityList": [],
                 "lootList": [
                     "gold"
                 ],
@@ -130,7 +121,7 @@
                     -1,
                     -1,
                     1,
-                    -1
+                    "0"
                 ]
             },
             {
@@ -219,7 +210,7 @@
                 "lootList": [
                     "gold"
                 ],
-                "name": "Corridor",
+                "name": "Cell C",
                 "type": "loot",
                 "exits": [
                     -1,

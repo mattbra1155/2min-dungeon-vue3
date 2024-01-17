@@ -18,11 +18,13 @@ const state: iStateUseSceneManager = reactive({
 })
 
 export const useSceneManager = () => {
-    const createScene = (sceneId = '0', numberOfEnemies = 1, levelName?: string) => {
+    const createScene = (sceneId: string, numberOfEnemies = 1, levelName?: string) => {
         const scene: Scene = new Scene()
         scene.fetchSceneDetails(sceneId)
         state.sceneList.push(scene)
         setScene(scene)
+        scene.changeCurrentRoom('0')
+        console.log(scene)
     }
     const setScene = (scene: Scene) => {
         state.activeScene = scene
@@ -53,16 +55,16 @@ export const useSceneManager = () => {
     }
     const loadScene = async () => {
         interface payload {
-            id: string
+            sceneId: string
             currentRoom: string
             roomList: Room[]
         }
         const data: string = (await localforage.getItem('activeScene')) as string
-        const savedScene: payload = JSON.parse(data)
+        const savedSceneData: payload = JSON.parse(data)
 
-        if (!savedScene) {
+        if (!savedSceneData) {
             console.log('CRATE SCENE: No saved scene')
-            createScene()
+            createScene('0')
             if (!state.activeScene) {
                 return
             }
@@ -75,10 +77,10 @@ export const useSceneManager = () => {
         }
 
         const scene: Scene = new Scene()
-        scene.fetchSceneDetails(scene.id)
-        scene.currentRoom = scene.roomList.find((room) => room.id === savedScene.currentRoom)
+        scene.fetchSceneDetails(savedSceneData.sceneId)
+        scene.currentRoom = savedSceneData.roomList.find((room) => room.id === savedSceneData.currentRoom)
         scene.roomList = scene.roomList.map((room) => {
-            const roomData = savedScene.roomList.find((roomData) => roomData.id === room.id)
+            const roomData = savedSceneData.roomList.find((roomData) => roomData.id === room.id)
             if (roomData) {
                 room = roomData
             }
