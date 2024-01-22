@@ -1,12 +1,11 @@
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { IScene } from '@/interfaces/IScene'
-import { Room, RoomExit } from '@/assets/models/RoomModel'
+import { Room } from '@/assets/models/RoomModel'
 import { PlayerModel } from './playerModel'
 import locations from '@/assets/json/locations.json'
 import { monsterGenerator } from '@/App.vue'
 import { EGameState } from '@/enums/EGameState'
 import { useGameStateManager } from '@/composables/useGameStateManager'
-import { ERoomTypes } from '@/enums/ERoomTypes'
 import roomObjects from '@/assets/json/roomObjects.json'
 import { RoomObject } from './RoomObjectModel'
 import { ItemGenerator } from '@/assets/generators/itemGenerator'
@@ -17,7 +16,7 @@ class Scene implements IScene {
         public id: string = '0',
         public name: string = '',
         public entityList: Array<PlayerModel | MonsterModel> = [],
-        public currentRoom: Room | RoomExit | undefined = undefined,
+        public currentRoom: Room | undefined = undefined,
         public roomList: Room[] = [],
         public description: string = '',
         public links: number[] = []
@@ -118,24 +117,6 @@ class Scene implements IScene {
                     list.push(createdObject)
                 })
                 return list
-            }
-
-            if (roomData.type === ERoomTypes.Exit) {
-                const roomExitData = roomData as unknown as RoomExit
-                const roomExit = new RoomExit(
-                    roomExitData.id,
-                    roomExitData.name,
-                    roomExitData.description,
-                    monsterList,
-                    createObjects(),
-                    roomExitData.lootList,
-                    roomExitData.exits,
-                    roomExitData.type,
-                    false,
-                    false,
-                    roomExitData.sceneLinks
-                )
-                this.roomList.push(roomExit)
             }
 
             this.roomList.push(

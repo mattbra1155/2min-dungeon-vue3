@@ -9,9 +9,10 @@ import localtions from '@/assets/json/locations.json'
 import router from '@/router'
 import { RoomObject } from '@/assets/models/RoomObjectModel'
 import { useFeed } from '@/composables/useFeed'
+import { isRoomExit } from '@/assets/models/RoomModel'
 
 const { activeRoomObject, setActiveRoomObject } = useFeed()
-const { activeScene, setScene, saveScene, createScene } = useSceneManager()
+const { activeScene, saveScene, createScene } = useSceneManager()
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
 const isSearched = computed(() => activeScene.value?.currentRoom?.isSearched)
@@ -39,55 +40,41 @@ const addKeybindings = () => {
     })
 }
 
-const moveToRoom = async (roomId: EDirections) => {
+const moveTo = async (sceneId: string, roomId = '0') => {
+    const sceneData = localtions.find((scene) => scene.id === sceneId)
+
     if (!activeScene.value) {
         return
     }
-    if (roomId === EDirections.Wall) {
+    if (!sceneData) {
+        console.error('no Scene found')
+        return
+    }
+
+    if (sceneId === 'town') {
+        router.push({ name: 'town' })
+        return
+    }
+
+    if (sceneId !== activeScene.value.id) {
+        createScene(sceneId)
+        console.error('WARNING: no room id set - changing room to 0')
+        activeScene.value.changeCurrentRoom(roomId)
+        return
+    }
+
+    if (parseInt(roomId) === EDirections.Wall) {
         console.log('wall')
         return
     }
 
-    activeScene.value.roomList.forEach((room) => {
-        console.log(room.name, room.isExplored)
-    })
-
-    const getRoom = () => activeScene.value?.roomList.find((room) => parseInt(room.id) === roomId)
-
-    const room = getRoom()
-
-    if (!room) {
-        return
-    }
-
-    activeScene.value.changeCurrentRoom(room.id)
+    activeScene.value.changeCurrentRoom(roomId)
 
     if (!activeScene.value.currentRoom) {
         console.error('No current Room')
         return
     }
     await saveScene(activeScene.value.id, activeScene.value.currentRoom.id, activeScene.value.roomList)
-}
-
-const moveToScene = (sceneId: string) => {
-    activeScene.value?.currentRoom
-    const sceneData = localtions.find((scene) => scene.id === sceneId)
-
-    if (!sceneData) {
-        console.error('no Scene found')
-        return
-    }
-
-    createScene(sceneId)
-
-    // const scene = Object.assign(new Scene(), sceneData)
-
-    // console.log(scene)
-
-    if (sceneId === 'town') {
-        router.push({ name: 'town' })
-        return
-    }
 }
 
 const directionButton = (direction: number) =>
@@ -127,19 +114,23 @@ onMounted(() => {
         </div>
         <button class="a-button action__button" v-if="!isSearched" @click="searchRoom">Search Room</button>
         <div class="o-interface__row o-interface__directionWrapper">
-            <template v-for="(direction, index) in activeScene.currentRoom?.exits" :key="index">
+            <template v-for="(destination, index) in activeScene.currentRoom?.exits" :key="index">
                 <button
-                    v-if="direction !== -1 && typeof direction === 'number'"
+                    v-if="destination !== -1 && typeof destination === 'number'"
                     class="a-button action__button"
-                    @click="moveToRoom(direction)"
+                    @click="moveTo(activeScene.id, destination.toString())"
                 >
-                    {{ directionButton(direction) }}
+                    {{ directionButton(destination) }}
                 </button>
             </template>
 
-            <template v-for="(roomId, index) in activeScene.currentRoom?.exits" :key="index">
-                <button class="a-button action__button" v-if="typeof roomId === 'string'" @click="moveToScene(roomId)">
-                    {{ roomId }}
+            <template v-for="(destinationId, index) in activeScene.currentRoom?.exits" :key="index">
+                <button
+                    class="a-button action__button"
+                    v-if="typeof destinationId !== 'number'"
+                    @click="moveTo(destinationId.sceneId, destinationId.roomId)"
+                >
+                    {{ destinationId.sceneId }}
                 </button>
             </template>
         </div>

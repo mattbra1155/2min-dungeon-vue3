@@ -22,7 +22,6 @@ const activeRoom = computed(() => activeScene.value?.currentRoom)
     <div id="top-bar">
         <h2 v-if="activeScene" id="levelName" class="level__name">{{ activeScene.name }}</h2>
         <p style="text-align: center">Room: {{ activeRoom?.name }}</p>
-        {{ activeScene?.id }}
         <template v-if="activeGameState === EGameState.Battle">
             <p style="text-align: center">{{ activeTurnState }}</p>
             <p style="text-align: center">Turn: {{ turnNumber }}</p>
