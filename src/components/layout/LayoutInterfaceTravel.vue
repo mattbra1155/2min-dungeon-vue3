@@ -133,11 +133,11 @@ onMounted(() => {
                     Search {{ roomObject.name }}
                 </button>
             </template>
-            <button class="a-button action__button" v-if="activeRoomObject" @click="setActiveRoomObject(null)">
+            <button v-if="activeRoomObject" class="a-button action__button" @click="setActiveRoomObject(null)">
                 Room description
             </button>
+            <button class="a-button action__button" v-if="!isSearched" @click="searchRoom">Search Room</button>
         </div>
-        <button class="a-button action__button" v-if="!isSearched" @click="searchRoom">Search Room</button>
         <div class="o-interface__row o-interface__directionWrapper">
             <template v-for="(destinationId, index) in activeScene.currentRoom?.exits" :key="index">
                 <button
