@@ -49,11 +49,17 @@ const getLocationName = (locationId: string) => {
     }
 }
 
-const moveToTown = (sceneId: string) => {
+const moveToTown = async (sceneId: string) => {
+    if (!activeScene.value || !activeScene.value.id || !activeScene.value.currentRoom || !activeScene.value.roomList) {
+        console.log(activeScene.value)
+
+        return
+    }
     if (sceneId === 'town') {
         router.push({ name: 'town' })
         return
     }
+    await saveScene(activeScene.value.id, activeScene.value.currentRoom.id, activeScene.value.roomList)
 }
 
 const moveTo = async (sceneId: string, roomId: string) => {

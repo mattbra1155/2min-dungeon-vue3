@@ -36,7 +36,8 @@ export const useSceneManager = () => {
     }
 
     const saveScene = async (sceneId: string, currentRoomId: string, roomList?: Room[]) => {
-        console.log(roomList)
+        // TO DO
+        // move all arguments here instead of passing it each time
         const seen: any = []
         // save and remove cyclic objects from store
         await localforage.setItem(
@@ -51,7 +52,6 @@ export const useSceneManager = () => {
                 return val
             })
         )
-        // localforage.setItem('sceneList', JSON.stringify(state.sceneList))
     }
     const loadScene = async () => {
         interface payload {
