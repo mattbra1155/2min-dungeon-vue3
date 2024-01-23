@@ -93,12 +93,12 @@
                     -1,
                     -1,
                     {
-                        "scene": 1,
-                        "room": 0
+                        "sceneId": 1,
+                        "roomId": 0
                     },
                     {
-                        "scene": "town",
-                        "room": 0
+                        "sceneId": "town",
+                        "roomId": 0
                     }
                 ]
             }

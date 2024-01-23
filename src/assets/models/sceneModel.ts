@@ -32,7 +32,8 @@ class Scene implements IScene {
 
     changeCurrentRoom(roomId: string) {
         const { setActiveRoomObject } = useFeed()
-        const currentRoom = this.roomList.find((room) => room.id === roomId)
+        const currentRoom = this.roomList.find((room) => room.id === roomId.toString())
+        console.log(this.roomList)
 
         if (!currentRoom) {
             console.error('No Room found')
@@ -78,7 +79,7 @@ class Scene implements IScene {
     }
 
     fetchSceneDetails(id: string): Scene | undefined {
-        const sceneDetails = locations.find((scene) => scene.id === id)
+        const sceneDetails = locations.find((scene) => scene.id === id.toString())
 
         if (!sceneDetails) {
             console.error('No scene details fetched')

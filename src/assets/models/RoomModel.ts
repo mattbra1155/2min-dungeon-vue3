@@ -24,12 +24,8 @@ interface IRoom {
     searchRoom(player: PlayerModel): boolean
 }
 
-export function isRoomExit(object: number | IRoomExit): object is IRoomExit {
-    if (typeof object !== 'number') {
-        return object.sceneId ? true : false
-    } else {
-        return false
-    }
+export function isRoomExit(object: IRoomExit): object is IRoomExit {
+    return object.sceneId ? true : false
 }
 
 class Room implements IRoom {

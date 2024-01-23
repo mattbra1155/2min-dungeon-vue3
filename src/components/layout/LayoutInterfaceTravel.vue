@@ -39,9 +39,25 @@ const addKeybindings = () => {
         }
     })
 }
+const getLocationName = (locationId: string) => {
+    const locationName = localtions.find((scene) => scene.id === locationId.toString())?.name
 
-const moveTo = async (sceneId: string, roomId = '0') => {
-    const sceneData = localtions.find((scene) => scene.id === sceneId)
+    if (locationName) {
+        return locationName
+    } else {
+        return 'Error - no Name'
+    }
+}
+
+const moveToTown = (sceneId: string) => {
+    if (sceneId === 'town') {
+        router.push({ name: 'town' })
+        return
+    }
+}
+
+const moveTo = async (sceneId: string, roomId: string) => {
+    const sceneData = localtions.find((scene) => scene.id === sceneId.toString())
 
     if (!activeScene.value) {
         return
@@ -51,14 +67,8 @@ const moveTo = async (sceneId: string, roomId = '0') => {
         return
     }
 
-    if (sceneId === 'town') {
-        router.push({ name: 'town' })
-        return
-    }
-
     if (sceneId !== activeScene.value.id) {
         createScene(sceneId)
-        console.error('WARNING: no room id set - changing room to 0')
         activeScene.value.changeCurrentRoom(roomId)
         return
     }
@@ -77,8 +87,17 @@ const moveTo = async (sceneId: string, roomId = '0') => {
     await saveScene(activeScene.value.id, activeScene.value.currentRoom.id, activeScene.value.roomList)
 }
 
-const directionButton = (direction: number) =>
-    Object.entries(EDirections).find((dir) => dir[0] === direction.toString())?.[1]
+const directionButton = (directionId: number, index: number) => {
+    if (index === EDirections.North) {
+        return Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
+    } else if (index === EDirections.East) {
+        return Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
+    } else if (index === EDirections.South) {
+        return Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
+    } else if (index === EDirections.West) {
+        return Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
+    }
+}
 
 const searchRoom = () => {
     if (!activeScene.value || !activeScene.value.currentRoom) {
@@ -114,21 +133,28 @@ onMounted(() => {
         </div>
         <button class="a-button action__button" v-if="!isSearched" @click="searchRoom">Search Room</button>
         <div class="o-interface__row o-interface__directionWrapper">
-            <template v-for="(destination, index) in activeScene.currentRoom?.exits" :key="index">
+            <template v-for="(destinationId, index) in activeScene.currentRoom?.exits" :key="index">
                 <button
-                    v-if="destination !== -1 && typeof destination === 'number'"
+                    v-if="destinationId !== -1 && typeof destinationId === 'number'"
                     class="a-button action__button"
-                    @click="moveTo(activeScene.id, destination.toString())"
+                    @click="moveTo(activeScene.id, destinationId.toString())"
                 >
-                    {{ directionButton(destination) }}
+                    {{ directionButton(destinationId, index) }}
                 </button>
             </template>
 
             <template v-for="(destinationId, index) in activeScene.currentRoom?.exits" :key="index">
                 <button
                     class="a-button action__button"
-                    v-if="typeof destinationId !== 'number'"
+                    v-if="typeof destinationId !== 'number' && destinationId.sceneId !== 'town'"
                     @click="moveTo(destinationId.sceneId, destinationId.roomId)"
+                >
+                    {{ getLocationName(destinationId.sceneId) }}
+                </button>
+                <button
+                    class="a-button action__button"
+                    v-if="typeof destinationId !== 'number' && destinationId.sceneId === 'town'"
+                    @click="moveToTown(destinationId.sceneId)"
                 >
                     {{ destinationId.sceneId }}
                 </button>
