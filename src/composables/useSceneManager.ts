@@ -23,8 +23,9 @@ export const useSceneManager = () => {
         scene.fetchSceneDetails(sceneId)
         state.sceneList.push(scene)
         setScene(scene)
-        scene.changeCurrentRoom('0')
-        console.log(scene)
+        if (sceneId !== 'town') {
+            scene.changeCurrentRoom('0')
+        }
     }
     const setScene = (scene: Scene) => {
         state.activeScene = scene

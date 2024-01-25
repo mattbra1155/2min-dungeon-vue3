@@ -9,7 +9,7 @@ import { EShops } from '@/enums/EShops'
 import { Town } from '@/assets/models/sceneTownModel'
 import { onMounted, ref } from 'vue'
 
-const { activeScene } = useSceneManager()
+const { activeScene, setScene } = useSceneManager()
 const { activeShopId } = useShop()
 const { activeGameState } = useGameStateManager()
 

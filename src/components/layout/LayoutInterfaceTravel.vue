@@ -52,10 +52,10 @@ const getLocationName = (locationId: string) => {
 const moveToTown = async (sceneId: string) => {
     if (!activeScene.value || !activeScene.value.id || !activeScene.value.currentRoom || !activeScene.value.roomList) {
         console.log(activeScene.value)
-
         return
     }
     if (sceneId === 'town') {
+        createScene(sceneId)
         router.push({ name: 'town' })
         return
     }

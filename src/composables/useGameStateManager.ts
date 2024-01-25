@@ -33,7 +33,6 @@ export const useGameStateManager = () => {
                 break
             case EGameState.Town:
                 console.log('GAME STATE: Town')
-                
                 break
             case EGameState.Battle:
                 console.log('GAME STATE: Battle started')
