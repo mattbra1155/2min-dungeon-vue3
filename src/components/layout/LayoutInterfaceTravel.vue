@@ -9,9 +9,10 @@ import localtions from '@/assets/json/locations.json'
 import router from '@/router'
 import { RoomObject } from '@/assets/models/RoomObjectModel'
 import { useFeed } from '@/composables/useFeed'
+import { isRoomExit } from '@/assets/models/RoomModel'
 
 const { activeRoomObject, setActiveRoomObject } = useFeed()
-const { activeScene, setScene, saveScene } = useSceneManager()
+const { activeScene, saveScene, createScene } = useSceneManager()
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
 const isSearched = computed(() => activeScene.value?.currentRoom?.isSearched)
@@ -38,29 +39,52 @@ const addKeybindings = () => {
         }
     })
 }
+const getLocationName = (locationId: string) => {
+    const locationName = localtions.find((scene) => scene.id === locationId.toString())?.name
 
-const moveToRoom = async (roomId: EDirections) => {
+    if (locationName) {
+        return locationName
+    } else {
+        return 'Error - no Name'
+    }
+}
+
+const moveToTown = async (sceneId: string) => {
+    if (!activeScene.value || !activeScene.value.id || !activeScene.value.currentRoom || !activeScene.value.roomList) {
+        console.log(activeScene.value)
+
+        return
+    }
+    if (sceneId === 'town') {
+        router.push({ name: 'town' })
+        return
+    }
+    await saveScene(activeScene.value.id, activeScene.value.currentRoom.id, activeScene.value.roomList)
+}
+
+const moveTo = async (sceneId: string, roomId: string) => {
+    const sceneData = localtions.find((scene) => scene.id === sceneId.toString())
+
     if (!activeScene.value) {
         return
     }
-    if (roomId === EDirections.Wall) {
+    if (!sceneData) {
+        console.error('no Scene found')
+        return
+    }
+
+    if (sceneId !== activeScene.value.id) {
+        createScene(sceneId)
+        activeScene.value.changeCurrentRoom(roomId)
+        return
+    }
+
+    if (parseInt(roomId) === EDirections.Wall) {
         console.log('wall')
         return
     }
 
-    activeScene.value.roomList.forEach((room) => {
-        console.log(room.name, room.isExplored)
-    })
-
-    const getRoom = () => activeScene.value?.roomList.find((room) => parseInt(room.id) === roomId)
-
-    const room = getRoom()
-
-    if (!room) {
-        return
-    }
-
-    activeScene.value.changeCurrentRoom(room.id)
+    activeScene.value.changeCurrentRoom(roomId)
 
     if (!activeScene.value.currentRoom) {
         console.error('No current Room')
@@ -69,29 +93,17 @@ const moveToRoom = async (roomId: EDirections) => {
     await saveScene(activeScene.value.id, activeScene.value.currentRoom.id, activeScene.value.roomList)
 }
 
-const moveToScene = (sceneId: string) => {
-    activeScene.value?.currentRoom
-    const sceneData = localtions.find((scene) => scene.id === sceneId)
-
-    if (!sceneData) {
-        console.error('no Scene found')
-        return
-    }
-
-    const scene = Object.assign(new Scene(), sceneData)
-
-    console.log(scene)
-
-    setScene(scene)
-
-    if (sceneId === 'town') {
-        router.push({ name: 'town' })
-        return
+const directionButton = (directionId: number, index: number) => {
+    if (index === EDirections.North) {
+        return Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
+    } else if (index === EDirections.East) {
+        return Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
+    } else if (index === EDirections.South) {
+        return Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
+    } else if (index === EDirections.West) {
+        return Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
     }
 }
-
-const directionButton = (direction: number) =>
-    Object.entries(EDirections).find((dir) => dir[0] === direction.toString())?.[1]
 
 const searchRoom = () => {
     if (!activeScene.value || !activeScene.value.currentRoom) {
@@ -121,28 +133,38 @@ onMounted(() => {
                     Search {{ roomObject.name }}
                 </button>
             </template>
-            <button class="a-button action__button" v-if="activeRoomObject" @click="setActiveRoomObject(null)">
+            <button v-if="activeRoomObject" class="a-button action__button" @click="setActiveRoomObject(null)">
                 Room description
             </button>
+            <button class="a-button action__button" v-if="!isSearched" @click="searchRoom">Search Room</button>
         </div>
-        <button class="a-button action__button" v-if="!isSearched" @click="searchRoom">Search Room</button>
         <div class="o-interface__row o-interface__directionWrapper">
-            <template v-for="(direction, index) in activeScene.currentRoom?.exits" :key="index">
-                <button v-if="direction !== -1" class="a-button action__button" @click="moveToRoom(direction)">
-                    {{ directionButton(direction) }}
+            <template v-for="(destinationId, index) in activeScene.currentRoom?.exits" :key="index">
+                <button
+                    v-if="destinationId !== -1 && typeof destinationId === 'number'"
+                    class="a-button action__button"
+                    @click="moveTo(activeScene.id, destinationId.toString())"
+                >
+                    {{ directionButton(destinationId, index) }}
                 </button>
             </template>
 
-            <!-- <template v-for="(sceneId, index) in activeScene.currentRoom?.sceneLinks" :key="index">
+            <template v-for="(destinationId, index) in activeScene.currentRoom?.exits" :key="index">
                 <button
                     class="a-button action__button"
-                    v-if="activeScene?.currentRoom?.type === ERoomTypes.Exit"
-                    @click="moveToScene(sceneId)"
+                    v-if="typeof destinationId !== 'number' && destinationId.sceneId !== 'town'"
+                    @click="moveTo(destinationId.sceneId, destinationId.roomId)"
                 >
-                    {{ sceneId }}
-                    Next Area
+                    {{ getLocationName(destinationId.sceneId) }}
                 </button>
-            </template> -->
+                <button
+                    class="a-button action__button"
+                    v-if="typeof destinationId !== 'number' && destinationId.sceneId === 'town'"
+                    @click="moveToTown(destinationId.sceneId)"
+                >
+                    {{ destinationId.sceneId }}
+                </button>
+            </template>
         </div>
         <div class="o-interface__row">
             <button id="inventoryButton" type="button" class="a-button action__button" @click="toggleInventory">

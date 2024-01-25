@@ -134,6 +134,7 @@ export const usePlayer = () => {
 
     const deadPlayer = () => {
         state.player.isAlive = false
+        localforage.removeItem('player')
         resetPlayer()
     }
 

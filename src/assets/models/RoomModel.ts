@@ -5,6 +5,11 @@ import { IRoomObject } from '@/interfaces/IRoomObject'
 import { diceRollK100 } from '../scripts/diceRoll'
 import { usePlayer } from '@/composables/usePlayer'
 
+export interface IRoomExit {
+    sceneId: string
+    roomId: string
+}
+
 interface IRoom {
     id: string
     name: string
@@ -12,15 +17,15 @@ interface IRoom {
     monsterList: Array<PlayerModel | MonsterModel>
     roomObjects: IRoomObject[]
     lootList: string[]
-    exits: number[]
+    exits: Array<number | IRoomExit>
     type: ERoomTypes
     isExplored: boolean
     isSearched: boolean
     searchRoom(player: PlayerModel): boolean
 }
 
-export interface IRoomExit extends IRoom {
-    sceneLinks?: string[]
+export function isRoomExit(object: IRoomExit): object is IRoomExit {
+    return object.sceneId ? true : false
 }
 
 class Room implements IRoom {
@@ -31,7 +36,7 @@ class Room implements IRoom {
         public monsterList: Array<PlayerModel | MonsterModel> = [],
         public roomObjects: IRoomObject[] = [],
         public lootList: string[] = [],
-        public exits: number[] = [],
+        public exits: Array<number | IRoomExit> = [],
         public isExplored: boolean = false,
         public isSearched: boolean = false,
         public type: ERoomTypes = ERoomTypes.Empty
@@ -63,23 +68,4 @@ class Room implements IRoom {
     }
 }
 
-class RoomExit extends Room implements IRoomExit {
-    constructor(
-        public id: string = '0',
-        public name: string = `Room - ${id}`,
-        public description: string = '',
-        public monsterList: Array<PlayerModel | MonsterModel> = [],
-        public roomObjects: IRoomObject[] = [],
-        public lootList: string[] = [],
-        public exits: number[] = [],
-        public type: ERoomTypes = ERoomTypes.Empty,
-        public isExplored: boolean = false,
-        public isSearched: boolean = false,
-        public sceneLinks: string[] | undefined = []
-    ) {
-        super(id, name, description, monsterList, roomObjects, lootList, exits, isExplored, isSearched, type)
-        this.sceneLinks = sceneLinks
-    }
-}
-
-export { Room, RoomExit }
+export { Room }

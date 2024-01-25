@@ -29,7 +29,7 @@ const init = async () => {
             await setPlayer(player)
             updateGameState(EGameState.Travel)
             router.push({ name: 'home' })
-            createScene()
+            createScene('0')
             return player
         } else {
             updateGameState(EGameState.CreateChar)

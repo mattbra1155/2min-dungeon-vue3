@@ -1,12 +1,11 @@
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { IScene } from '@/interfaces/IScene'
-import { Room, RoomExit } from '@/assets/models/RoomModel'
+import { Room } from '@/assets/models/RoomModel'
 import { PlayerModel } from './playerModel'
 import locations from '@/assets/json/locations.json'
 import { monsterGenerator } from '@/App.vue'
 import { EGameState } from '@/enums/EGameState'
 import { useGameStateManager } from '@/composables/useGameStateManager'
-import { ERoomTypes } from '@/enums/ERoomTypes'
 import roomObjects from '@/assets/json/roomObjects.json'
 import { RoomObject } from './RoomObjectModel'
 import { ItemGenerator } from '@/assets/generators/itemGenerator'
@@ -33,7 +32,8 @@ class Scene implements IScene {
 
     changeCurrentRoom(roomId: string) {
         const { setActiveRoomObject } = useFeed()
-        const currentRoom = this.roomList.find((room) => room.id === roomId)
+        const currentRoom = this.roomList.find((room) => room.id === roomId.toString())
+        console.log(this.roomList)
 
         if (!currentRoom) {
             console.error('No Room found')
@@ -79,7 +79,7 @@ class Scene implements IScene {
     }
 
     fetchSceneDetails(id: string): Scene | undefined {
-        const sceneDetails = locations.find((scene) => scene.id === id)
+        const sceneDetails = locations.find((scene) => scene.id === id.toString())
 
         if (!sceneDetails) {
             console.error('No scene details fetched')
@@ -87,14 +87,8 @@ class Scene implements IScene {
         }
         this.id = sceneDetails.id
         this.name = sceneDetails.name
-        // this.entityList = sceneDetails.entityList
 
         sceneDetails?.roomList?.forEach((roomData) => {
-            // const monsterList = roomData.entityList.map((entity) => {
-            //     const monster = new MonsterModel(entity)
-            //     return monster
-            // })
-
             const monsterList = this.createEnemyList(roomData.entityList.length)
             const createObjects = () => {
                 const list: any = []
@@ -106,9 +100,7 @@ class Scene implements IScene {
                     const getItems = () => {
                         const items = objectData.items.map((item) => {
                             const itemGenerator = new ItemGenerator()
-
                             const itemCategory = Object.values(EItemCategory).find((eItem) => eItem === item)
-
                             return itemGenerator.createItem(itemCategory!)
                         })
                         return items
@@ -126,24 +118,6 @@ class Scene implements IScene {
                     list.push(createdObject)
                 })
                 return list
-            }
-
-            if (roomData.type === ERoomTypes.Exit) {
-                const roomExitData = roomData as unknown as RoomExit
-                const roomExit = new RoomExit(
-                    roomExitData.id,
-                    roomExitData.name,
-                    roomExitData.description,
-                    monsterList,
-                    createObjects(),
-                    roomExitData.lootList,
-                    roomExitData.exits,
-                    roomExitData.type,
-                    false,
-                    false,
-                    roomExitData.sceneLinks
-                )
-                this.roomList.push(roomExit)
             }
 
             this.roomList.push(
