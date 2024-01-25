@@ -12,9 +12,6 @@
         "lootList": [
             "gold"
         ],
-        "links": [
-            1
-        ],
         "roomList": [
             {
                 "id": "0",
@@ -22,8 +19,10 @@
                     "chest",
                     "bookshelf"
                 ],
-                "description": "Looks like a Guard Post. There is a table and some old and rusty daggers an swords littering the room.",
-                "entityList": [],
+                "description": "",
+                "entityList": [
+                    "lesserGoblin"
+                ],
                 "lootList": [
                     "gold"
                 ],
@@ -45,7 +44,7 @@
                 "objects": [
                     {}
                 ],
-                "description": "",
+                "description": "Looks like a Guard Post. There is a table and some old and rusty daggers an swords littering the room.",
                 "entityList": [],
                 "lootList": [
                     "gold"
