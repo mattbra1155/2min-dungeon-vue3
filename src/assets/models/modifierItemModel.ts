@@ -28,8 +28,6 @@ class ModifierItem implements IModifierItem {
 
     applyEffect(target: PlayerModel | MonsterModel, statusId: string) {
         const statusData = statusList.find((statusItem) => statusItem.id === statusId)
-        console.log('apply')
-
         if (!statusData) {
             console.error('No modifier found')
             return
@@ -43,8 +41,6 @@ class ModifierItem implements IModifierItem {
         }
 
         let status: IAllStatusTypes | undefined = undefined
-        console.log(statusData)
-
         switch (statusType) {
             case EModifierTypes.BonusStats:
                 if (!statusData.bonusStatList) {

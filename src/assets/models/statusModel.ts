@@ -57,8 +57,6 @@ class Status implements IStatus {
                 return
             }
 
-            console.log(status instanceof StatusDamageOverTime, status.updateOnBeginning)
-
             if (status instanceof StatusDamageOverTime && status.updateOnBeginning) {
                 status.use()
             }

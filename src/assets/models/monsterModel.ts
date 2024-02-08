@@ -11,6 +11,7 @@ import { IStats } from '@/interfaces/IStats'
 class MonsterModel extends PersonModel implements IMonster {
     constructor(
         public id: string = self.crypto.randomUUID(),
+        public originId: string = '',
         public name: string = '',
         public race: string = '',
         public stats: IStats = structuredClone(statsModel),

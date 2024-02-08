@@ -33,7 +33,7 @@ class Room implements IRoom {
         public id: string = '0',
         public name: string = `Room - ${id}`,
         public description: string = '',
-        public monsterList: Array<PlayerModel | MonsterModel> = [],
+        public monsterList: Array<MonsterModel> = [],
         public roomObjects: IRoomObject[] = [],
         public lootList: string[] = [],
         public exits: Array<number | IRoomExit> = [],

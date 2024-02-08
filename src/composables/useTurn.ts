@@ -27,8 +27,6 @@ const state: ITurn = reactive({
 export const useTurn = () => {
     const sortTurnOrder = (entityList: Array<PlayerModel | MonsterModel>) => {
         const sorted = entityList.sort((a, b) => b.currentStats.initiative - a.currentStats.initiative)
-        console.log('logn', sorted)
-
         state.turnOrder = sorted
         return sorted
     }
@@ -37,8 +35,6 @@ export const useTurn = () => {
         const { player } = usePlayer()
 
         const monsterList = activeScene.value?.currentRoom?.monsterList
-
-        console.log(activeScene.value?.currentRoom?.monsterList)
 
         if (!player.value.isAlive) {
             return
@@ -50,7 +46,6 @@ export const useTurn = () => {
                 state.turnOrder = undefined
                 state.activeCharacter = undefined
                 console.log('turn state: ', state)
-
                 break
             }
             case ETurnState.Init: {
@@ -76,7 +71,6 @@ export const useTurn = () => {
                 console.log('<====>')
 
                 player.value.status.updateStatusList(player.value, state.turnNumber)
-                console.log(player.value)
 
                 if (state.turnOrder?.length === 0) {
                     console.log('turn Order empty')
@@ -93,7 +87,6 @@ export const useTurn = () => {
                         return
                     }
                     const isCleared = !state.turnOrder.find((enemy) => enemy.isAlive)
-                    console.log('isCleared', isCleared)
 
                     if (isCleared) {
                         updateGameState(EGameState.LevelCleared)
@@ -104,7 +97,10 @@ export const useTurn = () => {
                             console.log('Player is dead')
                             return
                         }
-
+                        if (!enemy.isAlive) {
+                            console.log(`${enemy.name}`)
+                            return
+                        }
                         enemy.status.updateStatusList(enemy, state.turnNumber)
                         state.activeCharacter = enemy
                         console.log(`${enemy.name} attacks`)
@@ -140,11 +136,10 @@ export const useTurn = () => {
             return
         }
         state.turnOrder.forEach((enemy) => {
-            console.log(enemy)
             if (enemy.currentStats.hp <= 0) {
                 console.log(`${enemy.name} is dead`)
                 enemy.isAlive = false
-                // removeDeadFromOrder(enemy)
+                removeDeadFromOrder(enemy)
             }
         })
         if (player.value && player.value.currentStats.hp <= 0) {
@@ -156,23 +151,21 @@ export const useTurn = () => {
     }
 
     const resetTurn = () => {
-        console.log('here')
-
         updateTurnStateMachine(ETurnState.Disabled)
     }
 
-    // const removeDeadFromOrder = (dead: MonsterModel | PlayerModel) => {
-    //     if (!state.turnOrder) {
-    //         console.error('No turn order')
-    //         return
-    //     }
-    //     console.log('dead')
+    const removeDeadFromOrder = (dead: MonsterModel | PlayerModel) => {
+        if (!state.turnOrder) {
+            console.error('No turn order')
+            return
+        }
+        console.log('dead')
 
-    //     const deadPerson = state.turnOrder.find((character) => character === dead)
-    //     const deadPersonIndex = state.turnOrder.findIndex((character) => character === deadPerson)
-    //     const updatedTurnOrder = state.turnOrder.splice(deadPersonIndex, 1)
-    //     return updatedTurnOrder
-    // }
+        const deadPerson = state.turnOrder.find((character) => character === dead)
+        const deadPersonIndex = state.turnOrder.findIndex((character) => character === deadPerson)
+        const updatedTurnOrder = state.turnOrder.splice(deadPersonIndex, 1)
+        return updatedTurnOrder
+    }
     return {
         ...toRefs(state),
         updateTurnStateMachine,

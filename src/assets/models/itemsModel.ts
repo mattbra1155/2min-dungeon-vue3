@@ -97,7 +97,6 @@ class Weapon extends Item implements IWeapon {
         })
         // owner.status.updateCurrentStats(owner)
         console.log('wielded', this)
-        console.log('owner', owner)
     }
 
     unequip(owner: PlayerModel | MonsterModel) {
@@ -146,8 +145,6 @@ class Armor extends Item implements IArmor {
         }
         // Find where the item should be worn
         const itemSlot: EBodyParts | undefined = Object.values(EBodyParts).find((bodyPart) => {
-            console.log(bodyPart.replaceAll(' ', ''), this.bodyPart.toString().toLowerCase())
-
             if (bodyPart.replaceAll(' ', '').toLowerCase() === this.bodyPart.toString().toLowerCase()) {
                 return bodyPart
             }
@@ -156,8 +153,6 @@ class Armor extends Item implements IArmor {
             console.log('item slot not found')
             return
         }
-        console.log(itemSlot.replace(/([A-Z])/g, ' $1').trim())
-
         //unequip current item
         owner.bodyParts[itemSlot].armor.item?.unequip(owner)
         console.log(`unequipped ${this.name}`)
@@ -176,14 +171,10 @@ class Armor extends Item implements IArmor {
                 return
             }
 
-            console.log(modifier)
-
             modifier.use(owner)
         })
         // TO DO apply/update stats
         // owner.modifiers.updateCurrentStats(owner)
-        console.log('Equipped', this)
-        console.log('CHar', owner)
     }
 
     unequip(owner: PlayerModel | MonsterModel) {
