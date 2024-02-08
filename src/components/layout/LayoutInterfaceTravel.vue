@@ -125,11 +125,8 @@ onMounted(() => {
     <div v-if="activeScene" class="o-interface">
         <div class="o-interface__row o-interface__objectActions">
             <template v-for="roomObject in activeScene.currentRoom?.roomObjects" :key="roomObject.id">
-                <button
-                    v-if="activeRoomObject?.id !== roomObject.id"
-                    class="a-button action__button"
-                    @click="searchObject(roomObject)"
-                >
+                <button v-if="activeRoomObject?.id !== roomObject.id" class="a-button action__button"
+                    @click="searchObject(roomObject)">
                     Search {{ roomObject.name }}
                 </button>
             </template>
@@ -140,28 +137,21 @@ onMounted(() => {
         </div>
         <div class="o-interface__row o-interface__directionWrapper">
             <template v-for="(destinationId, index) in activeScene.currentRoom?.exits" :key="index">
-                <button
-                    v-if="destinationId !== -1 && typeof destinationId === 'number'"
-                    class="a-button action__button"
-                    @click="moveTo(activeScene.id, destinationId.toString())"
-                >
+                <button v-if="destinationId !== -1 && typeof destinationId === 'number'" class="a-button action__button"
+                    @click="moveTo(activeScene.id, destinationId.toString())">
                     {{ directionButton(destinationId, index) }}
                 </button>
             </template>
 
             <template v-for="(destinationId, index) in activeScene.currentRoom?.exits" :key="index">
-                <button
-                    class="a-button action__button"
+                <button class="a-button action__button"
                     v-if="typeof destinationId !== 'number' && destinationId.sceneId !== 'town'"
-                    @click="moveTo(destinationId.sceneId, destinationId.roomId)"
-                >
+                    @click="moveTo(destinationId.sceneId, destinationId.roomId)">
                     {{ getLocationName(destinationId.sceneId) }}
                 </button>
-                <button
-                    class="a-button action__button"
+                <button class="a-button action__button"
                     v-if="typeof destinationId !== 'number' && destinationId.sceneId === 'town'"
-                    @click="moveToTown(destinationId.sceneId)"
-                >
+                    @click="moveToTown(destinationId.sceneId)">
                     {{ destinationId.sceneId }}
                 </button>
             </template>

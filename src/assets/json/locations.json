@@ -274,7 +274,9 @@
                 "objects": [
                     "chest"
                 ],
-                "entityList": [],
+                "entityList": [
+                    "lesserGoblin"
+                ],
                 "lootList": [
                     "gold"
                 ],
