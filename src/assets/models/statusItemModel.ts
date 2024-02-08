@@ -49,8 +49,6 @@ class StatusBonusStat extends StatusItem implements IStatusBonusStats {
     use(target: PlayerModel | MonsterModel) {
         Object.entries(this.bonusStatList).forEach((bonusStat) => {
             const statName = Object.values(EStats).find((stat) => stat === bonusStat[0])
-            console.log('PASSIVE', statName, bonusStat)
-
             if (!statName) {
                 throw new Error('No statName')
             }

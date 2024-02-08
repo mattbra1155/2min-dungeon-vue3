@@ -31,7 +31,7 @@ abstract class PersonModel implements IPerson {
         public isAlive: boolean = true,
         public modifiers: Modifiers = new Modifiers(),
         public status: Status = new Status()
-    ) {}
+    ) { }
 
     async clearCurrentStats() {
         const baseStats = structuredClone(toRaw(this.stats))
@@ -185,8 +185,6 @@ abstract class PersonModel implements IPerson {
                 }
                 item.modifiers.forEach((modifier) => {
                     if (modifier.type === EModifierTypes.DamageApplyEffect) {
-                        console.log('hrrrrrer', modifier)
-
                         modifier.use(enemy)
                         return
                     }

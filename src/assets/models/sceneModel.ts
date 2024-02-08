@@ -33,8 +33,6 @@ class Scene implements IScene {
     changeCurrentRoom(roomId: string) {
         const { setActiveRoomObject } = useFeed()
         const currentRoom = this.roomList.find((room) => room.id === roomId.toString())
-        console.log(this.roomList)
-
         if (!currentRoom) {
             console.error('No Room found')
             return
@@ -42,7 +40,6 @@ class Scene implements IScene {
 
         setActiveRoomObject(null)
         this.currentRoom = currentRoom
-        console.log(this.currentRoom.isExplored)
 
         // If Room is explored - monster defeated before - don't create another one
         if (this.currentRoom.isExplored) {
@@ -55,26 +52,24 @@ class Scene implements IScene {
             return
         }
 
-        this.createEnemyList(this.currentRoom.monsterList.length)
+        this.createEnemyList(this.currentRoom.monsterList.map((monster) => monster.originId))
         const { updateGameState } = useGameStateManager()
         updateGameState(EGameState.Battle)
     }
 
-    createMonster = () => {
-        const monster = monsterGenerator.create()
+    createMonster = (monsterId?: string) => {
+        const monster = monsterGenerator.create(monsterId)
         return monster
     }
 
-    createEnemyList = (enemiesToCreate: number) => {
-        let createdEnemies = 0
-        const enemyList = []
-        while (createdEnemies < enemiesToCreate) {
-            createdEnemies++
-            const enemy = this.createMonster()
-            // this.entityList.push(enemy)
-            enemyList.push(enemy)
-        }
+    createEnemyList = (enemiesToCreate: string[]) => {
+        const enemyList: MonsterModel[] = []
+        enemiesToCreate.forEach((monsterId: string) => {
+            console.log(monsterId);
 
+            const enemy = this.createMonster(monsterId)
+            enemyList.push(enemy)
+        })
         return enemyList
     }
 
@@ -89,7 +84,7 @@ class Scene implements IScene {
         this.name = sceneDetails.name
 
         sceneDetails?.roomList?.forEach((roomData) => {
-            const monsterList = this.createEnemyList(roomData.entityList.length)
+            const monsterList = this.createEnemyList(roomData.entityList)
             const createObjects = () => {
                 const list: any = []
                 roomData.objects.forEach((object) => {
