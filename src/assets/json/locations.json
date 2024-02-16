@@ -16,14 +16,14 @@
             {
                 "id": "0",
                 "objects": [],
-                "description": "",
+                "description": "A vast country with a lot of ununsed and overgrown fields. Few desolated farms are scattered in the distance. Its a sad sight",
                 "entityList": [],
                 "lootList": [],
-                "name": "North Fields",
+                "name": "Northen Fields",
                 "type": "entry",
                 "exits": [
                     1,
-                    -1,
+                    2,
                     -1,
                     -1,
                     {
@@ -43,9 +43,48 @@
                 "name": "Dark Forrest",
                 "type": "monster",
                 "exits": [
-                    1,
-                    2,
+                    3,
                     0,
+                    0,
+                    -1
+                ]
+            },
+            {
+                "id": "2",
+                "objects": [],
+                "description": "Ruins of a long abandoned and burned down farm. It looks only the chimney is intact",
+                "entityList": [
+                    "lesserGoblin",
+                    "lesserGoblin"
+                ],
+                "lootList": [],
+                "name": "Burned down farm",
+                "type": "monster",
+                "exits": [
+                    -1,
+                    -1,
+                    -1,
+                    0
+                ]
+            },
+            {
+                "id": "3",
+                "objects": [],
+                "description": "Next to the road is a small abandoned camp. Few old, tattered tents and bungalows are rotting away quietly.",
+                "entityList": [
+                    "lesserGoblin",
+                    "lesserGoblin"
+                ],
+                "lootList": [],
+                "name": "Abandoned lumber camp",
+                "type": "monster",
+                "exits": [
+                    {
+                        "sceneId": 1,
+                        "roomId": 0
+                    },
+                    0,
+                    1,
                     -1
                 ]
             }
