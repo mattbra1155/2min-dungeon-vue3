@@ -1,3 +1,4 @@
+import { ISkill } from './ISkill'
 import { IStats } from './IStats'
 
 export interface IProfessionPayload {
@@ -18,6 +19,7 @@ export interface IProfessionPayload {
         willPower: number
         charisma: number
     }
+    skills: string[]
 }
 
 export interface IProfession {
@@ -25,4 +27,5 @@ export interface IProfession {
     name: string
     description: string
     statsDevelopment: Partial<IStats>
+    skills: ISkill[]
 }

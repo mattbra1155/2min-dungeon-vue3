@@ -18,7 +18,6 @@ interface IMonsterData {
     description: string
 }
 class MonsterGenerator {
-
     create(monsterId?: string) {
         const generateId = () => {
             return self.crypto.randomUUID()
@@ -31,7 +30,7 @@ class MonsterGenerator {
             monsterData = bestiary.find((monster) => monster.id === monsterId) as IMonsterData
         }
 
-        console.log(monsterData, monsterId);
+        console.log(monsterData, monsterId)
 
         const generatedWeapon = new ItemGenerator().createItem(EItemCategory.Weapon)
         const monsterClass = new MonsterModel()
@@ -40,7 +39,7 @@ class MonsterGenerator {
             id: generateId(),
             weapon: generatedWeapon,
             stats: structuredClone(statsModel),
-            originId: monsterData.id
+            originId: monsterData.id,
         })
 
         Object.entries(monsterData.stats).forEach(([key, value]) => {

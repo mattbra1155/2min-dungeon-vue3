@@ -65,7 +65,7 @@ class Scene implements IScene {
     createEnemyList = (enemiesToCreate: string[]) => {
         const enemyList: MonsterModel[] = []
         enemiesToCreate.forEach((monsterId: string) => {
-            console.log(monsterId);
+            console.log(monsterId)
 
             const enemy = this.createMonster(monsterId)
             enemyList.push(enemy)

@@ -1,4 +1,4 @@
-const skills = [
+export const skills = [
     {
         id: 'specialist_weapon_two_handed',
         name: 'specialist weapon - two handed',
@@ -8,11 +8,11 @@ const skills = [
         name: 'mighty blow',
     },
     {
-        id: 'dogde',
+        id: 'dodge',
         name: 'dodge',
     },
     {
-        id: 'secrtet_language_battle',
+        id: 'secret_language_battle',
         name: 'secret language - battle',
     },
     {
