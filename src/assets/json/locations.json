@@ -7,6 +7,52 @@
     },
     {
         "id": "0",
+        "name": "Northen Road",
+        "entityList": [],
+        "lootList": [
+            "gold"
+        ],
+        "roomList": [
+            {
+                "id": "0",
+                "objects": [],
+                "description": "",
+                "entityList": [],
+                "lootList": [],
+                "name": "North Fields",
+                "type": "entry",
+                "exits": [
+                    1,
+                    -1,
+                    -1,
+                    -1,
+                    {
+                        "sceneId": "town",
+                        "roomId": 0
+                    }
+                ]
+            },
+            {
+                "id": "1",
+                "objects": [],
+                "description": "The air in the Blighted Wood hangs heavy with decay and despair. The Northen Road, once a lifeline, becomes a muddy scar choked by thorns and twisted roots. Sunlight fights to penetrate the canopy, leaving the forest floor in perpetual twilight. Screeching crows circle overhead, their caws echoing from the moss-draped boughs of skeletal trees.",
+                "entityList": [
+                    "lesserGoblin"
+                ],
+                "lootList": [],
+                "name": "Dark Forrest",
+                "type": "monster",
+                "exits": [
+                    1,
+                    2,
+                    0,
+                    -1
+                ]
+            }
+        ]
+    },
+    {
+        "id": "1",
         "name": "Castle Drakenhof",
         "entityList": [],
         "lootList": [
