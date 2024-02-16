@@ -79,7 +79,6 @@ export const useSceneManager = () => {
 
         const scene: Scene = new Scene()
         scene.fetchSceneDetails(savedSceneData.sceneId)
-        scene.currentRoom = savedSceneData.roomList.find((room) => room.id === savedSceneData.currentRoom)
         scene.roomList = scene.roomList.map((room) => {
             const roomData = savedSceneData.roomList.find((roomData) => roomData.id === room.id)
             if (roomData) {
@@ -100,6 +99,9 @@ export const useSceneManager = () => {
             })
             return Object.assign(new Room(), room)
         })
+
+        scene.changeCurrentRoom(savedSceneData.currentRoom)
+
         setScene(scene)
     }
 
