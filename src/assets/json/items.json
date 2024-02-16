@@ -10,7 +10,8 @@
                     "stat_bonus_melee_10"
                 ],
                 "isTwoHanded": false,
-                "price": 70
+                "price": 70,
+                "skillsRequired": []
             },
             {
                 "type": "axe",
@@ -21,7 +22,8 @@
                     "stat_bonus_melee_10"
                 ],
                 "isTwoHanded": false,
-                "price": 70
+                "price": 70,
+                "skillsRequired": []
             },
             {
                 "type": "two handed sword",
@@ -32,7 +34,10 @@
                     "stat_bonus_melee_10"
                 ],
                 "isTwoHanded": true,
-                "price": 70
+                "price": 70,
+                "skillsRequired": [
+                    "specialist_weapon_two_handed"
+                ]
             },
             {
                 "type": "two handed axe",
@@ -43,7 +48,8 @@
                     "stat_bonus_melee_10"
                 ],
                 "isTwoHanded": true,
-                "price": 70
+                "price": 70,
+                "skillsRequired": []
             },
             {
                 "type": "dagger",
@@ -52,7 +58,8 @@
                     "stat_bonus_melee_10"
                 ],
                 "isTwoHanded": false,
-                "price": 2
+                "price": 2,
+                "skillsRequired": []
             },
             {
                 "type": "spear",
@@ -61,7 +68,8 @@
                     "stat_bonus_melee_10"
                 ],
                 "isTwoHanded": false,
-                "price": 70
+                "price": 70,
+                "skillsRequired": []
             },
             {
                 "type": "staff",
@@ -71,7 +79,8 @@
                     "stat_bonus_melee_10"
                 ],
                 "isTwoHanded": true,
-                "price": 70
+                "price": 70,
+                "skillsRequired": []
             }
         ],
         "quality": [

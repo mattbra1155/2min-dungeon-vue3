@@ -17,7 +17,15 @@
                 "inteligence": 0,
                 "willPower": 0,
                 "charisma": 0
-            }
+            },
+            "skills": [
+                "disarm",
+                "dodge",
+                "secret_language_battle",
+                "mighty_blow",
+                "strike_to_stun",
+                "animal_care"
+            ]
         },
         {
             "id": "prof-1",
@@ -35,7 +43,12 @@
                 "inteligence": 0,
                 "willPower": 0,
                 "charisma": 0
-            }
+            },
+            "skills": [
+                "follow_trail",
+                "marksmanship",
+                "mighty_blow"
+            ]
         }
     ]
 }

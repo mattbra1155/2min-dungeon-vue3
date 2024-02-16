@@ -14,8 +14,7 @@ import { Status } from './statusModel'
 import { StatusAttackBonusDamage } from './statusItemModel'
 import { toRaw } from 'vue'
 import { EStats } from '@/enums/EStats'
-import { Room } from './RoomModel'
-import { useSceneManager } from '@/composables/useSceneManager'
+import { ISkill } from '@/interfaces/ISkill'
 
 abstract class PersonModel implements IPerson {
     constructor(
@@ -30,8 +29,9 @@ abstract class PersonModel implements IPerson {
         public inventory: Inventory,
         public isAlive: boolean = true,
         public modifiers: Modifiers = new Modifiers(),
-        public status: Status = new Status()
-    ) { }
+        public status: Status = new Status(),
+        public skills: ISkill[] = []
+    ) {}
 
     async clearCurrentStats() {
         const baseStats = structuredClone(toRaw(this.stats))

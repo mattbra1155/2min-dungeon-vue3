@@ -1,11 +1,11 @@
 import { iBodyPart } from '@/interfaces/BodyParts'
 import { IWeapon } from '@/interfaces/IItem'
+import { ISkill } from '@/interfaces/ISkill'
+import { IStats } from '@/interfaces/IStats'
 import { Inventory } from '@/assets/models/inventoryModel'
 import { Modifiers } from '@/assets/models/modifiersModel'
-import { IStats } from '@/interfaces/IStats'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { MonsterModel } from '@/assets/models/monsterModel'
-
 export interface IPerson {
     id: string
     name: string
@@ -18,6 +18,7 @@ export interface IPerson {
     bodyParts: iBodyPart
     isAlive: boolean
     modifiers: Modifiers
+    skills: ISkill[]
     clearCurrentStats(): void
     attack(enemy: PlayerModel | MonsterModel): number | undefined
 }

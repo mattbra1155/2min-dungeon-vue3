@@ -46,6 +46,17 @@ const { player } = usePlayer()
                 </template>
             </div>
         </div>
+        <div class="o-characterScreen__statsWrapper">
+            <h2 class="a-text">Stats:</h2>
+            <div class="o-characterScreen__statList">
+                <template v-for="(value, key) in player.skills" :key="key">
+                    <div v-if="value" class="o-characterScreen__statItem">
+                        <p class="a-text">{{ key }}</p>
+                        <p class="a-text">{{ value }}</p>
+                    </div>
+                </template>
+            </div>
+        </div>
         <div class="o-characterScreen__modifiersWrapper">
             <h2 class="a-text">Active Statuses</h2>
             <template v-for="status in player.status.list" :key="status.id">
