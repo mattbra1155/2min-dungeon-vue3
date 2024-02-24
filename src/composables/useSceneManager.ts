@@ -97,6 +97,10 @@ export const useSceneManager = () => {
                 const newObject = Object.assign(itemClass, objectItem)
                 return newObject
             })
+
+            if (room.name === 'Burned down farm') {
+                room.image = 'images/burnedDownFarm.jpeg'
+            }
             return Object.assign(new Room(), room)
         })
 

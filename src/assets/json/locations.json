@@ -1,12 +1,14 @@
 [
     {
         "id": "town",
+        "image": "",
         "name": "Oakwood",
         "shortDescription": "<p>This small town, surrounded by dense, foreboding forests, is an almost forgotten outpost, its once vibrant streets now echoing with the haunting whispers of a bygone era. Oakville stands as a testament to the ravages of war, with only a handful of resilient souls daring to call it home.</p>",
         "description": "<p>The heart of Oakville is marked by a weather-beaten tavern, known simply as &quot;The Wilted Oak.&quot; Its wooden fa&ccedil;ade, worn by time and neglect, casts a gloomy shadow over the few patrons who gather within. The air inside is thick with a melancholic haze, the conversations hushed and heavy, mirroring the town&#39;s overall atmosphere. The tavern serves as the social nexus, where the remaining residents share tales of hardship and loss over mugs of ale.</p><p>Adjacent to The Wilted Oak, a solitary merchant shop named &quot;Forgotten Wares&quot; stands as a relic of a more prosperous past. Its shelves, once stocked with a diverse array of goods, now showcase a sparse collection of dusty, neglected items. The shopkeeper, a grizzled and taciturn figure, tends to the store with a sense of duty, his eyes reflecting the toll of years of solitude and decay.</p><p>The town&#39;s proximity to a nearby mine, though long abandoned and dilapidated, serves as a grim reminder of Oakville&#39;s past prosperity. The mine&#39;s entrance is now overgrown with moss and surrounded by rusting equipment, a silent witness to the once-thriving industry that sustained the town.</p><p>Oakville, forgotten by time and overshadowed by the shadows of war, is a place where hope flickers but refuses to be extinguished. Its few remaining inhabitants navigate their daily lives in quiet resignation, finding solace in the familiar, though fading, warmth of The Wilted Oak and the dim light of Forgotten Wares. In the quiet desperation of Oakville, stories of resilience and endurance echo through the narrow streets, carving a fragile tapestry of survival against the backdrop of a war-torn universe.</p>"
     },
     {
         "id": "0",
+        "image": "",
         "name": "Northen Road",
         "entityList": [],
         "lootList": [
@@ -15,6 +17,7 @@
         "roomList": [
             {
                 "id": "0",
+                "image": "",
                 "objects": [],
                 "description": "A vast country with a lot of ununsed and overgrown fields. Few desolated farms are scattered in the distance. Its a sad sight",
                 "entityList": [],
@@ -34,6 +37,7 @@
             },
             {
                 "id": "1",
+                "image": "",
                 "objects": [],
                 "description": "The air in the Blighted Wood hangs heavy with decay and despair. The Northen Road, once a lifeline, becomes a muddy scar choked by thorns and twisted roots. Sunlight fights to penetrate the canopy, leaving the forest floor in perpetual twilight. Screeching crows circle overhead, their caws echoing from the moss-draped boughs of skeletal trees.",
                 "entityList": [
@@ -51,7 +55,10 @@
             },
             {
                 "id": "2",
-                "objects": [],
+                "image": "",
+                "objects": [
+                    "burnedDownFarm"
+                ],
                 "description": "Ruins of a long abandoned and burned down farm. It looks only the chimney is intact",
                 "entityList": [
                     "lesserGoblin",
@@ -69,6 +76,7 @@
             },
             {
                 "id": "3",
+                "image": "",
                 "objects": [],
                 "description": "Next to the road is a small abandoned camp. Few old, tattered tents and bungalows are rotting away quietly.",
                 "entityList": [
@@ -92,6 +100,7 @@
     },
     {
         "id": "1",
+        "image": "",
         "name": "Castle Drakenhof",
         "entityList": [],
         "lootList": [
@@ -100,6 +109,7 @@
         "roomList": [
             {
                 "id": "0",
+                "image": "",
                 "objects": [
                     "chest",
                     "bookshelf"
@@ -126,6 +136,7 @@
             },
             {
                 "id": "1",
+                "image": "",
                 "objects": [
                     {}
                 ],
@@ -145,6 +156,7 @@
             },
             {
                 "id": "2",
+                "image": "",
                 "objects": [
                     {}
                 ],
@@ -164,6 +176,7 @@
             },
             {
                 "id": "3",
+                "image": "",
                 "objects": [
                     {}
                 ],
@@ -194,6 +207,7 @@
     },
     {
         "id": "1",
+        "image": "",
         "description": "",
         "name": "Castle Drakenhof - dungeon",
         "entityList": [],
@@ -203,6 +217,7 @@
         "roomList": [
             {
                 "id": "0",
+                "image": "",
                 "description": "",
                 "objects": [
                     "chest"
@@ -226,6 +241,7 @@
             },
             {
                 "id": "1",
+                "image": "",
                 "objects": [
                     {}
                 ],
@@ -245,6 +261,7 @@
             },
             {
                 "id": "2",
+                "image": "",
                 "objects": [
                     {}
                 ],
@@ -264,6 +281,7 @@
             },
             {
                 "id": "3",
+                "image": "",
                 "objects": [
                     {}
                 ],
@@ -283,6 +301,7 @@
             },
             {
                 "id": "4",
+                "image": "",
                 "objects": [
                     {}
                 ],
@@ -302,6 +321,7 @@
             },
             {
                 "id": "5",
+                "image": "",
                 "objects": [
                     {}
                 ],
@@ -323,6 +343,7 @@
     },
     {
         "id": "2",
+        "image": "",
         "description": "",
         "name": "Castle Drakenhof - tower",
         "entityList": [],
@@ -332,6 +353,7 @@
         "roomList": [
             {
                 "id": "0",
+                "image": "",
                 "description": "",
                 "objects": [
                     "chest"
@@ -355,6 +377,7 @@
             },
             {
                 "id": "1",
+                "image": "",
                 "description": "A large room with all kinds of books, alchemical devices and potions. Clearly a mad wizard lair",
                 "objects": [
                     "chest"

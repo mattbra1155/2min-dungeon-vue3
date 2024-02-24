@@ -12,6 +12,7 @@ export interface IRoomExit {
 
 interface IRoom {
     id: string
+    image: string
     name: string
     description: string
     monsterList: Array<PlayerModel | MonsterModel>
@@ -32,6 +33,7 @@ class Room implements IRoom {
     constructor(
         public id: string = '0',
         public name: string = `Room - ${id}`,
+        public image: string = '',
         public description: string = '',
         public monsterList: Array<MonsterModel> = [],
         public roomObjects: IRoomObject[] = [],

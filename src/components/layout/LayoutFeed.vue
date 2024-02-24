@@ -56,6 +56,7 @@ const getItem = (container: RoomObject, item: AllItemTypes) => {
                 </div>
             </template>
             <template v-else>
+                <img v-if="currentRoom.image" class="a-image" :src="currentRoom.image" alt="" />
                 <div v-html="currentRoom.description"></div>
                 <p v-if="currentRoom.roomObjects.length">
                     There is a

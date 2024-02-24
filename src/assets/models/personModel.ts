@@ -15,6 +15,7 @@ import { StatusAttackBonusDamage } from './statusItemModel'
 import { toRaw } from 'vue'
 import { EStats } from '@/enums/EStats'
 import { ISkill } from '@/interfaces/ISkill'
+import { skills } from '../json/skills'
 
 abstract class PersonModel implements IPerson {
     constructor(
@@ -154,11 +155,14 @@ abstract class PersonModel implements IPerson {
                 return damageSum
             }
 
+            const mightyBlowSkill = () => (this.skills.find((skill) => skill.id === 'mighty_blow') ? 1 : 0)
+
             damagePoints += attackStats.strength
-            damagePoints += enemyArmorPoints ? enemyArmorPoints : 0
             damagePoints += weaponDamage()
             damagePoints += damageDiceRoll
             damagePoints += modifierDamage()
+            damagePoints += mightyBlowSkill()
+            damagePoints -= enemyArmorPoints ? enemyArmorPoints : 0
             damagePoints -= enemy.currentStats.thoughtness
 
             if (damagePoints < 0) {
