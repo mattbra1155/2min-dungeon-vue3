@@ -21,12 +21,6 @@ const { initPlayer, createPlayer, resetPlayer } = usePlayer()
 const { updateGameState } = useGameStateManager()
 const playerObject = ref<PlayerModel>(initPlayer.value)
 
-const getProfessionSkill = (id: string) => {
-    const skill = skillList.find((skillItem: ISkill) => skillItem.id === id)
-
-    return skill
-}
-
 const getProfessionSkillName = (id: string) => {
     const skill = skillList.find((skillItem: ISkill) => skillItem.id === id)
     if (skill) {
@@ -100,6 +94,18 @@ const selectProfession = (profession: IProfessionPayload) => {
             playerObject.value.profession.statsDevelopment[key] = value
         }
     })
+
+    const prefessionSkills: ISkill[] = []
+
+    profession.skills.forEach((skill) => {
+        const fff = skillList.find((skillId) => skillId.id === skill)
+        if (fff) {
+            prefessionSkills.push(fff)
+        }
+    })
+
+    if (prefessionSkills) playerObject.value.skills = prefessionSkills
+
     // TEST of purchased advances - WORKING
     // Object.assign(playerObject.value.advancedStats, { hp: 110, melee: 313 })
 
@@ -270,8 +276,9 @@ const savePlayer = async () => {
                             </div>
                             <div class="o-characterGenerator__skills">
                                 <p><b>Skills:</b></p>
+                                <br />
                                 <div class="o-characterGenerator__skillList">
-                                    <p v-for="skill in profession.skills" :key="skill" class="">
+                                    <p v-for="skill in profession.skills" :key="skill" class="a-text">
                                         {{ getProfessionSkillName(skill) }}
                                     </p>
                                 </div>
