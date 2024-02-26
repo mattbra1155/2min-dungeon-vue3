@@ -21,13 +21,27 @@ class PlayerModel extends PersonModel implements IPlayer {
         public advancedStats: Partial<IStats> = {},
         public bodyParts: iBodyPart = bodyPartsModel,
         public weapon: Weapon | null = null,
+        public offHand: Weapon | null = null,
         public description: string = '',
         public inventory: Inventory = new Inventory(),
         public isAlive: boolean = true,
         public player: boolean = true,
         public modifiers: Modifiers = new Modifiers()
     ) {
-        super(id, name, race, stats, currentStats, bodyParts, weapon, description, inventory, isAlive, modifiers)
+        super(
+            id,
+            name,
+            race,
+            stats,
+            currentStats,
+            bodyParts,
+            weapon,
+            offHand,
+            description,
+            inventory,
+            isAlive,
+            modifiers
+        )
     }
 }
 export { PlayerModel }

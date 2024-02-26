@@ -11,6 +11,7 @@ import { RoomObject } from './RoomObjectModel'
 import { ItemGenerator } from '@/assets/generators/itemGenerator'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { useFeed } from '@/composables/useFeed'
+import { usePlayer } from '@/composables/usePlayer'
 class Scene implements IScene {
     constructor(
         public id: string = '0',
@@ -31,10 +32,16 @@ class Scene implements IScene {
     }
 
     changeCurrentRoom(roomId: string) {
-        const { setActiveRoomObject } = useFeed()
+        const { player } = usePlayer()
+        const { setActiveRoomObject, newMessage } = useFeed()
         const currentRoom = this.roomList.find((room) => room.id === roomId.toString())
         if (!currentRoom) {
             console.error('No Room found')
+            return
+        }
+        // if player is not holding torch and room is dark stop him from entering
+        if (currentRoom.isDark && player.value.offHand?.id !== 'torch') {
+            newMessage('The room is completely dark. You need a lightsource to enter')
             return
         }
 
@@ -65,8 +72,6 @@ class Scene implements IScene {
     createEnemyList = (enemiesToCreate: string[]) => {
         const enemyList: MonsterModel[] = []
         enemiesToCreate.forEach((monsterId: string) => {
-            console.log(monsterId)
-
             const enemy = this.createMonster(monsterId)
             enemyList.push(enemy)
         })
@@ -119,13 +124,15 @@ class Scene implements IScene {
                 new Room(
                     roomData.id,
                     roomData.name,
+                    roomData.image,
                     roomData.description,
                     monsterList,
                     createObjects(),
                     roomData.lootList,
                     roomData.exits,
                     false,
-                    false
+                    false,
+                    roomData.isDark
                 )
             )
         })

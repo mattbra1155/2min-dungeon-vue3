@@ -6,8 +6,7 @@ import { useSceneManager } from '@/composables/useSceneManager'
 import { AllItemTypes } from '@/interfaces/IItem'
 import { computed } from 'vue'
 const { activeScene } = useSceneManager()
-const { activeRoomObject } = useFeed()
-
+const { activeRoomObject, feedList, newMessage } = useFeed()
 const { player } = usePlayer()
 const currentRoom = computed(() => activeScene.value?.currentRoom)
 const isSearched = computed(() => currentRoom.value?.isSearched)
@@ -66,6 +65,7 @@ const getItem = (container: RoomObject, item: AllItemTypes) => {
                     >
                     in the room.
                 </p>
+                <p v-for="feedItem in feedList" :key="feedItem">{{ feedItem }}</p>
                 <p v-if="isSearched">You searched this room already</p>
             </template>
         </ul>

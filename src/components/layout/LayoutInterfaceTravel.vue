@@ -86,6 +86,8 @@ const moveTo = async (sceneId: string, roomId: string) => {
 
     activeScene.value.changeCurrentRoom(roomId)
 
+    console.log(activeScene.value.currentRoom)
+
     if (!activeScene.value.currentRoom) {
         console.error('No current Room')
         return

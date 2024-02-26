@@ -22,6 +22,7 @@ interface IRoom {
     type: ERoomTypes
     isExplored: boolean
     isSearched: boolean
+    isDark: boolean
     searchRoom(player: PlayerModel): boolean
 }
 
@@ -41,6 +42,7 @@ class Room implements IRoom {
         public exits: Array<number | IRoomExit> = [],
         public isExplored: boolean = false,
         public isSearched: boolean = false,
+        public isDark: boolean = false,
         public type: ERoomTypes = ERoomTypes.Empty
     ) {
         this.id
@@ -53,9 +55,17 @@ class Room implements IRoom {
         this.type = type
         this.isExplored = isExplored
         this.isSearched = isSearched
+        this.isDark = isDark
     }
     unaliveMonsters = () => {
         this.monsterList.map((monster) => (monster.isAlive = false))
+    }
+    checkIfLightSourceNeeded(person: PlayerModel) {
+        if (!this.isDark) {
+            return
+        }
+        console.log('You need a lightsource to enter!')
+        return false
     }
     searchRoom() {
         const initiativeRoll = diceRollK100()

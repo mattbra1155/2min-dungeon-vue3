@@ -15,7 +15,6 @@ import { StatusAttackBonusDamage } from './statusItemModel'
 import { toRaw } from 'vue'
 import { EStats } from '@/enums/EStats'
 import { ISkill } from '@/interfaces/ISkill'
-import { skills } from '../json/skills'
 
 abstract class PersonModel implements IPerson {
     constructor(
@@ -26,6 +25,7 @@ abstract class PersonModel implements IPerson {
         public currentStats: IStats = structuredClone(statsModel),
         public bodyParts: iBodyPart = bodyPartsModel,
         public weapon: Weapon | null = null,
+        public offHand: Weapon | null = null,
         public description: string = '',
         public inventory: Inventory,
         public isAlive: boolean = true,

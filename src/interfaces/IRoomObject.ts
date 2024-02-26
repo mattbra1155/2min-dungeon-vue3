@@ -1,3 +1,4 @@
+import { PlayerModel } from '@/assets/models/playerModel'
 import { AllItemTypes } from './IItem'
 
 export interface IRoomObject {
@@ -10,4 +11,5 @@ export interface IRoomObject {
     isSearched: boolean
     isLocked: boolean
     setIsSearch(state: boolean): void
+    unlock(person: PlayerModel): void
 }

@@ -24,6 +24,7 @@
                 "lootList": [],
                 "name": "Northen Fields",
                 "type": "entry",
+                "isDark": false,
                 "exits": [
                     1,
                     2,
@@ -46,6 +47,7 @@
                 "lootList": [],
                 "name": "Dark Forrest",
                 "type": "monster",
+                "isDark": true,
                 "exits": [
                     3,
                     0,
@@ -67,6 +69,7 @@
                 "lootList": [],
                 "name": "Burned down farm",
                 "type": "monster",
+                "isDark": false,
                 "exits": [
                     -1,
                     -1,
@@ -86,6 +89,7 @@
                 "lootList": [],
                 "name": "Abandoned lumber camp",
                 "type": "monster",
+                "isDark": false,
                 "exits": [
                     {
                         "sceneId": 1,
@@ -123,6 +127,7 @@
                 ],
                 "name": "Entry Gate",
                 "type": "entry",
+                "isDark": false,
                 "exits": [
                     -1,
                     -1,
@@ -147,6 +152,7 @@
                 ],
                 "name": "Guard Post",
                 "type": "monster",
+                "isDark": false,
                 "exits": [
                     0,
                     -1,
@@ -167,6 +173,7 @@
                 ],
                 "name": "Guest Room",
                 "type": "loot",
+                "isDark": false,
                 "exits": [
                     -1,
                     0,
@@ -187,6 +194,7 @@
                 ],
                 "name": "Great Stairs",
                 "type": "Exit",
+                "isDark": false,
                 "sceneLinks": [],
                 "exits": [
                     -1,
@@ -228,6 +236,7 @@
                 ],
                 "name": "Entrence",
                 "type": "entry",
+                "isDark": false,
                 "exits": [
                     -1,
                     -1,
@@ -252,6 +261,7 @@
                 ],
                 "name": "Jailer room",
                 "type": "loot",
+                "isDark": false,
                 "exits": [
                     0,
                     -1,
@@ -272,6 +282,7 @@
                 ],
                 "name": "Corridor",
                 "type": "loot",
+                "isDark": false,
                 "exits": [
                     1,
                     3,
@@ -292,6 +303,7 @@
                 ],
                 "name": "Cell A",
                 "type": "loot",
+                "isDark": false,
                 "exits": [
                     -1,
                     -1,
@@ -312,6 +324,7 @@
                 ],
                 "name": "Cell B",
                 "type": "loot",
+                "isDark": false,
                 "exits": [
                     2,
                     -1,
@@ -332,6 +345,7 @@
                 ],
                 "name": "Cell C",
                 "type": "loot",
+                "isDark": false,
                 "exits": [
                     -1,
                     2,
@@ -364,6 +378,7 @@
                 ],
                 "name": "Corridor",
                 "type": "entry",
+                "isDark": false,
                 "exits": [
                     1,
                     -1,
@@ -390,6 +405,7 @@
                 ],
                 "name": "Wizard Chamber",
                 "type": "boss",
+                "isDark": false,
                 "exits": [
                     -1,
                     -1,

@@ -95,6 +95,8 @@ export const useSceneManager = () => {
             room.roomObjects = room.roomObjects.map((objectItem) => {
                 const itemClass = new RoomObject()
                 const newObject = Object.assign(itemClass, objectItem)
+                console.log(newObject)
+
                 return newObject
             })
 
