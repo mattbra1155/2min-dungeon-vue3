@@ -57,16 +57,6 @@ class Room implements IRoom {
         this.isSearched = isSearched
         this.isDark = isDark
     }
-    unaliveMonsters = () => {
-        this.monsterList.map((monster) => (monster.isAlive = false))
-    }
-    checkIfLightSourceNeeded(person: PlayerModel) {
-        if (!this.isDark) {
-            return
-        }
-        console.log('You need a lightsource to enter!')
-        return false
-    }
     searchRoom() {
         const initiativeRoll = diceRollK100()
         const { player } = usePlayer()

@@ -16,9 +16,13 @@ export const useFeed = () => {
     const newMessage = (message: string) => {
         state.feedList.push(message)
     }
+    const resetFeed = () => {
+        state.feedList = []
+    }
     return {
         ...toRefs(state),
         setActiveRoomObject,
         newMessage,
+        resetFeed,
     }
 }

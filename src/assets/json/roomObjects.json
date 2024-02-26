@@ -9,7 +9,8 @@
             "items": [
                 "weapon",
                 "armor"
-            ]
+            ],
+            "isLocked": false
         },
         {
             "id": "bookshelf",
@@ -21,7 +22,8 @@
             "id": "desk",
             "name": "desk",
             "description": "desk lorem ipsum",
-            "items": []
+            "items": [],
+            "isLocked": false
         }
     ],
     "doors": {}

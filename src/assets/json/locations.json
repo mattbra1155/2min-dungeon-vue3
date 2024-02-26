@@ -18,7 +18,12 @@
             {
                 "id": "0",
                 "image": "",
-                "objects": [],
+                "objects": [
+                    {
+                        "id": "chest",
+                        "isLocked": true
+                    }
+                ],
                 "description": "A vast country with a lot of ununsed and overgrown fields. Few desolated farms are scattered in the distance. Its a sad sight",
                 "entityList": [],
                 "lootList": [],
@@ -47,7 +52,7 @@
                 "lootList": [],
                 "name": "Dark Forrest",
                 "type": "monster",
-                "isDark": true,
+                "isDark": false,
                 "exits": [
                     3,
                     0,
@@ -57,10 +62,8 @@
             },
             {
                 "id": "2",
-                "image": "",
-                "objects": [
-                    "burnedDownFarm"
-                ],
+                "image": "burnedDownFarm",
+                "objects": [],
                 "description": "Ruins of a long abandoned and burned down farm. It looks only the chimney is intact",
                 "entityList": [
                     "lesserGoblin",
@@ -114,10 +117,7 @@
             {
                 "id": "0",
                 "image": "",
-                "objects": [
-                    "chest",
-                    "bookshelf"
-                ],
+                "objects": [],
                 "description": "",
                 "entityList": [
                     "lesserGoblin"
@@ -142,9 +142,7 @@
             {
                 "id": "1",
                 "image": "",
-                "objects": [
-                    {}
-                ],
+                "objects": [],
                 "description": "Looks like a Guard Post. There is a table and some old and rusty daggers an swords littering the room.",
                 "entityList": [],
                 "lootList": [
@@ -163,9 +161,7 @@
             {
                 "id": "2",
                 "image": "",
-                "objects": [
-                    {}
-                ],
+                "objects": [],
                 "description": "",
                 "entityList": [],
                 "lootList": [
@@ -184,9 +180,7 @@
             {
                 "id": "3",
                 "image": "",
-                "objects": [
-                    {}
-                ],
+                "objects": [],
                 "description": "",
                 "entityList": [],
                 "lootList": [
@@ -227,9 +221,7 @@
                 "id": "0",
                 "image": "",
                 "description": "",
-                "objects": [
-                    "chest"
-                ],
+                "objects": [],
                 "entityList": [],
                 "lootList": [
                     "gold"
@@ -251,9 +243,7 @@
             {
                 "id": "1",
                 "image": "",
-                "objects": [
-                    {}
-                ],
+                "objects": [],
                 "description": "",
                 "entityList": [],
                 "lootList": [
@@ -272,9 +262,7 @@
             {
                 "id": "2",
                 "image": "",
-                "objects": [
-                    {}
-                ],
+                "objects": [],
                 "description": "",
                 "entityList": [],
                 "lootList": [
@@ -293,9 +281,7 @@
             {
                 "id": "3",
                 "image": "",
-                "objects": [
-                    {}
-                ],
+                "objects": [],
                 "description": "",
                 "entityList": [],
                 "lootList": [
@@ -314,9 +300,7 @@
             {
                 "id": "4",
                 "image": "",
-                "objects": [
-                    {}
-                ],
+                "objects": [],
                 "description": "",
                 "entityList": [],
                 "lootList": [
@@ -335,9 +319,7 @@
             {
                 "id": "5",
                 "image": "",
-                "objects": [
-                    {}
-                ],
+                "objects": [],
                 "description": "",
                 "entityList": [],
                 "lootList": [
@@ -369,9 +351,7 @@
                 "id": "0",
                 "image": "",
                 "description": "",
-                "objects": [
-                    "chest"
-                ],
+                "objects": [],
                 "entityList": [],
                 "lootList": [
                     "gold"
@@ -394,9 +374,7 @@
                 "id": "1",
                 "image": "",
                 "description": "A large room with all kinds of books, alchemical devices and potions. Clearly a mad wizard lair",
-                "objects": [
-                    "chest"
-                ],
+                "objects": [],
                 "entityList": [
                     "lesserGoblin"
                 ],

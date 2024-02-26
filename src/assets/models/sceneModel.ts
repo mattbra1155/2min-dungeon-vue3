@@ -12,6 +12,7 @@ import { ItemGenerator } from '@/assets/generators/itemGenerator'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { useFeed } from '@/composables/useFeed'
 import { usePlayer } from '@/composables/usePlayer'
+
 class Scene implements IScene {
     constructor(
         public id: string = '0',
@@ -33,7 +34,11 @@ class Scene implements IScene {
 
     changeCurrentRoom(roomId: string) {
         const { player } = usePlayer()
-        const { setActiveRoomObject, newMessage } = useFeed()
+        const { setActiveRoomObject, newMessage, resetFeed } = useFeed()
+        const { updateGameState } = useGameStateManager()
+
+        resetFeed()
+
         const currentRoom = this.roomList.find((room) => room.id === roomId.toString())
         if (!currentRoom) {
             console.error('No Room found')
@@ -60,7 +65,6 @@ class Scene implements IScene {
         }
 
         this.createEnemyList(this.currentRoom.monsterList.map((monster) => monster.originId))
-        const { updateGameState } = useGameStateManager()
         updateGameState(EGameState.Battle)
     }
 
@@ -93,7 +97,7 @@ class Scene implements IScene {
             const createObjects = () => {
                 const list: any = []
                 roomData.objects.forEach((object) => {
-                    const objectData = roomObjects.containers.find((item) => item.id === object)
+                    const objectData = roomObjects.containers.find((item) => item.id === object.id)
                     if (!objectData) {
                         return
                     }
