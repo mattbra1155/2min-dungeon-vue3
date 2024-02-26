@@ -8,5 +8,6 @@ export interface IRoomObject {
     description: string
     items: AllItemTypes[]
     isSearched: boolean
+    isLocked: boolean
     setIsSearch(state: boolean): void
 }
