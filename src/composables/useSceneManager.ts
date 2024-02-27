@@ -73,6 +73,8 @@ export const useSceneManager = () => {
             if (!entry) {
                 return
             }
+            console.log(entry)
+
             state.activeScene.changeCurrentRoom(entry.id)
             return
         }

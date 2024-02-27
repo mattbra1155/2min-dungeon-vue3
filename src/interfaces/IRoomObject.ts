@@ -3,6 +3,7 @@ import { AllItemTypes } from './IItem'
 
 export interface IRoomObject {
     id: string
+    type: string
     image: string
     imageSearched: string
     name: string
@@ -11,5 +12,5 @@ export interface IRoomObject {
     isSearched: boolean
     isLocked: boolean
     setIsSearch(state: boolean): void
-    unlock(person: PlayerModel): void
+    unlock(person: PlayerModel): boolean
 }

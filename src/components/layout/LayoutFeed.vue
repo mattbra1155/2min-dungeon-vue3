@@ -4,18 +4,64 @@ import { useFeed } from '@/composables/useFeed'
 import { usePlayer } from '@/composables/usePlayer'
 import { useSceneManager } from '@/composables/useSceneManager'
 import { AllItemTypes } from '@/interfaces/IItem'
-import { computed } from 'vue'
+import { computed, onMounted, watch } from 'vue'
 const { activeScene } = useSceneManager()
 const { activeRoomObject, feedList, newMessage } = useFeed()
 const { player } = usePlayer()
 const currentRoom = computed(() => activeScene.value?.currentRoom)
 const isSearched = computed(() => currentRoom.value?.isSearched)
-const openContainer = (item: RoomObject) => item.setIsSearch(true)
+const openContainer = (item: RoomObject) => {
+    if (item.isLocked) {
+        const result = item.unlock(player.value)
+        if (result) {
+            item.setIsSearch(true)
+        } else {
+            newMessage('You were unable to open the chest')
+        }
+    }
+}
 const getItem = (container: RoomObject, item: AllItemTypes) => {
     const itemToRemoveIndex = container.items.findIndex((findItem) => findItem.id === item.id)
     container.items.splice(itemToRemoveIndex, 1)
     player.value.inventory.addItem(item, player.value.id)
+    if (!container.items.length) {
+        newMessage(`You took everything from ${container.name}`)
+    }
 }
+
+const containers = computed(() => {
+    if (!currentRoom.value?.roomObjects.length) {
+        return 'You see nothing worth taking.'
+    }
+    const items = currentRoom.value?.roomObjects.map((roomObject) => {
+        const isEmpty = roomObject.isSearched && roomObject.items.length === 0 ? 'empty ' : ''
+        const name = roomObject.name
+        return `${isEmpty}${name}`
+    })
+
+    return `There is a ${items} in the room.`
+})
+
+watch(
+    () => isSearched.value,
+    (isSearched) => {
+        if (isSearched) {
+            newMessage(`You searched this room already.`)
+        }
+    }
+)
+
+watch(
+    () => containers.value,
+    () => {
+        newMessage(containers.value)
+    }
+)
+console.log(containers.value)
+
+onMounted(() => {
+    newMessage('There is a chest in the room.')
+})
 </script>
 
 <template>
@@ -58,15 +104,13 @@ const getItem = (container: RoomObject, item: AllItemTypes) => {
                 <img v-if="currentRoom.image" class="a-image" :src="currentRoom.image" alt="" />
                 <div v-html="currentRoom.description"></div>
                 <p v-if="currentRoom.roomObjects.length">
-                    There is a
-                    <template v-for="(roomObject, index) in currentRoom.roomObjects" :key="roomObject.id"
-                        >{{ roomObject.isSearched && roomObject.items.length === 0 ? 'empty ' : '' }}{{ roomObject.name
+                    <!-- <template v-for="(roomObject, index) in currentRoom.roomObjects" :key="roomObject.id"
+                        >{{ roomObject.isSearched && roomObject.items.length === 0 ? 'empty ' : undefined
+                        }}{{ roomObject.name
                         }}{{ index === currentRoom.roomObjects.length - 1 ? '' : ',\&nbsp;' }}</template
-                    >
-                    in the room.
+                    > -->
                 </p>
                 <p v-for="feedItem in feedList" :key="feedItem">{{ feedItem }}</p>
-                <p v-if="isSearched">You searched this room already</p>
             </template>
         </ul>
     </div>

@@ -20,7 +20,7 @@
                 "image": "",
                 "objects": [
                     {
-                        "id": "chest",
+                        "type": "chest",
                         "isLocked": true
                     }
                 ],

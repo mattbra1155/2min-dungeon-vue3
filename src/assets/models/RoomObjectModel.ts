@@ -5,6 +5,7 @@ import { PlayerModel } from './playerModel'
 class RoomObject implements IRoomObject {
     constructor(
         public id: string = crypto.randomUUID(),
+        public type: string = '',
         public image: string = '',
         public imageSearched: string = '',
         public name: string = '',
@@ -13,7 +14,7 @@ class RoomObject implements IRoomObject {
         public isSearched: boolean = false,
         public isLocked: boolean = false
     ) {
-        this.id = id
+        this.type = type
         this.name = name
         this.description = description
         this.items = items
@@ -24,7 +25,9 @@ class RoomObject implements IRoomObject {
     unlock(person: PlayerModel) {
         if (person.skills.find((skill) => skill.id === 'lockpicking')) {
             this.isLocked = false
+            return true
         }
+        return false
     }
 }
 

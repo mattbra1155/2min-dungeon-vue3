@@ -97,8 +97,9 @@ class Scene implements IScene {
             const createObjects = () => {
                 const list: any = []
                 roomData.objects.forEach((object) => {
-                    const objectData = roomObjects.containers.find((item) => item.id === object.id)
+                    const objectData = roomObjects.containers.find((item) => item.type === object.type)
                     if (!objectData) {
+                        console.error('no roomObject container found')
                         return
                     }
                     const getItems = () => {
@@ -111,13 +112,17 @@ class Scene implements IScene {
                     }
 
                     const createdObject = new RoomObject(
-                        objectData.id,
+                        `container-${crypto.randomUUID()}`,
+                        objectData.type,
                         objectData.image,
                         objectData.imageSearched,
                         objectData.name,
                         objectData.description,
-                        getItems()
+                        getItems(),
+                        false,
+                        object.isLocked
                     )
+                    console.log(createdObject)
 
                     list.push(createdObject)
                 })
