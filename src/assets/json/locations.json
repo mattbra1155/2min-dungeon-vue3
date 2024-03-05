@@ -22,6 +22,10 @@
                     {
                         "type": "chest",
                         "isLocked": true
+                    },
+                    {
+                        "type": "chest",
+                        "isLocked": false
                     }
                 ],
                 "description": "A vast country with a lot of ununsed and overgrown fields. Few desolated farms are scattered in the distance. Its a sad sight",

@@ -4,19 +4,20 @@ import { useFeed } from '@/composables/useFeed'
 import { usePlayer } from '@/composables/usePlayer'
 import { useSceneManager } from '@/composables/useSceneManager'
 import { AllItemTypes } from '@/interfaces/IItem'
-import { computed, onMounted, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 const { activeScene } = useSceneManager()
 const { activeRoomObject, feedList, newMessage } = useFeed()
 const { player } = usePlayer()
 const currentRoom = computed(() => activeScene.value?.currentRoom)
 const isSearched = computed(() => currentRoom.value?.isSearched)
+const containerMessage = ref<string>()
 const openContainer = (item: RoomObject) => {
     if (item.isLocked) {
-        const result = item.unlock(player.value)
-        if (result) {
+        const canPlayerUnlock = item.unlock(player.value)
+        if (canPlayerUnlock) {
             item.setIsSearch(true)
         } else {
-            newMessage('You were unable to open the chest')
+            containerMessage.value = `You are unable to open the ${item.name}. You need lockpicking skills to open this`
         }
     }
 }
@@ -81,7 +82,9 @@ onMounted(() => {
                         :src="activeRoomObject.imageSearched"
                         alt=""
                     />
-                    <p class="a-text">{{ activeRoomObject.name }}</p>
+                    <p class="a-text">
+                        {{ activeRoomObject.isLocked ? `Locked ${activeRoomObject.name}` : activeRoomObject.name }}
+                    </p>
                     <template v-if="activeRoomObject.isSearched">
                         <template v-if="activeRoomObject.items.length">
                             contains:
@@ -96,20 +99,17 @@ onMounted(() => {
                         @click="openContainer(activeRoomObject)"
                         class="a-button action__button"
                     >
-                        Open
+                        {{ activeRoomObject.isLocked ? 'Unlock' : 'Open' }}
                     </button>
+                    <transition name="slide">
+                        <p v-if="containerMessage" class="test">{{ containerMessage }}</p>
+                    </transition>
                 </div>
             </template>
+
             <template v-else>
                 <img v-if="currentRoom.image" class="a-image" :src="currentRoom.image" alt="" />
                 <div v-html="currentRoom.description"></div>
-                <p v-if="currentRoom.roomObjects.length">
-                    <!-- <template v-for="(roomObject, index) in currentRoom.roomObjects" :key="roomObject.id"
-                        >{{ roomObject.isSearched && roomObject.items.length === 0 ? 'empty ' : undefined
-                        }}{{ roomObject.name
-                        }}{{ index === currentRoom.roomObjects.length - 1 ? '' : ',\&nbsp;' }}</template
-                    > -->
-                </p>
                 <p v-for="feedItem in feedList" :key="feedItem">{{ feedItem }}</p>
             </template>
         </ul>

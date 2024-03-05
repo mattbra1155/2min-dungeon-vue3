@@ -106,6 +106,7 @@ export const usePlayer = () => {
                             )
                             return modifier
                         })
+                        console.log(item.modifiers)
                     })
                 }
                 populateInventoryItemClasses()
