@@ -17,9 +17,11 @@ const openContainer = (item: RoomObject) => {
         if (canPlayerUnlock) {
             item.setIsSearch(true)
         } else {
-            containerMessage.value = `You are unable to open the ${item.name}. You need lockpicking skills to open this`
+            containerMessage.value = `You are unable to open the ${item.name}. You need a lockpicking skill.`
         }
+        return
     }
+    item.setIsSearch(true)
 }
 const getItem = (container: RoomObject, item: AllItemTypes) => {
     const itemToRemoveIndex = container.items.findIndex((findItem) => findItem.id === item.id)

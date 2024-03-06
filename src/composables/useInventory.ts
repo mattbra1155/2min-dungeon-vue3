@@ -4,6 +4,7 @@ import { reactive, toRefs } from 'vue'
 const state: IInventoryState = reactive({
     activeItemId: null,
     isOpen: false,
+    notifications: [],
 })
 
 export const useInventory = () => {
@@ -28,9 +29,16 @@ export const useInventory = () => {
             state.isOpen = true
         }
     }
+    const setNotification = (text: string) => {
+        state.notifications.unshift(text)
+        setTimeout(() => {
+            state.notifications.shift()
+        }, 3000)
+    }
     return {
         ...toRefs(state),
         toggleInventory,
         setactiveItemId,
+        setNotification,
     }
 }

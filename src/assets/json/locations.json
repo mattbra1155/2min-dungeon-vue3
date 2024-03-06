@@ -138,8 +138,8 @@
                     1,
                     2,
                     {
-                        "sceneId": "town",
-                        "roomId": 0
+                        "sceneId": 0,
+                        "roomId": 3
                     }
                 ]
             },

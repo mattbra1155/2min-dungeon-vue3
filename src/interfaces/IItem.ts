@@ -22,6 +22,7 @@ export interface IWeapon extends IItem {
     traits: string[]
     wield(owner: PlayerModel | MonsterModel): void
     unequip(owner: PlayerModel | MonsterModel): void
+    requiredSkills: string[]
 }
 
 export interface IArmor extends IItem {

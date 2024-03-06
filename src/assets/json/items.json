@@ -11,7 +11,7 @@
                 ],
                 "isTwoHanded": false,
                 "price": 70,
-                "skillsRequired": []
+                "requiredSkills": []
             },
             {
                 "type": "axe",
@@ -23,7 +23,7 @@
                 ],
                 "isTwoHanded": false,
                 "price": 70,
-                "skillsRequired": []
+                "requiredSkills": []
             },
             {
                 "type": "two handed sword",
@@ -35,7 +35,7 @@
                 ],
                 "isTwoHanded": true,
                 "price": 70,
-                "skillsRequired": [
+                "requiredSkills": [
                     "specialist_weapon_two_handed"
                 ]
             },
@@ -49,7 +49,10 @@
                 ],
                 "isTwoHanded": true,
                 "price": 70,
-                "skillsRequired": []
+                "requiredSkills": [
+                    "specialist_weapon_two_handed",
+                    "follow_trail"
+                ]
             },
             {
                 "type": "dagger",
@@ -59,7 +62,7 @@
                 ],
                 "isTwoHanded": false,
                 "price": 2,
-                "skillsRequired": []
+                "requiredSkills": []
             },
             {
                 "type": "spear",
@@ -69,7 +72,7 @@
                 ],
                 "isTwoHanded": false,
                 "price": 70,
-                "skillsRequired": []
+                "requiredSkills": []
             },
             {
                 "type": "staff",
@@ -80,7 +83,9 @@
                 ],
                 "isTwoHanded": true,
                 "price": 70,
-                "skillsRequired": []
+                "requiredSkills": [
+                    "specialist_weapon_two_handed"
+                ]
             }
         ],
         "quality": [

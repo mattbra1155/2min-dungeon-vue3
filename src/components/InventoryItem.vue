@@ -6,6 +6,7 @@ import { IArmor } from '@/interfaces/IItem'
 import { getTotalDamage } from '@/helpers/getTotalDamage'
 import { getTotalArmorPoints } from '@/helpers/getTotalArmorPoints'
 import { computed } from 'vue'
+import { skills } from '@/assets/json/skills'
 
 const { player } = usePlayer()
 const props = defineProps<{
@@ -13,6 +14,8 @@ const props = defineProps<{
 }>()
 
 const item = computed(() => player.value.inventory.inventory.find((inventoryItem) => inventoryItem.id === props.itemId))
+const getSkillNames = () =>
+    (item.value as Weapon).requiredSkills.map((skill) => skills.find((rrr) => rrr.id === skill)?.name)
 </script>
 
 <template>
@@ -24,6 +27,9 @@ const item = computed(() => player.value.inventory.inventory.find((inventoryItem
         <div class="m-inventoryItem__details">
             <h2 class="a-text m-inventoryItem__title m-inventoryItem__detailsItem --fullWidth">{{ item.name }}</h2>
             <p class="a-text m-inventoryItem__detailsItem --fullWidth">Type: {{ item.type }}</p>
+            <p class="a-text m-inventoryItem__detailsItem --fullWidth" v-if="item instanceof Weapon">
+                Rquired skills: <template v-for="skill in getSkillNames()" :key="skill">{{ skill }}, </template>
+            </p>
             <p class="a-text m-inventoryItem__detailsItem --fullWidth" v-if="item.category === EItemCategory.Armor">
                 Material: {{ (item as Armor).material }}
             </p>
