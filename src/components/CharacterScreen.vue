@@ -48,7 +48,7 @@ const { player } = usePlayer()
         </div>
         <div class="o-characterScreen__statsWrapper">
             <h2 class="a-text">Skills:</h2>
-            <div class="o-characterScreen__statList">
+            <div class="o-characterScreen__statList --skills">
                 <template v-for="skill in player.skills" :key="skill.id">
                     <div v-if="skill" class="o-characterScreen__statItem">
                         <p class="a-text">{{ skill.name }}</p>

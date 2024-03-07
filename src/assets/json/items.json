@@ -10,8 +10,9 @@
                     "stat_bonus_melee_10"
                 ],
                 "isTwoHanded": false,
-                "price": 70,
-                "requiredSkills": []
+                "price": 14,
+                "requiredSkills": [],
+                "encumbrance": 60
             },
             {
                 "type": "axe",
@@ -22,8 +23,9 @@
                     "stat_bonus_melee_10"
                 ],
                 "isTwoHanded": false,
-                "price": 70,
-                "requiredSkills": []
+                "price": 6,
+                "requiredSkills": [],
+                "encumbrance": 50
             },
             {
                 "type": "two handed sword",
@@ -34,10 +36,11 @@
                     "stat_bonus_melee_10"
                 ],
                 "isTwoHanded": true,
-                "price": 70,
+                "price": 35,
                 "requiredSkills": [
                     "specialist_weapon_two_handed"
-                ]
+                ],
+                "encumbrance": 250
             },
             {
                 "type": "two handed axe",
@@ -48,11 +51,12 @@
                     "stat_bonus_melee_10"
                 ],
                 "isTwoHanded": true,
-                "price": 70,
+                "price": 12,
                 "requiredSkills": [
                     "specialist_weapon_two_handed",
                     "follow_trail"
-                ]
+                ],
+                "encumbrance": 75
             },
             {
                 "type": "dagger",
@@ -62,7 +66,8 @@
                 ],
                 "isTwoHanded": false,
                 "price": 2,
-                "requiredSkills": []
+                "requiredSkills": [],
+                "encumbrance": 10
             },
             {
                 "type": "spear",
@@ -71,8 +76,9 @@
                     "stat_bonus_melee_10"
                 ],
                 "isTwoHanded": false,
-                "price": 70,
-                "requiredSkills": []
+                "price": 6,
+                "requiredSkills": [],
+                "encumbrance": 50
             },
             {
                 "type": "staff",
@@ -82,10 +88,11 @@
                     "stat_bonus_melee_10"
                 ],
                 "isTwoHanded": true,
-                "price": 70,
+                "price": 1,
                 "requiredSkills": [
                     "specialist_weapon_two_handed"
-                ]
+                ],
+                "encumbrance": 50
             }
         ],
         "quality": [
@@ -219,7 +226,7 @@
             {
                 "name": "low quality",
                 "modifiers": {
-                    "encumberence": 50
+                    "encumbrance": 50
                 }
             },
             {
@@ -271,16 +278,34 @@
             {
                 "name": "torch",
                 "baseValue": 0,
-                "type": "light source",
-                "price": 70,
-                "modifiers": []
+                "type": "illumination",
+                "price": 0.1,
+                "modifiers": [],
+                "encumbrance": 5
+            },
+            {
+                "name": "lantern",
+                "baseValue": 0,
+                "type": "illumination",
+                "price": 0.1,
+                "modifiers": [],
+                "encumbrance": 20
+            },
+            {
+                "name": "tinderbox",
+                "baseValue": 0,
+                "type": "household",
+                "price": 0.3,
+                "modifiers": [],
+                "encumbrance": 5
             },
             {
                 "name": "lockpick",
                 "baseValue": 0,
-                "type": "lockpick",
-                "price": 70,
-                "modifiers": []
+                "type": "tools",
+                "price": 10,
+                "modifiers": [],
+                "encumbrance": 20
             }
         ],
         "quality": [

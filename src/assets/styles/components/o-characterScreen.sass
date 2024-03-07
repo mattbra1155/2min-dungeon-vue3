@@ -17,8 +17,11 @@
         height: 10vh
     &__statList
         display: grid
-        grid-template-columns: repeat(2, minmax(0,1fr))
+        grid-template-columns: repeat(3, minmax(0,1fr))
         gap: 0.5rem
+        &.--skills
+            display: flex
+            flex-direction: column
     &__statItem
         display: flex
         flex-direction: column
@@ -30,3 +33,4 @@
         border-radius: 8px
         padding: 0.5rem
         text-transform: capitalize
+        text-align: center
