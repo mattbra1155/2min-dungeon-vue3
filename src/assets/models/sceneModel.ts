@@ -11,6 +11,8 @@ import { RoomObject } from './RoomObjectModel'
 import { ItemGenerator } from '@/assets/generators/itemGenerator'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { useFeed } from '@/composables/useFeed'
+import { usePlayer } from '@/composables/usePlayer'
+
 class Scene implements IScene {
     constructor(
         public id: string = '0',
@@ -31,10 +33,20 @@ class Scene implements IScene {
     }
 
     changeCurrentRoom(roomId: string) {
-        const { setActiveRoomObject } = useFeed()
+        const { player } = usePlayer()
+        const { setActiveRoomObject, newMessage, resetFeed } = useFeed()
+        const { updateGameState } = useGameStateManager()
+
+        resetFeed()
+
         const currentRoom = this.roomList.find((room) => room.id === roomId.toString())
         if (!currentRoom) {
             console.error('No Room found')
+            return
+        }
+        // if player is not holding torch and room is dark stop him from entering
+        if (currentRoom.isDark && player.value.offHand?.id !== 'torch') {
+            newMessage('The room is completely dark. You need a lightsource to enter')
             return
         }
 
@@ -53,7 +65,6 @@ class Scene implements IScene {
         }
 
         this.createEnemyList(this.currentRoom.monsterList.map((monster) => monster.originId))
-        const { updateGameState } = useGameStateManager()
         updateGameState(EGameState.Battle)
     }
 
@@ -65,8 +76,6 @@ class Scene implements IScene {
     createEnemyList = (enemiesToCreate: string[]) => {
         const enemyList: MonsterModel[] = []
         enemiesToCreate.forEach((monsterId: string) => {
-            console.log(monsterId);
-
             const enemy = this.createMonster(monsterId)
             enemyList.push(enemy)
         })
@@ -88,8 +97,9 @@ class Scene implements IScene {
             const createObjects = () => {
                 const list: any = []
                 roomData.objects.forEach((object) => {
-                    const objectData = roomObjects.containers.find((item) => item.id === object)
+                    const objectData = roomObjects.containers.find((item) => item.type === object.type)
                     if (!objectData) {
+                        console.error('no roomObject container found')
                         return
                     }
                     const getItems = () => {
@@ -102,13 +112,17 @@ class Scene implements IScene {
                     }
 
                     const createdObject = new RoomObject(
-                        objectData.id,
+                        `container-${crypto.randomUUID()}`,
+                        objectData.type,
                         objectData.image,
                         objectData.imageSearched,
                         objectData.name,
                         objectData.description,
-                        getItems()
+                        getItems(),
+                        false,
+                        object.isLocked
                     )
+                    console.log(createdObject)
 
                     list.push(createdObject)
                 })
@@ -119,13 +133,15 @@ class Scene implements IScene {
                 new Room(
                     roomData.id,
                     roomData.name,
+                    roomData.image,
                     roomData.description,
                     monsterList,
                     createObjects(),
                     roomData.lootList,
                     roomData.exits,
                     false,
-                    false
+                    false,
+                    roomData.isDark
                 )
             )
         })

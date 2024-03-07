@@ -86,6 +86,8 @@ const moveTo = async (sceneId: string, roomId: string) => {
 
     activeScene.value.changeCurrentRoom(roomId)
 
+    console.log(activeScene.value.currentRoom)
+
     if (!activeScene.value.currentRoom) {
         console.error('No current Room')
         return
@@ -110,14 +112,9 @@ const searchRoom = () => {
         console.error('SEARCH ROOM: no current room')
         return
     }
-    console.log(activeScene.value)
-
     activeScene.value.currentRoom.searchRoom()
 }
 
-const searchObject = (item: RoomObject) => {
-    setActiveRoomObject(item)
-}
 onMounted(() => {
     addKeybindings()
 })
@@ -130,7 +127,7 @@ onMounted(() => {
                 <button
                     v-if="activeRoomObject?.id !== roomObject.id"
                     class="a-button action__button"
-                    @click="searchObject(roomObject)"
+                    @click="setActiveRoomObject(roomObject)"
                 >
                     Search {{ roomObject.name }}
                 </button>

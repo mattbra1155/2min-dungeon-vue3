@@ -73,6 +73,8 @@ export const useSceneManager = () => {
             if (!entry) {
                 return
             }
+            console.log(entry)
+
             state.activeScene.changeCurrentRoom(entry.id)
             return
         }
@@ -95,8 +97,14 @@ export const useSceneManager = () => {
             room.roomObjects = room.roomObjects.map((objectItem) => {
                 const itemClass = new RoomObject()
                 const newObject = Object.assign(itemClass, objectItem)
+                console.log(newObject)
+
                 return newObject
             })
+
+            if (room.name === 'Burned down farm') {
+                room.image = 'images/burnedDownFarm.jpeg'
+            }
             return Object.assign(new Room(), room)
         })
 

@@ -10,7 +10,7 @@ import { AllItemTypes } from '@/interfaces/IItem'
 import InventoryItem from './InventoryItem.vue'
 
 const { player } = usePlayer()
-const { activeItemId, isOpen, toggleInventory, setactiveItemId } = useInventory()
+const { activeItemId, isOpen, toggleInventory, setactiveItemId, notifications } = useInventory()
 
 const getButtonType = (item: AllItemTypes) => {
     if (item.category === EItemCategory.Weapon) {
@@ -131,6 +131,7 @@ const unequip = (item: AllItemTypes) => {
 
             <InventoryItem v-if="activeItemId" :item-id="activeItemId" />
             <ul v-else id="inventoryList" class="o-inventory__list">
+                <p v-for="(notification, index) in notifications" :key="index">{{ notification }}</p>
                 <template v-for="item in player?.inventory.inventory" :key="item.id">
                     <li v-if="item && item.id && !item.isEquipped" class="o-inventory__item">
                         <p @click="setactiveItemId(item.id)">

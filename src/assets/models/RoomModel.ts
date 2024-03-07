@@ -12,6 +12,7 @@ export interface IRoomExit {
 
 interface IRoom {
     id: string
+    image: string
     name: string
     description: string
     monsterList: Array<PlayerModel | MonsterModel>
@@ -21,6 +22,7 @@ interface IRoom {
     type: ERoomTypes
     isExplored: boolean
     isSearched: boolean
+    isDark: boolean
     searchRoom(player: PlayerModel): boolean
 }
 
@@ -32,6 +34,7 @@ class Room implements IRoom {
     constructor(
         public id: string = '0',
         public name: string = `Room - ${id}`,
+        public image: string = '',
         public description: string = '',
         public monsterList: Array<MonsterModel> = [],
         public roomObjects: IRoomObject[] = [],
@@ -39,6 +42,7 @@ class Room implements IRoom {
         public exits: Array<number | IRoomExit> = [],
         public isExplored: boolean = false,
         public isSearched: boolean = false,
+        public isDark: boolean = false,
         public type: ERoomTypes = ERoomTypes.Empty
     ) {
         this.id
@@ -51,9 +55,7 @@ class Room implements IRoom {
         this.type = type
         this.isExplored = isExplored
         this.isSearched = isSearched
-    }
-    unaliveMonsters = () => {
-        this.monsterList.map((monster) => (monster.isAlive = false))
+        this.isDark = isDark
     }
     searchRoom() {
         const initiativeRoll = diceRollK100()

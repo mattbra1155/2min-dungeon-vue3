@@ -46,8 +46,18 @@ const { player } = usePlayer()
                 </template>
             </div>
         </div>
+        <div class="o-characterScreen__statsWrapper">
+            <h2 class="a-text">Skills:</h2>
+            <div class="o-characterScreen__statList">
+                <template v-for="skill in player.skills" :key="skill.id">
+                    <div v-if="skill" class="o-characterScreen__statItem">
+                        <p class="a-text">{{ skill.name }}</p>
+                    </div>
+                </template>
+            </div>
+        </div>
         <div class="o-characterScreen__modifiersWrapper">
-            <h2 class="a-text">Active Statuses</h2>
+            <h2 class="a-text">Active Statuses:</h2>
             <template v-for="status in player.status.list" :key="status.id">
                 <p v-if="status instanceof StatusBonusStat">
                     <span class="a-text">{{ status.name }} </span>&nbsp; &rarr; &nbsp;

@@ -1,7 +1,7 @@
 {
     "containers": [
         {
-            "id": "chest",
+            "type": "chest",
             "image": "images/Treasure Chest closed 254x254.png",
             "imageSearched": "images/Treasure Chest open 254x254.png",
             "name": "chest",
@@ -9,19 +9,21 @@
             "items": [
                 "weapon",
                 "armor"
-            ]
+            ],
+            "isLocked": false
         },
         {
-            "id": "bookshelf",
+            "type": "bookshelf",
             "name": "bookshelf",
             "description": "bookshelf lorem ipsum",
             "items": []
         },
         {
-            "id": "desk",
+            "type": "desk",
             "name": "desk",
             "description": "desk lorem ipsum",
-            "items": []
+            "items": [],
+            "isLocked": false
         }
     ],
     "doors": {}

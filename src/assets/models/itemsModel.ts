@@ -10,6 +10,7 @@ import { EModifierTypes } from '@/enums/EModifierTypes'
 import { EPotionTypes } from '@/enums/EPotionTypes'
 import { diceRollK6 } from '../scripts/diceRoll'
 import { EDice } from '@/enums/EDice'
+import { useInventory } from '@/composables/useInventory'
 
 class Item implements IItem {
     constructor(
@@ -64,7 +65,8 @@ class Weapon extends Item implements IWeapon {
         public isEquipped: boolean = false,
         public modifiers: ModifierItem[] = [],
         public traits: string[] = [],
-        public ownerId: string | undefined = undefined
+        public ownerId: string | undefined = undefined,
+        public requiredSkills: string[] = []
     ) {
         super(id, name, description, type, category, isEquipped, ownerId, modifiers)
         this.id = id
@@ -74,14 +76,32 @@ class Weapon extends Item implements IWeapon {
         this.modifiers = modifiers
         this.isEquipped = isEquipped
         this.ownerId = ownerId
+        this.requiredSkills = requiredSkills
     }
 
     wield(owner: PlayerModel | MonsterModel) {
+        const { setNotification } = useInventory()
         if (!this) {
             console.error(`no weapon to wield!!`)
             return
         }
+        const ownerHasRequiredSkills = () => {
+            return this.requiredSkills.every((skillId) => {
+                console.log(!Object.values(owner.skills).find((skillReq) => skillReq.id === skillId))
+                if (!Object.values(owner.skills).find((skillReq) => skillReq.id === skillId)) {
+                    console.log('no skill')
+                    setNotification(`Missing required skill - ${skillId}`)
+                    return false
+                }
+                return true
+            })
+        }
+
+        if (!ownerHasRequiredSkills()) {
+            return
+        }
         if (owner.weapon) {
+            // Unequip current weapon
             owner.weapon?.unequip(owner)
         }
         owner.weapon = this
@@ -221,6 +241,8 @@ class Potion extends Item implements IPotion {
             if (hpSum > person.stats.hp) {
                 person.currentStats.hp = person.stats.hp
                 console.log(`${person.name} has now ${person.currentStats.hp} hp`)
+                person.inventory.removeItem(this.id)
+                return
             }
             person.currentStats.hp += diceRoll
             person.inventory.removeItem(this.id)
