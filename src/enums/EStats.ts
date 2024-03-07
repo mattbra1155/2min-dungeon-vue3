@@ -9,6 +9,6 @@ export enum EStats {
     Initiative = 'initiative',
     Attacks = 'attacks',
     Inteligence = 'inteligence',
-    WillPower = 'willPower',
+    WillPower = 'willpower',
     Charisma = 'charisma',
 }

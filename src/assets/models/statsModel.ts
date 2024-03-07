@@ -11,7 +11,7 @@ export const stats: IStats = {
     initiative: 0,
     attacks: 0,
     inteligence: 0,
-    willPower: 0,
+    willpower: 0,
     charisma: 0,
 }
 
@@ -66,7 +66,7 @@ export const stats: IStats = {
 //         symbol: 'int',
 //         value: 0,
 //     },
-//     willPower: {
+//     willpower: {
 //         name: 'will power',
 //         symbol: 'wp',
 //         value: 0,

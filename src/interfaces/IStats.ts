@@ -15,6 +15,6 @@ export interface IStats {
     initiative: number
     attacks: number
     inteligence: number
-    willPower: number
+    willpower: number
     charisma: number
 }

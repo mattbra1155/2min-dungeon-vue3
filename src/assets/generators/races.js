@@ -13,7 +13,7 @@ const races = [
             initiative: global.diceRollK10() * 2,
             attacks: 1,
             inteligence: global.diceRollK10() * 2,
-            willPower: global.diceRollK10() * 2,
+            willpower: global.diceRollK10() * 2,
             charisma: global.diceRollK10() * 2,
         },
         statModifiers: {
@@ -45,7 +45,7 @@ const races = [
             initiative: global.diceRollK10() * 2,
             attacks: 1,
             inteligence: global.diceRollK10() * 2,
-            willPower: global.diceRollK10() * 2,
+            willpower: global.diceRollK10() * 2,
             charisma: global.diceRollK10() * 2,
         },
         statModifiers: {

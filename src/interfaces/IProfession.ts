@@ -16,7 +16,7 @@ export interface IProfessionPayload {
         initiative: number
         attacks: number
         inteligence: number
-        willPower: number
+        willpower: number
         charisma: number
     }
     skills: string[]

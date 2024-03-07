@@ -15,7 +15,7 @@
                 "initiative": 10,
                 "attacks": 1,
                 "inteligence": 0,
-                "willPower": 0,
+                "willpower": 0,
                 "charisma": 0
             },
             "skills": [
@@ -43,7 +43,7 @@
                 "initiative": 10,
                 "attacks": 0,
                 "inteligence": 0,
-                "willPower": 0,
+                "willpower": 0,
                 "charisma": 0
             },
             "skills": [

@@ -43,7 +43,7 @@ const rollStats = () => {
             initiative: diceRollK10() * 2 + 20,
             attacks: 1,
             inteligence: diceRollK10() * 2 + 20,
-            willPower: diceRollK10() * 2 + 20,
+            willpower: diceRollK10() * 2 + 20,
             charisma: diceRollK10() * 2 + 2,
         }
 
@@ -65,7 +65,7 @@ const rollStats = () => {
             initiative: diceRollK10() * 2 + 10,
             attacks: 1,
             inteligence: diceRollK10() * 2 + 20,
-            willPower: diceRollK10() * 2 + 40,
+            willpower: diceRollK10() * 2 + 40,
             charisma: diceRollK10() * 2 + 1,
         }
         Object.entries(updated).forEach(([key, stat]) => {

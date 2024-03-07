@@ -9,7 +9,7 @@
     {
         "id": "0",
         "image": "",
-        "name": "Northen Road",
+        "name": "Northern Road",
         "entityList": [],
         "lootList": [
             "gold"
@@ -31,7 +31,7 @@
                 "description": "A vast country with a lot of ununsed and overgrown fields. Few desolated farms are scattered in the distance. Its a sad sight",
                 "entityList": [],
                 "lootList": [],
-                "name": "Northen Fields",
+                "name": "Northern Fields",
                 "type": "entry",
                 "isDark": false,
                 "exits": [
