@@ -91,6 +91,7 @@ const unequip = (item: AllItemTypes) => {
         <div class="o-inventory__content">
             <div class="o-inventory__goldWrapper">
                 <p>Gold: {{ player.inventory.gold }}</p>
+                <p>Encumbrance: {{ player.encumbrance }}</p>
             </div>
             ---
             <hr />

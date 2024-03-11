@@ -31,7 +31,11 @@ abstract class PersonModel implements IPerson {
         public isAlive: boolean = true,
         public modifiers: Modifiers = new Modifiers(),
         public status: Status = new Status(),
-        public skills: ISkill[] = []
+        public skills: ISkill[] = [],
+        public encumbrance = {
+            max: 0,
+            current: 0,
+        }
     ) {}
 
     async clearCurrentStats() {
