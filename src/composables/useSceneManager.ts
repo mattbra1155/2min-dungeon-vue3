@@ -64,11 +64,9 @@ export const useSceneManager = () => {
         const sceneListData = JSON.parse((await localforage.getItem('exploredSceneList')) as string)
 
         if (sceneListData) {
-            sceneListData.forEach((sceneData: IScene) => {
+            state.sceneList = sceneListData.map((sceneData: IScene) => {
                 const scene = new Scene()
                 Object.assign(scene, sceneData)
-                console.log(scene)
-
                 scene.roomList = scene.roomList.map((room) => {
                     const roomData = sceneData.roomList.find((roomData: any) => roomData.id === room.id)
                     if (roomData) {
@@ -95,7 +93,9 @@ export const useSceneManager = () => {
 
                     return Object.assign(new Room(), room)
                 })
+                return scene
             })
+            console.log(state.sceneList)
         }
 
         // load scene
