@@ -113,7 +113,7 @@ const selectProfession = (profession: IProfessionPayload) => {
 }
 
 const setEncumbranceMax = () => {
-    playerObject.value.encumbrance.max = playerObject.value.stats.strength * 100
+    playerObject.value.inventory.encumbrance.max = playerObject.value.stats.strength * 100
 }
 
 const createInventoryItems = () => {
@@ -225,7 +225,7 @@ const savePlayer = async () => {
             </div>
             <div class="m-form__row o-characterGenerator__row">
                 <div class="m-form__column">Gold: {{ playerObject.inventory.gold }}</div>
-                <div class="m-form__column">Encumbrance: {{ playerObject.encumbrance.max }} pts</div>
+                <div class="m-form__column">Encumbrance: {{ playerObject.inventory.encumbrance.max }} pts</div>
             </div>
             <div class="m-form__row o-characterGenerator__row">
                 <div class="m-form__column">

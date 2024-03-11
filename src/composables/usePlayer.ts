@@ -67,6 +67,8 @@ export const usePlayer = () => {
                 newPlayer.modifiers = modifiers
                 newPlayer.status = status
 
+                newPlayer.inventory.encumbrance = playerData.inventory.encumbrance
+
                 const populateModifiers = () => {
                     playerData.modifiers.list.forEach((modifier: ModifierItem) => newPlayer.modifiers.addItem(modifier))
                 }

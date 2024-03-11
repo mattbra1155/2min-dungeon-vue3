@@ -8,4 +8,8 @@ export interface IInventoryState {
 export interface IInventory {
     inventory: Array<AllItemTypes>
     gold: number
+    encumbrance: {
+        max: number
+        current: number
+    }
 }

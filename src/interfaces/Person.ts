@@ -19,10 +19,6 @@ export interface IPerson {
     isAlive: boolean
     modifiers: Modifiers
     skills: ISkill[]
-    encumbrance: {
-        max: number
-        current: number
-    }
     clearCurrentStats(): void
     attack(enemy: PlayerModel | MonsterModel): number | undefined
 }
