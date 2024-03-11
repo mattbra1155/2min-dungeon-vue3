@@ -35,22 +35,10 @@ class ItemGenerator {
         const itemCategory = itemList[this.category]
         const randomItem = itemCategory.item[Math.floor(Math.random() * itemCategory.item.length)]
 
-        if (this.category === EItemCategory.Armor) {
-            const armorType =
-                itemList[this.category].material[
-                    Math.floor(Math.floor(Math.random() * itemList[this.category].material.length))
-                ]
-
-            const iii: Partial<IArmor> = {
-                material: armorType.name,
-                armorPoints: (itemObject as Armor).armorPoints + armorType.armorPoints,
-            }
-
-            itemObject = Object.assign(itemObject, iii)
-        }
         const finalItem: AllItemTypes = Object.assign(itemObject, randomItem, {
-            category: itemCategory,
+            category: this.category,
         })
+
         return finalItem
     }
 
