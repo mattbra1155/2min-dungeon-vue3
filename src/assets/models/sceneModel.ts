@@ -122,7 +122,6 @@ class Scene implements IScene {
                         false,
                         object.isLocked
                     )
-                    console.log(createdObject)
 
                     list.push(createdObject)
                 })

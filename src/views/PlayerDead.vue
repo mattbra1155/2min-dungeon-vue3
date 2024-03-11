@@ -11,14 +11,14 @@ import { EGameState } from '@/enums/EGameState'
 const { deadPlayer } = usePlayer()
 const router = useRouter()
 const { activeCharacter, resetTurn } = useTurn()
-const { resetScene } = useSceneManager()
+const { resetScene, resetSceneList } = useSceneManager()
 const { updateGameState } = useGameStateManager()
 
 const init = () => {
     deadPlayer()
     updateGameState(EGameState.PlayerDead)
     resetScene()
-    // createScene()
+    resetSceneList()
 }
 
 const closeView = () => {

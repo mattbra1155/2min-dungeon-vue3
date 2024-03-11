@@ -12,7 +12,7 @@ import { useFeed } from '@/composables/useFeed'
 import { isRoomExit } from '@/assets/models/RoomModel'
 
 const { activeRoomObject, setActiveRoomObject } = useFeed()
-const { activeScene, saveScene, createScene } = useSceneManager()
+const { activeScene, saveScene, sceneList, createScene, setScene } = useSceneManager()
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
 const isSearched = computed(() => activeScene.value?.currentRoom?.isSearched)
@@ -51,7 +51,7 @@ const getLocationName = (locationId: string) => {
 
 const moveToTown = async (sceneId: string) => {
     if (!activeScene.value || !activeScene.value.id || !activeScene.value.currentRoom || !activeScene.value.roomList) {
-        console.log(activeScene.value)
+        console.error('Cant go to Town - missing object')
         return
     }
     if (sceneId === 'town') {
@@ -63,30 +63,28 @@ const moveToTown = async (sceneId: string) => {
 }
 
 const moveTo = async (sceneId: string, roomId: string) => {
-    const sceneData = localtions.find((scene) => scene.id === sceneId.toString())
-
     if (!activeScene.value) {
-        return
-    }
-    if (!sceneData) {
-        console.error('no Scene found')
         return
     }
 
     if (sceneId !== activeScene.value.id) {
+        const existingScene = sceneList.value.find((scene) => scene.id.toString() === sceneId.toString())
+        if (existingScene) {
+            setScene(existingScene)
+            activeScene.value.changeCurrentRoom(roomId)
+            return
+        }
         createScene(sceneId)
         activeScene.value.changeCurrentRoom(roomId)
         return
     }
 
     if (parseInt(roomId) === EDirections.Wall) {
-        console.log('wall')
+        console.error('wall')
         return
     }
 
     activeScene.value.changeCurrentRoom(roomId)
-
-    console.log(activeScene.value.currentRoom)
 
     if (!activeScene.value.currentRoom) {
         console.error('No current Room')
