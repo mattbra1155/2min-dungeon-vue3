@@ -57,6 +57,11 @@ export const useSceneManager = () => {
                 return val
             })
         )
+        console.log(state.sceneList)
+
+        const exploredList = await localforage.getItem('exploredSceneList')
+        console.log(exploredList)
+
         await localforage.setItem('exploredSceneList', JSON.stringify(state.sceneList))
     }
     const loadScene = async () => {
@@ -95,7 +100,6 @@ export const useSceneManager = () => {
                 })
                 return scene
             })
-            console.log(state.sceneList)
         }
 
         // load scene

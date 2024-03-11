@@ -12,7 +12,7 @@ import { useFeed } from '@/composables/useFeed'
 import { isRoomExit } from '@/assets/models/RoomModel'
 
 const { activeRoomObject, setActiveRoomObject } = useFeed()
-const { activeScene, saveScene, createScene } = useSceneManager()
+const { activeScene, saveScene, sceneList, createScene } = useSceneManager()
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
 const isSearched = computed(() => activeScene.value?.currentRoom?.isSearched)
@@ -63,13 +63,7 @@ const moveToTown = async (sceneId: string) => {
 }
 
 const moveTo = async (sceneId: string, roomId: string) => {
-    const sceneData = localtions.find((scene) => scene.id === sceneId.toString())
-
     if (!activeScene.value) {
-        return
-    }
-    if (!sceneData) {
-        console.error('no Scene found')
         return
     }
 
@@ -85,8 +79,6 @@ const moveTo = async (sceneId: string, roomId: string) => {
     }
 
     activeScene.value.changeCurrentRoom(roomId)
-
-    console.log(activeScene.value.currentRoom)
 
     if (!activeScene.value.currentRoom) {
         console.error('No current Room')
