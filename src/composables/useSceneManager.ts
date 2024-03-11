@@ -58,10 +58,14 @@ export const useSceneManager = () => {
                 return val
             })
         )
-        console.log(state.sceneList)
 
-        const exploredList = (await localforage.getItem('exploredSceneList')) as string
-        console.log(JSON.parse(exploredList))
+        // save Scene List
+
+        const existingScene = state.sceneList.find((scene) => scene.id === sceneId)
+
+        if (existingScene && roomList) {
+            existingScene.roomList = roomList
+        }
 
         await localforage.setItem('exploredSceneList', JSON.stringify(state.sceneList))
     }
@@ -113,7 +117,7 @@ export const useSceneManager = () => {
         const savedSceneData: payload = JSON.parse(data)
 
         if (!savedSceneData) {
-            console.log('CRATE SCENE: No saved scene')
+            console.error('CRATE SCENE: No saved scene')
             createScene('0')
             if (!state.activeScene) {
                 return
@@ -122,7 +126,6 @@ export const useSceneManager = () => {
             if (!entry) {
                 return
             }
-            console.log(entry)
 
             state.activeScene.changeCurrentRoom(entry.id)
             return

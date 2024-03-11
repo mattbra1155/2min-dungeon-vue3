@@ -51,7 +51,7 @@ const getLocationName = (locationId: string) => {
 
 const moveToTown = async (sceneId: string) => {
     if (!activeScene.value || !activeScene.value.id || !activeScene.value.currentRoom || !activeScene.value.roomList) {
-        console.log(activeScene.value)
+        console.error('Cant go to Town - missing object')
         return
     }
     if (sceneId === 'town') {
@@ -68,26 +68,19 @@ const moveTo = async (sceneId: string, roomId: string) => {
     }
 
     if (sceneId !== activeScene.value.id) {
-        console.log(sceneId)
-
         const existingScene = sceneList.value.find((scene) => scene.id.toString() === sceneId.toString())
-        console.log(sceneList.value)
-
-        console.log(existingScene)
-
         if (existingScene) {
             setScene(existingScene)
             activeScene.value.changeCurrentRoom(roomId)
             return
-        } else {
-            createScene(sceneId)
-            activeScene.value.changeCurrentRoom(roomId)
-            return
         }
+        createScene(sceneId)
+        activeScene.value.changeCurrentRoom(roomId)
+        return
     }
 
     if (parseInt(roomId) === EDirections.Wall) {
-        console.log('wall')
+        console.error('wall')
         return
     }
 
