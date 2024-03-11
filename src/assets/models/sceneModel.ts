@@ -38,6 +38,7 @@ class Scene implements IScene {
         const { updateGameState } = useGameStateManager()
 
         resetFeed()
+        console.log(this)
 
         const currentRoom = this.roomList.find((room) => room.id === roomId.toString())
         if (!currentRoom) {

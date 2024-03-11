@@ -27,6 +27,7 @@ export const useSceneManager = () => {
             scene.changeCurrentRoom('0')
         }
     }
+
     const setScene = (scene: Scene) => {
         state.activeScene = scene
     }
@@ -59,8 +60,8 @@ export const useSceneManager = () => {
         )
         console.log(state.sceneList)
 
-        const exploredList = await localforage.getItem('exploredSceneList')
-        console.log(exploredList)
+        const exploredList = (await localforage.getItem('exploredSceneList')) as string
+        console.log(JSON.parse(exploredList))
 
         await localforage.setItem('exploredSceneList', JSON.stringify(state.sceneList))
     }

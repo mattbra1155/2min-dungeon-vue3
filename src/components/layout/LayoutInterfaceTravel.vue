@@ -12,7 +12,7 @@ import { useFeed } from '@/composables/useFeed'
 import { isRoomExit } from '@/assets/models/RoomModel'
 
 const { activeRoomObject, setActiveRoomObject } = useFeed()
-const { activeScene, saveScene, sceneList, createScene } = useSceneManager()
+const { activeScene, saveScene, sceneList, createScene, setScene } = useSceneManager()
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
 const isSearched = computed(() => activeScene.value?.currentRoom?.isSearched)
@@ -68,9 +68,22 @@ const moveTo = async (sceneId: string, roomId: string) => {
     }
 
     if (sceneId !== activeScene.value.id) {
-        createScene(sceneId)
-        activeScene.value.changeCurrentRoom(roomId)
-        return
+        console.log(sceneId)
+
+        const existingScene = sceneList.value.find((scene) => scene.id.toString() === sceneId.toString())
+        console.log(sceneList.value)
+
+        console.log(existingScene)
+
+        if (existingScene) {
+            setScene(existingScene)
+            activeScene.value.changeCurrentRoom(roomId)
+            return
+        } else {
+            createScene(sceneId)
+            activeScene.value.changeCurrentRoom(roomId)
+            return
+        }
     }
 
     if (parseInt(roomId) === EDirections.Wall) {
