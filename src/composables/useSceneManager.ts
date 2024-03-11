@@ -8,7 +8,7 @@ import { Inventory } from '@/assets/models/inventoryModel'
 import { Room } from '@/assets/models/RoomModel'
 import { RoomObject } from '@/assets/models/RoomObjectModel'
 interface iStateUseSceneManager {
-    sceneList: IScene[]
+    sceneList: Scene[]
     activeScene: Scene | null
 }
 
@@ -35,6 +35,10 @@ export const useSceneManager = () => {
         state.activeScene = null
         localforage.removeItem('activeScene')
     }
+    const resetSceneList = () => {
+        state.sceneList = []
+        localforage.removeItem('exploredSceneList')
+    }
 
     const saveScene = async (sceneId: string, currentRoomId: string, roomList?: Room[]) => {
         // TO DO
@@ -53,8 +57,48 @@ export const useSceneManager = () => {
                 return val
             })
         )
+        await localforage.setItem('exploredSceneList', JSON.stringify(state.sceneList))
     }
     const loadScene = async () => {
+        // load and save state.sceneList
+        const sceneListData = JSON.parse((await localforage.getItem('exploredSceneList')) as string)
+
+        if (sceneListData) {
+            sceneListData.forEach((sceneData: IScene) => {
+                const scene = new Scene()
+                Object.assign(scene, sceneData)
+                console.log(scene)
+
+                scene.roomList = scene.roomList.map((room) => {
+                    const roomData = sceneData.roomList.find((roomData: any) => roomData.id === room.id)
+                    if (roomData) {
+                        room = roomData
+                    }
+                    room.monsterList = room.monsterList.map((monster) => {
+                        const ttt = new MonsterModel()
+                        const newMonster = Object.assign(ttt, monster)
+                        newMonster.inventory = new Inventory()
+                        newMonster.inventory = monster.inventory
+                        newMonster.status = new Status()
+                        return newMonster
+                    })
+                    room.roomObjects = room.roomObjects.map((objectItem) => {
+                        const itemClass = new RoomObject()
+                        const newObject = Object.assign(itemClass, objectItem)
+
+                        return newObject
+                    })
+
+                    if (room.name === 'Burned down farm') {
+                        room.image = 'images/burnedDownFarm.jpeg'
+                    }
+
+                    return Object.assign(new Room(), room)
+                })
+            })
+        }
+
+        // load scene
         interface payload {
             sceneId: string
             currentRoom: string
@@ -97,7 +141,6 @@ export const useSceneManager = () => {
             room.roomObjects = room.roomObjects.map((objectItem) => {
                 const itemClass = new RoomObject()
                 const newObject = Object.assign(itemClass, objectItem)
-                console.log(newObject)
 
                 return newObject
             })
@@ -118,6 +161,7 @@ export const useSceneManager = () => {
         createScene,
         setScene,
         resetScene,
+        resetSceneList,
         saveScene,
         loadScene,
     }

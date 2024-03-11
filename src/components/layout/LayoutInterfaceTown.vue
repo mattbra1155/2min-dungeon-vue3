@@ -48,7 +48,14 @@ const addKeybindings = () => {
 }
 
 const moveToScene = (sceneId: string) => {
-    const sceneData = localtions.find((scene) => scene.id === sceneId)
+    const isAlreadyExplored = sceneList.value.find((scene) => scene.id === sceneId)
+
+    let sceneData: unknown = {}
+    if (isAlreadyExplored) {
+        sceneData = sceneList.value.find((scene) => scene.id === sceneId)
+    } else {
+        sceneData = localtions.find((scene) => scene.id === sceneId)
+    }
 
     if (!activeScene.value) {
         console.error('no active Scene')
