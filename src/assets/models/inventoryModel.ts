@@ -16,20 +16,28 @@ class Inventory implements IInventory {
         }
     }
 
-    _calculateEncubrance() {
-        this.encumbrance.current = this.inventory.reduce((acc, curr) => acc + curr.encumbrance, 0)
-        console.log(this.encumbrance)
+    _calculateEncubrance(): number {
+        return (this.encumbrance.current = this.inventory.reduce((acc, curr) => {
+            console.log(curr.isEquipped)
+
+            return acc + (curr.isEquipped ? 0 : curr.encumbrance)
+        }, 0))
     }
-    addItem(item: AllItemTypes | Gold, ownerId: string | undefined): void {
+    addItem(item: AllItemTypes | Gold, ownerId: string | undefined): boolean {
         if (item instanceof Gold) {
             this.gold += item.amount
             console.log(`${item.amount} gold added`)
-            return
+            return true
+        }
+        // check if encumbrance is equal or above max
+        if (this.encumbrance.current + item.encumbrance > this.encumbrance.max) {
+            return false
         }
 
         this.inventory.push(item)
         this._calculateEncubrance()
         item.ownerId = ownerId
+        return true
     }
     removeItem(itemId: string): void {
         if (!itemId) {

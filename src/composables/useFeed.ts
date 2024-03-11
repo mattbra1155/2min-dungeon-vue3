@@ -13,7 +13,7 @@ const state: useFeedState = reactive({
 
 export const useFeed = () => {
     const setActiveRoomObject = (roomObject: RoomObject | null) => (state.activeRoomObject = roomObject)
-    const newMessage = (message: string) => {
+    const setNotification = (message: string) => {
         state.feedList.push(message)
     }
     const resetFeed = () => {
@@ -22,7 +22,7 @@ export const useFeed = () => {
     return {
         ...toRefs(state),
         setActiveRoomObject,
-        newMessage,
+        setNotification,
         resetFeed,
     }
 }

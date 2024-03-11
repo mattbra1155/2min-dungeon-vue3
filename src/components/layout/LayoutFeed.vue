@@ -6,7 +6,7 @@ import { useSceneManager } from '@/composables/useSceneManager'
 import { AllItemTypes } from '@/interfaces/IItem'
 import { computed, onMounted, ref, watch } from 'vue'
 const { activeScene } = useSceneManager()
-const { activeRoomObject, feedList, newMessage } = useFeed()
+const { activeRoomObject, feedList, setNotification } = useFeed()
 const { player } = usePlayer()
 const currentRoom = computed(() => activeScene.value?.currentRoom)
 const isSearched = computed(() => currentRoom.value?.isSearched)
@@ -28,7 +28,7 @@ const getItem = (container: RoomObject, item: AllItemTypes) => {
     container.items.splice(itemToRemoveIndex, 1)
     player.value.inventory.addItem(item, player.value.id)
     if (!container.items.length) {
-        newMessage(`You took everything from ${container.name}`)
+        setNotification(`You took everything from ${container.name}`)
     }
 }
 
@@ -49,7 +49,7 @@ watch(
     () => isSearched.value,
     (isSearched) => {
         if (isSearched) {
-            newMessage(`You searched this room already.`)
+            setNotification(`You searched this room already.`)
         }
     }
 )
@@ -57,13 +57,13 @@ watch(
 watch(
     () => containers.value,
     () => {
-        newMessage(containers.value)
+        setNotification(containers.value)
     }
 )
 console.log(containers.value)
 
 onMounted(() => {
-    newMessage('There is a chest in the room.')
+    setNotification('There is a chest in the room.')
 })
 </script>
 

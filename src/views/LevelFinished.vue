@@ -38,7 +38,11 @@ const setRoomExploredStatus = async () => {
 }
 
 const takeItem = (lootItem: AllItemTypes | Gold) => {
-    player.value.inventory.addItem(lootItem, player.value.id)
+    const isAdded = player.value.inventory.addItem(lootItem, player.value.id)
+    if (!isAdded) {
+        console.log('Cant add to inventory')
+        return
+    }
     const indexOfItem = lootList.value.findIndex((item) => item.id === lootItem.id)
     lootList.value.splice(indexOfItem, 1)
 }
