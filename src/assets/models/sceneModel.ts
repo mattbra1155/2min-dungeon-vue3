@@ -34,7 +34,7 @@ class Scene implements IScene {
 
     changeCurrentRoom(roomId: string) {
         const { player } = usePlayer()
-        const { setActiveRoomObject, newMessage, resetFeed } = useFeed()
+        const { setActiveRoomObject, setNotification, resetFeed } = useFeed()
         const { updateGameState } = useGameStateManager()
 
         resetFeed()
@@ -46,7 +46,7 @@ class Scene implements IScene {
         }
         // if player is not holding torch and room is dark stop him from entering
         if (currentRoom.isDark && player.value.offHand?.id !== 'torch') {
-            newMessage('The room is completely dark. You need a lightsource to enter')
+            setNotification('The room is completely dark. You need a lightsource to enter')
             return
         }
 

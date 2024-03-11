@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { usePlayer } from '@/composables/usePlayer'
 import { useInventory } from '@/composables/useInventory'
 import { EItemCategory } from '@/enums/ItemCategory'
@@ -12,6 +12,8 @@ import InventoryItem from './InventoryItem.vue'
 const { player } = usePlayer()
 const { activeItemId, isOpen, toggleInventory, setactiveItemId, notifications } = useInventory()
 
+const encumbranceMax = computed(() => player.value.inventory.encumbrance.max)
+const encumbranceCurrent = computed(() => player.value.inventory.encumbrance.current)
 const getButtonType = (item: AllItemTypes) => {
     if (item.category === EItemCategory.Weapon) {
         return 'Wield'
@@ -91,6 +93,7 @@ const unequip = (item: AllItemTypes) => {
         <div class="o-inventory__content">
             <div class="o-inventory__goldWrapper">
                 <p>Gold: {{ player.inventory.gold }}</p>
+                <p>Encumbrance: {{ encumbranceCurrent }}/{{ encumbranceMax }}</p>
             </div>
             ---
             <hr />

@@ -22,7 +22,8 @@ class Item implements IItem {
         public isEquipped: boolean = false,
         public ownerId: string | undefined = undefined,
         public modifiers: ModifierItem[] = [],
-        public price: number = 0
+        public price: number = 0,
+        public encumbrance: number = 0
     ) {
         this.name = name
         this.description = description
@@ -87,9 +88,7 @@ class Weapon extends Item implements IWeapon {
         }
         const ownerHasRequiredSkills = () => {
             return this.requiredSkills.every((skillId) => {
-                console.log(!Object.values(owner.skills).find((skillReq) => skillReq.id === skillId))
                 if (!Object.values(owner.skills).find((skillReq) => skillReq.id === skillId)) {
-                    console.log('no skill')
                     setNotification(`Missing required skill - ${skillId}`)
                     return false
                 }
@@ -106,6 +105,7 @@ class Weapon extends Item implements IWeapon {
         }
         owner.weapon = this
         this.isEquipped = true
+        owner.inventory._calculateEncubrance()
 
         // assign PASSIVE modifier to owner after equipping
         this.modifiers.forEach((modifier) => {
@@ -122,6 +122,7 @@ class Weapon extends Item implements IWeapon {
     unequip(owner: PlayerModel | MonsterModel) {
         owner.weapon = null
         this.isEquipped = false
+        owner.inventory._calculateEncubrance()
         console.log(`unequiped ${this.name}`)
         owner.status.list.forEach((status) => {
             if (status.origin === this) {

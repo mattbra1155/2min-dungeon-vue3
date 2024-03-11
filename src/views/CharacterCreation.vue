@@ -112,6 +112,10 @@ const selectProfession = (profession: IProfessionPayload) => {
     return playerObject.value.profession
 }
 
+const setEncumbranceMax = () => {
+    playerObject.value.inventory.encumbrance.max = playerObject.value.stats.strength * 100
+}
+
 const createInventoryItems = () => {
     playerObject.value.inventory.inventory = []
     const itemList = []
@@ -199,7 +203,7 @@ const savePlayer = async () => {
                     <h2 class="o-characterGenerator__header">Stats</h2>
                     <button
                         type="button"
-                        @click="rollStats(), rollForGold(), createInventoryItems()"
+                        @click="rollStats(), rollForGold(), createInventoryItems(), setEncumbranceMax()"
                         id="generateStatsButton"
                         class="button action__button"
                     >
@@ -220,7 +224,8 @@ const savePlayer = async () => {
                 </div>
             </div>
             <div class="m-form__row o-characterGenerator__row">
-                <div class="m-form__column">GOLD: {{ playerObject.inventory.gold }}</div>
+                <div class="m-form__column">Gold: {{ playerObject.inventory.gold }}</div>
+                <div class="m-form__column">Encumbrance: {{ playerObject.inventory.encumbrance.max }} pts</div>
             </div>
             <div class="m-form__row o-characterGenerator__row">
                 <div class="m-form__column">
