@@ -8,6 +8,7 @@ import { useCharacterScreen } from '@/composables/useCharacterScreen'
 import { onMounted } from 'vue'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { EGameState } from '@/enums/EGameState'
+import KnapsackIcon from '../icons/KnapsackIcon.vue'
 
 const { activeGameState } = useGameStateManager()
 const { activeTurnState, checkIfDead, updateTurnStateMachine } = useTurn()
@@ -58,7 +59,7 @@ onMounted(() => {
             Attack
         </button>
         <button id="inventoryButton" type="button" class="a-button action__button" @click="toggleInventory">
-            Inventory
+            <KnapsackIcon />
         </button>
         <button
             v-if="activeGameState === EGameState.Battle"

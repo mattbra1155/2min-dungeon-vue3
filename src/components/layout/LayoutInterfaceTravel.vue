@@ -3,14 +3,13 @@ import { useInventory } from '@/composables/useInventory'
 import { useCharacterScreen } from '@/composables/useCharacterScreen'
 import { computed, onMounted } from 'vue'
 import { EDirections } from '@/enums/EDirections'
-import { Scene } from '@/assets/models/sceneModel'
 import { useSceneManager } from '@/composables/useSceneManager'
 import localtions from '@/assets/json/locations.json'
 import router from '@/router'
-import { RoomObject } from '@/assets/models/RoomObjectModel'
 import { useFeed } from '@/composables/useFeed'
-import { isRoomExit } from '@/assets/models/RoomModel'
-
+import AIcon from '@/components/AIcon.vue'
+import KnapsackIcon from '../icons/KnapsackIcon.vue'
+import CharacterScreenIcon from '../icons/CharacterScreenIcon.vue'
 const { activeRoomObject, setActiveRoomObject } = useFeed()
 const { activeScene, saveScene, sceneList, createScene, setScene } = useSceneManager()
 const { toggleInventory } = useInventory()
@@ -165,9 +164,11 @@ onMounted(() => {
         </div>
         <div class="o-interface__row">
             <button id="inventoryButton" type="button" class="a-button action__button" @click="toggleInventory">
-                Inventory
+                <AIcon :icon="KnapsackIcon" />
             </button>
-            <button class="a-button action__button" @click="toggleCharacterScreen">Character Screen</button>
+            <button class="a-button action__button" @click="toggleCharacterScreen">
+                <AIcon :icon="CharacterScreenIcon" />
+            </button>
         </div>
     </div>
 </template>
