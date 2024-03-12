@@ -26,7 +26,7 @@ export interface IWeapon extends IItem {
 }
 
 export interface IArmor extends IItem {
-    bodyPart: iBodyPart
+    bodyPart: string[]
     armorPoints: number
     traits: string[]
     material: string

@@ -155,209 +155,57 @@
         "item": [
             {
                 "type": "cap",
-                "bodyPart": [
-                    "head"
-                ],
+                "bodyPart": "head",
                 "modifiers": [],
-                "price": 6,
-                "encumbrance": 10,
-                "armorPoints": 1,
-                "material": "leather"
+                "price": 70
             },
             {
-                "type": "jacket",
-                "bodyPart": [
-                    "torso",
-                    "leftArm",
-                    "rightArm"
-                ],
+                "type": "right glove",
+                "bodyPart": "rightArm",
                 "modifiers": [],
-                "price": 17,
-                "encumbrance": 50,
-                "armorPoints": 1,
-                "material": "leather",
-                "availability": "common"
+                "price": 70
             },
             {
-                "type": "jerkin",
-                "bodyPart": [
-                    "torso"
-                ],
+                "type": "left glove",
+                "bodyPart": "leftArm",
                 "modifiers": [],
-                "price": 12,
-                "encumbrance": 40,
-                "armorPoints": 1,
-                "material": "leather",
-                "availability": "common"
+                "price": 70
             },
             {
-                "type": "shirt",
-                "bodyPart": [
-                    "torso"
-                ],
+                "type": "tunic",
+                "bodyPart": "torso",
                 "modifiers": [],
-                "price": 80,
-                "encumbrance": 60,
-                "armorPoints": 1,
-                "material": "chainmail",
-                "availability": "average"
+                "price": 70
             },
             {
-                "type": "coat",
-                "bodyPart": [
-                    "torso",
-                    "rightLeg",
-                    "leftLeg"
-                ],
+                "type": "basinet",
+                "bodyPart": "head",
                 "modifiers": [],
-                "price": 115,
-                "encumbrance": 80,
-                "armorPoints": 1,
-                "material": "chainmail",
-                "availability": "average"
+                "price": 70
             },
             {
-                "type": "sleeved shirt",
-                "bodyPart": [
-                    "torso",
-                    "leftArm",
-                    "rightArm"
-                ],
+                "type": "boot",
+                "bodyPart": "rightLeg",
                 "modifiers": [],
-                "price": 95,
-                "encumbrance": 80,
-                "armorPoints": 1,
-                "material": "chainmail",
-                "availability": "average"
+                "price": 70
             },
             {
-                "type": "sleeved coat",
-                "bodyPart": [
-                    "torso",
-                    "leftArm",
-                    "rightArm",
-                    "rightLeg",
-                    "leftLeg"
-                ],
+                "type": "boot",
+                "bodyPart": "leftLeg",
                 "modifiers": [],
-                "price": 130,
-                "encumbrance": 100,
-                "armorPoints": 1,
-                "material": "chainmail",
-                "availability": "average"
+                "price": 70
             },
             {
-                "type": "coif",
-                "bodyPart": [
-                    "head"
-                ],
+                "type": "helmet",
+                "bodyPart": "head",
                 "modifiers": [],
-                "price": 25,
-                "encumbrance": 30,
-                "armorPoints": 1,
-                "material": "chainmail",
-                "availability": "average"
-            },
-            {
-                "type": "leggings",
-                "bodyPart": [
-                    "rightLeg",
-                    "leftLeg"
-                ],
-                "modifiers": [],
-                "price": 55,
-                "encumbrance": 60,
-                "armorPoints": 1,
-                "material": "chainmail",
-                "availability": "scarce"
-            },
-            {
-                "type": "sleeves",
-                "bodyPart": [
-                    "leftArm",
-                    "rightArm"
-                ],
-                "modifiers": [],
-                "price": 20,
-                "encumbrance": 40,
-                "armorPoints": 1,
-                "material": "chainmail",
-                "availability": "rare"
+                "price": 70
             },
             {
                 "type": "breastplate",
-                "bodyPart": [
-                    "torso"
-                ],
+                "bodyPart": "torso",
                 "modifiers": [],
-                "price": 70,
-                "encumbrance": 75,
-                "armorPoints": 3,
-                "material": "plate",
-                "availability": "scarce"
-            },
-            {
-                "type": "cuisse and graves",
-                "bodyPart": [
-                    "rightLeg",
-                    "leftLeg"
-                ],
-                "modifiers": [],
-                "price": 70,
-                "encumbrance": 60,
-                "armorPoints": 1,
-                "material": "plate",
-                "availability": "scarce"
-            },
-            {
-                "type": "vambrace",
-                "bodyPart": [
-                    "leftArm",
-                    "rightArm"
-                ],
-                "modifiers": [],
-                "price": 60,
-                "encumbrance": 30,
-                "armorPoints": 1,
-                "material": "plate",
-                "availability": "scarce"
-            },
-            {
-                "type": "gauntlets",
-                "bodyPart": [
-                    "leftArm",
-                    "rightArm"
-                ],
-                "modifiers": [],
-                "price": 30,
-                "encumbrance": 10,
-                "armorPoints": 1,
-                "material": "plate",
-                "availability": "scarce"
-            },
-            {
-                "type": "knights helm",
-                "bodyPart": [
-                    "head"
-                ],
-                "modifiers": [],
-                "price": 30,
-                "encumbrance": 40,
-                "armorPoints": 2,
-                "material": "plate",
-                "availability": "scarce"
-            },
-            {
-                "type": "pot helmet",
-                "bodyPart": [
-                    "head"
-                ],
-                "modifiers": [],
-                "price": 2,
-                "encumbrance": 30,
-                "armorPoints": 1,
-                "material": "plate",
-                "availability": "common"
+                "price": 70
             }
         ],
         "prefix": [

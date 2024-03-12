@@ -14,7 +14,6 @@ import { IProfessionPayload } from '@/interfaces/IProfession'
 import { Profession } from '@/assets/models/professionModel'
 import { skills as skillList } from '@/assets/json/skills'
 import { ISkill } from '@/interfaces/ISkill'
-import { stats } from '@/assets/models/statsModel'
 
 const router = useRouter()
 const { initPlayer, createPlayer, resetPlayer } = usePlayer()
@@ -203,7 +202,7 @@ const savePlayer = async () => {
                     <h2 class="o-characterGenerator__header">Stats</h2>
                     <button
                         type="button"
-                        @click="rollStats(), rollForGold(), createInventoryItems(), setEncumbranceMax()"
+                        @click="rollStats(), rollForGold(), setEncumbranceMax(), createInventoryItems()"
                         id="generateStatsButton"
                         class="button action__button"
                     >
