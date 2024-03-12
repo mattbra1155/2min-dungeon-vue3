@@ -114,7 +114,7 @@ abstract class PersonModel implements IPerson {
 
         const savedBodyPart = getBodyPart()
 
-        const enemyArmorPoints = savedBodyPart?.armor.armorPoints
+        const enemyArmorPoints = savedBodyPart?.armor.item?.armorPoints
 
         // Calculate damage
         const damage = () => {

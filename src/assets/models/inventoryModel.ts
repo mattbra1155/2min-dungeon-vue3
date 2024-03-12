@@ -1,6 +1,7 @@
 import { IInventory } from '@/interfaces/IInventory'
 import { AllItemTypes } from '@/interfaces/IItem'
 import { Gold } from '@/assets/models/itemsModel'
+import { useSceneManager } from '@/composables/useSceneManager'
 
 class Inventory implements IInventory {
     constructor(
@@ -18,8 +19,6 @@ class Inventory implements IInventory {
 
     _calculateEncubrance(): number {
         return (this.encumbrance.current = this.inventory.reduce((acc, curr) => {
-            console.log(curr.isEquipped)
-
             return acc + (curr.isEquipped ? 0 : curr.encumbrance)
         }, 0))
     }

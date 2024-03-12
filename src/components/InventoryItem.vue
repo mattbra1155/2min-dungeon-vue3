@@ -14,6 +14,7 @@ const props = defineProps<{
 }>()
 
 const item = computed(() => player.value.inventory.inventory.find((inventoryItem) => inventoryItem.id === props.itemId))
+
 const getSkillNames = () =>
     (item.value as Weapon).requiredSkills.map((skill) => skills.find((rrr) => rrr.id === skill)?.name)
 </script>

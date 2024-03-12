@@ -137,7 +137,7 @@ class Armor extends Item implements IArmor {
         public id: string = '',
         public name: string = '',
         public description: string = '',
-        public bodyPart: iBodyPart = bodyPartsModel,
+        public bodyPart: string[] = [],
         public type: string = '',
         public material: string = '',
         public category: string = '',
@@ -164,24 +164,19 @@ class Armor extends Item implements IArmor {
             console.log('no item to equip')
             return
         }
-        // Find where the item should be worn
-        const itemSlot: EBodyParts | undefined = Object.values(EBodyParts).find((bodyPart) => {
-            if (bodyPart.replaceAll(' ', '').toLowerCase() === this.bodyPart.toString().toLowerCase()) {
-                return bodyPart
-            }
-        })
-        if (!itemSlot) {
-            console.log('item slot not found')
-            return
-        }
-        //unequip current item
-        owner.bodyParts[itemSlot].armor.item?.unequip(owner)
-        console.log(`unequipped ${this.name}`)
 
-        // equip the item
-        owner.bodyParts[itemSlot].armor.item = this
+        this.bodyPart.forEach((element) => {
+            //unequip currently equiped item item
+            if (owner.bodyParts[element as keyof iBodyPart].armor.item) {
+                owner.bodyParts[element as keyof iBodyPart].armor.item?.unequip(owner)
+                console.log(`unequipped ${this.name}`)
+            }
+            // equip the item
+            owner.bodyParts[element as keyof iBodyPart].armor.item = this
+            console.log(`equiped ${this.name} on ${element}`)
+        })
+
         this.isEquipped = true
-        console.log(`equiped ${this.name} on ${itemSlot}`)
 
         // assign modifier to owner after equipping
         this.modifiers.forEach((modifier) => {
