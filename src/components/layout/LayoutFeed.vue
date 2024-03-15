@@ -60,7 +60,6 @@ watch(
         setNotification(containers.value)
     }
 )
-console.log(containers.value)
 
 onMounted(() => {
     setNotification('There is a chest in the room.')
@@ -91,7 +90,8 @@ onMounted(() => {
                         <template v-if="activeRoomObject.items.length">
                             contains:
                             <p v-for="lootItem in activeRoomObject.items" :key="lootItem.id" class="a-text">
-                                {{ lootItem.name }} <button @click="getItem(activeRoomObject, lootItem)">take</button>
+                                {{ lootItem.name }}
+                                <button class="a-button" @click="getItem(activeRoomObject, lootItem)">take</button>
                             </p>
                         </template>
                         <p v-else>empty!</p>

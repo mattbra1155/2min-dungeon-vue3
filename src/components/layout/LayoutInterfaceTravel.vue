@@ -130,7 +130,7 @@ onMounted(() => {
                 </button>
             </template>
             <button v-if="activeRoomObject" class="a-button action__button" @click="setActiveRoomObject(null)">
-                Room description
+                Description
             </button>
             <button class="a-button action__button" v-if="!isSearched" @click="searchRoom">Search Room</button>
         </div>

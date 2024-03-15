@@ -22,21 +22,35 @@ class Inventory implements IInventory {
             return acc + (curr.isEquipped ? 0 : curr.encumbrance)
         }, 0))
     }
-    addItem(item: AllItemTypes | Gold, ownerId: string | undefined): boolean {
+    addItem(
+        item: AllItemTypes | Gold,
+        ownerId: string | undefined
+    ): {
+        status: boolean
+        message: string
+    } {
         if (item instanceof Gold) {
             this.gold += item.amount
-            console.log(`${item.amount} gold added`)
-            return true
+            return {
+                status: true,
+                message: `${item.amount} gold added`,
+            }
         }
         // check if encumbrance is equal or above max
         if (this.encumbrance.current + item.encumbrance > this.encumbrance.max) {
-            return false
+            return {
+                status: false,
+                message: 'Can`t add item - max encumbrance',
+            }
         }
 
         this.inventory.push(item)
         this._calculateEncubrance()
         item.ownerId = ownerId
-        return true
+        return {
+            status: true,
+            message: `${item.name} added`,
+        }
     }
     removeItem(itemId: string): void {
         if (!itemId) {

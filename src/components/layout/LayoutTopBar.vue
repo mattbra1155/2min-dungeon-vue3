@@ -19,29 +19,27 @@ const activeRoom = computed(() => activeScene.value?.currentRoom)
 </script>
 
 <template>
-    <div id="top-bar">
+    <div id="top-bar" class="o-header">
         <h2 v-if="activeScene" id="levelName" class="level__name">{{ activeScene.name }}</h2>
-        <p style="text-align: center">Room: {{ activeRoom?.name }}</p>
-        <template v-if="activeGameState === EGameState.Battle">
+        <p style="text-align: center">{{ activeRoom?.name }}</p>
+        <div v-if="activeGameState === EGameState.Battle">
             <p style="text-align: center">{{ activeTurnState }}</p>
             <p style="text-align: center">Turn: {{ turnNumber }}</p>
-        </template>
-        <div class="health__display">
-            <div class="player-hp">
-                <h2>{{ player?.name }}</h2>
-                <p id="playerHp" class="health--player">{{ player.currentStats.hp ? player.currentStats.hp : 0 }}</p>
-            </div>
+        </div>
+        <div class="o-header__healthWrapper">
             <template v-for="enemy in enemyList" :key="enemy.id">
                 <div
                     v-if="enemy.isAlive"
-                    class="monster-hp"
-                    :class="{ 'monster-hp--active': targetToAttack === enemy }"
+                    class="o-header__healthItem --enemy"
+                    :class="{ '--active': targetToAttack === enemy }"
                 >
-                    <h2 @click="setTargetToAttack(enemy)" id="monsterName">
+                    <h2 @click="setTargetToAttack(enemy)" class="o-header__name" id="monsterName">
                         {{ enemy.name ? enemy.name : 'placeholder enemy' }}
                     </h2>
                     <p id="monsterHp" class="health--monster">
-                        {{ enemy.currentStats.hp ? enemy.currentStats.hp : 0 }}
+                        <meter min="0" :max="enemy.stats.hp" low="30" :value="enemy.currentStats.hp">
+                            {{ enemy.currentStats.hp ? enemy.currentStats.hp : 0 }}
+                        </meter>
                     </p>
                 </div>
             </template>

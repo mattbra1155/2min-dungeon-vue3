@@ -9,7 +9,6 @@ const state: IInventoryState = reactive({
 
 export const useInventory = () => {
     const setactiveItemId = (itemId: string) => {
-        console.log(itemId)
         if (!itemId) {
             return
         }
@@ -20,8 +19,6 @@ export const useInventory = () => {
         }
     }
     const toggleInventory = () => {
-        console.log(state.isOpen)
-
         if (state.isOpen) {
             state.isOpen = false
             state.activeItemId = null

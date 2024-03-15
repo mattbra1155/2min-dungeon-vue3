@@ -103,23 +103,25 @@ const unequip = (item: AllItemTypes) => {
                 <ul class="o-inventory__list --noScroll">
                     <template v-for="item in player?.inventory.inventory" :key="item.id">
                         <li v-if="item && item.id && item.isEquipped" class="o-inventory__item --equipped">
-                            <p class="a-text" v-if="item instanceof Armor">
-                                {{
-                                    item.bodyPart
-                                        .toString()
-                                        .replace(/([A-Z])/g, ' $1')
-                                        .trim()
-                                        .toLowerCase()
-                                }}
-                            </p>
+                            <template v-if="item instanceof Armor">
+                                <div>
+                                    <p v-for="bodyPart in item.bodyPart" :key="bodyPart" class="a-text">
+                                        {{
+                                            bodyPart
+                                                .toString()
+                                                .replace(/([A-Z])/g, ' $1')
+                                                .trim()
+                                                .toLowerCase()
+                                        }}
+                                    </p>
+                                </div>
+                            </template>
                             <p class="a-text" v-if="item instanceof Weapon">weapon</p>
                             <p @click="setactiveItemId(item.id)">
                                 {{ item.name }}
                                 {{ getItemValue(item) }}
                             </p>
-                            <button class="a-button --primary o-inventory__actionButton" @click="unequip(item)">
-                                unequip
-                            </button>
+                            <button class="a-button o-inventory__actionButton" @click="unequip(item)">unequip</button>
                             <div class="o-inventory__details">
                                 modifiers:
                                 {{ getItemValue(item) }}
@@ -141,7 +143,7 @@ const unequip = (item: AllItemTypes) => {
                             {{ item.name }}
                             {{ getItemValue(item) }}
                         </p>
-                        <button class="a-button --primary" @click="submitAction(item)">
+                        <button class="a-button" @click="submitAction(item)">
                             {{ getButtonType(item) }}
                         </button>
                         <div class="o-inventory__details">

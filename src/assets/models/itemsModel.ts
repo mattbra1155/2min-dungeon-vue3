@@ -23,7 +23,8 @@ class Item implements IItem {
         public ownerId: string | undefined = undefined,
         public modifiers: ModifierItem[] = [],
         public price: number = 0,
-        public encumbrance: number = 0
+        public encumbrance: number = 0,
+        public icon: string | undefined = undefined
     ) {
         this.name = name
         this.description = description
@@ -34,6 +35,7 @@ class Item implements IItem {
         this.isEquipped = isEquipped
         this.ownerId = ownerId
         this.modifiers = modifiers
+        this.icon = icon
     }
 }
 
@@ -194,16 +196,11 @@ class Armor extends Item implements IArmor {
     }
 
     unequip(owner: PlayerModel | MonsterModel) {
-        const itemSlot: EBodyParts | undefined = Object.values(EBodyParts).find((bodyPart) => {
-            if (bodyPart === this.bodyPart.toString()) {
-                return bodyPart
-            }
+        this.bodyPart.forEach((element) => {
+            owner.bodyParts[element as keyof iBodyPart].armor.item = null
+            console.log(`unequiped ${this.name} on ${element}`)
         })
-        if (!itemSlot) {
-            console.log('item slot not found')
-            return
-        }
-        owner.bodyParts[itemSlot].armor.item = null
+
         this.isEquipped = false
     }
 }
