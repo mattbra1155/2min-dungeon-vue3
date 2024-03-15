@@ -19,6 +19,7 @@ export interface IPerson {
     isAlive: boolean
     modifiers: Modifiers
     skills: ISkill[]
+    image: string | null
     clearCurrentStats(): void
     attack(enemy: PlayerModel | MonsterModel): number | undefined
 }
