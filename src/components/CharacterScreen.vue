@@ -4,6 +4,8 @@ import { useCharacterScreen } from '@/composables/useCharacterScreen'
 import { usePlayer } from '@/composables/usePlayer'
 const { isOpen, toggleCharacterScreen } = useCharacterScreen()
 const { player } = usePlayer()
+import AIcon from './AIcon.vue'
+import { getItemIcon } from '@/helpers/getItemIcon'
 </script>
 
 <template>
@@ -12,16 +14,21 @@ const { player } = usePlayer()
             <h1 class="a-text">Character screen</h1>
             <button class="a-button --secondary" @click="toggleCharacterScreen">Close</button>
         </div>
-        <picture class="o-characterScreen__imageWrapper">
-            <source srcset="https://placehold.co/200x200" media="(max-width: 768px )" />
-            <img src="https://placehold.co/200x200" alt="" class="a-image m-inventoryItem__image" />
-        </picture>
+
         <div class="o-characterScreen__detailsWrapper">
-            <h2 class="a-text">{{ player.name }}</h2>
-            <p class="a-text" v-if="player.profession">Profession: {{ player.profession.name }}</p>
-            <p class="a-text">Race: {{ player.race }}</p>
-            <p class="a-text">Bio:</p>
-            <p class="a-text">{{ player.description }}</p>
+            <AIcon class="--fullWidth" :icon="getItemIcon('PlayerIcon')" />
+            <!-- <picture class="o-characterScreen__imageWrapper">
+                <source srcset="https://placehold.co/200x200" media="(max-width: 768px )" />
+                <img src="https://placehold.co/200x200" alt="" class="a-image m-inventoryItem__image" />
+            </picture> -->
+            <div>
+                <h2 class="a-text">{{ player.name }}</h2>
+                <p class="a-text" v-if="player.profession">Profession: {{ player.profession.name }}</p>
+                <p class="a-text">Race: {{ player.race }}</p>
+                <p class="a-text">Bio:</p>
+                <p v-if="player.description" class="a-text">{{ player.description }}</p>
+                <p v-else>unknown</p>
+            </div>
         </div>
         <div class="o-characterScreen__statsWrapper">
             <h2 class="a-text">Profession advancement:</h2>
