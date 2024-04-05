@@ -105,7 +105,11 @@ const unequip = (item: AllItemTypes) => {
                         <li v-if="item && item.id && item.isEquipped" class="o-inventory__item --equipped">
                             <template v-if="item instanceof Armor">
                                 <div>
-                                    <p v-for="bodyPart in item.bodyPart" :key="bodyPart" class="a-text">
+                                    <p
+                                        v-for="bodyPart in item.bodyPart"
+                                        :key="bodyPart"
+                                        class="a-text o-inventory__bodyPart"
+                                    >
                                         {{
                                             bodyPart
                                                 .toString()

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { skills } from '@/assets/json/skills'
 import { Armor, Weapon } from '@/assets/models/itemsModel'
 import AIcon from '@/components/AIcon.vue'
@@ -18,12 +18,28 @@ const item = computed(() => player.value.inventory.inventory.find((inventoryItem
 
 const getSkillNames = () =>
     (item.value as Weapon).requiredSkills.map((skill) => skills.find((rrr) => rrr.id === skill)?.name)
+
+const canvas = ref<any>()
+
+onMounted(() => {
+    const ctx = canvas.value.getContext('2d')
+    ctx.fillStyle = 'transparent'
+    ctx.fillRect(10, 10, 150, 100)
+    const img = new Image()
+    img.src = '/images/monochrome_32x32_transparent.png'
+    img.width = 16
+    img.height = 16
+    console.log(img)
+
+    ctx.drawImage(img, 0, 0)
+})
 </script>
 
 <template>
     <div v-if="item" class="m-inventoryItem">
         <AIcon :icon="getItemIcon(item)" />
         <div class="m-inventoryItem__details">
+            <canvas ref="canvas"></canvas>
             <h2 class="a-text m-inventoryItem__title m-inventoryItem__detailsItem --fullWidth">{{ item.name }}</h2>
             <p class="a-text m-inventoryItem__detailsItem --fullWidth">Type: {{ item.type }}</p>
             <p class="a-text m-inventoryItem__detailsItem --fullWidth" v-if="item instanceof Weapon">
@@ -32,7 +48,10 @@ const getSkillNames = () =>
             <p class="a-text m-inventoryItem__detailsItem --fullWidth" v-if="item.category === EItemCategory.Armor">
                 Material: {{ (item as Armor).material }}
             </p>
-            <p class="a-text m-inventoryItem__detailsItem --fullWidth" v-if="item.category === EItemCategory.Armor">
+            <p
+                class="a-text m-inventoryItem__detailsItem --fullWidth --slot"
+                v-if="item.category === EItemCategory.Armor"
+            >
                 Slot:
                 {{
                     (item as Armor).bodyPart

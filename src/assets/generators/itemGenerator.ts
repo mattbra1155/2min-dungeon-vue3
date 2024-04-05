@@ -44,9 +44,9 @@ class ItemGenerator {
 
     private createDescription(baseItem: AllItemTypes) {
         if (!this.quality) {
-            return `This is a ${baseItem.type}. Nothing out of the ordinary`
+            return `This is a ${baseItem instanceof Armor ? baseItem.material : ''} ${baseItem.type}. Nothing out of the ordinary`
         } else {
-            return `This is a ${baseItem.type}. It's ${this.quality.name}`
+            return `This is a ${baseItem instanceof Armor ? baseItem.material : ''} ${baseItem.type}. It's ${this.quality.name}`
         }
     }
 
