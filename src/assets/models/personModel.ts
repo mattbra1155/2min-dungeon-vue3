@@ -15,7 +15,6 @@ import { StatusAttackBonusDamage } from './statusItemModel'
 import { toRaw } from 'vue'
 import { EStats } from '@/enums/EStats'
 import { ISkill } from '@/interfaces/ISkill'
-
 abstract class PersonModel implements IPerson {
     constructor(
         public id: string = self.crypto.randomUUID(),
@@ -201,6 +200,10 @@ abstract class PersonModel implements IPerson {
 
         console.log(`${enemy.name} took ${finalDamage} damage`)
         enemy.currentStats.hp -= finalDamage
+
+        const audio = new Audio('sounds/07_human_atk_sword_1.wav')
+        audio.play()
+
         return finalDamage | 0
     }
     // } else {
