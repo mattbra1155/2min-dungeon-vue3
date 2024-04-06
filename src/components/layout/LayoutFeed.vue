@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { RoomObject } from '@/assets/models/RoomObjectModel'
-import { useFeed } from '@/composables/useFeed'
+import { useFeedStore } from '@/stores/useFeed'
 import { usePlayer } from '@/composables/usePlayer'
 import { useSceneManager } from '@/composables/useSceneManager'
 import { AllItemTypes } from '@/interfaces/IItem'
 import { computed, onMounted, ref, watch } from 'vue'
+
+const feedStore = useFeedStore()
 const { activeScene } = useSceneManager()
-const { activeRoomObject, feedList, setNotification } = useFeed()
 const { player } = usePlayer()
 const currentRoom = computed(() => activeScene.value?.currentRoom)
 const isSearched = computed(() => currentRoom.value?.isSearched)
@@ -28,7 +29,7 @@ const getItem = (container: RoomObject, item: AllItemTypes) => {
     container.items.splice(itemToRemoveIndex, 1)
     player.value.inventory.addItem(item, player.value.id)
     if (!container.items.length) {
-        setNotification(`You took everything from ${container.name}`)
+        feedStore.setNotification(`You took everything from ${container.name}`)
     }
 }
 
@@ -49,7 +50,7 @@ watch(
     () => isSearched.value,
     (isSearched) => {
         if (isSearched) {
-            setNotification(`You searched this room already.`)
+            feedStore.setNotification(`You searched this room already.`)
         }
     }
 )
@@ -57,51 +58,57 @@ watch(
 watch(
     () => containers.value,
     () => {
-        setNotification(containers.value)
+        feedStore.setNotification(containers.value)
     }
 )
 
 onMounted(() => {
-    setNotification('There is a chest in the room.')
+    feedStore.setNotification('There is a chest in the room.')
 })
 </script>
 
 <template>
     <div v-if="currentRoom" id="feed" class="o-feed">
         <ul id="feedContainer" class="o-feed__container">
-            <template v-if="activeRoomObject">
+            <template v-if="feedStore.activeRoomObject">
                 <div class="o-feed__item">
                     <img
                         class="a-image --contain o-feed__image"
-                        v-if="activeRoomObject.image && !activeRoomObject.isSearched"
-                        :src="activeRoomObject.image"
+                        v-if="feedStore.activeRoomObject.image && !feedStore.activeRoomObject.isSearched"
+                        :src="feedStore.activeRoomObject.image"
                         alt=""
                     />
                     <img
                         class="a-image --contain o-feed__image"
-                        v-else-if="activeRoomObject.imageSearched && activeRoomObject.isSearched"
-                        :src="activeRoomObject.imageSearched"
+                        v-else-if="feedStore.activeRoomObject.imageSearched && feedStore.activeRoomObject.isSearched"
+                        :src="feedStore.activeRoomObject.imageSearched"
                         alt=""
                     />
                     <p class="a-text">
-                        {{ activeRoomObject.isLocked ? `Locked ${activeRoomObject.name}` : activeRoomObject.name }}
+                        {{
+                            feedStore.activeRoomObject.isLocked
+                                ? `Locked ${feedStore.activeRoomObject.name}`
+                                : feedStore.activeRoomObject.name
+                        }}
                     </p>
-                    <template v-if="activeRoomObject.isSearched">
-                        <template v-if="activeRoomObject.items.length">
+                    <template v-if="feedStore.activeRoomObject.isSearched">
+                        <template v-if="feedStore.activeRoomObject.items.length">
                             contains:
-                            <p v-for="lootItem in activeRoomObject.items" :key="lootItem.id" class="a-text">
+                            <p v-for="lootItem in feedStore.activeRoomObject.items" :key="lootItem.id" class="a-text">
                                 {{ lootItem.name }}
-                                <button class="a-button" @click="getItem(activeRoomObject, lootItem)">take</button>
+                                <button class="a-button" @click="getItem(feedStore.activeRoomObject, lootItem)">
+                                    take
+                                </button>
                             </p>
                         </template>
                         <p v-else>empty!</p>
                     </template>
                     <button
-                        v-if="!activeRoomObject.isSearched"
-                        @click="openContainer(activeRoomObject)"
+                        v-if="!feedStore.activeRoomObject.isSearched"
+                        @click="openContainer(feedStore.activeRoomObject)"
                         class="a-button action__button"
                     >
-                        {{ activeRoomObject.isLocked ? 'Unlock' : 'Open' }}
+                        {{ feedStore.activeRoomObject.isLocked ? 'Unlock' : 'Open' }}
                     </button>
                     <transition name="slide">
                         <p v-if="containerMessage" class="test">{{ containerMessage }}</p>
@@ -112,7 +119,7 @@ onMounted(() => {
             <template v-else>
                 <img v-if="currentRoom.image" class="a-image" :src="currentRoom.image" alt="" />
                 <div v-html="currentRoom.description"></div>
-                <p v-for="feedItem in feedList" :key="feedItem">{{ feedItem }}</p>
+                <p v-for="feedItem in feedStore.feedList" :key="feedItem">{{ feedItem }}</p>
             </template>
         </ul>
     </div>
