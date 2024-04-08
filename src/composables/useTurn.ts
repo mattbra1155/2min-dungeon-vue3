@@ -6,6 +6,7 @@ import { EGameState } from '@/enums/EGameState'
 import { usePlayer } from '@/composables/usePlayer'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { useSceneManager } from './useSceneManager'
+import { playAudio } from '@/helpers/playAudio'
 
 const { updateGameState } = useGameStateManager()
 const { activeScene } = useSceneManager()
@@ -128,7 +129,7 @@ export const useTurn = () => {
         }
     }
 
-    const checkIfDead = () => {
+    const checkIfDead = async () => {
         const { player } = usePlayer()
         console.log('checking who is dead...')
         if (!state.turnOrder) {
@@ -139,11 +140,14 @@ export const useTurn = () => {
             if (enemy.currentStats.hp <= 0) {
                 console.log(`${enemy.name} is dead`)
                 enemy.isAlive = false
+                playAudio(['24_orc_death_spin'])
                 removeDeadFromOrder(enemy)
             }
         })
         if (player.value && player.value.currentStats.hp <= 0) {
             console.log('Player dead')
+            await playAudio(['14_human_death_spin'])
+            playAudio(['14_human_death_spin'])
             player.value.isAlive = false
             updateGameState(EGameState.PlayerDead)
             return

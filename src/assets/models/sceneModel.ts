@@ -10,7 +10,7 @@ import roomObjects from '@/assets/json/roomObjects.json'
 import { RoomObject } from './RoomObjectModel'
 import { ItemGenerator } from '@/assets/generators/itemGenerator'
 import { EItemCategory } from '@/enums/ItemCategory'
-import { useFeed } from '@/composables/useFeed'
+import { useFeedStore } from '@/stores/useFeed'
 import { usePlayer } from '@/composables/usePlayer'
 
 class Scene implements IScene {
@@ -34,10 +34,10 @@ class Scene implements IScene {
 
     changeCurrentRoom(roomId: string) {
         const { player } = usePlayer()
-        const { setActiveRoomObject, setNotification, resetFeed } = useFeed()
         const { updateGameState } = useGameStateManager()
+        const feedStore = useFeedStore()
 
-        resetFeed()
+        feedStore.resetFeed()
 
         const currentRoom = this.roomList.find((room) => room.id === roomId.toString())
         if (!currentRoom) {
@@ -46,11 +46,11 @@ class Scene implements IScene {
         }
         // if player is not holding torch and room is dark stop him from entering
         if (currentRoom.isDark && player.value.offHand?.id !== 'torch') {
-            setNotification('The room is completely dark. You need a lightsource to enter')
+            feedStore.setNotification('The room is completely dark. You need a lightsource to enter')
             return
         }
 
-        setActiveRoomObject(null)
+        feedStore.setActiveRoomObject(null)
         this.currentRoom = currentRoom
 
         // If Room is explored - monster defeated before - don't create another one

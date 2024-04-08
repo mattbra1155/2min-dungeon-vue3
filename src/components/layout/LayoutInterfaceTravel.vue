@@ -3,20 +3,19 @@ import { useInventory } from '@/composables/useInventory'
 import { useCharacterScreen } from '@/composables/useCharacterScreen'
 import { computed, onMounted } from 'vue'
 import { EDirections } from '@/enums/EDirections'
-import { Scene } from '@/assets/models/sceneModel'
 import { useSceneManager } from '@/composables/useSceneManager'
 import localtions from '@/assets/json/locations.json'
 import router from '@/router'
-import { RoomObject } from '@/assets/models/RoomObjectModel'
-import { useFeed } from '@/composables/useFeed'
-import { isRoomExit } from '@/assets/models/RoomModel'
-
-const { activeRoomObject, setActiveRoomObject } = useFeed()
+import { useFeedStore } from '@/stores/useFeed'
+import AIcon from '@/components/AIcon.vue'
+import KnapsackIcon from '../icons/KnapsackIcon.vue'
+import CharacterScreenIcon from '../icons/CharacterScreenIcon.vue'
 const { activeScene, saveScene, sceneList, createScene, setScene } = useSceneManager()
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
 const isSearched = computed(() => activeScene.value?.currentRoom?.isSearched)
 
+const feedStore = useFeedStore()
 const addKeybindings = () => {
     window.addEventListener('keydown', (event) => {
         if (event.key === 'i') {
@@ -123,15 +122,19 @@ onMounted(() => {
         <div class="o-interface__row o-interface__objectActions">
             <template v-for="roomObject in activeScene.currentRoom?.roomObjects" :key="roomObject.id">
                 <button
-                    v-if="activeRoomObject?.id !== roomObject.id"
+                    v-if="feedStore.activeRoomObject?.id !== roomObject.id"
                     class="a-button action__button"
-                    @click="setActiveRoomObject(roomObject)"
+                    @click="feedStore.setActiveRoomObject(roomObject)"
                 >
                     Search {{ roomObject.name }}
                 </button>
             </template>
-            <button v-if="activeRoomObject" class="a-button action__button" @click="setActiveRoomObject(null)">
-                Room description
+            <button
+                v-if="feedStore.activeRoomObject"
+                class="a-button action__button"
+                @click="feedStore.setActiveRoomObject(null)"
+            >
+                Description
             </button>
             <button class="a-button action__button" v-if="!isSearched" @click="searchRoom">Search Room</button>
         </div>
@@ -165,9 +168,11 @@ onMounted(() => {
         </div>
         <div class="o-interface__row">
             <button id="inventoryButton" type="button" class="a-button action__button" @click="toggleInventory">
-                Inventory
+                <AIcon :icon="KnapsackIcon" />
             </button>
-            <button class="a-button action__button" @click="toggleCharacterScreen">Character Screen</button>
+            <button class="a-button action__button" @click="toggleCharacterScreen">
+                <AIcon :icon="CharacterScreenIcon" />
+            </button>
         </div>
     </div>
 </template>

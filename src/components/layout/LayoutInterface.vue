@@ -8,6 +8,9 @@ import { useCharacterScreen } from '@/composables/useCharacterScreen'
 import { onMounted } from 'vue'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { EGameState } from '@/enums/EGameState'
+import AIcon from '@/components/AIcon.vue'
+import KnapsackIcon from '../icons/KnapsackIcon.vue'
+import CharacterScreenIcon from '../icons/CharacterScreenIcon.vue'
 
 const { activeGameState } = useGameStateManager()
 const { activeTurnState, checkIfDead, updateTurnStateMachine } = useTurn()
@@ -47,6 +50,13 @@ onMounted(() => {
 
 <template>
     <div class="o-interface">
+        <div class="o-header__healthItem --player">
+            <h2 class="o-header__name">{{ player?.name }}</h2>
+            <meter class="o-header__meter" min="0" :max="player.stats.hp" low="30" :value="player.currentStats.hp">
+                {{ player.currentStats.hp ? player.currentStats.hp : 0 }}
+            </meter>
+            <p id="playerHp"></p>
+        </div>
         <button
             id="attackButtonOne"
             type="button"
@@ -57,16 +67,13 @@ onMounted(() => {
         >
             Attack
         </button>
-        <button id="inventoryButton" type="button" class="a-button action__button" @click="toggleInventory">
-            Inventory
-        </button>
-        <button
-            v-if="activeGameState === EGameState.Battle"
-            :disabled="activeTurnState !== ETurnState.Init"
-            @click="updateTurnStateMachine(ETurnState.Init)"
-        >
-            start BATTLE
-        </button>
-        <button class="a-button action__button" @click="toggleCharacterScreen">Character Screen</button>
+        <div class="o-interface__row">
+            <button id="inventoryButton" type="button" class="a-button action__button" @click="toggleInventory">
+                <AIcon :icon="KnapsackIcon" />
+            </button>
+            <button class="a-button action__button" @click="toggleCharacterScreen">
+                <AIcon :icon="CharacterScreenIcon" />
+            </button>
+        </div>
     </div>
 </template>

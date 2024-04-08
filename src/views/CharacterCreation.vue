@@ -149,7 +149,7 @@ const savePlayer = async () => {
             <div class="m-form__row o-characterGenerator__row">
                 <div class="m-form__column">
                     <label for="playerName" class="header">Name</label>
-                    <input type="text" name="playerName" v-model="playerObject.name" />
+                    <input type="text" name="playerName" class="a-input" v-model="playerObject.name" />
                 </div>
             </div>
             <div class="m-form__row o-characterGenerator__row">
@@ -192,6 +192,7 @@ const savePlayer = async () => {
                         type="text"
                         name="bio"
                         id="characterBio"
+                        class="a-input a-input__textarea"
                         rows="5"
                         v-model="playerObject.description"
                     ></textarea>
@@ -204,7 +205,7 @@ const savePlayer = async () => {
                         type="button"
                         @click="rollStats(), rollForGold(), setEncumbranceMax(), createInventoryItems()"
                         id="generateStatsButton"
-                        class="button action__button"
+                        class="a-button action__button"
                     >
                         Roll dice
                     </button>
@@ -294,7 +295,7 @@ const savePlayer = async () => {
 
             <div class="m-form__row o-characterGenerator__row">
                 <div class="m-form__column">
-                    <button type="submit" id="createPlayerButton" class="button action__button">Create</button>
+                    <button type="submit" id="createPlayerButton" class="a-button action__button">Create</button>
                 </div>
             </div>
         </form>

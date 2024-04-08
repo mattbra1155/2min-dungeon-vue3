@@ -15,6 +15,7 @@ export interface IItem {
     ownerId: string | undefined
     modifiers: ModifierItem[]
     price: number
+    icon: string | undefined
 }
 
 export interface IWeapon extends IItem {

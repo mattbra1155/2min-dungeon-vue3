@@ -43,14 +43,12 @@ init()
 </script>
 
 <template>
-    <div id="app">
-        <nav class="nav">
-            <router-link to="/">Main</router-link>
-            <router-link to="/character-creation/">Create</router-link>
-        </nav>
+    <nav class="nav">
+        <router-link to="/">Main</router-link>
+        <router-link to="/character-creation/">Create</router-link>
+    </nav>
 
-        <router-view class="o-page" />
-        <inventory-panel />
-        <character-screen />
-    </div>
+    <router-view class="o-page" />
+    <inventory-panel />
+    <character-screen />
 </template>

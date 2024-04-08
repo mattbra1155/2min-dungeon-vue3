@@ -12,7 +12,8 @@
                 "isTwoHanded": false,
                 "price": 14,
                 "requiredSkills": [],
-                "encumbrance": 60
+                "encumbrance": 60,
+                "icon": "SwordIcon"
             },
             {
                 "type": "axe",
@@ -25,7 +26,8 @@
                 "isTwoHanded": false,
                 "price": 6,
                 "requiredSkills": [],
-                "encumbrance": 50
+                "encumbrance": 50,
+                "icon": ""
             },
             {
                 "type": "two handed sword",
@@ -40,7 +42,8 @@
                 "requiredSkills": [
                     "specialist_weapon_two_handed"
                 ],
-                "encumbrance": 250
+                "encumbrance": 250,
+                "icon": ""
             },
             {
                 "type": "two handed axe",
@@ -56,7 +59,8 @@
                     "specialist_weapon_two_handed",
                     "follow_trail"
                 ],
-                "encumbrance": 75
+                "encumbrance": 75,
+                "icon": ""
             },
             {
                 "type": "dagger",
@@ -67,7 +71,8 @@
                 "isTwoHanded": false,
                 "price": 2,
                 "requiredSkills": [],
-                "encumbrance": 10
+                "encumbrance": 10,
+                "icon": ""
             },
             {
                 "type": "spear",
@@ -78,7 +83,8 @@
                 "isTwoHanded": false,
                 "price": 6,
                 "requiredSkills": [],
-                "encumbrance": 50
+                "encumbrance": 50,
+                "icon": "SpearIcon"
             },
             {
                 "type": "staff",
@@ -92,7 +98,8 @@
                 "requiredSkills": [
                     "specialist_weapon_two_handed"
                 ],
-                "encumbrance": 50
+                "encumbrance": 50,
+                "icon": ""
             }
         ],
         "quality": [
@@ -161,6 +168,7 @@
                 "modifiers": [],
                 "price": 6,
                 "encumbrance": 10,
+                "icon": "",
                 "armorPoints": 1,
                 "material": "leather"
             },
@@ -174,6 +182,7 @@
                 "modifiers": [],
                 "price": 17,
                 "encumbrance": 50,
+                "icon": "",
                 "armorPoints": 1,
                 "material": "leather",
                 "availability": "common"
@@ -186,6 +195,7 @@
                 "modifiers": [],
                 "price": 12,
                 "encumbrance": 40,
+                "icon": "",
                 "armorPoints": 1,
                 "material": "leather",
                 "availability": "common"
@@ -198,6 +208,7 @@
                 "modifiers": [],
                 "price": 80,
                 "encumbrance": 60,
+                "icon": "",
                 "armorPoints": 1,
                 "material": "chainmail",
                 "availability": "average"
@@ -212,6 +223,7 @@
                 "modifiers": [],
                 "price": 115,
                 "encumbrance": 80,
+                "icon": "",
                 "armorPoints": 1,
                 "material": "chainmail",
                 "availability": "average"
@@ -226,6 +238,7 @@
                 "modifiers": [],
                 "price": 95,
                 "encumbrance": 80,
+                "icon": "",
                 "armorPoints": 1,
                 "material": "chainmail",
                 "availability": "average"
@@ -242,6 +255,7 @@
                 "modifiers": [],
                 "price": 130,
                 "encumbrance": 100,
+                "icon": "",
                 "armorPoints": 1,
                 "material": "chainmail",
                 "availability": "average"
@@ -254,6 +268,7 @@
                 "modifiers": [],
                 "price": 25,
                 "encumbrance": 30,
+                "icon": "",
                 "armorPoints": 1,
                 "material": "chainmail",
                 "availability": "average"
@@ -267,6 +282,7 @@
                 "modifiers": [],
                 "price": 55,
                 "encumbrance": 60,
+                "icon": "",
                 "armorPoints": 1,
                 "material": "chainmail",
                 "availability": "scarce"
@@ -280,6 +296,7 @@
                 "modifiers": [],
                 "price": 20,
                 "encumbrance": 40,
+                "icon": "",
                 "armorPoints": 1,
                 "material": "chainmail",
                 "availability": "rare"
@@ -292,6 +309,7 @@
                 "modifiers": [],
                 "price": 70,
                 "encumbrance": 75,
+                "icon": "",
                 "armorPoints": 3,
                 "material": "plate",
                 "availability": "scarce"
@@ -305,6 +323,7 @@
                 "modifiers": [],
                 "price": 70,
                 "encumbrance": 60,
+                "icon": "",
                 "armorPoints": 1,
                 "material": "plate",
                 "availability": "scarce"
@@ -318,6 +337,7 @@
                 "modifiers": [],
                 "price": 60,
                 "encumbrance": 30,
+                "icon": "",
                 "armorPoints": 1,
                 "material": "plate",
                 "availability": "scarce"
@@ -331,6 +351,7 @@
                 "modifiers": [],
                 "price": 30,
                 "encumbrance": 10,
+                "icon": "",
                 "armorPoints": 1,
                 "material": "plate",
                 "availability": "scarce"
@@ -343,6 +364,7 @@
                 "modifiers": [],
                 "price": 30,
                 "encumbrance": 40,
+                "icon": "",
                 "armorPoints": 2,
                 "material": "plate",
                 "availability": "scarce"
@@ -355,6 +377,7 @@
                 "modifiers": [],
                 "price": 2,
                 "encumbrance": 30,
+                "icon": "",
                 "armorPoints": 1,
                 "material": "plate",
                 "availability": "common"
@@ -378,19 +401,22 @@
             {
                 "name": "low quality",
                 "modifiers": {
-                    "encumbrance": 50
+                    "encumbrance": 50,
+                    "icon": ""
                 }
             },
             {
                 "name": "good quality",
                 "modifiers": {
-                    "encumbrance": -10
+                    "encumbrance": -10,
+                    "icon": ""
                 }
             },
             {
                 "name": "best quality",
                 "modifiers": {
-                    "encumbrance": -50
+                    "encumbrance": -50,
+                    "icon": ""
                 }
             }
         ]
@@ -433,7 +459,8 @@
                 "type": "illumination",
                 "price": 0.1,
                 "modifiers": [],
-                "encumbrance": 5
+                "encumbrance": 5,
+                "icon": ""
             },
             {
                 "name": "lantern",
@@ -441,7 +468,8 @@
                 "type": "illumination",
                 "price": 0.1,
                 "modifiers": [],
-                "encumbrance": 20
+                "encumbrance": 20,
+                "icon": ""
             },
             {
                 "name": "tinderbox",
@@ -449,7 +477,8 @@
                 "type": "household",
                 "price": 0.3,
                 "modifiers": [],
-                "encumbrance": 5
+                "encumbrance": 5,
+                "icon": ""
             },
             {
                 "name": "lockpick",
@@ -457,7 +486,8 @@
                 "type": "tools",
                 "price": 10,
                 "modifiers": [],
-                "encumbrance": 20
+                "encumbrance": 20,
+                "icon": ""
             }
         ],
         "quality": [
