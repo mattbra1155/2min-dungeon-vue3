@@ -46,7 +46,7 @@ class Scene implements IScene {
         }
         // if player is not holding torch and room is dark stop him from entering
         if (currentRoom.isDark && player.value.offHand?.id !== 'torch') {
-            feedStore.setNotification('The room is completely dark. You need a lightsource to enter')
+            feedStore.setTravelFeedItem('The room is completely dark. You need a lightsource to enter')
             return
         }
 

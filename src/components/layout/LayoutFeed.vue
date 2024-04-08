@@ -29,7 +29,7 @@ const getItem = (container: RoomObject, item: AllItemTypes) => {
     container.items.splice(itemToRemoveIndex, 1)
     player.value.inventory.addItem(item, player.value.id)
     if (!container.items.length) {
-        feedStore.setNotification(`You took everything from ${container.name}`)
+        feedStore.setTravelFeedItem(`You took everything from ${container.name}`)
     }
 }
 
@@ -50,7 +50,7 @@ watch(
     () => isSearched.value,
     (isSearched) => {
         if (isSearched) {
-            feedStore.setNotification(`You searched this room already.`)
+            feedStore.setTravelFeedItem(`You searched this room already.`)
         }
     }
 )
@@ -58,12 +58,12 @@ watch(
 watch(
     () => containers.value,
     () => {
-        feedStore.setNotification(containers.value)
+        feedStore.setTravelFeedItem(containers.value)
     }
 )
 
 onMounted(() => {
-    feedStore.setNotification('There is a chest in the room.')
+    feedStore.setTravelFeedItem('There is a chest in the room.')
 })
 </script>
 
@@ -96,7 +96,7 @@ onMounted(() => {
                             contains:
                             <p v-for="lootItem in feedStore.activeRoomObject.items" :key="lootItem.id" class="a-text">
                                 {{ lootItem.name }}
-                                <button class="a-button" @click="getItem(feedStore.activeRoomObject, lootItem)">
+                                <button class="a-button" @click="getItem(feedStore.activeRoomObject!, lootItem)">
                                     take
                                 </button>
                             </p>
@@ -105,7 +105,7 @@ onMounted(() => {
                     </template>
                     <button
                         v-if="!feedStore.activeRoomObject.isSearched"
-                        @click="openContainer(feedStore.activeRoomObject)"
+                        @click="openContainer(feedStore.activeRoomObject!)"
                         class="a-button action__button"
                     >
                         {{ feedStore.activeRoomObject.isLocked ? 'Unlock' : 'Open' }}
@@ -119,7 +119,7 @@ onMounted(() => {
             <template v-else>
                 <img v-if="currentRoom.image" class="a-image" :src="currentRoom.image" alt="" />
                 <div v-html="currentRoom.description"></div>
-                <p v-for="feedItem in feedStore.feedList" :key="feedItem">{{ feedItem }}</p>
+                <p v-for="feedItem in feedStore.feedTravelList" :key="feedItem">{{ feedItem }}</p>
             </template>
         </ul>
     </div>

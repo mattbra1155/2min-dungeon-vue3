@@ -26,7 +26,7 @@ export const useInventory = () => {
             state.isOpen = true
         }
     }
-    const setNotification = (text: string) => {
+    const setTravelFeedItem = (text: string) => {
         state.notifications.unshift(text)
         setTimeout(() => {
             state.notifications.shift()
@@ -36,6 +36,6 @@ export const useInventory = () => {
         ...toRefs(state),
         toggleInventory,
         setactiveItemId,
-        setNotification,
+        setTravelFeedItem,
     }
 }
