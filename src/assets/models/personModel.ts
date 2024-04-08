@@ -15,6 +15,7 @@ import { StatusAttackBonusDamage } from './statusItemModel'
 import { toRaw } from 'vue'
 import { EStats } from '@/enums/EStats'
 import { ISkill } from '@/interfaces/ISkill'
+import { playAudio } from '@/helpers/playAudio'
 abstract class PersonModel implements IPerson {
     constructor(
         public id: string = self.crypto.randomUUID(),
@@ -84,6 +85,7 @@ abstract class PersonModel implements IPerson {
         // check if attack hits
         if (diceRollHitResult > attackStats.melee) {
             console.log(`${this.name} missed`)
+            playAudio(['27_sword_miss_1', '27_sword_miss_2', '27_sword_miss_3'])
             return
         }
 
@@ -201,9 +203,7 @@ abstract class PersonModel implements IPerson {
         console.log(`${enemy.name} took ${finalDamage} damage`)
         enemy.currentStats.hp -= finalDamage
 
-        const audio = new Audio('sounds/07_human_atk_sword_1.wav')
-        audio.play()
-
+        playAudio(['26_sword_hit_1', '26_sword_hit_2', '26_sword_hit_3'])
         return finalDamage | 0
     }
     // } else {
