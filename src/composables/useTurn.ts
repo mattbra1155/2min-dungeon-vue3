@@ -129,7 +129,7 @@ export const useTurn = () => {
         }
     }
 
-    const checkIfDead = () => {
+    const checkIfDead = async () => {
         const { player } = usePlayer()
         console.log('checking who is dead...')
         if (!state.turnOrder) {
@@ -146,6 +146,7 @@ export const useTurn = () => {
         })
         if (player.value && player.value.currentStats.hp <= 0) {
             console.log('Player dead')
+            await playAudio(['14_human_death_spin'])
             playAudio(['14_human_death_spin'])
             player.value.isAlive = false
             updateGameState(EGameState.PlayerDead)
