@@ -9,7 +9,9 @@ const { activeGameState } = useGameStateManager()
 </script>
 
 <template>
-    <FeedBattle v-if="activeGameState === EGameState.Battle" />
-    <FeedLoot v-else-if="activeGameState === EGameState.Loot" />
-    <FeedTravel v-else />
+    <div class="o-feed">
+        <FeedBattle v-if="activeGameState === EGameState.Battle" />
+        <FeedLoot v-else-if="activeGameState === EGameState.Loot" />
+        <FeedTravel v-else />
+    </div>
 </template>

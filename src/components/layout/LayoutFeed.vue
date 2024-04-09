@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<!-- <script setup lang="ts">
 import { RoomObject } from '@/assets/models/RoomObjectModel'
 import { useFeedStore } from '@/stores/useFeed'
 import { usePlayer } from '@/composables/usePlayer'
@@ -123,4 +123,4 @@ onMounted(() => {
             </template>
         </ul>
     </div>
-</template>
+</template> -->

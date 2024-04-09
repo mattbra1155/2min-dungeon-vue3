@@ -1,21 +1,18 @@
 <script setup lang="ts">
 import { useSceneManager } from '@/composables/useSceneManager'
 import { useFeedStore } from '@/stores/useFeed'
+import { computed } from 'vue'
 const { activeScene } = useSceneManager()
 const feedStore = useFeedStore()
 
-console.log(activeScene.value?.entityList)
+const monsterList = computed(() => activeScene.value?.currentRoom?.monsterList.map((monster) => monster.name))
 
-const monsterList = () => {
-    return activeScene.value?.currentRoom?.monsterList.map((monster) => monster.name)
-}
-
-feedStore.setBattleFeedItem(`You see ${monsterList()}`)
+feedStore.setBattleFeedItem(`You are being attacked by ${monsterList.value?.length} enemies: ${monsterList.value}`)
 </script>
 
 <template>
-    <div class="feed__list">
-        <div class="feed__item" v-for="feedItem in feedStore.feedBattleList" :key="feedItem">
+    <div class="o-feed__container">
+        <div class="o-feed__item" v-for="feedItem in feedStore.feedBattleList" :key="feedItem">
             {{ feedItem.replace(',', ', ') }}
         </div>
     </div>

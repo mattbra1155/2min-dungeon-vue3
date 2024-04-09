@@ -7,10 +7,10 @@ import { usePlayer } from '@/composables/usePlayer'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { useSceneManager } from './useSceneManager'
 import { playAudio } from '@/helpers/playAudio'
+import { useFeedStore } from '@/stores/useFeed'
 
 const { updateGameState } = useGameStateManager()
 const { activeScene } = useSceneManager()
-
 interface ITurn {
     turnNumber: number
     turnOrder: Array<PlayerModel | MonsterModel> | undefined
@@ -93,24 +93,29 @@ export const useTurn = () => {
                         updateGameState(EGameState.LevelCleared)
                         return
                     }
-                    state.turnOrder.forEach((enemy) => {
-                        if (!player.value.isAlive) {
-                            console.log('Player is dead')
-                            return
-                        }
-                        if (!enemy.isAlive) {
-                            console.log(`${enemy.name}`)
-                            return
-                        }
-                        enemy.status.updateStatusList(enemy, state.turnNumber)
-                        state.activeCharacter = enemy
-                        console.log(`${enemy.name} attacks`)
-                        state.activeCharacter.attack(player.value)
-                        checkIfDead()
+                    state.turnOrder?.forEach((enemy, index) => {
+                        setTimeout(() => {
+                            if (!player.value.isAlive) {
+                                console.log('Player is dead')
+                                return
+                            }
+                            if (!enemy.isAlive) {
+                                console.log(`${enemy.name}`)
+                                return
+                            }
+                            enemy.status.updateStatusList(enemy, state.turnNumber)
+                            state.activeCharacter = enemy
+                            console.log(`${enemy.name} attacks`)
+                            state.activeCharacter.attack(player.value)
+                            checkIfDead()
+                        }, 2000 * (index + 1))
                     })
+
                     updateTurnStateMachine(ETurnState.EndTurn)
                 }
+
                 enemyAttack()
+
                 break
             }
             case ETurnState.CalculateDamage:
@@ -131,6 +136,8 @@ export const useTurn = () => {
 
     const checkIfDead = async () => {
         const { player } = usePlayer()
+        const feedStore = useFeedStore()
+
         console.log('checking who is dead...')
         if (!state.turnOrder) {
             console.error('no turn order')
@@ -138,6 +145,7 @@ export const useTurn = () => {
         }
         state.turnOrder.forEach((enemy) => {
             if (enemy.currentStats.hp <= 0) {
+                feedStore.setBattleFeedItem(`${enemy.name} is dead`)
                 console.log(`${enemy.name} is dead`)
                 enemy.isAlive = false
                 playAudio(['24_orc_death_spin'])
@@ -146,6 +154,7 @@ export const useTurn = () => {
         })
         if (player.value && player.value.currentStats.hp <= 0) {
             console.log('Player dead')
+            feedStore.setBattleFeedItem(`${player.value.name} is dead`)
             await playAudio(['14_human_death_spin'])
             playAudio(['14_human_death_spin'])
             player.value.isAlive = false
