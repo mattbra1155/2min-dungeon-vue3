@@ -8,6 +8,7 @@ import { useGameStateManager } from '@/composables/useGameStateManager'
 import { useSceneManager } from './useSceneManager'
 import { playAudio } from '@/helpers/playAudio'
 import { useFeedStore } from '@/stores/useFeed'
+import { useGlobalStore } from '@/stores/useGlobal'
 
 const { updateGameState } = useGameStateManager()
 const { activeScene } = useSceneManager()
@@ -34,6 +35,7 @@ export const useTurn = () => {
 
     const updateTurnStateMachine = (newTurnState: ETurnState) => {
         const { player } = usePlayer()
+        const globalStore = useGlobalStore()
 
         const monsterList = activeScene.value?.currentRoom?.monsterList
 
@@ -82,6 +84,7 @@ export const useTurn = () => {
                 break
             case ETurnState.EnemyAttack: {
                 console.log('TURN STATE:', ETurnState.EnemyAttack)
+
                 const enemyAttack = () => {
                     if (!state.turnOrder) {
                         console.error('no turn order!')
@@ -93,7 +96,9 @@ export const useTurn = () => {
                         updateGameState(EGameState.LevelCleared)
                         return
                     }
+
                     state.turnOrder?.forEach((enemy, index) => {
+                        globalStore.isAttacking = true
                         setTimeout(() => {
                             if (!player.value.isAlive) {
                                 console.log('Player is dead')
@@ -103,18 +108,20 @@ export const useTurn = () => {
                                 console.log(`${enemy.name}`)
                                 return
                             }
+
                             enemy.status.updateStatusList(enemy, state.turnNumber)
                             state.activeCharacter = enemy
                             console.log(`${enemy.name} attacks`)
                             state.activeCharacter.attack(player.value)
                             checkIfDead()
-                        }, 2000 * (index + 1))
+                            globalStore.isAttacking = false
+                        }, 1000 * (index + 1))
                     })
-
                     updateTurnStateMachine(ETurnState.EndTurn)
                 }
 
                 enemyAttack()
+                console.log(globalStore.isAttacking)
 
                 break
             }

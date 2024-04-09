@@ -7,9 +7,11 @@ import { useSceneManager } from '@/composables/useSceneManager'
 import { ETurnState } from '@/enums/ETurnState'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { EGameState } from '@/enums/EGameState'
+import { useFeedStore } from '@/stores/useFeed'
 
 const { deadPlayer } = usePlayer()
 const router = useRouter()
+const feedStore = useFeedStore()
 const { activeCharacter, resetTurn } = useTurn()
 const { resetScene, resetSceneList } = useSceneManager()
 const { updateGameState } = useGameStateManager()
@@ -19,6 +21,7 @@ const init = () => {
     updateGameState(EGameState.PlayerDead)
     resetScene()
     resetSceneList()
+    feedStore.resetBattleFeed()
 }
 
 const closeView = () => {
