@@ -5,9 +5,11 @@ import { computed, nextTick, ref, watch } from 'vue'
 const { activeScene } = useSceneManager()
 const feedStore = useFeedStore()
 
-const monsterList = computed(() => activeScene.value?.currentRoom?.monsterList.map((monster) => monster.name))
+const monsterList = computed(() => activeScene.value?.currentRoom?.monsterList.map((monster) => monster.name) || [])
 
-feedStore.setBattleFeedItem(`You are being attacked by enemies: ${monsterList.value}`)
+feedStore.setBattleFeedItem(
+    `You are being attacked by ${monsterList.value.length > 1 ? 'enemies' : 'enemy'}: ${monsterList.value}`
+)
 
 const feedList = ref<HTMLElement>()
 watch(
@@ -25,8 +27,8 @@ watch(
 
 <template>
     <div class="o-feed__container" ref="feedList">
-        <div class="o-feed__item" v-for="feedItem in feedStore.feedBattleList" :key="feedItem">
+        <p class="o-feed__item" v-for="feedItem in feedStore.feedBattleList" :key="feedItem">
             {{ feedItem.replace(',', ', ') }}
-        </div>
+        </p>
     </div>
 </template>
