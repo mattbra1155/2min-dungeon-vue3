@@ -7,7 +7,7 @@ const feedStore = useFeedStore()
 
 const monsterList = computed(() => activeScene.value?.currentRoom?.monsterList.map((monster) => monster.name))
 
-feedStore.setBattleFeedItem(`You are being attacked by ${monsterList.value?.length} enemies: ${monsterList.value}`)
+feedStore.setBattleFeedItem(`You are being attacked by enemies: ${monsterList.value}`)
 
 const feedList = ref<HTMLElement>()
 watch(
