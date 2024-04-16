@@ -16,6 +16,7 @@ import { toRaw } from 'vue'
 import { EStats } from '@/enums/EStats'
 import { ISkill } from '@/interfaces/ISkill'
 import { playAudio } from '@/helpers/playAudio'
+import { useFeedStore } from '@/stores/useFeed'
 abstract class PersonModel implements IPerson {
     constructor(
         public id: string = self.crypto.randomUUID(),
@@ -62,8 +63,11 @@ abstract class PersonModel implements IPerson {
         }
     }
     attack(enemy: MonsterModel | PlayerModel) {
+        const feedStore = useFeedStore()
+        feedStore.setBattleFeedItem(`${this.name} attacks!`)
         // dice roll
         const diceRollHitResult = diceRollK100()
+        feedStore.setBattleFeedItem(`Dice roll: ${diceRollHitResult}`)
         console.log(`Dice roll: ${diceRollHitResult}`)
 
         // set temp character stats for attack
@@ -84,6 +88,7 @@ abstract class PersonModel implements IPerson {
 
         // check if attack hits
         if (diceRollHitResult > attackStats.melee) {
+            feedStore.setBattleFeedItem(`${this.name} missed`)
             console.log(`${this.name} missed`)
             playAudio(['27_sword_miss_1', '27_sword_miss_2', '27_sword_miss_3'])
             return
@@ -114,9 +119,9 @@ abstract class PersonModel implements IPerson {
             }
         }
 
-        const savedBodyPart = getBodyPart()
-
-        const enemyArmorPoints = savedBodyPart?.armor.item?.armorPoints
+        const hitBodyPart = getBodyPart()
+        feedStore.setBattleFeedItem(`${this.name} hit ${enemy.name} in the ${hitBodyPart?.name}`)
+        const enemyArmorPoints = hitBodyPart?.armor.item?.armorPoints
 
         // Calculate damage
         const damage = () => {

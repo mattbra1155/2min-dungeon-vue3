@@ -37,7 +37,7 @@ class Scene implements IScene {
         const { updateGameState } = useGameStateManager()
         const feedStore = useFeedStore()
 
-        feedStore.resetFeed()
+        feedStore.resetTravelFeed()
 
         const currentRoom = this.roomList.find((room) => room.id === roomId.toString())
         if (!currentRoom) {
@@ -46,7 +46,7 @@ class Scene implements IScene {
         }
         // if player is not holding torch and room is dark stop him from entering
         if (currentRoom.isDark && player.value.offHand?.id !== 'torch') {
-            feedStore.setNotification('The room is completely dark. You need a lightsource to enter')
+            feedStore.setTravelFeedItem('The room is completely dark. You need a lightsource to enter')
             return
         }
 

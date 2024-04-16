@@ -5,13 +5,15 @@ import { ETurnState } from '@/enums/ETurnState'
 import { usePlayer } from '@/composables/usePlayer'
 import { useInventory } from '@/composables/useInventory'
 import { useCharacterScreen } from '@/composables/useCharacterScreen'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { EGameState } from '@/enums/EGameState'
 import AIcon from '@/components/AIcon.vue'
 import KnapsackIcon from '../icons/KnapsackIcon.vue'
 import CharacterScreenIcon from '../icons/CharacterScreenIcon.vue'
+import { useGlobalStore } from '@/stores/useGlobal'
 
+const globalStore = useGlobalStore()
 const { activeGameState } = useGameStateManager()
 const { activeTurnState, checkIfDead, updateTurnStateMachine } = useTurn()
 const { targetToAttack } = useAttack()
@@ -20,7 +22,9 @@ const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
 
 const playerAttack = () => {
-    if (targetToAttack.value) {
+    console.log(globalStore.isAttacking)
+
+    if (targetToAttack.value && !globalStore.isAttacking) {
         player.value.attack(targetToAttack.value)
         checkIfDead()
         updateTurnStateMachine(ETurnState.EnemyAttack)
@@ -61,9 +65,9 @@ onMounted(() => {
             id="attackButtonOne"
             type="button"
             class="a-button action__button"
+            :class="{ '--disabled': globalStore.isAttacking }"
             @click="playerAttack"
-            :disbaled="activeTurnState !== ETurnState.PlayerAttack"
-            :disabled="!player.isAlive"
+            :disbaled="activeTurnState !== ETurnState.PlayerAttack || globalStore.isAttacking || !player.isAlive"
         >
             Attack
         </button>

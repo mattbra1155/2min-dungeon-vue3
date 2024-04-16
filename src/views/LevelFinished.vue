@@ -11,6 +11,7 @@ import { EGameState } from '@/enums/EGameState'
 import { useSceneManager } from '@/composables/useSceneManager'
 import localforage from 'localforage'
 import { onMounted } from 'vue'
+import { useFeedStore } from '@/stores/useFeed'
 
 const { updateTurnStateMachine, resetTurn } = useTurn()
 const router = useRouter()
@@ -18,9 +19,11 @@ const { player } = usePlayer()
 const { lootList, generateLoot } = useLoot()
 const { activeScene, saveScene } = useSceneManager()
 const { updateGameState } = useGameStateManager()
+const feedStore = useFeedStore()
 
 updateGameState(EGameState.LevelCleared)
 updateTurnStateMachine(ETurnState.Init)
+feedStore.resetBattleFeed()
 
 const setRoomExploredStatus = async () => {
     if (!activeScene.value) {

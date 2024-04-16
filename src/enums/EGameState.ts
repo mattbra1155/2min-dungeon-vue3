@@ -3,6 +3,7 @@ export enum EGameState {
     CreateChar = 'Create Character',
     CreateLevel = 'Create Level',
     Travel = 'Travel',
+    Loot = 'Loot',
     Battle = 'Battle',
     Playing = 'Playing',
     PlayerDead = 'Player dead',
