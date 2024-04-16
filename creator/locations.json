@@ -1,0 +1,94 @@
+[
+    {
+        "id": 0,
+        "image": "empty",
+        "objects": [
+            {
+                "type": "chest",
+                "isLocked": true
+            },
+            {
+                "type": "chest",
+                "isLocked": false
+            }
+        ],
+        "description": "A vast country with a lot of ununsed and overgrown fields. Few desolated farms are scattered in the distance. Its a sad sight",
+        "entityList": [],
+        "lootList": [],
+        "name": "Northern Fields",
+        "type": "entry",
+        "isDark": false,
+        "exits": [
+            1,
+            2,
+            -1,
+            -1,
+            {
+                "sceneId": "town",
+                "roomId": 0
+            }
+        ]
+    },
+    {
+        "id": 1,
+        "image": "empty",
+        "objects": [],
+        "description": "The air in the Blighted Wood hangs heavy with decay and despair. The Northen Road, once a lifeline, becomes a muddy scar choked by thorns and twisted roots. Sunlight fights to penetrate the canopy, leaving the forest floor in perpetual twilight. Screeching crows circle overhead, their caws echoing from the moss-draped boughs of skeletal trees.",
+        "entityList": [
+            "lesserGoblin"
+        ],
+        "lootList": [],
+        "name": "Dark Forrest",
+        "type": "monster",
+        "isDark": false,
+        "exits": [
+            3,
+            0,
+            0,
+            -1
+        ]
+    },
+    {
+        "id": 2,
+        "image": "burnedDownFarm",
+        "objects": [],
+        "description": "Ruins of a long abandoned and burned down farm. It looks only the chimney is intact",
+        "entityList": [
+            "lesserGoblin",
+            "lesserGoblin"
+        ],
+        "lootList": [],
+        "name": "Burned down farm",
+        "type": "monster",
+        "isDark": false,
+        "exits": [
+            -1,
+            -1,
+            -1,
+            0
+        ]
+    },
+    {
+        "id": 3,
+        "image": "empty",
+        "objects": [],
+        "description": "Next to the road is a small abandoned camp. Few old, tattered tents and bungalows are rotting away quietly.",
+        "entityList": [
+            "lesserGoblin",
+            "lesserGoblin"
+        ],
+        "lootList": [],
+        "name": "Abandoned lumber camp",
+        "type": "monster",
+        "isDark": false,
+        "exits": [
+            {
+                "sceneId": 1,
+                "roomId": 0
+            },
+            0,
+            1,
+            -1
+        ]
+    }
+]
