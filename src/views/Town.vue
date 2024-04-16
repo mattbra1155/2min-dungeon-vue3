@@ -8,6 +8,7 @@ import { EGameState } from '@/enums/EGameState'
 import { EShops } from '@/enums/EShops'
 import { Town } from '@/assets/models/sceneTownModel'
 import { onMounted, ref } from 'vue'
+import { makeGrid, updateGrid } from '@/helpers/makeGrid'
 
 const { activeScene, setScene } = useSceneManager()
 const { activeShopId } = useShop()
@@ -21,11 +22,12 @@ const descriptionShort = ref<string>('')
 const descriptionLong = ref<string>('')
 const showMoreButton = ref<boolean>(false)
 const words = ref<string>('')
+
 // Move this to a standalone function
 const writeAnimation = (text: string) => {
     let i = 0
     const txt = text
-    const speed = 50
+    const speed = 10
     words.value = ''
 
     function typeWriter() {
@@ -49,10 +51,13 @@ const showMoreDescription = () => {
     descriptionShort.value = words.value
     writeAnimation(town.description)
 }
+const gridWrapper = ref<HTMLElement>()
 onMounted(() => {
     if (town.shortDescription) {
         writeAnimation(town.shortDescription)
     }
+
+    console.log(gridWrapper)
 })
 </script>
 
@@ -61,11 +66,9 @@ onMounted(() => {
         <div class="o-town__header">
             <h1>{{ activeScene?.name }}</h1>
         </div>
+        <img class="o-town__image" src="images/placeholderTown2.jpeg" alt="" />
         <div class="o-town__content">
-            <!-- <div class="o-town__description --short" v-html="descriptionShort"></div> -->
             <div class="o-town__description --short" v-html="words"></div>
-            <!-- <button class="a-button" v-if="showMoreButton" @click="showMoreDescription()">more</button> -->
-            <!-- <div class="o-town__description --long" v-html="descriptionLong"></div> -->
         </div>
         <LayoutInterfaceTown :town="town" v-if="activeShopId === undefined" />
         <MerchantShop v-if="activeShopId === EShops.Merchant" />
