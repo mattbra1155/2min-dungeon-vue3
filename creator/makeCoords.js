@@ -1,5 +1,6 @@
-road / forest,forest,fields,grassland,mountains,high mountains,water,road,dark forest,foothills,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-high mountains,mountains,mountains,mountains,mountains,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,road,road,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,water
+/* eslint-disable no-undef */
+
+const csv = `high mountains,mountains,mountains,mountains,mountains,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,road,road,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,water
 high mountains,mountains,mountains,mountains,mountains,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,road,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,water,water
 high mountains,high mountains,mountains,mountains,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,road,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,water,water
 high mountains,high mountains,mountains,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,road,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,grassland,water,water,grassland,grassland,grassland,grassland,grassland,grassland,grassland,water,water,water
@@ -25,4 +26,48 @@ high mountains,mountains,mountains,mountains,mountains,mountains,mountains,footh
 high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,mountains,water,water,mountains,high mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,South Mountain Pass,mountains,mountains,mountains,mountains,grassland,grassland,grassland,water,water,water,grassland,grassland,grassland,grassland,grassland,grassland,water,water,water,water,water,water
 high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,mountains,water,water,mountains,high mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,water,water,water,water,water,water,water,water,water,water,water,water,water,water,water,water,water,water
 high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,mountains,mountains,mountains,mountains,high mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,mountains,water,water,water
-high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,water,water
+high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,high mountains,water,water`
+
+import fs from 'node:fs/promises'
+import { parse } from 'csv-parse'
+
+const mapGrid = []
+
+function wrapStringsIntoObjectsFromString(commaSeparatedString) {
+    const array = commaSeparatedString.replace(/(\r\n|\n|\r)/gm, ',').split(',')
+    for (let i = 0; i < array.length; i += 42) {
+        const obj = array.slice(i, i + 42)
+        mapGrid.push(obj)
+    }
+}
+
+// Example usage:
+
+async function example() {
+    try {
+        const data = await fs.readFile('uuu.csv', { encoding: 'utf8' })
+        // console.log(data);
+        wrapStringsIntoObjectsFromString(data)
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+const init = async () => {
+    await example()
+    console.log(mapGrid[6][15]);
+
+}
+
+init()
+
+// fs.createReadStream('uuu.csv', { encoding: 'utf-8' })
+//     .pipe(parse({ delimiter: ',' }))
+//     .on('data', function (csvrow) {
+//         //do something with csvrow
+//         mapGrid.push(csvrow);
+//     })
+//     .on('end', function () {
+//         //do something with mapGrid
+//         console.log(mapGrid);
+//     });
