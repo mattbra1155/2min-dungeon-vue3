@@ -43,7 +43,7 @@ function wrapStringsIntoObjectsFromString(commaSeparatedString) {
 
 // Example usage:
 
-async function example() {
+async function prepareMapGrid() {
     try {
         const data = await fs.readFile('uuu.csv', { encoding: 'utf8' })
         // console.log(data);
@@ -54,8 +54,8 @@ async function example() {
 }
 
 const init = async () => {
-    await example()
-    console.log(mapGrid[6][15]);
+    await prepareMapGrid()
+    console.log(mapGrid[22][19]);
 
 }
 
