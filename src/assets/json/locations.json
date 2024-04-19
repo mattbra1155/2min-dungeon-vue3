@@ -8,8 +8,8 @@
         "lootList": [],
         "type": "entry",
         "isDark": false,
-        "x": 22,
-        "y": 19,
+        "x": 19,
+        "y": 21,
         "objects": [
             {
                 "type": "chest",
@@ -41,6 +41,6 @@
         "type": "entry",
         "isDark": false,
         "x": 19,
-        "y": 21
+        "y": 20
     }
 ]

@@ -165,7 +165,7 @@ onMounted(() => {
             <button class="a-button action__button" v-if="!isSearched" @click="searchRoom">Search Room</button>
         </div>
         <div class="o-interface__row o-interface__directionWrapper">
-            <template v-for="(destinationId, index) in sceneManager.activeRoom?.exits" :key="index">
+            <template v-for="(destinationId, index) in 4" :key="index">
                 <button
                     v-if="destinationId !== -1 && typeof destinationId === 'number'"
                     class="a-button action__button"

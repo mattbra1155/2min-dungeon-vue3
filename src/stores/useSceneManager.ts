@@ -36,7 +36,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
 
         feedStore.resetTravelFeed()
 
-        console.log(roomX, roomY);
+        console.log('x', roomX, 'y', roomY);
 
         activeRoom.value = sceneList.value.find((room) => room.x === roomX && room.y === roomY)
         if (!activeRoom.value) {
