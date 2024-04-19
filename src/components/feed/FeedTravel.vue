@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { useFeedStore } from '@/stores/useFeed'
-import { useSceneManager } from '@/composables/useSceneManager'
+import { useSceneManagerStore } from '@/stores/useSceneManager'
 import { computed, onMounted, watch } from 'vue'
 
 const feedStore = useFeedStore()
-const { activeScene } = useSceneManager()
-const currentRoom = computed(() => activeScene.value?.currentRoom)
+const sceneManager = useSceneManagerStore()
+const currentRoom = computed(() => sceneManager.activeRoom)
 const isSearched = computed(() => currentRoom.value?.isSearched)
 
 const containers = computed(() => {

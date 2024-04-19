@@ -8,7 +8,7 @@ import { AllItemTypes } from '@/interfaces/IItem'
 import { Gold } from '@/assets/models/itemsModel'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { EGameState } from '@/enums/EGameState'
-import { useSceneManager } from '@/composables/useSceneManager'
+import { useSceneManagerStore } from '@/stores/useSceneManager'
 import localforage from 'localforage'
 import { onMounted } from 'vue'
 import { useFeedStore } from '@/stores/useFeed'
@@ -17,7 +17,7 @@ const { updateTurnStateMachine, resetTurn } = useTurn()
 const router = useRouter()
 const { player } = usePlayer()
 const { lootList, generateLoot } = useLoot()
-const { activeScene, saveScene } = useSceneManager()
+const { activeRoom, saveScene } = useSceneManagerStore()
 const { updateGameState } = useGameStateManager()
 const feedStore = useFeedStore()
 
@@ -26,17 +26,17 @@ updateTurnStateMachine(ETurnState.Init)
 feedStore.resetBattleFeed()
 
 const setRoomExploredStatus = async () => {
-    if (!activeScene.value) {
+    if (!activeRoom.value) {
         return
     }
-    if (!activeScene.value.currentRoom) {
+    if (!activeRoom.value.currentRoom) {
         return
     }
 
-    activeScene.value.currentRoom.isExplored = true
-    console.log(activeScene.value.currentRoom)
+    activeRoom.value.currentRoom.isExplored = true
+    console.log(activeRoom.value.currentRoom)
 
-    await saveScene(activeScene.value.id, activeScene.value.currentRoom.id, activeScene.value.roomList)
+    await saveScene(activeRoom.value.id, activeRoom.value.currentRoom.id, activeRoom.value.roomList)
     resetTurn()
 }
 

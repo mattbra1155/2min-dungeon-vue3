@@ -2,6 +2,7 @@
   "name": "2min-dungeon-vue3",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -9,6 +10,10 @@
     "lint": "eslint --ext .ts,.vue --ignore-path .gitignore --fix src"
   },
   "dependencies": {
+    "convert-csv-to-json": "^2.44.0",
+    "csv-parse": "^5.5.5",
+    "csv-parser": "^3.0.0",
+    "json-2-csv": "^5.5.1",
     "localforage": "^1.10.0",
     "pinia": "^2.1.7",
     "register-service-worker": "^1.7.1",

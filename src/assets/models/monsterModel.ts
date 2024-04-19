@@ -23,10 +23,11 @@ class MonsterModel extends PersonModel implements IMonster {
         public isAlive: boolean = true,
         public modifiers: Modifiers = new Modifiers(),
         public prefferedPosition: string = '',
+        public offHand: Weapon | null = null,
         public level: number = 1,
         public isHostile: boolean = true
     ) {
-        super(id, name, race, stats, currentStats, bodyParts, weapon, description, inventory, isAlive, modifiers)
+        super(id, name, race, stats, currentStats, bodyParts, weapon, offHand, description, inventory, isAlive, modifiers)
         this.prefferedPosition = prefferedPosition
         this.level = level
         this.isHostile = isHostile

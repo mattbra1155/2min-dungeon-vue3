@@ -1,6 +1,5 @@
 <script lang="ts">
 import { MonsterGenerator } from './assets/generators/monsterGenerator'
-import { useSceneManager } from './composables/useSceneManager'
 import InventoryPanel from './components/InventoryPanel.vue'
 import CharacterScreen from './components/CharacterScreen.vue'
 
@@ -15,8 +14,10 @@ import { useRouter } from 'vue-router'
 import { useGameStateManager } from './composables/useGameStateManager'
 import { EGameState } from './enums/EGameState'
 import { PlayerModel } from './assets/models/playerModel'
+import { useSceneManagerStore } from '@/stores/useSceneManager'
+import { storeToRefs } from 'pinia'
 
-const { createScene } = useSceneManager()
+const sceneManager = useSceneManagerStore()
 const { fetchPlayer, setPlayer } = usePlayer()
 const { activeGameState, updateGameState } = useGameStateManager()
 const router = useRouter()
@@ -29,7 +30,7 @@ const init = async () => {
             await setPlayer(player)
             updateGameState(EGameState.Travel)
             router.push({ name: 'home' })
-            createScene('0')
+            sceneManager.createLocations('northern_fields')
             return player
         } else {
             updateGameState(EGameState.CreateChar)

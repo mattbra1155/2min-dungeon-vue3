@@ -55,7 +55,7 @@ async function prepareMapGrid() {
 
 const init = async () => {
     await prepareMapGrid()
-    console.log(mapGrid[22][19]);
+    console.log(mapGrid[21][19]);
 
 }
 

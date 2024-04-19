@@ -3,7 +3,7 @@ import { useInventory } from '@/composables/useInventory'
 import { useCharacterScreen } from '@/composables/useCharacterScreen'
 import { computed, onMounted, toRefs } from 'vue'
 import { Scene } from '@/assets/models/sceneModel'
-import { useSceneManager } from '@/composables/useSceneManager'
+import { useSceneManagerStore } from '@/stores/useSceneManager'
 import localtions from '@/assets/json/locations.json'
 import router from '@/router'
 import { useShop } from '@/composables/useShop'
@@ -11,7 +11,7 @@ import { EGameState } from '@/enums/EGameState'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { Town } from '@/assets/models/sceneTownModel'
 
-const { activeScene, setScene, sceneList } = useSceneManager()
+const { activeRoom, setMapLocation, sceneList } = useSceneManagerStore()
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
 const { setActiveShop } = useShop()
@@ -57,7 +57,7 @@ const moveToScene = (sceneId: string) => {
         sceneData = localtions.find((scene) => scene.id === sceneId)
     }
 
-    if (!activeScene.value) {
+    if (!activeRoom.value) {
         console.error('no active Scene')
         return
     }
@@ -66,7 +66,7 @@ const moveToScene = (sceneId: string) => {
         return
     }
 
-    if (activeScene.value.id !== 'town' && sceneId === 'town') {
+    if (activeRoom.value.id !== 'town' && sceneId === 'town') {
         router.push({ name: 'town' })
         return
     }
@@ -75,9 +75,9 @@ const moveToScene = (sceneId: string) => {
     town.value.activeShopId = undefined
     router.push({ name: 'home' })
 
-    const scene = Object.assign(new Scene(), sceneData)
+    const scene = Object.assign(new Location(), sceneData)
 
-    setScene(scene)
+    setMapLocation(scene)
 }
 
 const enterShop = (shopId: string) => {
@@ -91,7 +91,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div v-if="activeScene" class="o-interface --town">
+    <div v-if="activeRoom" class="o-interface --town">
         <button class="a-button action__button" v-if="lastScene" @click="moveToScene(lastScene.id)">Leave Town</button>
         <div class="o-interface__row">
             <button
