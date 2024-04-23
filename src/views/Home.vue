@@ -12,7 +12,7 @@ import LayoutInterfaceTravel from '@/components/layout/LayoutInterfaceTravel.vue
 import { useSceneManagerStore } from '@/stores/useSceneManager'
 import FeedPanel from '@/components/FeedPanel.vue'
 
-const { loadScene } = useSceneManagerStore()
+const sceneManger = useSceneManagerStore()
 const { activeGameState } = useGameStateManager()
 const { updateTurnStateMachine } = useTurn()
 const { player } = usePlayer()
@@ -44,7 +44,7 @@ watch(player.value, () => {
 })
 
 onMounted(async () => {
-    await loadScene()
+    await sceneManger.loadScene()
 })
 </script>
 

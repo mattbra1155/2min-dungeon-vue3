@@ -9,7 +9,7 @@ const currentRoom = computed(() => sceneManager.activeRoom)
 const isSearched = computed(() => currentRoom.value?.isSearched)
 
 const containers = computed(() => {
-    if (!currentRoom.value?.roomObjects.length) {
+    if (!currentRoom.value?.roomObjects?.length) {
         return 'You see nothing worth taking.'
     }
     const items = currentRoom.value?.roomObjects.map((roomObject) => {

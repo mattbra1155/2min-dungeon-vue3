@@ -16,7 +16,6 @@ import { EGameState } from './enums/EGameState'
 import { PlayerModel } from './assets/models/playerModel'
 import { useSceneManagerStore } from '@/stores/useSceneManager'
 import { storeToRefs } from 'pinia'
-
 const sceneManager = useSceneManagerStore()
 const { fetchPlayer, setPlayer } = usePlayer()
 const { activeGameState, updateGameState } = useGameStateManager()
@@ -30,12 +29,12 @@ const init = async () => {
             await setPlayer(player)
             updateGameState(EGameState.Travel)
             router.push({ name: 'home' })
-            sceneManager.createLocations('northern_fields')
-            return player
         } else {
             updateGameState(EGameState.CreateChar)
             router.push({ name: 'characterCreation' })
         }
+        sceneManager.createLocations('outskirts_north')
+
     }
 }
 

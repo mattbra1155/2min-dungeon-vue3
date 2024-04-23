@@ -1,0 +1,4 @@
+id,image,name,description,entityList,lootList,type,isDark,x,y,objects
+town,empty,Oakwood,test,[],[],entry,FALSE,111,222,"[{""type"":""chest"",""isLocked"":true},{""type"":""chest"",""isLocked"":false}]"
+outskirts_north,empty,Outskirts North,A vast country with a lot of ununsed and overgrown fields. Few desolated farms are scattered in the distance. Its a sad sight,[],[],entry,FALSE,19,20,"[{""type"":""chest"",""isLocked"":true},{""type"":""chest"",""isLocked"":false}]"
+old_shrine,empty,Old Shrine,A old shrine,"[""lesser_goblin""]",,monster,FALSE,,,"[{""type"":""chest"",""isLocked"":true}]"

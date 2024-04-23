@@ -20,6 +20,8 @@ const prepareMapGrid = async () => {
         const data = await fs.readFile('uuu.csv', { encoding: 'utf8' })
         // console.log(data);
         wrapStringsIntoObjectsFromString(data)
+        console.log(`mapGrid - done`);
+
     } catch (err) {
         console.log(err)
     }
@@ -38,20 +40,29 @@ const getLocationMap = async (location) => {
         })
 
     })
+    // console.log(mapLocations);
+    console.log(`mapLocations - done`);
+
     return resultLocationMap
 }
 
 const createLocationsJSON = async () => {
     try {
         const data = await fs.readFile('../src/assets/json/locations.json', { encoding: 'utf8' })
+        // console.log(data);
         const locationData = JSON.parse(data)
 
+
         const rrr = locationData.map(locationItem => {
+            // console.log(locationItem);
             if (!locationItem) {
                 return
             }
-            console.log(locationItem);
-            const found = mapLocations.find((mapLocationItem) => mapLocationItem.name === locationItem.name)
+            const found = mapLocations.find((mapLocationItem) => {
+                console.log(locationItem.name.toLowerCase());
+                return mapLocationItem.name.toLowerCase() === locationItem.name.toLowerCase()
+            })
+            console.log(found);
             if (!found) {
                 return ''
             }
@@ -62,10 +73,17 @@ const createLocationsJSON = async () => {
 
         })
 
-        console.log(locationData[0]);
+        // console.log(locationData[0]);
         console.log(rrr);
 
-        fs.writeFile('../src/assets/json/locations.json', JSON.stringify(rrr))
+        fs.writeFile(`../src/assets/json/locations.json`, JSON.stringify(rrr), 'utf8', (err) => {
+            if (err) {
+                console.log('Some error occured - file either not saved or corrupted file saved.')
+            } else {
+                console.log("It's saved!")
+            }
+        })
+
 
     } catch (err) {
         console.log(err)
@@ -75,17 +93,11 @@ const createLocationsJSON = async () => {
 
 
 const init = async () => {
-
     await prepareMapGrid()
     await getLocationMap()
     await createLocationsJSON()
-    // console.log(locationMap);
-    // console.log(mapGrid[21][19]);
-
-
-
 }
 
 init()
 
-export { mapGrid, mapLocations }
+export { mapGrid, mapLocations, init }

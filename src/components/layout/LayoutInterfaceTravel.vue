@@ -67,6 +67,7 @@ const move = async (index: number) => {    // if ()
     if (!sceneManager.activeRoom) {
         return
     }
+    const savedPlayerPosition = playerPosition.coords
 
     if (index === EDirections.North) {
         playerPosition.updateCoords(playerPosition.coords.x, playerPosition.coords.y - 1)
