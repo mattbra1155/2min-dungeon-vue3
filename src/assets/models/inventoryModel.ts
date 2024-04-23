@@ -1,7 +1,6 @@
 import { IInventory } from '@/interfaces/IInventory'
 import { AllItemTypes } from '@/interfaces/IItem'
 import { Gold } from '@/assets/models/itemsModel'
-import { useSceneManager } from '@/composables/useSceneManager'
 
 class Inventory implements IInventory {
     constructor(

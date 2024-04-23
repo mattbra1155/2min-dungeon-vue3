@@ -1,9 +1,9 @@
 /* eslint-disable no-undef */
 
 // console.log(locations);
-const fs = require('fs')
-const locations = require('/home/mbrania/serwer/2min-dungeon-vue3/src/assets/json/locations.json')
-const converter = require('json-2-csv')
+import fs from 'fs'
+import locations from '/home/mbrania/serwer/2min-dungeon-vue3/src/assets/json/locations.json' assert {type: 'json'}
+import converter from 'json-2-csv'
 
 const saveToCSV = async (jsonFile, outputName) => {
     if (!jsonFile) {
@@ -12,7 +12,8 @@ const saveToCSV = async (jsonFile, outputName) => {
     }
     const csvData = converter.json2csv(jsonFile, {
         delimiter: {
-
+            field: '|',
+            wrap: '\''
         },
         emptyFieldValue: 'empty'
     })
@@ -25,4 +26,4 @@ const saveToCSV = async (jsonFile, outputName) => {
     })
 }
 
-saveToCSV(locations[1].roomList, 'locations')
+saveToCSV(locations, 'locations123')

@@ -12,7 +12,7 @@
 //     create(player, enemy) {
 //         const id = this.createId()
 //         const name = this.createName(id)
-//         const scene = new Scene(id, name, player, enemy)
+//         const scene = new Location(id, name, player, enemy)
 
 //         return scene
 //     }

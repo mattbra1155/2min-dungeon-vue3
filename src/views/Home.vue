@@ -9,10 +9,10 @@ import { usePlayer } from '@/composables/usePlayer'
 import { useRouter } from 'vue-router'
 import LayoutTopBar from '@/components/layout/LayoutTopBar.vue'
 import LayoutInterfaceTravel from '@/components/layout/LayoutInterfaceTravel.vue'
-import { useSceneManager } from '@/composables/useSceneManager'
+import { useSceneManagerStore } from '@/stores/useSceneManager'
 import FeedPanel from '@/components/FeedPanel.vue'
 
-const { loadScene } = useSceneManager()
+const { loadScene } = useSceneManagerStore()
 const { activeGameState } = useGameStateManager()
 const { updateTurnStateMachine } = useTurn()
 const { player } = usePlayer()

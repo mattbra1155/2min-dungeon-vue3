@@ -7,7 +7,7 @@ export const useFeedStore = defineStore('feed', () => {
     const feedBattleList = ref<any[]>([])
     const activeRoomObject = ref<RoomObject>()
 
-    const setActiveRoomObject = (roomObject: RoomObject) => (activeRoomObject.value = roomObject)
+    const setActiveRoomObject = (roomObject: RoomObject | undefined) => (activeRoomObject.value = roomObject)
     const setTravelFeedItem = (message: string) => feedTravelList.value.push(message)
     const setBattleFeedItem = (message: string) => feedBattleList.value.push(message)
     const resetTravelFeed = () => (feedTravelList.value = [])

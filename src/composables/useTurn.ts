@@ -5,13 +5,12 @@ import { ETurnState } from '@/enums/ETurnState'
 import { EGameState } from '@/enums/EGameState'
 import { usePlayer } from '@/composables/usePlayer'
 import { useGameStateManager } from '@/composables/useGameStateManager'
-import { useSceneManager } from './useSceneManager'
+import { useSceneManagerStore } from '@/stores/useSceneManager'
 import { playAudio } from '@/helpers/playAudio'
 import { useFeedStore } from '@/stores/useFeed'
 import { useGlobalStore } from '@/stores/useGlobal'
 
 const { updateGameState } = useGameStateManager()
-const { activeScene } = useSceneManager()
 interface ITurn {
     turnNumber: number
     turnOrder: Array<PlayerModel | MonsterModel> | undefined
@@ -27,6 +26,7 @@ const state: ITurn = reactive({
 })
 
 export const useTurn = () => {
+
     const sortTurnOrder = (entityList: Array<PlayerModel | MonsterModel>) => {
         const sorted = entityList.sort((a, b) => b.currentStats.initiative - a.currentStats.initiative)
         state.turnOrder = sorted
@@ -36,8 +36,10 @@ export const useTurn = () => {
     const updateTurnStateMachine = (newTurnState: ETurnState) => {
         const { player } = usePlayer()
         const globalStore = useGlobalStore()
+        const sceneManager = useSceneManagerStore()
 
-        const monsterList = activeScene.value?.currentRoom?.monsterList
+
+        const monsterList = sceneManager.activeRoom?.monsterList
 
         if (!player.value.isAlive) {
             return

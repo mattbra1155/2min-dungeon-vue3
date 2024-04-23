@@ -12,6 +12,8 @@ export interface IRoomExit {
 
 interface IRoom {
     id: string
+    x: number
+    y: number
     image: string
     name: string
     description: string
@@ -33,6 +35,8 @@ export function isRoomExit(object: IRoomExit): object is IRoomExit {
 class Room implements IRoom {
     constructor(
         public id: string = '0',
+        public x: number = 0,
+        public y: number = 0,
         public name: string = `Room - ${id}`,
         public image: string = '',
         public description: string = '',
@@ -46,6 +50,8 @@ class Room implements IRoom {
         public type: ERoomTypes = ERoomTypes.Empty
     ) {
         this.id
+        this.x = x
+        this.y = y
         this.name = name
         this.description = description
         this.exits = exits

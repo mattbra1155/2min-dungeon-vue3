@@ -2,7 +2,7 @@
 import LayoutInterfaceTown from '@/components/layout/LayoutInterfaceTown.vue'
 import MerchantShop from '@/components/shops/MerchantShop.vue'
 import { useGameStateManager } from '@/composables/useGameStateManager'
-import { useSceneManager } from '@/composables/useSceneManager'
+import { useSceneManagerStore } from '@/stores/useSceneManager'
 import { useShop } from '@/composables/useShop'
 import { EGameState } from '@/enums/EGameState'
 import { EShops } from '@/enums/EShops'
@@ -10,7 +10,7 @@ import { Town } from '@/assets/models/sceneTownModel'
 import { onMounted, ref } from 'vue'
 import { makeGrid, updateGrid } from '@/helpers/makeGrid'
 
-const { activeScene, setScene } = useSceneManager()
+const { activeRoom, setMapLocation } = useSceneManagerStore()
 const { activeShopId } = useShop()
 const { activeGameState } = useGameStateManager()
 
@@ -64,7 +64,7 @@ onMounted(() => {
 <template>
     <div class="o-town">
         <div class="o-town__header">
-            <h1>{{ activeScene?.name }}</h1>
+            <h1>{{ activeRoom?.name }}</h1>
         </div>
         <img class="o-town__image" src="images/placeholderTown2.jpeg" alt="" />
         <div class="o-town__content">
