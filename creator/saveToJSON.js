@@ -1,54 +1,43 @@
-// /* eslint-disable no-undef */
+/* eslint-disable no-undef */
+import fs from 'fs'
+import csvToJson from 'convert-csv-to-json'
+const saveToJSON = async () => {
 
 
 
-// * NOT WORKING 
+    // console.log(csvToJson.csvStringToJson('./locations123.csv'))
+
+    // fs.writeFile(`${outputName}.csv`, csvData, (err) => {
+    //     if (err) {
+    //         console.log('Some error occured - file either not saved or corrupted file saved.')
+    //     } else {
+    //         console.log("It's saved!")
+    //     }
+    // })
+
+    let json = csvToJson.utf8Encoding()
+        .formatValueByType()
+        .parseSubArray('\'', ',')
+        .supportQuotedField(false)
+        .fieldDelimiter("|")
+        .getJsonFromCsv('./locations123.csv')
 
 
-// // console.log(locations);
-// const fs = require('fs')
-// const csv = require('csv-parser')
-// const results = [];
-// const { parse } = require('csv-parse');
-// // fs.createReadStream('locations.csv')
-// //     .pipe(csv())
-// //     .on('data', (data) => results.push(data))
-// //     .on('end', () => {
-// //         console.log(results);
-// //         // [
-// //         //   { NAME: 'Daffy Duck', AGE: '24' },
-// //         //   { NAME: 'Bugs Bunny', AGE: '22' }
-// //         // ]
-// //         fs.writeFile(`locations.json`, JSON.stringify(results), 'utf8', (err) => {
-// //             if (err) {
-// //                 console.log('Some error occured - file either not saved or corrupted file saved.')
-// //             } else {
-// //                 console.log("It's saved!")
-// //             }
-// //         })
-// //     });
+    //BUGFIX convert nested arrays from string to objects
+    json = json.map(ele => {
+        ele.objects = JSON.parse(ele.objects)
+        ele.lootList = JSON.parse(ele.lootList)
+        ele.entityList = JSON.parse(ele.entityList)
+        return ele
+    })
 
-// const locations = require('./locations.csv')
-// const converter = require('json-2-csv')
+    fs.writeFile(`locations1.json`, JSON.stringify(json), 'utf8', (err) => {
+        if (err) {
+            console.log('Some error occured - file either not saved or corrupted file saved.')
+        } else {
+            console.log("It's saved!")
+        }
+    })
+}
 
-
-// const saveToJSON = async (csvFile, outputName) => {
-//     if (!csvFile) {
-//         console.error('No csvFile')
-//         return
-//     }
-//     const jsonData = converter.csv2json(csvFile, {
-//         delimiter: {
-//             field: ';'
-//         }
-//     })
-//     fs.writeFile(`${outputName}.json`, jsonData, 'utf8', (err) => {
-//         if (err) {
-//             console.log('Some error occured - file either not saved or corrupted file saved.')
-//         } else {
-//             console.log("It's saved!")
-//         }
-//     })
-// }
-
-// saveToJSON(locations, 'locations')
+saveToJSON()

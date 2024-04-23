@@ -12,8 +12,8 @@ const saveToCSV = async (jsonFile, outputName) => {
     }
     const csvData = converter.json2csv(jsonFile, {
         delimiter: {
-            field: ';'
-
+            field: '|',
+            wrap: '\''
         },
         emptyFieldValue: 'empty'
     })
@@ -26,4 +26,4 @@ const saveToCSV = async (jsonFile, outputName) => {
     })
 }
 
-saveToCSV(locations[1].roomList, 'locations')
+saveToCSV(locations, 'locations123')
