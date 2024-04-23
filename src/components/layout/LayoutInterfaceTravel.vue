@@ -59,7 +59,7 @@ const moveToTown = async (sceneId: string) => {
         router.push({ name: 'town' })
         return
     }
-    await sceneManager.saveScene(sceneManager.activeRoom.id, sceneManager.activeRoom.id, sceneManager.activeRoom)
+    await sceneManager.saveScene({x: playerPosition.coords.x, y: playerPosition.coords.y}, sceneManager.sceneList)
 }
 
 const move = async (index: number) => {    // if ()  
@@ -84,7 +84,7 @@ const move = async (index: number) => {    // if ()
         console.error('No current Room')
         return
     }
-    await sceneManager.saveScene(sceneManager.activeRoom.id, sceneManager.activeRoom.id, sceneManager.activeRoom)
+    await sceneManager.saveScene({x: playerPosition.coords.x, y: playerPosition.coords.y}, sceneManager.sceneList)
 }
 
 // const moveTo = async (sceneId: string, roomId: string) => {

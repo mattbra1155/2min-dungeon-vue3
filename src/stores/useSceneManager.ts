@@ -99,6 +99,8 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         // move all arguments here instead of passing it each time
         const seen: any = []
         // save and remove cyclic objects from store
+        console.log(currentRoom);
+
         await localforage.setItem(
             'activeRoom',
             JSON.stringify({ currentRoomCoords: currentRoom, locationList }, function (key, val) {
