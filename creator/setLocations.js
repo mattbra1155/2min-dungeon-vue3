@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+import localforage from 'localforage'
 import fs from 'node:fs/promises'
 
 const mapGrid = []
@@ -51,8 +52,25 @@ const createLocationsJSON = async () => {
         const data = await fs.readFile('./templocations.json', { encoding: 'utf8' })
         const POIlocationData = JSON.parse(data)
 
-        const ttt = mapLocations.map(location => {
+        const mergedLocations = mapLocations.map(location => {
             location.id = location.name.replace(' ', '_').toLowerCase()
+
+
+            if (location.id === 'grassland') {
+                location.description = `Entering the grassland, you're surrounded by a vast expanse of undulating golden - green.The landscape stretches out before you, a sea of swaying blades of grass punctuated by colorful wildflowers.`
+            }
+            if (location.id === 'road') {
+                location.description = `An old, overgrown road winds its way through the landscape, its once smooth surface now cracked and weathered. Thick vegetation encroaches from all sides, reclaiming the path inch by inch. Nature's relentless advance has transformed the road into a forgotten trail, a relic of a bygone era.`
+            }
+            if (location.id === 'high_mountains') {
+                location.description = `Towerous mountains loom, impassable barriers cutting the horizon. Their jagged peaks pierce the sky, cloaked in perpetual snow. Valleys yawning between them seem unreachable, lost to the clouds. No path, no passage; these formidable giants stand as guardians of the untamed wilderness, daunting and unconquerable.`
+            }
+            if (location.id === 'mountains') {
+                location.description = `The mountains rise, their majestic peaks beckoning adventurers. Yet, their treacherous slopes and winding paths demand respect. Each step is a test of skill and endurance, doubling the journey's length. Despite the breathtaking vistas, the unforgiving terrain serves as a reminder of nature's formidable challenges and the price of passage.`
+            }
+            if (location.id === 'foothills') {
+                location.description = `The foothills sprawl at the base of the towering mountains, their gentle slopes a transition between lowlands and peaks. Dappled with patches of verdant greenery and scattered with boulders, they offer a prelude to the grandeur above. Here, the land undulates in harmony, teasing with the promise of higher heights.`
+            }
 
             const POILocation = POIlocationData.find(item => item.id === location.id)
             if (POILocation) {
@@ -62,24 +80,13 @@ const createLocationsJSON = async () => {
             return location
         })
 
-
-
-        const mergedLocations = ttt
-
-        // console.log(mergedLocations);
-        fs.writeFile(`../src/assets/json/locations.json`, JSON.stringify(mergedLocations), 'utf8', (err) => {
-            if (err) {
-                console.log('Some error occured - file either not saved or corrupted file saved.')
-            } else {
-                console.log("It's saved!")
-            }
-        })
+        await fs.writeFile(`../src/assets/json/locations.json`, JSON.stringify(mergedLocations))
+        console.log('createLocationsJSON - done')
 
 
     } catch (err) {
         console.log(err)
     }
-
 }
 
 
