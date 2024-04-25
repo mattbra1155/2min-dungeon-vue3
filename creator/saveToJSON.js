@@ -38,7 +38,7 @@ const saveToJSON = async () => {
         return element
     })
 
-    fs.writeFile(`/home/mbrania/serwer/2min-dungeon-vue3/src/assets/json/locations.json`, JSON.stringify(json), 'utf8', (err) => {
+    fs.writeFile(`./templocations.json`, JSON.stringify(json), 'utf8', (err) => {
         if (err) {
             console.log('Some error occured - file either not saved or corrupted file saved.')
         } else {

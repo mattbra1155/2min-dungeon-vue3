@@ -48,35 +48,26 @@ const getLocationMap = async (location) => {
 
 const createLocationsJSON = async () => {
     try {
-        const data = await fs.readFile('../src/assets/json/locations.json', { encoding: 'utf8' })
-        // console.log(data);
-        const locationData = JSON.parse(data)
+        const data = await fs.readFile('./templocations.json', { encoding: 'utf8' })
+        const POIlocationData = JSON.parse(data)
 
+        const ttt = mapLocations.map(location => {
+            location.id = location.name.replace(' ', '_').toLowerCase()
 
-        const rrr = locationData.map(locationItem => {
-            // console.log(locationItem);
-            if (!locationItem) {
-                return
+            const POILocation = POIlocationData.find(item => item.id === location.id)
+            if (POILocation) {
+                location = Object.assign(POILocation, location)
             }
-            const found = mapLocations.find((mapLocationItem) => {
-                console.log(locationItem.name.toLowerCase());
-                return mapLocationItem.name.toLowerCase() === locationItem.name.toLowerCase()
-            })
-            console.log(found);
-            if (!found) {
-                return ''
-            }
-            locationItem.x = found.x
-            locationItem.y = found.y
 
-            return locationItem
-
+            return location
         })
 
-        // console.log(locationData[0]);
-        console.log(rrr);
 
-        fs.writeFile(`../src/assets/json/locations.json`, JSON.stringify(rrr), 'utf8', (err) => {
+
+        const mergedLocations = ttt
+
+        // console.log(mergedLocations);
+        fs.writeFile(`../src/assets/json/locations.json`, JSON.stringify(mergedLocations), 'utf8', (err) => {
             if (err) {
                 console.log('Some error occured - file either not saved or corrupted file saved.')
             } else {
