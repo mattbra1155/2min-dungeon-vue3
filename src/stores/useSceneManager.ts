@@ -66,16 +66,16 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
             console.error('No Room found')
             return false
         }
-        feedStore.resetTravelFeed()
+        // feedStore.resetTravelFeed()
 
-        feedStore.setTravelFeedItem(`You have entered ${activeRoom.value?.name}`)
-        feedStore.setTravelFeedItem(`${activeRoom.value?.description}`)
+        // feedStore.setTravelFeedItem(`You have entered ${activeRoom.value?.name}`)
+        // feedStore.setTravelFeedItem(`${activeRoom.value?.description}`)
 
-        // Get closes tiles names
-        const north = getLocationData(roomX, roomY - 1)
-        const south = getLocationData(roomX, roomY + 1)
-        const east = getLocationData(roomX - 1, roomY)
-        const west = getLocationData(roomX + 1, roomY)
+        // // Get closes tiles names
+        // const north = getLocationData(roomX, roomY - 1)
+        // const south = getLocationData(roomX, roomY + 1)
+        // const east = getLocationData(roomX - 1, roomY)
+        // const west = getLocationData(roomX + 1, roomY)
 
         // if (north) {
         //     feedStore.setTravelFeedItem(`To the north you see ${north.name}`)
@@ -89,18 +89,19 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         // if (west) {
         //     feedStore.setTravelFeedItem(`To the west you see ${west.name}`)
         // }
-        if (north) {
-            feedStore.setTravelFeedItem(`N: ${north.name}`)
-        }
-        if (south) {
-            feedStore.setTravelFeedItem(`S: ${south.name}`)
-        }
-        if (east) {
-            feedStore.setTravelFeedItem(`E: ${east.name}`)
-        }
-        if (west) {
-            feedStore.setTravelFeedItem(`W: ${west.name}`)
-        }
+        // if (north) {
+        //     feedStore.setTravelFeedItem(`N: ${north.name}`)
+        // }
+        // if (east) {
+        //     feedStore.setTravelFeedItem(`E: ${east.name}`)
+        // }
+        // if (south) {
+        //     feedStore.setTravelFeedItem(`S: ${south.name}`)
+        // }
+        // if (west) {
+        //     feedStore.setTravelFeedItem(`W: ${west.name}`)
+        // }
+
 
 
         // if player is not holding torch and room is dark stop him from entering
@@ -287,6 +288,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         saveScene,
         loadScene,
         changeActiveRoom,
+        getLocationData
     }
 
 

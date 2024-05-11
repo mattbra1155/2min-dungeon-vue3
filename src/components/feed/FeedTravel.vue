@@ -39,7 +39,7 @@ watch(
 </script>
 
 <template>
-    <div v-if="currentRoom" id="feed" class="o-feed" :class="{ '--loading': sceneManager.loadingArea }">
+    <div v-if="currentRoom" id="feed" class="o-feed__travel" :class="{ '--loading': sceneManager.loadingArea }">
         <transition name="fade">
             <ul v-if="!sceneManager.loadingArea" id="feedContainer" class="o-feed__container">
                 <img v-if="currentRoom.image" class="a-image" :src="currentRoom.image" alt="" />

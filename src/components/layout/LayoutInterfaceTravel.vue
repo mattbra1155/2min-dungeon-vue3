@@ -11,12 +11,15 @@ import AIcon from '@/components/AIcon.vue'
 import KnapsackIcon from '../icons/KnapsackIcon.vue'
 import CharacterScreenIcon from '../icons/CharacterScreenIcon.vue'
 import { usePlayerPositionStore } from '@/stores/usePlayerPosition'
-const sceneManager = useSceneManagerStore()
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
-const isSearched = computed(() => sceneManager.activeRoom?.isSearched)
 const playerPosition = usePlayerPositionStore()
 const feedStore = useFeedStore()
+const sceneManager = useSceneManagerStore()
+
+const isSearched = computed(() => sceneManager.activeRoom?.isSearched)
+
+
 
 const addKeybindings = () => {
     window.addEventListener('keydown', (event) => {
@@ -60,46 +63,92 @@ const moveToTown = async (sceneId: string) => {
         router.push({ name: 'town' })
         return
     }
-    await sceneManager.saveScene({x: playerPosition.coords.x, y: playerPosition.coords.y}, sceneManager.sceneList)
+    await sceneManager.saveScene({ x: playerPosition.coords.x, y: playerPosition.coords.y }, sceneManager.sceneList)
 }
 
-const move = async (index: number) => {   
+const move = async (index: number) => {
 
     if (!sceneManager.activeRoom) {
         return
     }
-    
+
     sceneManager.loadingArea = true
 
     const savedPlayerPosition = structuredClone(toRaw(playerPosition.coords))
+    let newCoords = {
+        x: 0,
+        y: 0
+    }
+    feedStore.resetTravelFeed()
 
     if (index === EDirections.North) {
-        playerPosition.updateCoords(playerPosition.coords.x, playerPosition.coords.y - 1)
+        // playerPosition.updateCoords(playerPosition.coords.x, playerPosition.coords.y - 1)
+        newCoords = {
+            x: playerPosition.coords.x,
+            y: playerPosition.coords.y - 1
+        }
+
         feedStore.setTravelFeedItem(`You move north`)
     } else if (index === EDirections.East) {
-        playerPosition.updateCoords(playerPosition.coords.x - 1, playerPosition.coords.y)
+        // playerPosition.updateCoords(playerPosition.coords.x - 1, playerPosition.coords.y)
+        newCoords = {
+            x: playerPosition.coords.x - 1,
+            y: playerPosition.coords.y
+        }
         feedStore.setTravelFeedItem(`You move east`)
     } else if (index === EDirections.South) {
-        playerPosition.updateCoords(playerPosition.coords.x, playerPosition.coords.y + 1)
+        // playerPosition.updateCoords(playerPosition.coords.x, playerPosition.coords.y + 1)
+        newCoords = {
+            x: playerPosition.coords.x,
+            y: playerPosition.coords.y + 1
+        }
         feedStore.setTravelFeedItem(`You move south`)
     } else if (index === EDirections.West) {
-        playerPosition.updateCoords(playerPosition.coords.x + 1, playerPosition.coords.y)
+        // playerPosition.updateCoords(playerPosition.coords.x + 1, playerPosition.coords.y)
+        newCoords = {
+            x: playerPosition.coords.x + 1,
+            y: playerPosition.coords.y
+        }
         feedStore.setTravelFeedItem(`You move west`)
     }
+    playerPosition.updateCoords(newCoords.x, newCoords.y)
+
     const changedRoom = sceneManager.changeActiveRoom(playerPosition.coords.x, playerPosition.coords.y)
 
-    console.log(savedPlayerPosition);
-    
     if (!changedRoom) {
         console.error('No current Room')
         playerPosition.updateCoords(savedPlayerPosition.x, savedPlayerPosition.y)
         sceneManager.changeActiveRoom(playerPosition.coords.x, playerPosition.coords.y)
         return
     }
-    await sceneManager.saveScene({x: playerPosition.coords.x, y: playerPosition.coords.y}, sceneManager.sceneList)
+
+
+    feedStore.setTravelFeedItem(`You have entered ${sceneManager.activeRoom.name}`)
+    feedStore.setTravelFeedItem(`${sceneManager.activeRoom.description}`)
+
+    // Get closes tiles names
+    const north = sceneManager.getLocationData(playerPosition.coords.x, playerPosition.coords.y - 1)
+    const south = sceneManager.getLocationData(playerPosition.coords.x, playerPosition.coords.y + 1)
+    const east = sceneManager.getLocationData(playerPosition.coords.x - 1, playerPosition.coords.y)
+    const west = sceneManager.getLocationData(playerPosition.coords.x + 1, playerPosition.coords.y)
+
+    if (north) {
+        feedStore.setTravelFeedItem(`N: ${north.name}`)
+    }
+    if (east) {
+        feedStore.setTravelFeedItem(`E: ${east.name}`)
+    }
+    if (south) {
+        feedStore.setTravelFeedItem(`S: ${south.name}`)
+    }
+    if (west) {
+        feedStore.setTravelFeedItem(`W: ${west.name}`)
+    }
+
+    await sceneManager.saveScene({ x: playerPosition.coords.x, y: playerPosition.coords.y }, sceneManager.sceneList)
     setTimeout(() => {
         sceneManager.loadingArea = false
-    },  800)
+    }, 800)
 
 }
 
@@ -163,46 +212,33 @@ onMounted(() => {
     <div v-if="sceneManager.activeRoom" class="o-interface">
         <div class="o-interface__row o-interface__objectActions">
             <template v-for="roomObject in sceneManager.activeRoom?.roomObjects" :key="roomObject.id">
-                <button
-                    v-if="feedStore.activeRoomObject?.id !== roomObject.id"
-                    class="a-button action__button"
-                    @click="feedStore.setActiveRoomObject(roomObject)"
-                >
+                <button v-if="feedStore.activeRoomObject?.id !== roomObject.id" class="a-button action__button"
+                    @click="feedStore.setActiveRoomObject(roomObject)">
                     Search {{ roomObject.name }}
                 </button>
             </template>
-            <button
-                v-if="feedStore.activeRoomObject"
-                class="a-button action__button"
-                @click="feedStore.setActiveRoomObject(undefined)"
-            >
+            <button v-if="feedStore.activeRoomObject" class="a-button action__button"
+                @click="feedStore.setActiveRoomObject(undefined)">
                 Description
             </button>
             <button class="a-button action__button" v-if="!isSearched" @click="searchRoom">Search Room</button>
         </div>
         <div class="o-interface__row o-interface__directionWrapper">
             <template v-for="(destinationId, index) in 4" :key="index">
-                <button
-                    v-if="destinationId !== -1 && typeof destinationId === 'number'"
-                    class="a-button action__button"
-                    @click="move(index)"
-                >
-                    {{ directionButton(destinationId, index) }} 
+                <button v-if="destinationId !== -1 && typeof destinationId === 'number'" class="a-button action__button"
+                    @click="move(index)">
+                    {{ directionButton(destinationId, index) }}
                 </button>
             </template>
 
             <template v-for="(destinationId, index) in sceneManager.activeRoom?.exits" :key="index">
-                <button
-                    class="a-button action__button"
-                    v-if="typeof destinationId !== 'number' && destinationId.sceneId !== 'town'"
-                >
+                <button class="a-button action__button"
+                    v-if="typeof destinationId !== 'number' && destinationId.sceneId !== 'town'">
                     {{ getLocationName(destinationId.sceneId) }}
                 </button>
-                <button
-                    class="a-button action__button"
+                <button class="a-button action__button"
                     v-if="typeof destinationId !== 'number' && destinationId.sceneId === 'town'"
-                    @click="moveToTown(destinationId.sceneId)"
-                >
+                    @click="moveToTown(destinationId.sceneId)">
                     {{ destinationId.sceneId }}
                 </button>
             </template>
