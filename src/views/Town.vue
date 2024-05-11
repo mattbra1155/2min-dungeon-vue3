@@ -10,7 +10,7 @@ import { Town } from '@/assets/models/sceneTownModel'
 import { onMounted, ref } from 'vue'
 import { makeGrid, updateGrid } from '@/helpers/makeGrid'
 
-const { activeRoom, setMapLocation } = useSceneManagerStore()
+const { activeRoom } = useSceneManagerStore()
 const { activeShopId } = useShop()
 const { activeGameState } = useGameStateManager()
 
@@ -66,7 +66,7 @@ onMounted(() => {
         <div class="o-town__header">
             <h1>{{ activeRoom?.name }}</h1>
         </div>
-        <img class="o-town__image" src="images/placeholderTown2.jpeg" alt="" />
+        <img class="o-town__image" :src="'images/placeholderTown2.jpeg' || ''" alt="" />
         <div class="o-town__content">
             <div class="o-town__description --short" v-html="words"></div>
         </div>

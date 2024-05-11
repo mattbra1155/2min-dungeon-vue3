@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useInventory } from '@/composables/useInventory'
 import { useCharacterScreen } from '@/composables/useCharacterScreen'
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref, toRaw } from 'vue'
 import { EDirections } from '@/enums/EDirections'
 import { useSceneManagerStore } from '@/stores/useSceneManager'
 import localtions from '@/assets/json/locations.json'
@@ -17,6 +17,7 @@ const { toggleCharacterScreen } = useCharacterScreen()
 const isSearched = computed(() => sceneManager.activeRoom?.isSearched)
 const playerPosition = usePlayerPositionStore()
 const feedStore = useFeedStore()
+
 const addKeybindings = () => {
     window.addEventListener('keydown', (event) => {
         if (event.key === 'i') {
@@ -62,30 +63,44 @@ const moveToTown = async (sceneId: string) => {
     await sceneManager.saveScene({x: playerPosition.coords.x, y: playerPosition.coords.y}, sceneManager.sceneList)
 }
 
-const move = async (index: number) => {    // if ()  
+const move = async (index: number) => {   
 
     if (!sceneManager.activeRoom) {
         return
     }
-    const savedPlayerPosition = playerPosition.coords
+    
+    sceneManager.loadingArea = true
+
+    const savedPlayerPosition = structuredClone(toRaw(playerPosition.coords))
 
     if (index === EDirections.North) {
         playerPosition.updateCoords(playerPosition.coords.x, playerPosition.coords.y - 1)
+        feedStore.setTravelFeedItem(`You move north`)
     } else if (index === EDirections.East) {
         playerPosition.updateCoords(playerPosition.coords.x - 1, playerPosition.coords.y)
+        feedStore.setTravelFeedItem(`You move east`)
     } else if (index === EDirections.South) {
         playerPosition.updateCoords(playerPosition.coords.x, playerPosition.coords.y + 1)
+        feedStore.setTravelFeedItem(`You move south`)
     } else if (index === EDirections.West) {
         playerPosition.updateCoords(playerPosition.coords.x + 1, playerPosition.coords.y)
+        feedStore.setTravelFeedItem(`You move west`)
     }
+    const changedRoom = sceneManager.changeActiveRoom(playerPosition.coords.x, playerPosition.coords.y)
 
-    sceneManager.changeActiveRoom(playerPosition.coords.x, playerPosition.coords.y)
-
-    if (!sceneManager.activeRoom) {
+    console.log(savedPlayerPosition);
+    
+    if (!changedRoom) {
         console.error('No current Room')
+        playerPosition.updateCoords(savedPlayerPosition.x, savedPlayerPosition.y)
+        sceneManager.changeActiveRoom(playerPosition.coords.x, playerPosition.coords.y)
         return
     }
     await sceneManager.saveScene({x: playerPosition.coords.x, y: playerPosition.coords.y}, sceneManager.sceneList)
+    setTimeout(() => {
+        sceneManager.loadingArea = false
+    },  800)
+
 }
 
 // const moveTo = async (sceneId: string, roomId: string) => {

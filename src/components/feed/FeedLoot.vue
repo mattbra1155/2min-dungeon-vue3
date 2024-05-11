@@ -76,7 +76,3 @@ const getItem = (container: RoomObject, item: AllItemTypes) => {
         </div>
     </div>
 </template>
-import { RoomObject } from '@/assets/models/RoomObjectModel'; import { AllItemTypes } from '@/interfaces/IItem'; import
-{ ref } from 'vue'; import { RoomObject } from '@/assets/models/RoomObjectModel'; import { AllItemTypes } from
-'@/interfaces/IItem'; import { ref } from 'vue';import { RoomObject } from '@/assets/models/RoomObjectModel'; import {
-AllItemTypes } from '@/interfaces/IItem';

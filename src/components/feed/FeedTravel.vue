@@ -36,18 +36,17 @@ watch(
         feedStore.setTravelFeedItem(containers.value)
     }
 )
-
-onMounted(() => {
-    feedStore.setTravelFeedItem('There is a chest in the room.')
-})
 </script>
 
 <template>
-    <div v-if="currentRoom" id="feed" class="o-feed">
-        <ul id="feedContainer" class="o-feed__container">
-            <img v-if="currentRoom.image" class="a-image" :src="currentRoom.image" alt="" />
-            <div v-html="currentRoom.description"></div>
-            <p v-for="feedItem in feedStore.feedTravelList" :key="feedItem">{{ feedItem }}</p>
-        </ul>
+    <div v-if="currentRoom" id="feed" class="o-feed" :class="{ '--loading': sceneManager.loadingArea }">
+        <transition name="fade">
+            <ul v-if="!sceneManager.loadingArea" id="feedContainer" class="o-feed__container">
+                <img v-if="currentRoom.image" class="a-image" :src="currentRoom.image" alt="" />
+                <!-- <div v-html="currentRoom.description"></div> -->
+                    <p v-for="feedItem in feedStore.feedTravelList" :key="feedItem">{{ feedItem }}</p>
+            </ul>
+        </transition>
+
     </div>
 </template>

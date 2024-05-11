@@ -71,6 +71,9 @@ const createLocationsJSON = async () => {
             if (location.id === 'foothills') {
                 location.description = `The foothills sprawl at the base of the towering mountains, their gentle slopes a transition between lowlands and peaks. Dappled with patches of verdant greenery and scattered with boulders, they offer a prelude to the grandeur above. Here, the land undulates in harmony, teasing with the promise of higher heights.`
             }
+            if (location.id === 'fields') {
+                location.description = `Amidst the desolation, fields sprawl untended, once-rich crops now withered and rotting. Neglected and forgotten, they stand as a testament to abandonment. Weeds choke the earth, reclaiming what was once cultivated. Nature's reclaiming hand transforms the once-thriving fields into a somber tableau of decay and neglect.`
+            }
 
             const POILocation = POIlocationData.find(item => item.id === location.id)
             if (POILocation) {
@@ -94,6 +97,8 @@ const init = async () => {
     await prepareMapGrid()
     await getLocationMap()
     await createLocationsJSON()
+
+    console.log(mapGrid[21][19])
 }
 
 init()

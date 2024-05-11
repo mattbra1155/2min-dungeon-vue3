@@ -17,6 +17,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
 
     const activeRoom = ref<Room>()
     const sceneList = ref<Room[]>([])
+    const loadingArea = ref<boolean>(false)
     const createLocations = (locationId: string) => {
         const locationList: Room[] = locations.map((locationData) => {
 
@@ -39,20 +40,69 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
 
     }
 
+    const getLocationData = (x: number, y: number) => {
+        const feedStore = useFeedStore()
+
+        const foundLocation = sceneList.value.find(location => location.x === x && location.y === y)
+
+        if (!foundLocation) {
+            return false
+        }
+
+        return foundLocation
+    }
+
     const changeActiveRoom = (roomX: number, roomY: number) => {
         const { player } = usePlayer()
         const { updateGameState } = useGameStateManager()
         const feedStore = useFeedStore()
 
-        feedStore.resetTravelFeed()
 
         console.log('x', roomX, 'y', roomY);
 
         activeRoom.value = sceneList.value.find((room) => room.x === roomX && room.y === roomY)
+
         if (!activeRoom.value) {
             console.error('No Room found')
             return false
         }
+        feedStore.resetTravelFeed()
+
+        feedStore.setTravelFeedItem(`You have entered ${activeRoom.value?.name}`)
+        feedStore.setTravelFeedItem(`${activeRoom.value?.description}`)
+
+        // Get closes tiles names
+        const north = getLocationData(roomX, roomY - 1)
+        const south = getLocationData(roomX, roomY + 1)
+        const east = getLocationData(roomX - 1, roomY)
+        const west = getLocationData(roomX + 1, roomY)
+
+        // if (north) {
+        //     feedStore.setTravelFeedItem(`To the north you see ${north.name}`)
+        // }
+        // if (south) {
+        //     feedStore.setTravelFeedItem(`To the south you see ${south.name}`)
+        // }
+        // if (east) {
+        //     feedStore.setTravelFeedItem(`To the east you see ${east.name}`)
+        // }
+        // if (west) {
+        //     feedStore.setTravelFeedItem(`To the west you see ${west.name}`)
+        // }
+        if (north) {
+            feedStore.setTravelFeedItem(`N: ${north.name}`)
+        }
+        if (south) {
+            feedStore.setTravelFeedItem(`S: ${south.name}`)
+        }
+        if (east) {
+            feedStore.setTravelFeedItem(`E: ${east.name}`)
+        }
+        if (west) {
+            feedStore.setTravelFeedItem(`W: ${west.name}`)
+        }
+
+
         // if player is not holding torch and room is dark stop him from entering
         if (activeRoom.value.isDark && player.value.offHand?.id !== 'torch') {
             feedStore.setTravelFeedItem('The room is completely dark. You need a lightsource to enter')
@@ -60,17 +110,16 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         }
 
         feedStore.setActiveRoomObject(undefined)
-        activeRoom.value = activeRoom.value
 
         // If Room is explored - monster defeated before - don't create another one
         if (activeRoom.value.isExplored) {
-            return
+            return true
         }
 
         // If Room is not explored and there is no monsters present - set Room as explored
         if (!activeRoom.value.monsterList.length) {
             activeRoom.value.isExplored = true
-            return
+            return true
         }
 
         createEnemyList(activeRoom.value.monsterList.map((monster) => monster.originId))
@@ -228,6 +277,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
 
     }
     return {
+        loadingArea,
         activeRoom,
         sceneList,
         createLocations,
