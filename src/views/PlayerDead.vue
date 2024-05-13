@@ -13,14 +13,12 @@ const { deadPlayer } = usePlayer()
 const router = useRouter()
 const feedStore = useFeedStore()
 const { activeCharacter, resetTurn } = useTurn()
-const { resetMapLocation, resetMapLocationList } = useSceneManagerStore()
+const sceneManager = useSceneManagerStore()
 const { updateGameState } = useGameStateManager()
 
 const init = () => {
     deadPlayer()
     updateGameState(EGameState.PlayerDead)
-    resetMapLocation()
-    resetMapLocationList()
     feedStore.resetBattleFeed()
 }
 

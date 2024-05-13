@@ -191,24 +191,17 @@ onMounted(() => {
                 Description
             </button>
             <button class="a-button action__button" v-if="!isSearched" @click="searchRoom">Search Room</button>
+            <button class="a-button action__button"
+            @click="$router.push({name: 'town'})"
+                v-if="sceneManager.activeRoom.id === 'oakwood'">
+                Enter {{ sceneManager.activeRoom.name }}
+            </button>
         </div>
         <div class="o-interface__row o-interface__directionWrapper">
             <template v-for="(destinationId, index) in 4" :key="index">
                 <button v-if="destinationId !== -1 && typeof destinationId === 'number'" class="a-button action__button"
                     @click="move(index)">
                     {{ directionButton(destinationId, index) }}
-                </button>
-            </template>
-
-            <template v-for="(destinationId, index) in sceneManager.activeRoom?.exits" :key="index">
-                <button class="a-button action__button"
-                    v-if="typeof destinationId !== 'number' && destinationId.sceneId !== 'town'">
-                    {{ getLocationName(destinationId.sceneId) }}
-                </button>
-                <button class="a-button action__button"
-                    v-if="typeof destinationId !== 'number' && destinationId.sceneId === 'town'"
-                    @click="moveToTown(destinationId.sceneId)">
-                    {{ destinationId.sceneId }}
                 </button>
             </template>
         </div>
