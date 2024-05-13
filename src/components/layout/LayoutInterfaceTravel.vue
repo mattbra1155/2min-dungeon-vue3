@@ -92,7 +92,7 @@ const move = async (index: number) => {
     } else if (index === EDirections.East) {
         // playerPosition.updateCoords(playerPosition.coords.x - 1, playerPosition.coords.y)
         newCoords = {
-            x: playerPosition.coords.x - 1,
+            x: playerPosition.coords.x + 1,
             y: playerPosition.coords.y
         }
         feedStore.setTravelFeedItem(`You move east`)
@@ -106,7 +106,7 @@ const move = async (index: number) => {
     } else if (index === EDirections.West) {
         // playerPosition.updateCoords(playerPosition.coords.x + 1, playerPosition.coords.y)
         newCoords = {
-            x: playerPosition.coords.x + 1,
+            x: playerPosition.coords.x - 1,
             y: playerPosition.coords.y
         }
         feedStore.setTravelFeedItem(`You move west`)
@@ -129,8 +129,8 @@ const move = async (index: number) => {
     // Get closes tiles names
     const north = sceneManager.getLocationData(playerPosition.coords.x, playerPosition.coords.y - 1)
     const south = sceneManager.getLocationData(playerPosition.coords.x, playerPosition.coords.y + 1)
-    const east = sceneManager.getLocationData(playerPosition.coords.x - 1, playerPosition.coords.y)
-    const west = sceneManager.getLocationData(playerPosition.coords.x + 1, playerPosition.coords.y)
+    const east = sceneManager.getLocationData(playerPosition.coords.x + 1, playerPosition.coords.y)
+    const west = sceneManager.getLocationData(playerPosition.coords.x - 1, playerPosition.coords.y)
 
     if (north) {
         feedStore.setTravelFeedItem(`N: ${north.name}`)
@@ -151,37 +151,6 @@ const move = async (index: number) => {
     }, 800)
 
 }
-
-// const moveTo = async (sceneId: string, roomId: string) => {
-//     if (!sceneManager.activeRoom) {
-//         return
-//     }
-
-//     if (sceneId !== sceneManager.activeRoom.id) {
-//         const existingScene = sceneList.value.find((scene) => scene.id.toString() === sceneId.toString())
-//         if (existingScene) {
-//             setMapLocation(existingScene)
-//             sceneManager.activeRoom.changeActiveRoom(roomId)
-//             return
-//         }
-//         createLocations(sceneId)
-//         sceneManager.activeRoom.changeActiveRoom(roomId)
-//         return
-//     }
-
-//     if (parseInt(roomId) === EDirections.Wall) {
-//         console.error('wall')
-//         return
-//     }
-
-//     sceneManager.activeRoom.changeActiveRoom(roomId)
-
-//     if (!sceneManager.activeRoom) {
-//         console.error('No current Room')
-//         return
-//     }
-//     await saveScene(sceneManager.activeRoom.id, sceneManager.activeRoom.id, sceneManager.activeRoom)
-// }
 
 const directionButton = (directionId: number, index: number) => {
     if (index === EDirections.North) {
