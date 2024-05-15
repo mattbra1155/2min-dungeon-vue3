@@ -16,6 +16,7 @@ interface ITurn {
     turnOrder: Array<PlayerModel | MonsterModel> | undefined
     activeCharacter: PlayerModel | MonsterModel | undefined
     activeTurnState: ETurnState
+    monsterList: Array<PlayerModel | MonsterModel> | undefined
 }
 
 const state: ITurn = reactive({
@@ -23,6 +24,7 @@ const state: ITurn = reactive({
     turnOrder: undefined,
     activeCharacter: undefined,
     activeTurnState: ETurnState.Init,
+    monsterList: undefined
 })
 
 export const useTurn = () => {
@@ -39,8 +41,12 @@ export const useTurn = () => {
         const sceneManager = useSceneManagerStore()
 
 
-        const monsterList = sceneManager.activeRoom?.monsterList
+        const monsterList = state.monsterList
 
+        if (monsterList?.length && !monsterList.find(item => item !== player.value)) {
+
+            monsterList?.push(player.value)
+        }
         if (!player.value.isAlive) {
             return
         }
@@ -63,9 +69,8 @@ export const useTurn = () => {
                 console.log('TURN STATE:', ETurnState.SortOrder)
                 state.turnOrder = undefined
                 console.log(monsterList)
-                if (!monsterList) {
+                if (!monsterList?.length) {
                     console.error('no monster list')
-
                     return
                 }
 
@@ -188,10 +193,14 @@ export const useTurn = () => {
         const updatedTurnOrder = state.turnOrder.splice(deadPersonIndex, 1)
         return updatedTurnOrder
     }
+    const setMonsterList = (monsterList: MonsterModel[]) => {
+        state.monsterList = monsterList
+    }
     return {
         ...toRefs(state),
         updateTurnStateMachine,
         resetTurn,
         checkIfDead,
+        setMonsterList
     }
 }

@@ -11,15 +11,23 @@ import AIcon from '@/components/AIcon.vue'
 import KnapsackIcon from '../icons/KnapsackIcon.vue'
 import CharacterScreenIcon from '../icons/CharacterScreenIcon.vue'
 import { usePlayerPositionStore } from '@/stores/usePlayerPosition'
+import { diceRollK100 } from '@/assets/scripts/diceRoll'
+import { useGameStateManager } from '@/composables/useGameStateManager'
+import { EGameState } from '@/enums/EGameState'
+import { ETurnState } from '@/enums/ETurnState'
+import { useTurn } from '@/composables/useTurn'
+import { useRandomEncounters } from '@/stores/useRandomEncounters'
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
+const { setMonsterList } = useTurn()
 const playerPosition = usePlayerPositionStore()
 const feedStore = useFeedStore()
 const sceneManager = useSceneManagerStore()
+const randomEncounters = useRandomEncounters()
 
 const isSearched = computed(() => sceneManager.activeRoom?.isSearched)
 
-
+const { activeGameState, updateGameState } = useGameStateManager()
 
 const addKeybindings = () => {
     window.addEventListener('keydown', (event) => {
@@ -82,29 +90,24 @@ const move = async (index: number) => {
     feedStore.resetTravelFeed()
 
     if (index === EDirections.North) {
-        // playerPosition.updateCoords(playerPosition.coords.x, playerPosition.coords.y - 1)
         newCoords = {
             x: playerPosition.coords.x,
             y: playerPosition.coords.y - 1
         }
-
         feedStore.setTravelFeedItem(`You move north`)
     } else if (index === EDirections.East) {
-        // playerPosition.updateCoords(playerPosition.coords.x - 1, playerPosition.coords.y)
         newCoords = {
             x: playerPosition.coords.x + 1,
             y: playerPosition.coords.y
         }
         feedStore.setTravelFeedItem(`You move east`)
     } else if (index === EDirections.South) {
-        // playerPosition.updateCoords(playerPosition.coords.x, playerPosition.coords.y + 1)
         newCoords = {
             x: playerPosition.coords.x,
             y: playerPosition.coords.y + 1
         }
         feedStore.setTravelFeedItem(`You move south`)
     } else if (index === EDirections.West) {
-        // playerPosition.updateCoords(playerPosition.coords.x + 1, playerPosition.coords.y)
         newCoords = {
             x: playerPosition.coords.x - 1,
             y: playerPosition.coords.y
@@ -122,7 +125,14 @@ const move = async (index: number) => {
         return
     }
 
+    // check if there is a monster here
+    const location = sceneManager.getLocationData(playerPosition.coords.x, playerPosition.coords.y)
+    
+    if (location) {
+        randomEncounters.rollEncounter(location.id)
+    }
 
+    
     feedStore.setTravelFeedItem(`You have entered ${sceneManager.activeRoom.name}`)
     feedStore.setTravelFeedItem(`${sceneManager.activeRoom.description}`)
 

@@ -288,7 +288,8 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         saveScene,
         loadScene,
         changeActiveRoom,
-        getLocationData
+        getLocationData,
+        createEnemyList
     }
 
 

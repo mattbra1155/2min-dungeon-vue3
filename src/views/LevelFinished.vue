@@ -12,31 +12,29 @@ import { useSceneManagerStore } from '@/stores/useSceneManager'
 import localforage from 'localforage'
 import { onMounted } from 'vue'
 import { useFeedStore } from '@/stores/useFeed'
+import { usePlayerPositionStore } from '@/stores/usePlayerPosition'
 
 const { updateTurnStateMachine, resetTurn } = useTurn()
 const router = useRouter()
 const { player } = usePlayer()
 const { lootList, generateLoot } = useLoot()
-const { activeRoom, saveScene } = useSceneManagerStore()
+const sceneManager = useSceneManagerStore()
+const playerPosition = usePlayerPositionStore()
 const { updateGameState } = useGameStateManager()
 const feedStore = useFeedStore()
 
-updateGameState(EGameState.LevelCleared)
-updateTurnStateMachine(ETurnState.Init)
+updateTurnStateMachine(ETurnState.Disabled)
 feedStore.resetBattleFeed()
 
 const setRoomExploredStatus = async () => {
-    if (!activeRoom.value) {
-        return
-    }
-    if (!activeRoom.value.currentRoom) {
+    if (!sceneManager.activeRoom) {
         return
     }
 
-    activeRoom.value.currentRoom.isExplored = true
-    console.log(activeRoom.value.currentRoom)
+    sceneManager.activeRoom.isExplored = true
+    console.log(sceneManager.activeRoom)
 
-    await saveScene(activeRoom.value.id, activeRoom.value.currentRoom.id, activeRoom.value.roomList)
+    await sceneManager.saveScene(playerPosition.coords, sceneManager.sceneList)
     resetTurn()
 }
 
