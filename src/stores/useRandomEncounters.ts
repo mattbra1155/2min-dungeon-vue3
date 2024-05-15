@@ -17,7 +17,7 @@ export const useRandomEncounters = defineStore('randomEncounters', () => {
 
     const roll = ref<number>()
     const isBattle = ref<boolean>(false)
-
+    const numberOfEnemies = ref<number>(0)
 
     const rollEncounter = (locationType: string) => {
 
@@ -33,49 +33,60 @@ export const useRandomEncounters = defineStore('randomEncounters', () => {
             forest: 35,
             darkForest: 40
         }
-        console.log(isBattle.value);
+        console.log(roll.value);
 
+        let monsters: string[] = []
 
         if (locationType === 'road') {
+            monsters = ['lesserGoblin']
             if (roll.value <= threshold.road) {
                 isBattle.value = true
             }
         }
         if (locationType === 'grassland') {
+            monsters = ['lesserGoblin', 'goblin']
             if (roll.value <= threshold.grassland) {
                 isBattle.value = true
             }
         }
         if (locationType === 'fields') {
+            monsters = ['lesserGoblin', 'goblin']
             if (roll.value <= threshold.fields) {
                 isBattle.value = true
             }
         }
         if (locationType === 'forest') {
+            monsters = ['lesserGoblin', 'goblin', 'ork', 'skeleton']
             if (roll.value <= threshold.forest) {
                 isBattle.value = true
             }
         }
         if (locationType === 'hinterlands') {
+            monsters = ['goblin', 'ork', 'ogre']
             if (roll.value <= threshold.hinterlands) {
                 isBattle.value = true
             }
         }
         if (locationType === 'dark_forest') {
+            monsters = ['ork', 'ogre', 'liche']
             if (roll.value <= threshold.darkForest) {
                 isBattle.value = true
             }
         }
 
-        console.log(locationType, roll.value, roll.value <= threshold.road, isBattle.value);
-
-
-
         if (!isBattle.value) {
             return false
         }
 
-        const monsterList = sceneManager.createEnemyList(['lesserGoblin'])
+        const list: string[] = []
+
+
+        for (let x = 0; x <= numberOfEnemies.value; x++) {
+            const index = Math.floor(Math.random() * monsters.length)
+            list.push(monsters[index])
+
+        }
+        const monsterList = sceneManager.createEnemyList(list)
         updateGameState(EGameState.Battle)
         setMonsterList(monsterList)
     }
