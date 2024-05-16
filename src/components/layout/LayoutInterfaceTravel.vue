@@ -119,21 +119,22 @@ const move = async (index: number) => {
     const changedRoom = sceneManager.changeActiveRoom(playerPosition.coords.x, playerPosition.coords.y)
 
     if (!changedRoom) {
+        // if cant move to the next tile return the player to the previous place
         console.error('No current Room')
         playerPosition.updateCoords(savedPlayerPosition.x, savedPlayerPosition.y)
         sceneManager.changeActiveRoom(playerPosition.coords.x, playerPosition.coords.y)
-        return
+        feedStore.setTravelFeedItem(`You travel back.`)
     }
 
-    // check if there is a monster here
     const location = sceneManager.getLocationData(playerPosition.coords.x, playerPosition.coords.y)
-    
+
     if (location) {
+        // check if there is a monster here
         randomEncounters.rollEncounter(location.id)
     }
 
-    
-    feedStore.setTravelFeedItem(`You have entered ${sceneManager.activeRoom.name}`)
+
+    feedStore.setTravelFeedItem(`You have entered ${sceneManager.activeRoom.name}.`)
     feedStore.setTravelFeedItem(`${sceneManager.activeRoom.description}`)
 
     // Get closes tiles names
@@ -201,8 +202,7 @@ onMounted(() => {
                 Description
             </button>
             <button class="a-button action__button" v-if="!isSearched" @click="searchRoom">Search Room</button>
-            <button class="a-button action__button"
-            @click="$router.push({name: 'town'})"
+            <button class="a-button action__button" @click="$router.push({ name: 'town' })"
                 v-if="sceneManager.activeRoom.id === 'oakwood'">
                 Enter {{ sceneManager.activeRoom.name }}
             </button>

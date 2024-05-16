@@ -103,6 +103,20 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         // }
 
 
+        if (activeRoom.value.id === 'water') {
+            feedStore.setTravelFeedItem('The water is to deep. You need a boat.')
+            return false
+        }
+
+        if (activeRoom.value.id === 'mountains' && !player.value.inventory.inventory.find(item => item.id === 'climbing_equipment')) {
+            feedStore.setTravelFeedItem(`The mountains are too steep. You need climbing equipment to travel.`)
+            return false
+        }
+
+        if (activeRoom.value.id === 'high_mountains') {
+            feedStore.setTravelFeedItem(`The high mountains are too dangerous to travel. You can't go further.`)
+            return false
+        }
 
         // if player is not holding torch and room is dark stop him from entering
         if (activeRoom.value.isDark && player.value.offHand?.id !== 'torch') {

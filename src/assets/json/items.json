@@ -488,6 +488,15 @@
                 "modifiers": [],
                 "encumbrance": 20,
                 "icon": ""
+            },
+            {
+                "name": "climbing_equipment",
+                "baseValue": 0,
+                "type": "tools",
+                "price": 30,
+                "modifiers": [],
+                "encumbrance": 80,
+                "icon": ""
             }
         ],
         "quality": [
