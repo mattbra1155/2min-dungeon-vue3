@@ -6,7 +6,9 @@ import { useSceneManagerStore } from '@/stores/useSceneManager'
 import { computed } from 'vue'
 import { EGameState } from '@/enums/EGameState'
 import { useGameStateManager } from '@/composables/useGameStateManager'
+import { useInstanceManagerStore } from '@/stores/useInstanceManager'
 
+const instanceManager = useInstanceManagerStore()
 const { targetToAttack, setTargetToAttack } = useAttack()
 const { player } = usePlayer()
 const sceneManager = useSceneManagerStore()
@@ -20,18 +22,15 @@ const enemyList = computed(() => turnOrder.value)
 <template>
     <div id="top-bar" class="o-header">
         <h2 v-if="sceneManager.activeRoom" id="levelName" class="level__name">{{ sceneManager.activeRoom.name }}</h2>
-        <!-- <p style="text-align: center">{{ sceneManager.activeRoom?.name }}</p> -->
+        <p style="text-align: center">{{ instanceManager.activeRoom?.name }}</p>
         <div v-if="activeGameState === EGameState.Battle">
             <p style="text-align: center">{{ activeTurnState }}</p>
             <p style="text-align: center">Turn: {{ turnNumber }}</p>
         </div>
         <div class="o-header__healthWrapper">
             <template v-for="enemy in enemyList" :key="enemy.id">
-                <div
-                    v-if="enemy.isAlive"
-                    class="o-header__healthItem --enemy"
-                    :class="{ '--active': targetToAttack === enemy }"
-                >
+                <div v-if="enemy.isAlive" class="o-header__healthItem --enemy"
+                    :class="{ '--active': targetToAttack === enemy }">
                     <h2 @click="setTargetToAttack(enemy)" class="o-header__name" id="monsterName">
                         {{ enemy.name ? enemy.name : 'placeholder enemy' }}
                     </h2>

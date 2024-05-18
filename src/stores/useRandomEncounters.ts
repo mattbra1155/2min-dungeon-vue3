@@ -26,12 +26,12 @@ export const useRandomEncounters = defineStore('randomEncounters', () => {
 
         roll.value = diceRollK100()
         const threshold = {
-            road: 5,
-            grassland: 20,
-            fields: 15,
-            hinterlands: 30,
-            forest: 35,
-            darkForest: 40
+            road: 0,
+            grassland: 0,
+            fields: 0,
+            hinterlands: 0,
+            forest: 0,
+            darkForest: 0
         }
         console.log(roll.value);
 

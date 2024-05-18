@@ -17,6 +17,9 @@ import { EGameState } from '@/enums/EGameState'
 import { ETurnState } from '@/enums/ETurnState'
 import { useTurn } from '@/composables/useTurn'
 import { useRandomEncounters } from '@/stores/useRandomEncounters'
+import { useInstanceManagerStore } from '@/stores/useInstanceManager'
+import { Room } from '@/assets/models/RoomModel'
+import { Store } from 'pinia'
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
 const { setMonsterList } = useTurn()
@@ -24,10 +27,21 @@ const playerPosition = usePlayerPositionStore()
 const feedStore = useFeedStore()
 const sceneManager = useSceneManagerStore()
 const randomEncounters = useRandomEncounters()
+const instanceManager = useInstanceManagerStore()
 
 const isSearched = computed(() => sceneManager.activeRoom?.isSearched)
+const closesTiles = ref<{
+    north: Room | false
+    east: Room | false
+    south: Room | false
+    west: Room | false
+}>({
+    north: false,
+    east: false,
+    south: false,
+    west: false,
 
-const { activeGameState, updateGameState } = useGameStateManager()
+})
 
 const addKeybindings = () => {
     window.addEventListener('keydown', (event) => {
@@ -50,6 +64,33 @@ const addKeybindings = () => {
             // toggleCharacterScreen()
         }
     })
+}
+
+const getClosestTiles = () => {
+
+    let manager: any = sceneManager
+    if (instanceManager.isActive) {
+        manager = instanceManager
+    }
+    console.log(manager);
+
+    closesTiles.value.north = manager.getLocationData(playerPosition.coords.x, playerPosition.coords.y - 1)
+    closesTiles.value.south = manager.getLocationData(playerPosition.coords.x, playerPosition.coords.y + 1)
+    closesTiles.value.east = manager.getLocationData(playerPosition.coords.x + 1, playerPosition.coords.y)
+    closesTiles.value.west = manager.getLocationData(playerPosition.coords.x - 1, playerPosition.coords.y)
+
+    if (closesTiles.value.north) {
+        feedStore.setTravelFeedItem(`N: ${closesTiles.value.north.name}`)
+    }
+    if (closesTiles.value.east) {
+        feedStore.setTravelFeedItem(`E: ${closesTiles.value.east.name}`)
+    }
+    if (closesTiles.value.south) {
+        feedStore.setTravelFeedItem(`S: ${closesTiles.value.south.name}`)
+    }
+    if (closesTiles.value.west) {
+        feedStore.setTravelFeedItem(`W: ${closesTiles.value.west.name}`)
+    }
 }
 const getLocationName = (locationId: string) => {
     const locationName = localtions.find((scene) => scene.id === locationId.toString())?.name
@@ -75,12 +116,17 @@ const moveToTown = async (sceneId: string) => {
 }
 
 const move = async (index: number) => {
+    let manager: any = sceneManager
 
-    if (!sceneManager.activeRoom) {
+    if (instanceManager.isActive) {
+        manager = instanceManager
+    }
+
+    if (!manager) {
         return
     }
 
-    sceneManager.loadingArea = true
+    manager.loadingArea = true
 
     const savedPlayerPosition = structuredClone(toRaw(playerPosition.coords))
     let newCoords = {
@@ -116,17 +162,20 @@ const move = async (index: number) => {
     }
     playerPosition.updateCoords(newCoords.x, newCoords.y)
 
-    const changedRoom = sceneManager.changeActiveRoom(playerPosition.coords.x, playerPosition.coords.y)
+    console.log(manager);
+
+    const changedRoom = manager.changeActiveRoom(playerPosition.coords.x, playerPosition.coords.y)
+
 
     if (!changedRoom) {
         // if cant move to the next tile return the player to the previous place
         console.error('No current Room')
         playerPosition.updateCoords(savedPlayerPosition.x, savedPlayerPosition.y)
-        sceneManager.changeActiveRoom(playerPosition.coords.x, playerPosition.coords.y)
+        manager.changeActiveRoom(playerPosition.coords.x, playerPosition.coords.y)
         feedStore.setTravelFeedItem(`You travel back.`)
     }
 
-    const location = sceneManager.getLocationData(playerPosition.coords.x, playerPosition.coords.y)
+    const location = manager.getLocationData(playerPosition.coords.x, playerPosition.coords.y)
 
     if (location) {
         // check if there is a monster here
@@ -134,45 +183,37 @@ const move = async (index: number) => {
     }
 
 
-    feedStore.setTravelFeedItem(`You have entered ${sceneManager.activeRoom.name}.`)
-    feedStore.setTravelFeedItem(`${sceneManager.activeRoom.description}`)
+    feedStore.setTravelFeedItem(`You have entered ${manager.activeRoom?.name}.`)
+    feedStore.setTravelFeedItem(`${manager.activeRoom?.description}`)
 
     // Get closes tiles names
-    const north = sceneManager.getLocationData(playerPosition.coords.x, playerPosition.coords.y - 1)
-    const south = sceneManager.getLocationData(playerPosition.coords.x, playerPosition.coords.y + 1)
-    const east = sceneManager.getLocationData(playerPosition.coords.x + 1, playerPosition.coords.y)
-    const west = sceneManager.getLocationData(playerPosition.coords.x - 1, playerPosition.coords.y)
+    getClosestTiles()
 
-    if (north) {
-        feedStore.setTravelFeedItem(`N: ${north.name}`)
-    }
-    if (east) {
-        feedStore.setTravelFeedItem(`E: ${east.name}`)
-    }
-    if (south) {
-        feedStore.setTravelFeedItem(`S: ${south.name}`)
-    }
-    if (west) {
-        feedStore.setTravelFeedItem(`W: ${west.name}`)
-    }
-
-    await sceneManager.saveScene({ x: playerPosition.coords.x, y: playerPosition.coords.y }, sceneManager.sceneList)
+    await manager.saveScene({ x: playerPosition.coords.x, y: playerPosition.coords.y }, manager.sceneList)
     setTimeout(() => {
-        sceneManager.loadingArea = false
+        manager.loadingArea = false
     }, 800)
 
 }
 
-const directionButton = (directionId: number, index: number) => {
+const directionButton = (index: number) => {
+    let destination = undefined
+    console.log(index);
+
     if (index === EDirections.North) {
-        return Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
+        destination = Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
     } else if (index === EDirections.East) {
-        return Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
+        destination = Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
     } else if (index === EDirections.South) {
-        return Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
+        destination = Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
     } else if (index === EDirections.West) {
-        return Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
+        destination = Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
     }
+
+
+    console.log(destination);
+    return destination
+
 }
 
 const searchRoom = () => {
@@ -183,6 +224,18 @@ const searchRoom = () => {
     sceneManager.activeRoom.searchRoom()
 }
 
+const enterInstance = () => {
+    if (!sceneManager.activeRoom) {
+        return
+    }
+    instanceManager.isActive = true
+
+    instanceManager.createLocations(sceneManager.activeRoom.id, 'gate')
+
+    feedStore.resetTravelFeed()
+    feedStore.setTravelFeedItem(`You have entered ${instanceManager.activeRoom?.name}`)
+    getClosestTiles()
+}
 onMounted(() => {
     addKeybindings()
 })
@@ -202,6 +255,10 @@ onMounted(() => {
                 Description
             </button>
             <button class="a-button action__button" v-if="!isSearched" @click="searchRoom">Search Room</button>
+            <button class="a-button action__button" @click="enterInstance()"
+                v-if="!['road', 'grassland', 'hinterlands', 'mountains', 'water', 'fields', 'forest'].includes(sceneManager.activeRoom.id)">
+                Enter {{ sceneManager.activeRoom.name }}
+            </button>
             <button class="a-button action__button" @click="$router.push({ name: 'town' })"
                 v-if="sceneManager.activeRoom.id === 'oakwood'">
                 Enter {{ sceneManager.activeRoom.name }}
@@ -209,9 +266,8 @@ onMounted(() => {
         </div>
         <div class="o-interface__row o-interface__directionWrapper">
             <template v-for="(destinationId, index) in 4" :key="index">
-                <button v-if="destinationId !== -1 && typeof destinationId === 'number'" class="a-button action__button"
-                    @click="move(index)">
-                    {{ directionButton(destinationId, index) }}
+                <button class="a-button action__button" @click="move(index)">
+                    {{ directionButton(index) }}
                 </button>
             </template>
         </div>
