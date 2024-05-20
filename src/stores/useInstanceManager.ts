@@ -167,11 +167,11 @@ export const useInstanceManagerStore = defineStore('InstanceManager', () => {
         )
 
         // save Scene List
-        await localforage.setItem('savedsceneList', JSON.stringify(sceneList.value))
+        await localforage.setItem('savedInstanceList', JSON.stringify(sceneList.value))
     }
     const loadScene = async () => {
         // load and save sceneList.value
-        const sceneListData = JSON.parse((await localforage.getItem('savedsceneList')) as string)
+        const sceneListData = JSON.parse((await localforage.getItem('savedInstanceList')) as string)
 
         if (!sceneListData) {
             console.log('no scene List saved');
