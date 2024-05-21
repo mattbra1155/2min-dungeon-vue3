@@ -1,12 +1,11 @@
 /* eslint-disable no-undef */
-import localforage from 'localforage'
 import fs from 'node:fs/promises'
-
+import { Interface } from 'node:readline'
+// import ttt from '../src/assets/data/instances.json' with {type: 'json'}
 const mapGrid = []
 const mapLocations = []
 
 let locationName = ''
-
 function wrapStringsIntoObjectsFromString(commaSeparatedString) {
     const array = commaSeparatedString.replace(/(\r\n|\n|\r)/gm, ',').split(',')
     // console.log(array);
@@ -23,69 +22,71 @@ const prepareMapGrid = async (csvFile) => {
         const data = await fs.readFile(`${csvFile}.csv`, { encoding: 'utf8' })
         // console.log(data);
         wrapStringsIntoObjectsFromString(data)
-        console.log(`mapGrid - done`);
+        console.log(`mapGrid - done`)
         locationName = csvFile
-
     } catch (err) {
         console.log(err)
     }
 }
 
-const getLocationMap = async (location) => {
+const getLocationMap = async () => {
     const resultLocationMap = mapGrid.map((row, columnIndex) => {
         row.map((item, rowIndex) => {
             const resultItem = {
                 name: item,
                 y: columnIndex,
-                x: rowIndex
+                x: rowIndex,
             }
             mapLocations.push(resultItem)
             return resultItem
         })
-
     })
     // console.log(mapLocations);
-    console.log(`mapLocations - done`);
+    console.log(`mapLocations - done`)
 
     return resultLocationMap
 }
 
 const createLocationsJSON = async () => {
     try {
-        // const data = await fs.readFile('./templocations.json', { encoding: 'utf8' })
-        // const POIlocationData = JSON.parse(data)
+        const data = await fs.readFile('../src/assets/data/instances.json', { encoding: 'utf8' })
+        const POIlocationList = JSON.parse(data)
 
-        const mergedLocations = mapLocations.map(location => {
+        // console.log(locationName)
+        const POIlocationData = POIlocationList.find((location) => location.id === locationName)
+
+        // console.log(POIlocationData.locations)
+        const mergedLocations = mapLocations.map((location) => {
             location.id = location.name.replace(' ', '_').toLowerCase()
 
-            // const POILocation = POIlocationData.find(item => item.id === location.id)
-            // if (POILocation) {
-            //     location = Object.assign(POILocation, location)
-            // }
+            const POILocation = POIlocationData.locations.find((item) => item.id === location.id)
+            if (POILocation) {
+                location = Object.assign(POILocation, location)
+            }
 
             return location
         })
 
         const result = {
             name: locationName,
-            map: mergedLocations
+            map: mergedLocations,
         }
-
 
         await fs.writeFile(`../src/assets/json/instances.json`, JSON.stringify([result]))
         console.log('createLocationsJSON - done')
-
-
     } catch (err) {
         console.log(err)
     }
 }
 
-
 const init = async () => {
-    await prepareMapGrid('castle_drakenhof')
-    await getLocationMap()
-    await createLocationsJSON()
+    const listOfInstances = ['castle_drakenhof', 'castle_drakenhof_dungeon']
+    listOfInstances.forEach(async (element) => {
+        console.log(element)
+        await prepareMapGrid(element)
+        await getLocationMap()
+        await createLocationsJSON()
+    })
 
     // console.log(mapGrid[21][19])
 }

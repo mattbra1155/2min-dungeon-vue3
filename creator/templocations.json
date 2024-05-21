@@ -62,5 +62,26 @@
                 "isLocked": true
             }
         ]
+    },
+    {
+        "id": "castle_drakenhof",
+        "image": "empty",
+        "name": "Castle Drakenhof",
+        "description": "A scary castle on a cliff overlooking a forest.",
+        "entityList": [],
+        "lootList": "",
+        "isDark": false,
+        "x": "",
+        "y": "",
+        "objects": [
+            {
+                "type": "chest",
+                "isLocked": true
+            }
+        ],
+        "connectedLocation": {
+            "id": "castle_drakenhof",
+            "entryId": "gate"
+        }
     }
 ]

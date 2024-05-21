@@ -2087,10 +2087,25 @@
         "description": "Towerous mountains loom, impassable barriers cutting the horizon. Their jagged peaks pierce the sky, cloaked in perpetual snow. Valleys yawning between them seem unreachable, lost to the clouds. No path, no passage; these formidable giants stand as guardians of the untamed wilderness, daunting and unconquerable."
     },
     {
+        "id": "castle_drakenhof",
+        "image": "empty",
         "name": "Castle drakenhof",
-        "y": 7,
+        "description": "A scary castle on a cliff overlooking a forest.",
+        "entityList": [],
+        "lootList": "",
+        "isDark": false,
         "x": 15,
-        "id": "castle_drakenhof"
+        "y": 7,
+        "objects": [
+            {
+                "type": "chest",
+                "isLocked": true
+            }
+        ],
+        "connectedLocation": {
+            "id": "castle_drakenhof",
+            "entryId": "gate"
+        }
     },
     {
         "name": "high mountains",

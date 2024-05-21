@@ -1,8 +1,8 @@
 export enum ERoomTypes {
-    Entry = 'Entry',
-    Empty = 'Empty',
-    Loot = 'Loot',
-    Monster = 'Monster',
-    Boos = 'Boss',
-    Exit = 'Exit',
+    Entry = 'entry',
+    Empty = 'empty',
+    Loot = 'loot',
+    Monster = 'monster',
+    Boos = 'boss',
+    Exit = 'exit',
 }

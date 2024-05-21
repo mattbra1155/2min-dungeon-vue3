@@ -9,8 +9,8 @@ interface coords {
 export const usePlayerPositionStore = defineStore('playerPosition', () => {
     const sceneManager = useSceneManagerStore()
     const coords = ref<coords>({
-        x: sceneManager.activeRoom?.x || 19,
-        y: sceneManager.activeRoom?.y || 21,
+        x: sceneManager.activeRoom?.x || 15,
+        y: sceneManager.activeRoom?.y || 7,
     })
 
     const updateCoords = (x: number, y: number) => {
@@ -19,6 +19,6 @@ export const usePlayerPositionStore = defineStore('playerPosition', () => {
     }
     return {
         coords,
-        updateCoords
+        updateCoords,
     }
 })

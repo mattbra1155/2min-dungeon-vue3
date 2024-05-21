@@ -26,6 +26,7 @@ interface IRoom {
     isSearched: boolean
     isDark: boolean
     searchRoom(player: PlayerModel): boolean
+    connectedLocation: { id: string; entryId: string } | undefined
 }
 
 export function isRoomExit(object: IRoomExit): object is IRoomExit {
@@ -47,7 +48,8 @@ class Room implements IRoom {
         public isExplored: boolean = false,
         public isSearched: boolean = false,
         public isDark: boolean = false,
-        public type: ERoomTypes = ERoomTypes.Empty
+        public type: ERoomTypes = ERoomTypes.Empty,
+        public connectedLocation: { id: string; entryId: string } | undefined = undefined
     ) {
         this.id
         this.x = x
@@ -62,6 +64,7 @@ class Room implements IRoom {
         this.isExplored = isExplored
         this.isSearched = isSearched
         this.isDark = isDark
+        this.connectedLocation = connectedLocation
     }
     searchRoom() {
         const initiativeRoll = diceRollK100()

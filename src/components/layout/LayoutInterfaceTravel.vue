@@ -11,18 +11,12 @@ import AIcon from '@/components/AIcon.vue'
 import KnapsackIcon from '../icons/KnapsackIcon.vue'
 import CharacterScreenIcon from '../icons/CharacterScreenIcon.vue'
 import { usePlayerPositionStore } from '@/stores/usePlayerPosition'
-import { diceRollK100 } from '@/assets/scripts/diceRoll'
-import { useGameStateManager } from '@/composables/useGameStateManager'
-import { EGameState } from '@/enums/EGameState'
-import { ETurnState } from '@/enums/ETurnState'
-import { useTurn } from '@/composables/useTurn'
 import { useRandomEncounters } from '@/stores/useRandomEncounters'
 import { useInstanceManagerStore } from '@/stores/useInstanceManager'
 import { Room } from '@/assets/models/RoomModel'
-import { Store } from 'pinia'
+import { ERoomTypes } from '@/enums/ERoomTypes'
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
-const { setMonsterList } = useTurn()
 const playerPosition = usePlayerPositionStore()
 const feedStore = useFeedStore()
 const sceneManager = useSceneManagerStore()
@@ -40,7 +34,6 @@ const closesTiles = ref<{
     east: false,
     south: false,
     west: false,
-
 })
 
 const addKeybindings = () => {
@@ -67,13 +60,10 @@ const addKeybindings = () => {
 }
 
 const getClosestTiles = () => {
-
     let manager: any = sceneManager
     if (instanceManager.isActive) {
         manager = instanceManager
     }
-    console.log(manager);
-
     closesTiles.value.north = manager.getLocationData(playerPosition.coords.x, playerPosition.coords.y - 1)
     closesTiles.value.south = manager.getLocationData(playerPosition.coords.x, playerPosition.coords.y + 1)
     closesTiles.value.east = manager.getLocationData(playerPosition.coords.x + 1, playerPosition.coords.y)
@@ -102,16 +92,7 @@ const getLocationName = (locationId: string) => {
     }
 }
 
-const moveToTown = async (sceneId: string) => {
-    if (!sceneManager.activeRoom || !sceneManager.activeRoom.id || !sceneManager.activeRoom || !sceneManager.activeRoom) {
-        console.error('Cant go to Town - missing object')
-        return
-    }
-    if (sceneId === 'town') {
-        sceneManager.createLocations(sceneId)
-        router.push({ name: 'town' })
-        return
-    }
+const moveToLocation = async (locationId: string, x: number, y: number) => {
     await sceneManager.saveScene({ x: playerPosition.coords.x, y: playerPosition.coords.y }, sceneManager.sceneList)
 }
 
@@ -131,41 +112,38 @@ const move = async (index: number) => {
     const savedPlayerPosition = structuredClone(toRaw(playerPosition.coords))
     let newCoords = {
         x: 0,
-        y: 0
+        y: 0,
     }
     feedStore.resetTravelFeed()
 
     if (index === EDirections.North) {
         newCoords = {
             x: playerPosition.coords.x,
-            y: playerPosition.coords.y - 1
+            y: playerPosition.coords.y - 1,
         }
         feedStore.setTravelFeedItem(`You move north`)
     } else if (index === EDirections.East) {
         newCoords = {
             x: playerPosition.coords.x + 1,
-            y: playerPosition.coords.y
+            y: playerPosition.coords.y,
         }
         feedStore.setTravelFeedItem(`You move east`)
     } else if (index === EDirections.South) {
         newCoords = {
             x: playerPosition.coords.x,
-            y: playerPosition.coords.y + 1
+            y: playerPosition.coords.y + 1,
         }
         feedStore.setTravelFeedItem(`You move south`)
     } else if (index === EDirections.West) {
         newCoords = {
             x: playerPosition.coords.x - 1,
-            y: playerPosition.coords.y
+            y: playerPosition.coords.y,
         }
         feedStore.setTravelFeedItem(`You move west`)
     }
     playerPosition.updateCoords(newCoords.x, newCoords.y)
 
-    console.log(manager);
-
     const changedRoom = manager.changeActiveRoom(playerPosition.coords.x, playerPosition.coords.y)
-
 
     if (!changedRoom) {
         // if cant move to the next tile return the player to the previous place
@@ -182,7 +160,6 @@ const move = async (index: number) => {
         randomEncounters.rollEncounter(location.id)
     }
 
-
     feedStore.setTravelFeedItem(`You have entered ${manager.activeRoom?.name}.`)
     feedStore.setTravelFeedItem(`${manager.activeRoom?.description}`)
 
@@ -193,13 +170,10 @@ const move = async (index: number) => {
     setTimeout(() => {
         manager.loadingArea = false
     }, 800)
-
 }
 
 const directionButton = (index: number) => {
     let destination = undefined
-    console.log(index);
-
     if (index === EDirections.North) {
         destination = Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
     } else if (index === EDirections.East) {
@@ -210,10 +184,7 @@ const directionButton = (index: number) => {
         destination = Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
     }
 
-
-    console.log(destination);
     return destination
-
 }
 
 const searchRoom = () => {
@@ -224,17 +195,26 @@ const searchRoom = () => {
     sceneManager.activeRoom.searchRoom()
 }
 
-const enterInstance = () => {
-    if (!sceneManager.activeRoom) {
+const enterInstance = (instanceId: string, entryId: string) => {
+    if (!sceneManager.activeRoom || !instanceId || !entryId) {
         return
     }
+
     instanceManager.isActive = true
 
-    instanceManager.createLocations(sceneManager.activeRoom.id, 'gate')
-
+    instanceManager.createLocations(instanceId || sceneManager.activeRoom.id, entryId)
     feedStore.resetTravelFeed()
     feedStore.setTravelFeedItem(`You have entered ${instanceManager.activeRoom?.name}`)
+    feedStore.setTravelFeedItem(`${instanceManager.activeRoom?.description}`)
     getClosestTiles()
+}
+
+const enterRoom = () => {
+    if (instanceManager.activeRoom?.type !== ERoomTypes.Exit) {
+        return
+    }
+
+    const room = instanceManager.activeRoom.connectedLocation
 }
 onMounted(() => {
     addKeybindings()
@@ -245,22 +225,42 @@ onMounted(() => {
     <div v-if="sceneManager.activeRoom" class="o-interface">
         <div class="o-interface__row o-interface__objectActions">
             <template v-for="roomObject in sceneManager.activeRoom?.roomObjects" :key="roomObject.id">
-                <button v-if="feedStore.activeRoomObject?.id !== roomObject.id" class="a-button action__button"
-                    @click="feedStore.setActiveRoomObject(roomObject)">
+                <button
+                    v-if="feedStore.activeRoomObject?.id !== roomObject.id"
+                    class="a-button action__button"
+                    @click="feedStore.setActiveRoomObject(roomObject)"
+                >
                     Search {{ roomObject.name }}
                 </button>
             </template>
-            <button v-if="feedStore.activeRoomObject" class="a-button action__button"
-                @click="feedStore.setActiveRoomObject(undefined)">
+            <button
+                v-if="feedStore.activeRoomObject"
+                class="a-button action__button"
+                @click="feedStore.setActiveRoomObject(undefined)"
+            >
                 Description
             </button>
             <button class="a-button action__button" v-if="!isSearched" @click="searchRoom">Search Room</button>
-            <button class="a-button action__button" @click="enterInstance()"
-                v-if="!['road', 'grassland', 'hinterlands', 'mountains', 'water', 'fields', 'forest'].includes(sceneManager.activeRoom.id)">
-                Enter {{ sceneManager.activeRoom.name }}
-            </button>
-            <button class="a-button action__button" @click="$router.push({ name: 'town' })"
-                v-if="sceneManager.activeRoom.id === 'oakwood'">
+            <template v-if="sceneManager.activeRoom && sceneManager.activeRoom.connectedLocation !== undefined">
+                {{ instanceManager.activeRoom?.connectedLocation }}
+                <button
+                    v-if="sceneManager.activeRoom.connectedLocation"
+                    class="a-button action__button"
+                    @click="
+                        enterInstance(
+                            sceneManager.activeRoom?.connectedLocation?.id!,
+                            sceneManager.activeRoom?.connectedLocation?.entryId!
+                        )
+                    "
+                >
+                    Enter {{ instanceManager.activeRoom?.name || sceneManager.activeRoom.name }}
+                </button>
+            </template>
+            <button
+                v-if="sceneManager.activeRoom.id === 'oakwood'"
+                class="a-button action__button"
+                @click="$router.push({ name: 'town' })"
+            >
                 Enter {{ sceneManager.activeRoom.name }}
             </button>
         </div>
