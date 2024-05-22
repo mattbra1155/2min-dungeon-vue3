@@ -12,16 +12,16 @@ import KnapsackIcon from '../icons/KnapsackIcon.vue'
 import CharacterScreenIcon from '../icons/CharacterScreenIcon.vue'
 import { usePlayerPositionStore } from '@/stores/usePlayerPosition'
 import { useRandomEncounters } from '@/stores/useRandomEncounters'
-import { useInstanceManagerStore } from '@/stores/useInstanceManager'
 import { Room } from '@/assets/models/RoomModel'
 import { ERoomTypes } from '@/enums/ERoomTypes'
+import instances from '@/assets/json/instances.json'
+
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
 const playerPosition = usePlayerPositionStore()
 const feedStore = useFeedStore()
 const sceneManager = useSceneManagerStore()
 const randomEncounters = useRandomEncounters()
-const instanceManager = useInstanceManagerStore()
 
 const isSearched = computed(() => sceneManager.activeRoom?.isSearched)
 const closesTiles = ref<{
@@ -60,19 +60,17 @@ const addKeybindings = () => {
 }
 
 const getClosestTiles = () => {
-    let manager: any = sceneManager
-    if (instanceManager.isActive) {
-        manager = instanceManager
-    }
-    closesTiles.value.north = manager.getLocationData(playerPosition.coords.x, playerPosition.coords.y - 1)
-    closesTiles.value.south = manager.getLocationData(playerPosition.coords.x, playerPosition.coords.y + 1)
-    closesTiles.value.east = manager.getLocationData(playerPosition.coords.x + 1, playerPosition.coords.y)
-    closesTiles.value.west = manager.getLocationData(playerPosition.coords.x - 1, playerPosition.coords.y)
+    closesTiles.value.north = sceneManager.getLocationData(playerPosition.coords.x, playerPosition.coords.y - 1)
+    closesTiles.value.south = sceneManager.getLocationData(playerPosition.coords.x, playerPosition.coords.y + 1)
+    closesTiles.value.east = sceneManager.getLocationData(playerPosition.coords.x + 1, playerPosition.coords.y)
+    closesTiles.value.west = sceneManager.getLocationData(playerPosition.coords.x - 1, playerPosition.coords.y)
 
     if (closesTiles.value.north) {
         feedStore.setTravelFeedItem(`N: ${closesTiles.value.north.name}`)
     }
     if (closesTiles.value.east) {
+        console.log(closesTiles.value)
+
         feedStore.setTravelFeedItem(`E: ${closesTiles.value.east.name}`)
     }
     if (closesTiles.value.south) {
@@ -82,32 +80,27 @@ const getClosestTiles = () => {
         feedStore.setTravelFeedItem(`W: ${closesTiles.value.west.name}`)
     }
 }
-const getLocationName = (locationId: string) => {
-    const locationName = localtions.find((scene) => scene.id === locationId.toString())?.name
+// const getLocationName = (locationId: string) => {
+//     let locationName = undefined
+//     if (instanceManager.isActive) {
+//         locationName = instances.find((scene) => scene.id === locationId.toString())?.name
+//     } else {
+//         locationName = localtions.find((scene) => scene.id === locationId.toString())?.name
+//     }
 
-    if (locationName) {
-        return locationName
-    } else {
-        return 'Error - no Name'
-    }
-}
-
-const moveToLocation = async (locationId: string, x: number, y: number) => {
-    await sceneManager.saveScene({ x: playerPosition.coords.x, y: playerPosition.coords.y }, sceneManager.sceneList)
-}
+//     if (locationName) {
+//         return locationName
+//     } else {
+//         return 'Error - no Name'
+//     }
+// }
 
 const move = async (index: number) => {
-    let manager: any = sceneManager
-
-    if (instanceManager.isActive) {
-        manager = instanceManager
-    }
-
-    if (!manager) {
+    if (!sceneManager) {
         return
     }
 
-    manager.loadingArea = true
+    sceneManager.loadingArea = true
 
     const savedPlayerPosition = structuredClone(toRaw(playerPosition.coords))
     let newCoords = {
@@ -143,32 +136,32 @@ const move = async (index: number) => {
     }
     playerPosition.updateCoords(newCoords.x, newCoords.y)
 
-    const changedRoom = manager.changeActiveRoom(playerPosition.coords.x, playerPosition.coords.y)
+    const changedRoom = sceneManager.changeActiveRoom(playerPosition.coords.x, playerPosition.coords.y)
 
     if (!changedRoom) {
         // if cant move to the next tile return the player to the previous place
         console.error('No current Room')
         playerPosition.updateCoords(savedPlayerPosition.x, savedPlayerPosition.y)
-        manager.changeActiveRoom(playerPosition.coords.x, playerPosition.coords.y)
+        sceneManager.changeActiveRoom(playerPosition.coords.x, playerPosition.coords.y)
         feedStore.setTravelFeedItem(`You travel back.`)
     }
 
-    const location = manager.getLocationData(playerPosition.coords.x, playerPosition.coords.y)
+    const location = sceneManager.getLocationData(playerPosition.coords.x, playerPosition.coords.y)
 
     if (location) {
         // check if there is a monster here
         randomEncounters.rollEncounter(location.id)
     }
 
-    feedStore.setTravelFeedItem(`You have entered ${manager.activeRoom?.name}.`)
-    feedStore.setTravelFeedItem(`${manager.activeRoom?.description}`)
+    feedStore.setTravelFeedItem(`You have entered ${sceneManager.activeRoom?.name}.`)
+    feedStore.setTravelFeedItem(`${sceneManager.activeRoom?.description}`)
 
     // Get closes tiles names
     getClosestTiles()
 
-    await manager.saveScene({ x: playerPosition.coords.x, y: playerPosition.coords.y }, manager.sceneList)
+    await sceneManager.saveScene({ x: playerPosition.coords.x, y: playerPosition.coords.y }, sceneManager.sceneList)
     setTimeout(() => {
-        manager.loadingArea = false
+        sceneManager.loadingArea = false
     }, 800)
 }
 
@@ -195,27 +188,22 @@ const searchRoom = () => {
     sceneManager.activeRoom.searchRoom()
 }
 
-const enterInstance = (instanceId: string, entryId: string) => {
+const enterInstance = async (instanceId: string, entryId: string) => {
     if (!sceneManager.activeRoom || !instanceId || !entryId) {
         return
     }
 
-    instanceManager.isActive = true
-
-    instanceManager.createLocations(instanceId || sceneManager.activeRoom.id, entryId)
+    console.log('start creating locations')
+    console.time('tt')
+    await sceneManager.createInstanceLocations(instanceId, entryId)
+    console.timeEnd('tt')
+    console.log('end creating locations')
     feedStore.resetTravelFeed()
-    feedStore.setTravelFeedItem(`You have entered ${instanceManager.activeRoom?.name}`)
-    feedStore.setTravelFeedItem(`${instanceManager.activeRoom?.description}`)
+    feedStore.setTravelFeedItem(`You have entered ${sceneManager.activeRoom?.name}`)
+    feedStore.setTravelFeedItem(`${sceneManager.activeRoom?.description}`)
     getClosestTiles()
 }
 
-const enterRoom = () => {
-    if (instanceManager.activeRoom?.type !== ERoomTypes.Exit) {
-        return
-    }
-
-    const room = instanceManager.activeRoom.connectedLocation
-}
 onMounted(() => {
     addKeybindings()
 })
@@ -242,7 +230,7 @@ onMounted(() => {
             </button>
             <button class="a-button action__button" v-if="!isSearched" @click="searchRoom">Search Room</button>
             <template v-if="sceneManager.activeRoom && sceneManager.activeRoom.connectedLocation !== undefined">
-                {{ instanceManager.activeRoom?.connectedLocation }}
+                <!-- {{ sceneManager.activeRoom?.connectedLocation }} -->
                 <button
                     v-if="sceneManager.activeRoom.connectedLocation"
                     class="a-button action__button"
@@ -253,7 +241,7 @@ onMounted(() => {
                         )
                     "
                 >
-                    Enter {{ instanceManager.activeRoom?.name || sceneManager.activeRoom.name }}
+                    Enter {{ sceneManager.activeRoom?.name }}
                 </button>
             </template>
             <button

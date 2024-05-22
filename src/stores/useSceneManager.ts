@@ -13,22 +13,53 @@ import { useGameStateManager } from '@/composables/useGameStateManager'
 import { usePlayer } from '@/composables/usePlayer'
 import locations from '@/assets/json/locations.json'
 import { monsterGenerator } from '@/App.vue'
-export const useSceneManagerStore = defineStore('sceneManager', () => {
+import instances from '@/assets/json/instances.json'
+import { usePlayerPositionStore } from './usePlayerPosition'
 
+interface Instance {
+    id: string
+    map: any[]
+}
+export const useSceneManagerStore = defineStore('sceneManager', () => {
     const activeRoom = ref<Room>()
     const sceneList = ref<Room[]>([])
+    const instanceList = ref<Room[]>([])
+    const instance = ref<Instance>()
     const loadingArea = ref<boolean>(false)
+    const createInstanceLocations = async (instanceId: string, entryId: string) => {
+        const selectedInstance = instances.find((instanceItem) => instanceItem.id === instanceId)
+        console.log(instanceId)
+
+        if (!selectedInstance) {
+            console.error('No selectedInstance found')
+            return
+        }
+        const locationList: Room[] = selectedInstance.map.map((locationData) => {
+            const locationClass = new Room()
+            const location = Object.assign(locationClass, locationData)
+            instanceList.value.push(location)
+            return location
+        })
+
+        const getRoom = locationList.find((room) => room.name === entryId)
+
+        if (!getRoom) {
+            return
+        }
+
+        instance.value = selectedInstance
+        setRoom(getRoom)
+
+        localforage.setItem('instanceList', locationList)
+    }
     const createLocations = (locationId: string) => {
         const locationList: Room[] = locations.map((locationData) => {
-
             const locationClass = new Room()
             const location = Object.assign(locationClass, locationData)
             sceneList.value.push(location)
             return location
-
         })
-        const getRoom = locationList.find(room => room.id === locationId)
-        console.log(locationList, locationId);
+        const getRoom = locationList.find((room) => room.id === locationId)
 
         if (!getRoom) {
             return
@@ -37,13 +68,17 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         setRoom(getRoom)
 
         localforage.setItem('locationList', locationList)
-
     }
 
     const getLocationData = (x: number, y: number) => {
-        const feedStore = useFeedStore()
+        let foundLocation = undefined
+        if (instance.value) {
+            foundLocation = instanceList.value.find((location) => location.x === x && location.y === y)
+        } else {
+            foundLocation = sceneList.value.find((location) => location.x === x && location.y === y)
+        }
 
-        const foundLocation = sceneList.value.find(location => location.x === x && location.y === y)
+        console.log(instance.value, foundLocation)
 
         if (!foundLocation) {
             return false
@@ -57,13 +92,21 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         const { updateGameState } = useGameStateManager()
         const feedStore = useFeedStore()
 
+        console.log('x', roomX, 'y', roomY)
 
-        console.log('x', roomX, 'y', roomY);
-
-        activeRoom.value = sceneList.value.find((room) => room.x === roomX && room.y === roomY)
+        if (instance.value) {
+            activeRoom.value = instanceList.value.find((room) => room.x === roomX && room.y === roomY)
+        } else {
+            activeRoom.value = sceneList.value.find((room) => room.x === roomX && room.y === roomY)
+        }
 
         if (!activeRoom.value) {
             console.error('No Room found')
+            return false
+        }
+
+        if (activeRoom.value.id === 'wall') {
+            feedStore.setTravelFeedItem('You smash your face at a wall')
             return false
         }
 
@@ -72,7 +115,10 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
             return false
         }
 
-        if (activeRoom.value.id === 'mountains' && !player.value.inventory.inventory.find(item => item.id === 'climbing_equipment')) {
+        if (
+            activeRoom.value.id === 'mountains' &&
+            !player.value.inventory.inventory.find((item) => item.id === 'climbing_equipment')
+        ) {
             feedStore.setTravelFeedItem(`The mountains are too steep. You need climbing equipment to travel.`)
             return false
         }
@@ -121,7 +167,9 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
     }
 
     const setRoom = (scene: Room) => {
+        const playerPosition = usePlayerPositionStore()
         activeRoom.value = scene
+        playerPosition.updateCoords(activeRoom.value.x, activeRoom.value.y)
     }
 
     const resetRoom = () => {
@@ -133,12 +181,12 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         localforage.removeItem('exploredSceneList')
     }
 
-    const saveScene = async (currentRoom: { x: number, y: number }, locationList: Room[]) => {
+    const saveScene = async (currentRoom: { x: number; y: number }, locationList: Room[]) => {
         // TO DO
         // move all arguments here instead of passing it each time
         const seen: any = []
         // save and remove cyclic objects from store
-        console.log(currentRoom);
+        console.log(currentRoom)
 
         await localforage.setItem(
             'activeRoom',
@@ -161,7 +209,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         const sceneListData = JSON.parse((await localforage.getItem('savedSceneList')) as string)
 
         if (!sceneListData) {
-            console.log('no scene List saved');
+            console.log('no scene List saved')
 
             return
         }
@@ -190,9 +238,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
             return location
         })
 
-
-        console.log(sceneList.value);
-
+        console.log(sceneList.value)
 
         // load scene
         interface payload {
@@ -205,7 +251,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         const data: string = (await localforage.getItem('activeRoom')) as string
         const savedSceneData: payload = JSON.parse(data)
 
-        console.log(savedSceneData);
+        console.log(savedSceneData)
 
         if (!savedSceneData) {
             console.error('CRATE SCENE: No saved scene')
@@ -220,7 +266,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
             changeActiveRoom(19, 22)
             return
         }
-        console.log(savedSceneData);
+        console.log(savedSceneData)
 
         changeActiveRoom(savedSceneData.currentRoomCoords.x, savedSceneData.currentRoomCoords.y)
 
@@ -253,13 +299,15 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         // })
 
         // location.changeActiveRoom(savedSceneData.currentRoom)
-
     }
     return {
         loadingArea,
+        instance,
         activeRoom,
         sceneList,
+        instanceList,
         createLocations,
+        createInstanceLocations,
         setRoom,
         resetRoom,
         resetRoomList,
@@ -267,8 +315,6 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         loadScene,
         changeActiveRoom,
         getLocationData,
-        createEnemyList
+        createEnemyList,
     }
-
-
 })

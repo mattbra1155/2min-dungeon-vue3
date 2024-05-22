@@ -33,8 +33,7 @@ const init = async () => {
             updateGameState(EGameState.CreateChar)
             router.push({ name: 'characterCreation' })
         }
-        sceneManager.createLocations('outskirts_north')
-
+        sceneManager.createLocations('castle_drakenhof')
     }
 }
 
