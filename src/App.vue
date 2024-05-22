@@ -2,6 +2,7 @@
 import { MonsterGenerator } from './assets/generators/monsterGenerator'
 import InventoryPanel from './components/InventoryPanel.vue'
 import CharacterScreen from './components/CharacterScreen.vue'
+import { useFeedStore } from './stores/useFeed'
 
 const monsterGenerator = new MonsterGenerator()
 
@@ -15,7 +16,6 @@ import { useGameStateManager } from './composables/useGameStateManager'
 import { EGameState } from './enums/EGameState'
 import { PlayerModel } from './assets/models/playerModel'
 import { useSceneManagerStore } from '@/stores/useSceneManager'
-import { storeToRefs } from 'pinia'
 const sceneManager = useSceneManagerStore()
 const { fetchPlayer, setPlayer } = usePlayer()
 const { activeGameState, updateGameState } = useGameStateManager()
@@ -28,12 +28,20 @@ const init = async () => {
         if (player) {
             await setPlayer(player)
             updateGameState(EGameState.Travel)
+
             router.push({ name: 'home' })
         } else {
             updateGameState(EGameState.CreateChar)
             router.push({ name: 'characterCreation' })
         }
+
+        console.time('qq')
         sceneManager.createLocations('castle_drakenhof')
+        console.timeEnd('qq')
+        if (sceneManager.activeRoom?.x === undefined && sceneManager.activeRoom?.y === undefined) {
+            return
+        }
+        sceneManager.moveToLocation(sceneManager.activeRoom?.x, sceneManager.activeRoom?.y)
     }
 }
 

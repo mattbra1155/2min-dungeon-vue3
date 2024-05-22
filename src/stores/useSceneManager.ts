@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { reactive, ref, toRefs } from 'vue'
+import { reactive, ref, toRaw, toRefs } from 'vue'
 import { ILocation } from '@/interfaces/ILocation'
 import { Room } from '@/assets/models/RoomModel'
 import localforage from 'localforage'
@@ -27,6 +27,15 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
     const instance = ref<Instance>()
     const loadingArea = ref<boolean>(false)
     const createInstanceLocations = async (instanceId: string, entryId: string) => {
+        if (instanceList.value.length) {
+            const entryLocation = instanceList.value.find((room) => room.name === entryId)
+            if (!entryLocation) {
+                return
+            }
+            setActiveScene(entryLocation)
+            localforage.setItem('instanceList', toRaw(instanceList.value))
+            return
+        }
         const selectedInstance = instances.find((instanceItem) => instanceItem.id === instanceId)
         console.log(instanceId)
 
@@ -41,14 +50,14 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
             return location
         })
 
-        const getRoom = locationList.find((room) => room.name === entryId)
+        const entryLocation = instanceList.value.find((room) => room.name === entryId)
 
-        if (!getRoom) {
+        if (!entryLocation) {
             return
         }
 
         instance.value = selectedInstance
-        setRoom(getRoom)
+        setActiveScene(entryLocation)
 
         localforage.setItem('instanceList', locationList)
     }
@@ -65,9 +74,70 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
             return
         }
 
-        setRoom(getRoom)
+        setActiveScene(getRoom)
 
         localforage.setItem('locationList', locationList)
+    }
+
+    const moveToLocation = (x: number, y: number) => {
+        const feedStore = useFeedStore()
+        let location = undefined
+        if (instance.value) {
+            location = instanceList.value.find((location) => location.x === x && location.y === y)
+        } else {
+            location = sceneList.value.find((location) => location.x === x && location.y === y)
+        }
+
+        if (!location) {
+            console.error('cant find location')
+            return
+        }
+
+        setActiveScene(location)
+        feedStore.setTravelFeedItem(`You have entered ${activeRoom.value?.name}.`)
+        feedStore.setTravelFeedItem(`${activeRoom.value?.description}`)
+        getClosestTiles()
+    }
+
+    const getClosestTiles = () => {
+        const playerPosition = usePlayerPositionStore()
+        const feedStore = useFeedStore()
+        const closesTiles = ref<{
+            north: Room | false
+            east: Room | false
+            south: Room | false
+            west: Room | false
+        }>({
+            north: false,
+            east: false,
+            south: false,
+            west: false,
+        })
+        if (playerPosition.coords.x === undefined || playerPosition.coords.y === undefined) {
+            console.log(playerPosition.coords.x)
+
+            console.error('no player coords')
+            return
+        }
+        closesTiles.value.north = getLocationData(playerPosition.coords.x, playerPosition.coords.y - 1)
+        closesTiles.value.south = getLocationData(playerPosition.coords.x, playerPosition.coords.y + 1)
+        closesTiles.value.east = getLocationData(playerPosition.coords.x + 1, playerPosition.coords.y)
+        closesTiles.value.west = getLocationData(playerPosition.coords.x - 1, playerPosition.coords.y)
+
+        console.log('here', closesTiles.value)
+
+        if (closesTiles.value.north) {
+            feedStore.setTravelFeedItem(`N: ${closesTiles.value.north.name}`)
+        }
+        if (closesTiles.value.east) {
+            feedStore.setTravelFeedItem(`E: ${closesTiles.value.east.name}`)
+        }
+        if (closesTiles.value.south) {
+            feedStore.setTravelFeedItem(`S: ${closesTiles.value.south.name}`)
+        }
+        if (closesTiles.value.west) {
+            feedStore.setTravelFeedItem(`W: ${closesTiles.value.west.name}`)
+        }
     }
 
     const getLocationData = (x: number, y: number) => {
@@ -104,6 +174,8 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
             console.error('No Room found')
             return false
         }
+
+        console.log(activeRoom.value.id)
 
         if (activeRoom.value.id === 'wall') {
             feedStore.setTravelFeedItem('You smash your face at a wall')
@@ -166,7 +238,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         return enemyList
     }
 
-    const setRoom = (scene: Room) => {
+    const setActiveScene = (scene: Room) => {
         const playerPosition = usePlayerPositionStore()
         activeRoom.value = scene
         playerPosition.updateCoords(activeRoom.value.x, activeRoom.value.y)
@@ -308,7 +380,9 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         instanceList,
         createLocations,
         createInstanceLocations,
-        setRoom,
+        setActiveScene,
+        moveToLocation,
+        getClosestTiles,
         resetRoom,
         resetRoomList,
         saveScene,

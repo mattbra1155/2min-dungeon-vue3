@@ -2,15 +2,14 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useSceneManagerStore } from './useSceneManager'
 interface coords {
-    x: number
-    y: number
+    x: number | undefined
+    y: number | undefined
 }
 
 export const usePlayerPositionStore = defineStore('playerPosition', () => {
-    const sceneManager = useSceneManagerStore()
     const coords = ref<coords>({
-        x: sceneManager.activeRoom?.x || 15,
-        y: sceneManager.activeRoom?.y || 7,
+        x: undefined,
+        y: undefined,
     })
 
     const updateCoords = (x: number, y: number) => {

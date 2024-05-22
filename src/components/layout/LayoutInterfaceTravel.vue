@@ -24,17 +24,6 @@ const sceneManager = useSceneManagerStore()
 const randomEncounters = useRandomEncounters()
 
 const isSearched = computed(() => sceneManager.activeRoom?.isSearched)
-const closesTiles = ref<{
-    north: Room | false
-    east: Room | false
-    south: Room | false
-    west: Room | false
-}>({
-    north: false,
-    east: false,
-    south: false,
-    west: false,
-})
 
 const addKeybindings = () => {
     window.addEventListener('keydown', (event) => {
@@ -59,27 +48,6 @@ const addKeybindings = () => {
     })
 }
 
-const getClosestTiles = () => {
-    closesTiles.value.north = sceneManager.getLocationData(playerPosition.coords.x, playerPosition.coords.y - 1)
-    closesTiles.value.south = sceneManager.getLocationData(playerPosition.coords.x, playerPosition.coords.y + 1)
-    closesTiles.value.east = sceneManager.getLocationData(playerPosition.coords.x + 1, playerPosition.coords.y)
-    closesTiles.value.west = sceneManager.getLocationData(playerPosition.coords.x - 1, playerPosition.coords.y)
-
-    if (closesTiles.value.north) {
-        feedStore.setTravelFeedItem(`N: ${closesTiles.value.north.name}`)
-    }
-    if (closesTiles.value.east) {
-        console.log(closesTiles.value)
-
-        feedStore.setTravelFeedItem(`E: ${closesTiles.value.east.name}`)
-    }
-    if (closesTiles.value.south) {
-        feedStore.setTravelFeedItem(`S: ${closesTiles.value.south.name}`)
-    }
-    if (closesTiles.value.west) {
-        feedStore.setTravelFeedItem(`W: ${closesTiles.value.west.name}`)
-    }
-}
 // const getLocationName = (locationId: string) => {
 //     let locationName = undefined
 //     if (instanceManager.isActive) {
@@ -96,7 +64,9 @@ const getClosestTiles = () => {
 // }
 
 const move = async (index: number) => {
-    if (!sceneManager) {
+    if (!sceneManager || playerPosition.coords.x === undefined || playerPosition.coords.y === undefined) {
+        console.log(playerPosition.coords.x)
+
         return
     }
 
@@ -141,6 +111,10 @@ const move = async (index: number) => {
     if (!changedRoom) {
         // if cant move to the next tile return the player to the previous place
         console.error('No current Room')
+        if (savedPlayerPosition.x === undefined || savedPlayerPosition.y === undefined) {
+            console.error('No previous player position')
+            return
+        }
         playerPosition.updateCoords(savedPlayerPosition.x, savedPlayerPosition.y)
         sceneManager.changeActiveRoom(playerPosition.coords.x, playerPosition.coords.y)
         feedStore.setTravelFeedItem(`You travel back.`)
@@ -157,7 +131,7 @@ const move = async (index: number) => {
     feedStore.setTravelFeedItem(`${sceneManager.activeRoom?.description}`)
 
     // Get closes tiles names
-    getClosestTiles()
+    sceneManager.getClosestTiles()
 
     await sceneManager.saveScene({ x: playerPosition.coords.x, y: playerPosition.coords.y }, sceneManager.sceneList)
     setTimeout(() => {
@@ -193,6 +167,24 @@ const enterInstance = async (instanceId: string, entryId: string) => {
         return
     }
 
+    if (instanceId === 'overworld') {
+        const exitLocation = sceneManager.sceneList.find((location) => location.id === entryId)
+
+        if (!exitLocation) {
+            console.error('no exit location found')
+
+            return
+        }
+        sceneManager.instance = undefined
+
+        sceneManager.setActiveScene(exitLocation)
+        feedStore.resetTravelFeed()
+        feedStore.setTravelFeedItem(`You have entered ${sceneManager.activeRoom?.name}`)
+        feedStore.setTravelFeedItem(`${sceneManager.activeRoom?.description}`)
+        sceneManager.getClosestTiles()
+        return
+    }
+
     console.log('start creating locations')
     console.time('tt')
     await sceneManager.createInstanceLocations(instanceId, entryId)
@@ -201,7 +193,7 @@ const enterInstance = async (instanceId: string, entryId: string) => {
     feedStore.resetTravelFeed()
     feedStore.setTravelFeedItem(`You have entered ${sceneManager.activeRoom?.name}`)
     feedStore.setTravelFeedItem(`${sceneManager.activeRoom?.description}`)
-    getClosestTiles()
+    sceneManager.getClosestTiles()
 }
 
 onMounted(() => {
