@@ -26,6 +26,7 @@ const randomEncounters = useRandomEncounters()
 
 const isSearched = computed(() => sceneManager.activeRoom?.isSearched)
 
+const isMoving = ref<boolean>(false)
 const addKeybindings = () => {
     window.addEventListener('keydown', (event) => {
         if (event.key === 'i') {
@@ -70,6 +71,9 @@ const move = async (index: number) => {
 
         return
     }
+
+    isMoving.value = true
+
     const footstepsOne = [
         'footsteps/Steps_dirt-001.ogg',
         'footsteps/Steps_dirt-002.ogg',
@@ -151,6 +155,7 @@ const move = async (index: number) => {
     await sceneManager.saveScene({ x: playerPosition.coords.x, y: playerPosition.coords.y }, sceneManager.sceneList)
     setTimeout(() => {
         sceneManager.loadingArea = false
+        isMoving.value = false
     }, 800)
 }
 
@@ -261,7 +266,7 @@ onMounted(() => {
         </div>
         <div class="o-interface__row o-interface__directionWrapper">
             <template v-for="(destinationId, index) in 4" :key="index">
-                <button class="a-button action__button" @click="move(index)">
+                <button class="a-button action__button" @click="move(index)" :disabled="isMoving">
                     {{ directionButton(index) }}
                 </button>
             </template>
