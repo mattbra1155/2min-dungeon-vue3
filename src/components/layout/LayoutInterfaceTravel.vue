@@ -15,6 +15,7 @@ import { useRandomEncounters } from '@/stores/useRandomEncounters'
 import { Room } from '@/assets/models/RoomModel'
 import { ERoomTypes } from '@/enums/ERoomTypes'
 import instances from '@/assets/json/instances.json'
+import { playAudio } from '@/helpers/playAudio'
 
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
@@ -69,6 +70,20 @@ const move = async (index: number) => {
 
         return
     }
+    const footstepsOne = [
+        'footsteps/Steps_dirt-001.ogg',
+        'footsteps/Steps_dirt-002.ogg',
+        'footsteps/Steps_dirt-003.ogg',
+    ]
+    const footstepsTwo = [
+        'footsteps/Steps_dirt-004.ogg',
+        'footsteps/Steps_dirt-005.ogg',
+        'footsteps/Steps_dirt-006.ogg',
+    ]
+
+    const footstpes = Math.random() <= 0.5 ? footstepsOne : footstepsTwo
+
+    playAudio(footstpes)
 
     sceneManager.loadingArea = true
 

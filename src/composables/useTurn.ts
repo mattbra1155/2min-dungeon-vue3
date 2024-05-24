@@ -24,11 +24,10 @@ const state: ITurn = reactive({
     turnOrder: undefined,
     activeCharacter: undefined,
     activeTurnState: ETurnState.Init,
-    monsterList: undefined
+    monsterList: undefined,
 })
 
 export const useTurn = () => {
-
     const sortTurnOrder = (entityList: Array<PlayerModel | MonsterModel>) => {
         const sorted = entityList.sort((a, b) => b.currentStats.initiative - a.currentStats.initiative)
         state.turnOrder = sorted
@@ -40,11 +39,9 @@ export const useTurn = () => {
         const globalStore = useGlobalStore()
         const sceneManager = useSceneManagerStore()
 
-
         const monsterList = state.monsterList
 
-        if (monsterList?.length && !monsterList.find(item => item !== player.value)) {
-
+        if (monsterList?.length && !monsterList.find((item) => item !== player.value)) {
             monsterList?.push(player.value)
         }
         if (!player.value.isAlive) {
@@ -169,8 +166,8 @@ export const useTurn = () => {
         if (player.value && player.value.currentStats.hp <= 0) {
             console.log('Player dead')
             feedStore.setBattleFeedItem(`${player.value.name} is dead`)
-            await playAudio(['14_human_death_spin'])
-            playAudio(['14_human_death_spin'])
+            await playAudio(['14_human_death_spin.wav'])
+            playAudio(['14_human_death_spin.wav'])
             player.value.isAlive = false
             updateGameState(EGameState.PlayerDead)
             return
@@ -201,6 +198,6 @@ export const useTurn = () => {
         updateTurnStateMachine,
         resetTurn,
         checkIfDead,
-        setMonsterList
+        setMonsterList,
     }
 }

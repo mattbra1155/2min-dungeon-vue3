@@ -90,7 +90,7 @@ abstract class PersonModel implements IPerson {
         if (diceRollHitResult > attackStats.melee) {
             feedStore.setBattleFeedItem(`${this.name} missed`)
             console.log(`${this.name} missed`)
-            playAudio(['27_sword_miss_1', '27_sword_miss_2', '27_sword_miss_3'])
+            playAudio(['27_sword_miss_1.wav', '27_sword_miss_2.wav', '27_sword_miss_3.wav'])
             return
         }
 
@@ -208,7 +208,7 @@ abstract class PersonModel implements IPerson {
         console.log(`${enemy.name} took ${finalDamage} damage`)
         enemy.currentStats.hp -= finalDamage
 
-        playAudio(['26_sword_hit_1', '26_sword_hit_2', '26_sword_hit_3'])
+        playAudio(['26_sword_hit_1.wav', '26_sword_hit_2.wav', '26_sword_hit_3/wav'])
         return finalDamage | 0
     }
     // } else {
