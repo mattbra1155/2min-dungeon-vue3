@@ -9,7 +9,6 @@ import { Gold } from '@/assets/models/itemsModel'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { EGameState } from '@/enums/EGameState'
 import { useSceneManagerStore } from '@/stores/useSceneManager'
-import localforage from 'localforage'
 import { onMounted, ref } from 'vue'
 import { useFeedStore } from '@/stores/useFeed'
 import { usePlayerPositionStore } from '@/stores/usePlayerPosition'
@@ -33,7 +32,11 @@ const setRoomExploredStatus = async () => {
     sceneManager.activeRoom.isExplored = true
     console.log(sceneManager.activeRoom)
 
-    await sceneManager.saveScene(playerPosition.coords, sceneManager.sceneList)
+    if (playerPosition.coords.x === undefined || playerPosition.coords.y === undefined) {
+        console.error('No previous player position')
+        return
+    }
+    await sceneManager.saveScene({ x: playerPosition.coords.x, y: playerPosition.coords.y }, sceneManager.sceneList)
     resetTurn()
 }
 
