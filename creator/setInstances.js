@@ -35,6 +35,7 @@ const getLocationMap = async () => {
     const resultLocationMap = mapGrid.map((row, columnIndex) => {
         row.map((item, rowIndex) => {
             const resultItem = {
+                id: item.trim().replaceAll(' ', '_'),
                 name: item,
                 y: columnIndex,
                 x: rowIndex,
@@ -74,6 +75,7 @@ const createLocationsJSON = async (locationName) => {
         const ttt = []
 
         const result = {
+            id: locationName.trim().replaceAll(' ', '_'),
             name: locationName,
             map: mergedLocations,
         }

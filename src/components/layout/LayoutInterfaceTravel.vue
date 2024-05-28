@@ -242,7 +242,6 @@ onMounted(() => {
             </button>
             <button class="a-button action__button" v-if="!isSearched" @click="searchRoom">Search Room</button>
             <template v-if="sceneManager.activeRoom && sceneManager.activeRoom.connectedLocation !== undefined">
-                <!-- {{ sceneManager.activeRoom?.connectedLocation }} -->
                 <button
                     v-if="sceneManager.activeRoom.connectedLocation"
                     class="a-button action__button"

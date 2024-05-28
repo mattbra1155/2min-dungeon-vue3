@@ -18,6 +18,7 @@ import { usePlayerPositionStore } from './usePlayerPosition'
 
 interface Instance {
     id: string
+    name: string
     map: any[]
 }
 export const useSceneManagerStore = defineStore('sceneManager', () => {
@@ -26,40 +27,65 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
     const instanceList = ref<Room[]>([])
     const instance = ref<Instance>()
     const loadingArea = ref<boolean>(false)
-    const createInstanceLocations = async (instanceId: string, entryId: string) => {
-        if (instanceList.value.length) {
-            const entryLocation = instanceList.value.find((room) => room.name === entryId)
-            if (!entryLocation) {
-                return
+
+    const setActiveInstance = (instanceId: string) => {
+        const selectedInstance = instances.find((instanceItem) => {
+            console.log(instanceId, instanceItem)
+
+            if (instanceItem.id === instanceId) {
+                return instanceItem
             }
-            setActiveScene(entryLocation)
-            localforage.setItem('instanceList', toRaw(instanceList.value))
-            return
-        }
-        const selectedInstance = instances.find((instanceItem) => instanceItem.id === instanceId)
-        console.log(instanceId)
+        })
 
         if (!selectedInstance) {
             console.error('No selectedInstance found')
             return
         }
-        const locationList: Room[] = selectedInstance.map.map((locationData) => {
+
+        instance.value = selectedInstance
+
+        return selectedInstance
+    }
+    const createInstanceLocations = async (instanceId: string, entryId: string) => {
+        // FIX: dont load saved instance  for now
+        instance.value = undefined
+        instanceList.value = []
+        // if (instance.value?.id === instanceId && instanceList.value.length) {
+        //     const entryLocation = instanceList.value.find((room) => room.name === entryId)
+        //     if (!entryLocation) {
+        //         console.error('no Entry location')
+        //         return
+        //     }
+        //     console.log(instanceId)
+        //     setActiveScene(entryLocation)
+        //     localforage.setItem('instanceList', toRaw(instanceList.value))
+        //     return
+        // }
+        instance.value = setActiveInstance(instanceId)
+
+        if (!instance.value) {
+            console.error('No Active instance')
+
+            return
+        }
+
+        const locationList: Room[] = instance.value.map.map((locationData) => {
             const locationClass = new Room()
             const location = Object.assign(locationClass, locationData)
             instanceList.value.push(location)
             return location
         })
 
-        const entryLocation = instanceList.value.find((room) => room.name === entryId)
+        const entryLocation = instanceList.value.find((room) => room.id === entryId)
 
         if (!entryLocation) {
+            console.error('no Entry location')
             return
         }
 
-        instance.value = selectedInstance
         setActiveScene(entryLocation)
 
-        localforage.setItem('instanceList', locationList)
+        localforage.setItem('instanceList', JSON.stringify(locationList))
     }
     const createLocations = (locationId: string) => {
         const locationList: Room[] = locations.map((locationData) => {
