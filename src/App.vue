@@ -41,16 +41,14 @@ const init = async () => {
             router.push({ name: 'characterCreation' })
         }
 
-        if (player) {
-            try {
-                console.time('qq')
-                sceneManager.createLocations('castle_drakenhof')
-                console.timeEnd('qq')
-            } catch (error) {
-                console.error(error)
-            } finally {
-                globalStore.toggleIsLoading()
-            }
+        try {
+            console.time('qq')
+            sceneManager.createLocations('castle_drakenhof')
+            console.timeEnd('qq')
+        } catch (error) {
+            console.error(error)
+        } finally {
+            globalStore.toggleIsLoading()
         }
 
         if (sceneManager.activeRoom?.x === undefined && sceneManager.activeRoom?.y === undefined) {
