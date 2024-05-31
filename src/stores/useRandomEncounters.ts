@@ -20,20 +20,19 @@ export const useRandomEncounters = defineStore('randomEncounters', () => {
     const numberOfEnemies = ref<number>(0)
 
     const rollEncounter = (locationType: string) => {
-
         roll.value = undefined
         isBattle.value = false
 
         roll.value = diceRollK100()
         const threshold = {
-            road: 0,
-            grassland: 0,
-            fields: 0,
-            hinterlands: 0,
-            forest: 0,
-            darkForest: 0
+            road: 5,
+            grassland: 10,
+            fields: 15,
+            hinterlands: 25,
+            forest: 30,
+            darkForest: 35,
         }
-        console.log(roll.value);
+        console.log(roll.value)
 
         let monsters: string[] = []
 
@@ -80,11 +79,9 @@ export const useRandomEncounters = defineStore('randomEncounters', () => {
 
         const list: string[] = []
 
-
         for (let x = 0; x <= numberOfEnemies.value; x++) {
             const index = Math.floor(Math.random() * monsters.length)
             list.push(monsters[index])
-
         }
         const monsterList = sceneManager.createEnemyList(list)
         updateGameState(EGameState.Battle)

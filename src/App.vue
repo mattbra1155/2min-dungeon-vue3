@@ -3,6 +3,7 @@ import { MonsterGenerator } from './assets/generators/monsterGenerator'
 import InventoryPanel from './components/InventoryPanel.vue'
 import CharacterScreen from './components/CharacterScreen.vue'
 import { useFeedStore } from './stores/useFeed'
+import localforage from 'localforage'
 
 const monsterGenerator = new MonsterGenerator()
 
@@ -45,17 +46,34 @@ const init = async () => {
     }
 }
 
+const resetStorage = () => {
+    localforage.removeItem('activeRoom')
+    localforage.removeItem('initPlayer')
+    localforage.removeItem('instanceList')
+    localforage.removeItem('locationList')
+    localforage.removeItem('player')
+    localforage.removeItem('savedSceneList')
+}
+
 // starts the app
 init()
 </script>
 
 <template>
     <nav class="nav">
-        <router-link to="/">Main</router-link>
-        <router-link to="/character-creation/">Create</router-link>
+        <router-link class="a-text" to="/">Main</router-link>
+        <router-link class="a-text" to="/character-creation/">Create</router-link>
+        <button @click="resetStorage()" class="a-text">Reset storage</button>
     </nav>
 
     <router-view class="o-page" />
     <inventory-panel />
     <character-screen />
 </template>
+
+<style scoped>
+nav {
+    display: flex;
+    gap: 1rem;
+}
+</style>
