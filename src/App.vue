@@ -2,8 +2,11 @@
 import { MonsterGenerator } from './assets/generators/monsterGenerator'
 import InventoryPanel from './components/InventoryPanel.vue'
 import CharacterScreen from './components/CharacterScreen.vue'
+import LoadingScreen from './components/LoadingScreen.vue'
 import { useFeedStore } from './stores/useFeed'
 import localforage from 'localforage'
+import { ref } from 'vue'
+import { useGlobalStore } from './stores/useGlobal'
 
 const monsterGenerator = new MonsterGenerator()
 
@@ -21,6 +24,8 @@ const sceneManager = useSceneManagerStore()
 const { fetchPlayer, setPlayer } = usePlayer()
 const { activeGameState, updateGameState } = useGameStateManager()
 const router = useRouter()
+const globalStore = useGlobalStore()
+globalStore.toggleIsLoading()
 
 const init = async () => {
     updateGameState(EGameState.Init)
@@ -36,9 +41,18 @@ const init = async () => {
             router.push({ name: 'characterCreation' })
         }
 
-        console.time('qq')
-        sceneManager.createLocations('castle_drakenhof')
-        console.timeEnd('qq')
+        if (player) {
+            try {
+                console.time('qq')
+                sceneManager.createLocations('castle_drakenhof')
+                console.timeEnd('qq')
+            } catch (error) {
+                console.error(error)
+            } finally {
+                globalStore.toggleIsLoading()
+            }
+        }
+
         if (sceneManager.activeRoom?.x === undefined && sceneManager.activeRoom?.y === undefined) {
             return
         }
@@ -69,6 +83,7 @@ init()
     <router-view class="o-page" />
     <inventory-panel />
     <character-screen />
+    <LoadingScreen v-if="globalStore.isLoading" />
 </template>
 
 <style scoped>
