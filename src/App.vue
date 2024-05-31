@@ -61,9 +61,9 @@ init()
 
 <template>
     <nav class="nav">
-        <router-link class="a-text" to="/">Main</router-link>
-        <router-link class="a-text" to="/character-creation/">Create</router-link>
-        <button @click="resetStorage()" class="a-text">Reset storage</button>
+        <router-link class="a-text --dark" to="/">Main</router-link>
+        <router-link class="a-text --dark" to="/character-creation/">Create</router-link>
+        <button @click="resetStorage()" class="a-text --dark">Reset storage</button>
     </nav>
 
     <router-view class="o-page" />
