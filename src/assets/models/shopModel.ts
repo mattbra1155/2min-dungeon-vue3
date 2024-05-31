@@ -47,7 +47,7 @@ class Shop implements IShop {
     buyItem(item: AllItemTypes) {
         player.value.inventory.removeItem(item.id)
         this.gold = this.gold - item.price
-        player.value.inventory.gold = player.value.inventory.gold + item.price
+        player.value.inventory.gold = player.value.inventory.gold + item.price / 0.5
         this.inventory.push(item)
     }
 }

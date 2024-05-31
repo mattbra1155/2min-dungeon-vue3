@@ -8,32 +8,35 @@ import { AllItemTypes } from '@/interfaces/IItem'
 import { Gold } from '@/assets/models/itemsModel'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { EGameState } from '@/enums/EGameState'
-import { useSceneManager } from '@/composables/useSceneManager'
-import localforage from 'localforage'
-import { onMounted } from 'vue'
+import { useSceneManagerStore } from '@/stores/useSceneManager'
+import { onMounted, ref } from 'vue'
+import { useFeedStore } from '@/stores/useFeed'
+import { usePlayerPositionStore } from '@/stores/usePlayerPosition'
 
 const { updateTurnStateMachine, resetTurn } = useTurn()
 const router = useRouter()
 const { player } = usePlayer()
-const { lootList, generateLoot } = useLoot()
-const { activeScene, saveScene } = useSceneManager()
+const { isLootSearched, lootList, generateLoot } = useLoot()
+const sceneManager = useSceneManagerStore()
+const playerPosition = usePlayerPositionStore()
 const { updateGameState } = useGameStateManager()
-
-updateGameState(EGameState.LevelCleared)
-updateTurnStateMachine(ETurnState.Init)
+const feedStore = useFeedStore()
+updateTurnStateMachine(ETurnState.Disabled)
+feedStore.resetBattleFeed()
 
 const setRoomExploredStatus = async () => {
-    if (!activeScene.value) {
-        return
-    }
-    if (!activeScene.value.currentRoom) {
+    if (!sceneManager.activeRoom) {
         return
     }
 
-    activeScene.value.currentRoom.isExplored = true
-    console.log(activeScene.value.currentRoom)
+    sceneManager.activeRoom.isExplored = true
+    console.log(sceneManager.activeRoom)
 
-    await saveScene(activeScene.value.id, activeScene.value.currentRoom.id, activeScene.value.roomList)
+    if (playerPosition.coords.x === undefined || playerPosition.coords.y === undefined) {
+        console.error('No previous player position')
+        return
+    }
+    await sceneManager.saveScene({ x: playerPosition.coords.x, y: playerPosition.coords.y }, sceneManager.sceneList)
     resetTurn()
 }
 
@@ -48,6 +51,7 @@ const takeItem = (lootItem: AllItemTypes | Gold) => {
 }
 
 const closeScreen = async () => {
+    isLootSearched.value = false
     router.push({ name: 'home', state: { nextLevel: true } })
     updateGameState(EGameState.Travel)
 }
@@ -60,18 +64,22 @@ onMounted(async () => {
 <template>
     <div class="m-main o-levelFinished">
         <div class="o-levelFinished__textContainer">
-            <h1 class="o-levelFinished__title">LEVEL CLEARED</h1>
-            <template v-if="!lootList.length">
-                <p>search for loot</p>
-                <button @click="generateLoot()">Search</button>
+            <h1 class="o-levelFinished__title">Enemies defeated!</h1>
+            <template v-if="!isLootSearched">
+                <p>Search for loot</p>
+                <button class="a-button" @click="generateLoot()">Search</button>
             </template>
             <template v-else>
-                <p class="o-levelFinished__text">you found</p>
-                <div v-for="lootItem in lootList" :key="lootItem.id" class="m-lootCard">
-                    <p>name: {{ lootItem.name }}</p>
-                    <p>type: {{ lootItem.type }}</p>
-                    <button @click="takeItem(lootItem)">take</button>
-                </div>
+                <p class="o-levelFinished__text">You found:</p>
+                <transition-group name="fade">
+                    <template v-if="lootList.length">
+                        <div v-for="lootItem in lootList" :key="lootItem.id" class="m-lootCard">
+                            <p>{{ lootItem.name }}</p>
+                            <button class="m-lootCard__button" @click="takeItem(lootItem)">take</button>
+                        </div>
+                    </template>
+                    <template v-else>Nothing interesting</template>
+                </transition-group>
             </template>
             <button @click="closeScreen" class="a-button">Continue</button>
         </div>

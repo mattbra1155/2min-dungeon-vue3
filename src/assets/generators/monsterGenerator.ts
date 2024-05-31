@@ -29,6 +29,8 @@ class MonsterGenerator {
         } else {
             monsterData = bestiary.find((monster) => monster.id === monsterId) as IMonsterData
         }
+        console.log(monsterData);
+
 
         const generatedWeapon = new ItemGenerator().createItem(EItemCategory.Weapon)
         const monsterClass = new MonsterModel()

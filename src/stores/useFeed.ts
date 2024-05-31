@@ -3,21 +3,24 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useFeedStore = defineStore('feed', () => {
-    const feedList = ref<any[]>([])
-    const activeRoomObject = ref<RoomObject | null>(null)
+    const feedTravelList = ref<any[]>([])
+    const feedBattleList = ref<any[]>([])
+    const activeRoomObject = ref<RoomObject>()
 
-    const setActiveRoomObject = (roomObject: RoomObject | null) => (activeRoomObject.value = roomObject)
-    const setNotification = (message: string) => {
-        feedList.value.push(message)
-    }
-    const resetFeed = () => {
-        feedList.value = []
-    }
+    const setActiveRoomObject = (roomObject: RoomObject | undefined) => (activeRoomObject.value = roomObject)
+    const setTravelFeedItem = (message: string) => feedTravelList.value.push(message)
+    const setBattleFeedItem = (message: string) => feedBattleList.value.push(message)
+    const resetTravelFeed = () => (feedTravelList.value = [])
+    const resetBattleFeed = () => (feedBattleList.value = [])
+
     return {
-        feedList,
+        feedTravelList,
+        feedBattleList,
         activeRoomObject,
         setActiveRoomObject,
-        setNotification,
-        resetFeed,
+        setTravelFeedItem,
+        setBattleFeedItem,
+        resetTravelFeed,
+        resetBattleFeed,
     }
 })

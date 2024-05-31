@@ -3,22 +3,23 @@ import { onMounted } from 'vue'
 import { useTurn } from '@/composables/useTurn'
 import { useRouter } from 'vue-router'
 import { usePlayer } from '@/composables/usePlayer'
-import { useSceneManager } from '@/composables/useSceneManager'
+import { useSceneManagerStore } from '@/stores/useSceneManager'
 import { ETurnState } from '@/enums/ETurnState'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { EGameState } from '@/enums/EGameState'
+import { useFeedStore } from '@/stores/useFeed'
 
 const { deadPlayer } = usePlayer()
 const router = useRouter()
+const feedStore = useFeedStore()
 const { activeCharacter, resetTurn } = useTurn()
-const { resetScene, resetSceneList } = useSceneManager()
+const sceneManager = useSceneManagerStore()
 const { updateGameState } = useGameStateManager()
 
 const init = () => {
     deadPlayer()
     updateGameState(EGameState.PlayerDead)
-    resetScene()
-    resetSceneList()
+    feedStore.resetBattleFeed()
 }
 
 const closeView = () => {

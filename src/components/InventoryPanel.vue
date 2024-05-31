@@ -122,10 +122,6 @@ const unequip = (item: AllItemTypes) => {
                                 {{ getItemValue(item) }}
                             </p>
                             <button class="a-button o-inventory__actionButton" @click="unequip(item)">unequip</button>
-                            <div class="o-inventory__details">
-                                modifiers:
-                                {{ getItemValue(item) }}
-                            </div>
                         </li>
                     </template>
                 </ul>
@@ -146,10 +142,6 @@ const unequip = (item: AllItemTypes) => {
                         <button class="a-button" @click="submitAction(item)">
                             {{ getButtonType(item) }}
                         </button>
-                        <div class="o-inventory__details">
-                            modifiers:
-                            {{ getItemValue(item) }}
-                        </div>
                     </li>
                 </template>
             </ul>

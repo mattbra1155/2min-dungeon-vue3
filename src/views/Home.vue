@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted, watch } from 'vue'
 import LayoutInterface from '@/components/layout/LayoutInterface.vue'
-import LayoutFeed from '@/components/layout/LayoutFeed.vue'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { EGameState } from '@/enums/EGameState'
 import { useTurn } from '@/composables/useTurn'
@@ -10,9 +9,10 @@ import { usePlayer } from '@/composables/usePlayer'
 import { useRouter } from 'vue-router'
 import LayoutTopBar from '@/components/layout/LayoutTopBar.vue'
 import LayoutInterfaceTravel from '@/components/layout/LayoutInterfaceTravel.vue'
-import { useSceneManager } from '@/composables/useSceneManager'
+import { useSceneManagerStore } from '@/stores/useSceneManager'
+import FeedPanel from '@/components/FeedPanel.vue'
 
-const { loadScene } = useSceneManager()
+const sceneManger = useSceneManagerStore()
 const { activeGameState } = useGameStateManager()
 const { updateTurnStateMachine } = useTurn()
 const { player } = usePlayer()
@@ -44,14 +44,14 @@ watch(player.value, () => {
 })
 
 onMounted(async () => {
-    await loadScene()
+    await sceneManger.loadScene()
 })
 </script>
 
 <template>
     <div class="home">
         <LayoutTopBar />
-        <LayoutFeed />
+        <FeedPanel />
         <LayoutInterface v-if="activeGameState === EGameState.Battle" />
         <LayoutInterfaceTravel v-if="activeGameState === EGameState.Travel" />
     </div>

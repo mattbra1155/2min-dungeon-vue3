@@ -1,21 +1,32 @@
 <script setup lang="ts">
 import { useInventory } from '@/composables/useInventory'
 import { useCharacterScreen } from '@/composables/useCharacterScreen'
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref, toRaw } from 'vue'
 import { EDirections } from '@/enums/EDirections'
-import { useSceneManager } from '@/composables/useSceneManager'
+import { useSceneManagerStore } from '@/stores/useSceneManager'
 import localtions from '@/assets/json/locations.json'
 import router from '@/router'
 import { useFeedStore } from '@/stores/useFeed'
 import AIcon from '@/components/AIcon.vue'
 import KnapsackIcon from '../icons/KnapsackIcon.vue'
 import CharacterScreenIcon from '../icons/CharacterScreenIcon.vue'
-const { activeScene, saveScene, sceneList, createScene, setScene } = useSceneManager()
+import { usePlayerPositionStore } from '@/stores/usePlayerPosition'
+import { useRandomEncounters } from '@/stores/useRandomEncounters'
+import { Room } from '@/assets/models/RoomModel'
+import { ERoomTypes } from '@/enums/ERoomTypes'
+import instances from '@/assets/json/instances.json'
+import { playAudio } from '@/helpers/playAudio'
+
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
-const isSearched = computed(() => activeScene.value?.currentRoom?.isSearched)
-
+const playerPosition = usePlayerPositionStore()
 const feedStore = useFeedStore()
+const sceneManager = useSceneManagerStore()
+const randomEncounters = useRandomEncounters()
+
+const isSearched = computed(() => sceneManager.activeRoom?.isSearched)
+
+const isMoving = ref<boolean>(false)
 const addKeybindings = () => {
     window.addEventListener('keydown', (event) => {
         if (event.key === 'i') {
@@ -38,78 +49,171 @@ const addKeybindings = () => {
         }
     })
 }
-const getLocationName = (locationId: string) => {
-    const locationName = localtions.find((scene) => scene.id === locationId.toString())?.name
 
-    if (locationName) {
-        return locationName
-    } else {
-        return 'Error - no Name'
-    }
-}
+// const getLocationName = (locationId: string) => {
+//     let locationName = undefined
+//     if (instanceManager.isActive) {
+//         locationName = instances.find((scene) => scene.id === locationId.toString())?.name
+//     } else {
+//         locationName = localtions.find((scene) => scene.id === locationId.toString())?.name
+//     }
 
-const moveToTown = async (sceneId: string) => {
-    if (!activeScene.value || !activeScene.value.id || !activeScene.value.currentRoom || !activeScene.value.roomList) {
-        console.error('Cant go to Town - missing object')
-        return
-    }
-    if (sceneId === 'town') {
-        createScene(sceneId)
-        router.push({ name: 'town' })
-        return
-    }
-    await saveScene(activeScene.value.id, activeScene.value.currentRoom.id, activeScene.value.roomList)
-}
+//     if (locationName) {
+//         return locationName
+//     } else {
+//         return 'Error - no Name'
+//     }
+// }
 
-const moveTo = async (sceneId: string, roomId: string) => {
-    if (!activeScene.value) {
+const move = async (index: number) => {
+    if (!sceneManager || playerPosition.coords.x === undefined || playerPosition.coords.y === undefined) {
+        console.log(playerPosition.coords.x)
+
         return
     }
 
-    if (sceneId !== activeScene.value.id) {
-        const existingScene = sceneList.value.find((scene) => scene.id.toString() === sceneId.toString())
-        if (existingScene) {
-            setScene(existingScene)
-            activeScene.value.changeCurrentRoom(roomId)
+    isMoving.value = true
+
+    const footstepsOne = [
+        'footsteps/Steps_dirt-001.ogg',
+        'footsteps/Steps_dirt-002.ogg',
+        'footsteps/Steps_dirt-003.ogg',
+    ]
+    const footstepsTwo = [
+        'footsteps/Steps_dirt-004.ogg',
+        'footsteps/Steps_dirt-005.ogg',
+        'footsteps/Steps_dirt-006.ogg',
+    ]
+
+    const footstpes = Math.random() <= 0.5 ? footstepsOne : footstepsTwo
+
+    playAudio(footstpes)
+
+    sceneManager.loadingArea = true
+
+    const savedPlayerPosition = structuredClone(toRaw(playerPosition.coords))
+    let newCoords = {
+        x: 0,
+        y: 0,
+    }
+    feedStore.resetTravelFeed()
+
+    if (index === EDirections.North) {
+        newCoords = {
+            x: playerPosition.coords.x,
+            y: playerPosition.coords.y - 1,
+        }
+        feedStore.setTravelFeedItem(`You move north`)
+    } else if (index === EDirections.East) {
+        newCoords = {
+            x: playerPosition.coords.x + 1,
+            y: playerPosition.coords.y,
+        }
+        feedStore.setTravelFeedItem(`You move east`)
+    } else if (index === EDirections.South) {
+        newCoords = {
+            x: playerPosition.coords.x,
+            y: playerPosition.coords.y + 1,
+        }
+        feedStore.setTravelFeedItem(`You move south`)
+    } else if (index === EDirections.West) {
+        newCoords = {
+            x: playerPosition.coords.x - 1,
+            y: playerPosition.coords.y,
+        }
+        feedStore.setTravelFeedItem(`You move west`)
+    }
+    playerPosition.updateCoords(newCoords.x, newCoords.y)
+
+    const changedRoom = sceneManager.changeActiveRoom(playerPosition.coords.x, playerPosition.coords.y)
+
+    if (!changedRoom) {
+        // if cant move to the next tile return the player to the previous place
+        console.error('No current Room')
+        if (savedPlayerPosition.x === undefined || savedPlayerPosition.y === undefined) {
+            console.error('No previous player position')
             return
         }
-        createScene(sceneId)
-        activeScene.value.changeCurrentRoom(roomId)
-        return
+        playerPosition.updateCoords(savedPlayerPosition.x, savedPlayerPosition.y)
+        sceneManager.changeActiveRoom(playerPosition.coords.x, playerPosition.coords.y)
+        feedStore.setTravelFeedItem(`You travel back.`)
     }
 
-    if (parseInt(roomId) === EDirections.Wall) {
-        console.error('wall')
-        return
+    const location = sceneManager.getLocationData(playerPosition.coords.x, playerPosition.coords.y)
+
+    if (location) {
+        // check if there is a monster here
+        randomEncounters.rollEncounter(location.id)
     }
 
-    activeScene.value.changeCurrentRoom(roomId)
+    feedStore.setTravelFeedItem(`You have entered ${sceneManager.activeRoom?.name}.`)
+    feedStore.setTravelFeedItem(`${sceneManager.activeRoom?.description}`)
 
-    if (!activeScene.value.currentRoom) {
-        console.error('No current Room')
-        return
-    }
-    await saveScene(activeScene.value.id, activeScene.value.currentRoom.id, activeScene.value.roomList)
+    // Get closes tiles names
+    sceneManager.getClosestTiles()
+
+    await sceneManager.saveScene({ x: playerPosition.coords.x, y: playerPosition.coords.y }, sceneManager.sceneList)
+    setTimeout(() => {
+        sceneManager.loadingArea = false
+        isMoving.value = false
+    }, 800)
 }
 
-const directionButton = (directionId: number, index: number) => {
+const directionButton = (index: number) => {
+    let destination = undefined
     if (index === EDirections.North) {
-        return Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
+        destination = Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
     } else if (index === EDirections.East) {
-        return Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
+        destination = Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
     } else if (index === EDirections.South) {
-        return Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
+        destination = Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
     } else if (index === EDirections.West) {
-        return Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
+        destination = Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
     }
+
+    return destination
 }
 
 const searchRoom = () => {
-    if (!activeScene.value || !activeScene.value.currentRoom) {
+    if (!sceneManager.activeRoom || !sceneManager.activeRoom) {
         console.error('SEARCH ROOM: no current room')
         return
     }
-    activeScene.value.currentRoom.searchRoom()
+    sceneManager.activeRoom.searchRoom()
+}
+
+const enterInstance = async (instanceId: string, entryId: string) => {
+    if (!sceneManager.activeRoom || !instanceId || !entryId) {
+        return
+    }
+
+    if (instanceId === 'overworld') {
+        const exitLocation = sceneManager.sceneList.find((location) => location.id === entryId)
+
+        if (!exitLocation) {
+            console.error('no exit location found')
+
+            return
+        }
+        sceneManager.instance = undefined
+
+        sceneManager.setActiveScene(exitLocation)
+        feedStore.resetTravelFeed()
+        feedStore.setTravelFeedItem(`You have entered ${sceneManager.activeRoom?.name}`)
+        feedStore.setTravelFeedItem(`${sceneManager.activeRoom?.description}`)
+        sceneManager.getClosestTiles()
+        return
+    }
+
+    console.log('start creating locations')
+    console.time('tt')
+    await sceneManager.createInstanceLocations(instanceId, entryId)
+    console.timeEnd('tt')
+    console.log('end creating locations')
+    feedStore.resetTravelFeed()
+    feedStore.setTravelFeedItem(`You have entered ${sceneManager.activeRoom?.name}`)
+    feedStore.setTravelFeedItem(`${sceneManager.activeRoom?.description}`)
+    sceneManager.getClosestTiles()
 }
 
 onMounted(() => {
@@ -118,9 +222,9 @@ onMounted(() => {
 </script>
 
 <template>
-    <div v-if="activeScene" class="o-interface">
+    <div v-if="sceneManager.activeRoom" class="o-interface">
         <div class="o-interface__row o-interface__objectActions">
-            <template v-for="roomObject in activeScene.currentRoom?.roomObjects" :key="roomObject.id">
+            <template v-for="roomObject in sceneManager.activeRoom?.roomObjects" :key="roomObject.id">
                 <button
                     v-if="feedStore.activeRoomObject?.id !== roomObject.id"
                     class="a-button action__button"
@@ -132,37 +236,37 @@ onMounted(() => {
             <button
                 v-if="feedStore.activeRoomObject"
                 class="a-button action__button"
-                @click="feedStore.setActiveRoomObject(null)"
+                @click="feedStore.setActiveRoomObject(undefined)"
             >
                 Description
             </button>
             <button class="a-button action__button" v-if="!isSearched" @click="searchRoom">Search Room</button>
-        </div>
-        <div class="o-interface__row o-interface__directionWrapper">
-            <template v-for="(destinationId, index) in activeScene.currentRoom?.exits" :key="index">
+            <template v-if="sceneManager.activeRoom && sceneManager.activeRoom.connectedLocation !== undefined">
                 <button
-                    v-if="destinationId !== -1 && typeof destinationId === 'number'"
+                    v-if="sceneManager.activeRoom.connectedLocation"
                     class="a-button action__button"
-                    @click="moveTo(activeScene.id, destinationId.toString())"
+                    @click="
+                        enterInstance(
+                            sceneManager.activeRoom?.connectedLocation?.id!,
+                            sceneManager.activeRoom?.connectedLocation?.entryId!
+                        )
+                    "
                 >
-                    {{ directionButton(destinationId, index) }}
+                    Enter {{ sceneManager.activeRoom?.name }}
                 </button>
             </template>
-
-            <template v-for="(destinationId, index) in activeScene.currentRoom?.exits" :key="index">
-                <button
-                    class="a-button action__button"
-                    v-if="typeof destinationId !== 'number' && destinationId.sceneId !== 'town'"
-                    @click="moveTo(destinationId.sceneId, destinationId.roomId)"
-                >
-                    {{ getLocationName(destinationId.sceneId) }}
-                </button>
-                <button
-                    class="a-button action__button"
-                    v-if="typeof destinationId !== 'number' && destinationId.sceneId === 'town'"
-                    @click="moveToTown(destinationId.sceneId)"
-                >
-                    {{ destinationId.sceneId }}
+            <button
+                v-if="sceneManager.activeRoom.id === 'oakwood'"
+                class="a-button action__button"
+                @click="$router.push({ name: 'town' })"
+            >
+                Enter {{ sceneManager.activeRoom.name }}
+            </button>
+        </div>
+        <div class="o-interface__row o-interface__directionWrapper">
+            <template v-for="(destinationId, index) in 4" :key="index">
+                <button class="a-button action__button" @click="move(index)" :disabled="isMoving">
+                    {{ directionButton(index) }}
                 </button>
             </template>
         </div>

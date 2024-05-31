@@ -15,6 +15,7 @@ interface ILootState {
     isHigherTierLoot: boolean
     baseChanceFor2TierLoot: number
     lootList: Array<AllItemTypes | Gold>
+    isLootSearched: boolean
 }
 
 const state: ILootState = reactive({
@@ -27,10 +28,13 @@ const state: ILootState = reactive({
     baseChanceFor2TierLoot: 40,
     isHigherTierLoot: false,
     lootList: [],
+    isLootSearched: false
+
 })
 
 export const useLoot = () => {
     const generateLoot = () => {
+        state.isLootSearched = true
         const roll = diceRollK100()
         if (roll > state.baseLootChance) {
             console.log(`${roll}/${state.baseLootChance} = no loot generated`)
@@ -44,6 +48,8 @@ export const useLoot = () => {
             const generatedItem = generateLootItem(1)
             state.lootList.push(generatedItem)
         }
+        console.log(state.isLootSearched);
+
     }
     const generateLootItem = (enemyLootTier: number) => {
         const itemGenerator = new ItemGenerator()

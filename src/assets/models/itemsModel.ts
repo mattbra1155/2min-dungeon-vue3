@@ -83,7 +83,7 @@ class Weapon extends Item implements IWeapon {
     }
 
     wield(owner: PlayerModel | MonsterModel) {
-        const { setNotification } = useInventory()
+        const { setTravelFeedItem } = useInventory()
         if (!this) {
             console.error(`no weapon to wield!!`)
             return
@@ -91,7 +91,7 @@ class Weapon extends Item implements IWeapon {
         const ownerHasRequiredSkills = () => {
             return this.requiredSkills.every((skillId) => {
                 if (!Object.values(owner.skills).find((skillReq) => skillReq.id === skillId)) {
-                    setNotification(`Missing required skill - ${skillId}`)
+                    setTravelFeedItem(`Missing required skill - ${skillId}`)
                     return false
                 }
                 return true

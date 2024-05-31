@@ -13,6 +13,7 @@ const { setActiveShop } = useShop()
 const words = ref<string>('')
 const merchant = reactive(new Merchant())
 merchant.fillInventory(diceRollK10())
+const isWriting = ref<boolean>(false)
 
 // Move this to a standalone function
 const writeAnimation = (text: string) => {
@@ -20,6 +21,7 @@ const writeAnimation = (text: string) => {
     const txt = text
     const speed = 50
     words.value = ''
+    isWriting.value = true
 
     function typeWriter() {
         if (i < txt.length) {
@@ -28,6 +30,7 @@ const writeAnimation = (text: string) => {
             setTimeout(typeWriter, speed)
         }
     }
+    isWriting.value = false
 
     typeWriter()
 }
@@ -42,6 +45,7 @@ const sellItem = (item: AllItemTypes) => {
         console.log('SHOP: Merchant doesnt have enough gold')
         return
     }
+    console.log(isWriting.value)
     writeAnimation('Great doing business with you...')
     merchant.buyItem(item)
 }
@@ -77,7 +81,7 @@ onMounted(() => {
                 <template v-for="item in player.inventory.inventory" :key="item.id">
                     <button v-if="!item.isEquipped" class="a-button o-merchant__item" @click="sellItem(item)">
                         <p class="o-merchant__itemName">{{ item.name }}</p>
-                        <p class="o-merchant__itemPrice">{{ item.price }} GC</p>
+                        <p class="o-merchant__itemPrice">{{ item.price / 2 }} GC</p>
                     </button>
                 </template>
             </div>
