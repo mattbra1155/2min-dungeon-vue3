@@ -188,13 +188,14 @@ const enterInstance = async (instanceId: string, entryId: string) => {
     if (!sceneManager.activeRoom || !instanceId || !entryId) {
         return
     }
+    isMoving.value = true
 
     if (instanceId === 'overworld') {
         const exitLocation = sceneManager.sceneList.find((location) => location.id === entryId)
 
         if (!exitLocation) {
             console.error('no exit location found')
-
+            isMoving.value = false
             return
         }
         sceneManager.instance = undefined
@@ -204,6 +205,7 @@ const enterInstance = async (instanceId: string, entryId: string) => {
         feedStore.setTravelFeedItem(`You have entered ${sceneManager.activeRoom?.name}`)
         feedStore.setTravelFeedItem(`${sceneManager.activeRoom?.description}`)
         sceneManager.getClosestTiles()
+        isMoving.value = false
         return
     }
 
@@ -216,6 +218,7 @@ const enterInstance = async (instanceId: string, entryId: string) => {
     feedStore.setTravelFeedItem(`You have entered ${sceneManager.activeRoom?.name}`)
     feedStore.setTravelFeedItem(`${sceneManager.activeRoom?.description}`)
     sceneManager.getClosestTiles()
+    isMoving.value = false
 }
 
 onMounted(() => {
@@ -261,6 +264,7 @@ onMounted(() => {
                 v-if="sceneManager.activeRoom.id === 'oakwood'"
                 class="a-button action__button"
                 @click="$router.push({ name: 'town' })"
+                :disabled="isMoving"
             >
                 Enter {{ sceneManager.activeRoom.name }}
             </button>
