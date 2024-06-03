@@ -29,13 +29,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
     const loadingArea = ref<boolean>(false)
 
     const setActiveInstance = (instanceId: string) => {
-        const selectedInstance = instances.find((instanceItem) => {
-            console.log(instanceId, instanceItem)
-
-            if (instanceItem.id === instanceId) {
-                return instanceItem
-            }
-        })
+        const selectedInstance = instances.find((instanceItem) => instanceItem.id === instanceId)
 
         if (!selectedInstance) {
             console.error('No selectedInstance found')
@@ -140,8 +134,6 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
             west: false,
         })
         if (playerPosition.coords.x === undefined || playerPosition.coords.y === undefined) {
-            console.log(playerPosition.coords.x)
-
             console.error('no player coords')
             return
         }
@@ -149,8 +141,6 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         closesTiles.value.south = getLocationData(playerPosition.coords.x, playerPosition.coords.y + 1)
         closesTiles.value.east = getLocationData(playerPosition.coords.x + 1, playerPosition.coords.y)
         closesTiles.value.west = getLocationData(playerPosition.coords.x - 1, playerPosition.coords.y)
-
-        console.log('here', closesTiles.value)
 
         if (closesTiles.value.north) {
             feedStore.setTravelFeedItem(`N: ${closesTiles.value.north.name}`)
@@ -173,8 +163,6 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         } else {
             foundLocation = sceneList.value.find((location) => location.x === x && location.y === y)
         }
-
-        console.log(instance.value, foundLocation)
 
         if (!foundLocation) {
             return false
@@ -200,8 +188,6 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
             console.error('No Room found')
             return false
         }
-
-        console.log(activeRoom.value.id)
 
         if (activeRoom.value.id === 'wall') {
             feedStore.setTravelFeedItem('You smash your face at a wall')
@@ -284,7 +270,6 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         // move all arguments here instead of passing it each time
         const seen: any = []
         // save and remove cyclic objects from store
-        console.log(currentRoom)
 
         await localforage.setItem(
             'activeRoom',
@@ -308,7 +293,6 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
 
         if (!sceneListData) {
             console.log('no scene List saved')
-
             return
         }
         sceneList.value = sceneListData.map((sceneData: Room) => {
@@ -336,8 +320,6 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
             return location
         })
 
-        console.log(sceneList.value)
-
         // load scene
         interface payload {
             currentRoomCoords: {
@@ -348,8 +330,6 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         }
         const data: string = (await localforage.getItem('activeRoom')) as string
         const savedSceneData: payload = JSON.parse(data)
-
-        console.log(savedSceneData)
 
         if (!savedSceneData) {
             console.error('CRATE SCENE: No saved scene')
@@ -364,7 +344,6 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
             changeActiveRoom(19, 22)
             return
         }
-        console.log(savedSceneData)
 
         changeActiveRoom(savedSceneData.currentRoomCoords.x, savedSceneData.currentRoomCoords.y)
 
