@@ -9,16 +9,40 @@ class RoomObject implements IRoomObject {
         public image: string = '',
         public imageSearched: string = '',
         public name: string = '',
-        public description: string = '',
-        public items: AllItemTypes[] = [],
-        public isSearched: boolean = false,
-        public isLocked: boolean = false
+        public description: string = ''
     ) {
         this.type = type
         this.name = name
         this.description = description
-        this.items = items
     }
+}
+
+interface Container {
+    id: string
+    name: string
+    items: AllItemTypes[]
+    isSearched: boolean
+    isLocked: boolean
+    setIsSearch(state: boolean): void
+    unlock(person: PlayerModel): boolean
+}
+
+class Container implements Container {
+    constructor(
+        public id: string,
+        public type: string = 'container',
+        public name: string,
+        public items: AllItemTypes[] = [],
+        public isSearched: boolean = false,
+        public isLocked: boolean = false
+    ) {
+        this.id = id
+        this.name = name
+        this.items = items
+        this.isSearched = isSearched
+        this.isLocked = isLocked
+    }
+
     setIsSearch(state: boolean) {
         this.isSearched = state
     }
@@ -31,4 +55,4 @@ class RoomObject implements IRoomObject {
     }
 }
 
-export { RoomObject }
+export { RoomObject, Container }

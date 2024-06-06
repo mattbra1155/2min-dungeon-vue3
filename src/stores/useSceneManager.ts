@@ -66,6 +66,14 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         const locationList: Room[] = instance.value.map.map((locationData) => {
             const locationClass = new Room()
             const location = Object.assign(locationClass, locationData)
+            if (location.roomObjects.length) {
+                location.roomObjects = location.roomObjects.map((objectItem: RoomObject) => {
+                    const itemClass = new RoomObject()
+                    const newObject = Object.assign(itemClass, objectItem)
+
+                    return newObject
+                })
+            }
             instanceList.value.push(location)
             return location
         })
@@ -85,6 +93,12 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         const locationList: Room[] = locations.map((locationData) => {
             const locationClass = new Room()
             const location = Object.assign(locationClass, locationData)
+            // location.roomObjects = location.objects.map((objectItem) => {
+            //     const itemClass = new RoomObject()
+            //     const newObject = Object.assign(itemClass, objectItem)
+
+            //     return newObject
+            // })
             sceneList.value.push(location)
             return location
         })

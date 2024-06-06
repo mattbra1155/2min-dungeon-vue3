@@ -28,8 +28,7 @@ const state: ILootState = reactive({
     baseChanceFor2TierLoot: 40,
     isHigherTierLoot: false,
     lootList: [],
-    isLootSearched: false
-
+    isLootSearched: false,
 })
 
 export const useLoot = () => {
@@ -48,8 +47,7 @@ export const useLoot = () => {
             const generatedItem = generateLootItem(1)
             state.lootList.push(generatedItem)
         }
-        console.log(state.isLootSearched);
-
+        console.log(state.isLootSearched)
     }
     const generateLootItem = (enemyLootTier: number) => {
         const itemGenerator = new ItemGenerator()

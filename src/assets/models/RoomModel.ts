@@ -1,10 +1,9 @@
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { PlayerModel } from '@/assets/models/playerModel'
 import { ERoomTypes } from '@/enums/ERoomTypes'
-import { IRoomObject } from '@/interfaces/IRoomObject'
 import { diceRollK100 } from '../scripts/diceRoll'
 import { usePlayer } from '@/composables/usePlayer'
-
+import { IContainer } from '@/interfaces/IContainer'
 export interface IRoomExit {
     sceneId: string
     roomId: string
@@ -18,7 +17,7 @@ interface IRoom {
     name: string
     description: string
     monsterList: Array<PlayerModel | MonsterModel>
-    roomObjects: IRoomObject[]
+    roomObjects: IContainer[]
     lootList: string[]
     exits: Array<number | IRoomExit>
     type: ERoomTypes
@@ -42,7 +41,7 @@ class Room implements IRoom {
         public image: string = '',
         public description: string = '',
         public monsterList: Array<MonsterModel> = [],
-        public roomObjects: IRoomObject[] = [],
+        public roomObjects: [] = [],
         public lootList: string[] = [],
         public exits: Array<number | IRoomExit> = [],
         public isExplored: boolean = false,

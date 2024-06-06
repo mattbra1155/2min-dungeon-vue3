@@ -10,7 +10,7 @@ import { EGameState } from '@/enums/EGameState'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { Town } from '@/assets/models/sceneTownModel'
 
-const sceneManager= useSceneManagerStore()
+const sceneManager = useSceneManagerStore()
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
 const { setActiveShop } = useShop()
@@ -49,7 +49,7 @@ const addKeybindings = () => {
 // MOVE TOWN TO COMPONENT
 
 const exitTown = () => {
-    const townEntry = sceneManager.sceneList.find(location => location.id === 'oakwood')
+    const townEntry = sceneManager.sceneList.find((location) => location.id === 'oakwood')
 
     activeGameState.value = EGameState.Travel
     town.value.activeShopId = undefined
@@ -68,7 +68,7 @@ onMounted(() => {
 
 <template>
     <div v-if="sceneManager.activeRoom && lastScene" class="o-interface --town">
-        <button  class="a-button action__button" @click="exitTown()" >Leave Town</button>
+        <button class="a-button action__button" @click="exitTown()">Leave Town</button>
         <div class="o-interface__row">
             <button
                 v-for="shop in town.shops"
