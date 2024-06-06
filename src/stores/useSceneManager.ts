@@ -15,6 +15,7 @@ import locations from '@/assets/json/locations.json'
 import { monsterGenerator } from '@/App.vue'
 import instances from '@/assets/json/instances.json'
 import { usePlayerPositionStore } from './usePlayerPosition'
+import { IContainer } from '@/interfaces/IContainer'
 
 interface Instance {
     id: string
@@ -66,7 +67,10 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         const locationList: Room[] = instance.value.map.map((locationData) => {
             const locationClass = new Room()
             const location = Object.assign(locationClass, locationData)
+
             if (location.roomObjects.length) {
+                console.log(location.roomObjects.length)
+
                 location.roomObjects = location.roomObjects.map((objectItem: RoomObject) => {
                     const itemClass = new RoomObject()
                     const newObject = Object.assign(itemClass, objectItem)
@@ -74,6 +78,8 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
                     return newObject
                 })
             }
+            // console.log(location.roomObjects)
+
             instanceList.value.push(location)
             return location
         })
@@ -311,7 +317,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         }
         sceneList.value = sceneListData.map((sceneData: Room) => {
             const locationClass = new Room()
-            const location = Object.assign(locationClass, sceneData)
+            const location: Room = Object.assign(locationClass, sceneData)
             location.monsterList = location.monsterList.map((monster) => {
                 const ttt = new MonsterModel()
                 const newMonster = Object.assign(ttt, monster)
@@ -320,7 +326,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
                 newMonster.status = new Status()
                 return newMonster
             })
-            location.roomObjects = location.roomObjects.map((objectItem) => {
+            location.roomObjects = location.roomObjects.map((objectItem: IContainer) => {
                 const itemClass = new RoomObject()
                 const newObject = Object.assign(itemClass, objectItem)
 

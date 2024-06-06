@@ -41,7 +41,7 @@ class Room implements IRoom {
         public image: string = '',
         public description: string = '',
         public monsterList: Array<MonsterModel> = [],
-        public roomObjects: [] = [],
+        public roomObjects: IContainer[] = [],
         public lootList: string[] = [],
         public exits: Array<number | IRoomExit> = [],
         public isExplored: boolean = false,
