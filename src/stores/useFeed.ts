@@ -1,13 +1,14 @@
-import { RoomObject } from '@/assets/models/RoomObjectModel'
+import { Container, RoomObject } from '@/assets/models/RoomObjectModel'
+import { IContainer } from '@/interfaces/IContainer'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useFeedStore = defineStore('feed', () => {
     const feedTravelList = ref<any[]>([])
     const feedBattleList = ref<any[]>([])
-    const activeRoomObject = ref<RoomObject>()
+    const activeRoomObject = ref<IContainer>()
 
-    const setActiveRoomObject = (roomObject: RoomObject | undefined) => (activeRoomObject.value = roomObject)
+    const setActiveRoomObject = (roomObject: IContainer | undefined) => (activeRoomObject.value = roomObject)
     const setTravelFeedItem = (message: string) => feedTravelList.value.push(message)
     const setBattleFeedItem = (message: string) => feedBattleList.value.push(message)
     const resetTravelFeed = () => (feedTravelList.value = [])

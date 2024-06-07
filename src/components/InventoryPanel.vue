@@ -81,8 +81,12 @@ const unequip = (item: AllItemTypes) => {
             <button v-if="activeItemId" class="a-button --secondary o-inventory__close" @click="closeItemDetails">
                 Back
             </button>
-            <button v-else id="inventoryCloseButton" class="a-button --secondary o-inventory__close"
-                @click="toggleInventory">
+            <button
+                v-else
+                id="inventoryCloseButton"
+                class="a-button --secondary o-inventory__close"
+                @click="toggleInventory"
+            >
                 Close
             </button>
         </div>

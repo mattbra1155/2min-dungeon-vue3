@@ -6,7 +6,7 @@ import localforage from 'localforage'
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { Status } from '@/assets/models/statusModel'
 import { Inventory } from '@/assets/models/inventoryModel'
-import { RoomObject } from '@/assets/models/RoomObjectModel'
+import { Container, RoomObject } from '@/assets/models/RoomObjectModel'
 import { EGameState } from '@/enums/EGameState'
 import { useFeedStore } from '@/stores/useFeed'
 import { useGameStateManager } from '@/composables/useGameStateManager'
@@ -15,6 +15,9 @@ import locations from '@/assets/json/locations.json'
 import { monsterGenerator } from '@/App.vue'
 import instances from '@/assets/json/instances.json'
 import { usePlayerPositionStore } from './usePlayerPosition'
+import { IContainer } from '@/interfaces/IContainer'
+import { ItemGenerator } from '@/assets/generators/itemGenerator'
+import { EItemCategory } from '@/enums/ItemCategory'
 
 interface Instance {
     id: string
@@ -44,6 +47,8 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         // FIX: dont load saved instance  for now
         instance.value = undefined
         instanceList.value = []
+
+        const itemGenerator = new ItemGenerator()
         // if (instance.value?.id === instanceId && instanceList.value.length) {
         //     const entryLocation = instanceList.value.find((room) => room.name === entryId)
         //     if (!entryLocation) {
@@ -65,7 +70,34 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
 
         const locationList: Room[] = instance.value.map.map((locationData) => {
             const locationClass = new Room()
-            const location = Object.assign(locationClass, locationData)
+            const location: Room = Object.assign(locationClass, locationData)
+
+            if (location.roomObjects.length) {
+                location.roomObjects = location.roomObjects.map((objectItem: any) => {
+                    const item = new Container(
+                        objectItem.type,
+                        objectItem.image,
+                        objectItem.imageSearched,
+                        objectItem.name,
+                        objectItem.description,
+                        objectItem.items,
+                        objectItem.isSearched,
+                        objectItem.isLocked
+                    )
+
+                    if (objectItem.items.length) {
+                        item.items = objectItem.items.map((itemData: string) => {
+                            const createdItem = itemGenerator.createItem(itemData)
+                            return createdItem
+                        })
+                    }
+                    console.log(item)
+
+                    return item
+                })
+            }
+            // console.log(location.roomObjects)
+
             instanceList.value.push(location)
             return location
         })
@@ -85,6 +117,12 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         const locationList: Room[] = locations.map((locationData) => {
             const locationClass = new Room()
             const location = Object.assign(locationClass, locationData)
+            // location.roomObjects = location.objects.map((objectItem) => {
+            //     const itemClass = new RoomObject()
+            //     const newObject = Object.assign(itemClass, objectItem)
+
+            //     return newObject
+            // })
             sceneList.value.push(location)
             return location
         })
@@ -288,6 +326,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         await localforage.setItem('savedSceneList', JSON.stringify(sceneList.value))
     }
     const loadScene = async () => {
+        const itemGenerator = new ItemGenerator()
         // load and save sceneList.value
         const sceneListData = JSON.parse((await localforage.getItem('savedSceneList')) as string)
 
@@ -297,7 +336,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         }
         sceneList.value = sceneListData.map((sceneData: Room) => {
             const locationClass = new Room()
-            const location = Object.assign(locationClass, sceneData)
+            const location: Room = Object.assign(locationClass, sceneData)
             location.monsterList = location.monsterList.map((monster) => {
                 const ttt = new MonsterModel()
                 const newMonster = Object.assign(ttt, monster)
@@ -306,12 +345,30 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
                 newMonster.status = new Status()
                 return newMonster
             })
-            location.roomObjects = location.roomObjects.map((objectItem) => {
-                const itemClass = new RoomObject()
-                const newObject = Object.assign(itemClass, objectItem)
+            if (location.roomObjects.length) {
+                location.roomObjects = location.roomObjects.map((objectItem: any) => {
+                    const item = new Container(
+                        objectItem.type,
+                        objectItem.image,
+                        objectItem.imageSearched,
+                        objectItem.name,
+                        objectItem.description,
+                        objectItem.items,
+                        objectItem.isSearched,
+                        objectItem.isLocked
+                    )
 
-                return newObject
-            })
+                    if (objectItem.items.length) {
+                        item.items = objectItem.items.map((itemData: string) => {
+                            const createdItem = itemGenerator.createItem(itemData)
+                            return createdItem
+                        })
+                    }
+                    console.log(item)
+
+                    return item
+                })
+            }
 
             if (location.name === 'Burned down farm') {
                 location.image = 'images/burnedDownFarm.jpeg'

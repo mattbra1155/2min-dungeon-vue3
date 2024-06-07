@@ -1,4 +1,3 @@
-import { RoomObject } from '@/assets/models/RoomObjectModel'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 

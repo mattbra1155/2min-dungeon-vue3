@@ -65,6 +65,8 @@ const resetStorage = () => {
     localforage.removeItem('locationList')
     localforage.removeItem('player')
     localforage.removeItem('savedSceneList')
+
+    window.location.reload()
 }
 
 // starts the app

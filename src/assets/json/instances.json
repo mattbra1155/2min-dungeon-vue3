@@ -3468,7 +3468,7 @@
             {
                 "id": "dungeon",
                 "image": "",
-                "objects": [],
+                "roomObjects": [],
                 "description": "Dark and slimy stairs lead to the castle's jail cells.",
                 "entityList": [],
                 "lootList": [],
@@ -3569,8 +3569,15 @@
             {
                 "id": "gate",
                 "image": "",
-                "objects": [
-                    "chest"
+                "roomObjects": [
+                    {
+                        "name": "chest",
+                        "type": "container",
+                        "items": [
+                            "armor",
+                            "weapon"
+                        ]
+                    }
                 ],
                 "description": "Big gate leading to the inside of the castle. It's opened and looks like nobody used it in a long time.",
                 "entityList": [],
@@ -3588,7 +3595,7 @@
             {
                 "id": "courtyard",
                 "image": "",
-                "objects": [],
+                "roomObjects": [],
                 "description": "A big open square with cobblestone floor and some buildings. You see a door to the dunegon and the main entrence to the castle.",
                 "entityList": [],
                 "lootList": [],
@@ -8114,7 +8121,7 @@
             {
                 "id": "dungeon_entrence",
                 "image": "",
-                "objects": [],
+                "roomObjects": [],
                 "description": "Dark and damp stairs leading up.",
                 "entityList": [],
                 "lootList": [],

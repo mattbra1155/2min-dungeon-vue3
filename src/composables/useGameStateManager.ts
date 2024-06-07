@@ -2,7 +2,6 @@ import { EGameState } from '@/enums/EGameState'
 import { reactive, toRefs } from 'vue'
 import { useSceneManagerStore } from '@/stores/useSceneManager'
 
-
 interface IGameStateState {
     activeGameState: EGameState
 }
@@ -12,7 +11,6 @@ const state: IGameStateState = reactive({
 })
 
 export const useGameStateManager = () => {
-
     const updateGameState = (newState: EGameState) => {
         const sceneManager = useSceneManagerStore()
         state.activeGameState = newState

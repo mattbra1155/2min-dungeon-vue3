@@ -5,14 +5,12 @@ import { computed, onMounted, watch } from 'vue'
 
 const feedStore = useFeedStore()
 const sceneManager = useSceneManagerStore()
-const currentRoom = computed(() => sceneManager.activeRoom)
-const isSearched = computed(() => currentRoom.value?.isSearched)
 
 const containers = computed(() => {
-    if (!currentRoom.value?.roomObjects?.length) {
+    if (!sceneManager.activeRoom?.roomObjects.length) {
         return 'You see nothing worth taking.'
     }
-    const items = currentRoom.value?.roomObjects.map((roomObject) => {
+    const items = sceneManager.activeRoom.roomObjects.map((roomObject) => {
         const isEmpty = roomObject.isSearched && roomObject.items.length === 0 ? 'empty ' : ''
         const name = roomObject.name
         return `${isEmpty}${name}`
@@ -22,7 +20,7 @@ const containers = computed(() => {
 })
 
 watch(
-    () => isSearched.value,
+    () => sceneManager.activeRoom?.isSearched,
     (isSearched) => {
         if (isSearched) {
             feedStore.setTravelFeedItem(`You searched this room already.`)
@@ -39,13 +37,17 @@ watch(
 </script>
 
 <template>
-    <div v-if="currentRoom" id="feed" class="o-feed__travel" :class="{ '--loading': sceneManager.loadingArea }">
+    <div
+        v-if="sceneManager.activeRoom"
+        id="feed"
+        class="o-feed__travel"
+        :class="{ '--loading': sceneManager.loadingArea }"
+    >
         <transition name="fade">
             <ul v-if="!sceneManager.loadingArea" id="feedContainer" class="o-feed__container">
-                <img v-if="currentRoom.image" class="a-image" :src="currentRoom.image" alt="" />
+                <img v-if="sceneManager.activeRoom.image" class="a-image" :src="sceneManager.activeRoom.image" alt="" />
                 <p v-for="feedItem in feedStore.feedTravelList" :key="feedItem">{{ feedItem }}</p>
             </ul>
         </transition>
-
     </div>
 </template>
