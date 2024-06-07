@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RoomObject } from '@/assets/models/RoomObjectModel'
 import { usePlayer } from '@/composables/usePlayer'
+import { IContainer } from '@/interfaces/IContainer'
 import { AllItemTypes } from '@/interfaces/IItem'
 import { useFeedStore } from '@/stores/useFeed'
 import { ref } from 'vue'
@@ -9,7 +10,7 @@ const { player } = usePlayer()
 const feedStore = useFeedStore()
 const containerMessage = ref<string>()
 
-const openContainer = (item: RoomObject) => {
+const openContainer = (item: IContainer) => {
     if (item.isLocked) {
         const canPlayerUnlock = item.unlock(player.value)
         if (canPlayerUnlock) {
@@ -21,7 +22,7 @@ const openContainer = (item: RoomObject) => {
     }
     item.setIsSearch(true)
 }
-const getItem = (container: RoomObject, item: AllItemTypes) => {
+const getItem = (container: IContainer, item: AllItemTypes) => {
     const itemToRemoveIndex = container.items.findIndex((findItem) => findItem.id === item.id)
     container.items.splice(itemToRemoveIndex, 1)
     player.value.inventory.addItem(item, player.value.id)

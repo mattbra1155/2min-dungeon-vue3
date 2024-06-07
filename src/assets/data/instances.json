@@ -9,7 +9,9 @@
                     {
                         "id": "chest",
                         "type": "container",
-                        "loot": []
+                        "loot": [
+                            "sword"
+                        ]
                     }
                 ],
                 "description": "Big gate leading to the inside of the castle. It's opened and looks like nobody used it in a long time.",

@@ -27,18 +27,21 @@ interface Container {
     unlock(person: PlayerModel): boolean
 }
 
-class Container implements Container {
+class Container extends RoomObject implements Container {
     constructor(
-        public id: string,
         public type: string = 'container',
+        public image: string,
+        public imageSearched: string,
         public name: string,
+        public description: string,
         public items: AllItemTypes[] = [],
         public isSearched: boolean = false,
         public isLocked: boolean = false
     ) {
-        this.id = id
-        this.name = name
+        super(type, image, imageSearched, name, description)
+        this.id = `${type}-${crypto.randomUUID()}`
         this.items = items
+        this.type = type
         this.isSearched = isSearched
         this.isLocked = isLocked
     }

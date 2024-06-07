@@ -6,7 +6,7 @@ import localforage from 'localforage'
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { Status } from '@/assets/models/statusModel'
 import { Inventory } from '@/assets/models/inventoryModel'
-import { RoomObject } from '@/assets/models/RoomObjectModel'
+import { Container, RoomObject } from '@/assets/models/RoomObjectModel'
 import { EGameState } from '@/enums/EGameState'
 import { useFeedStore } from '@/stores/useFeed'
 import { useGameStateManager } from '@/composables/useGameStateManager'
@@ -66,16 +66,23 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
 
         const locationList: Room[] = instance.value.map.map((locationData) => {
             const locationClass = new Room()
-            const location = Object.assign(locationClass, locationData)
+            const location: Room = Object.assign(locationClass, locationData)
 
             if (location.roomObjects.length) {
-                console.log(location.roomObjects.length)
+                location.roomObjects = location.roomObjects.map((objectItem: IContainer) => {
+                    const item = new Container(
+                        objectItem.type,
+                        objectItem.image,
+                        objectItem.imageSearched,
+                        objectItem.name,
+                        objectItem.description,
+                        objectItem.items,
+                        objectItem.isSearched,
+                        objectItem.isLocked
+                    )
+                    console.log(item)
 
-                location.roomObjects = location.roomObjects.map((objectItem: RoomObject) => {
-                    const itemClass = new RoomObject()
-                    const newObject = Object.assign(itemClass, objectItem)
-
-                    return newObject
+                    return item
                 })
             }
             // console.log(location.roomObjects)
