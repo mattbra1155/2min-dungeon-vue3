@@ -9,8 +9,8 @@
                     {
                         "id": "chest",
                         "type": "container",
-                        "loot": [
-                            "sword"
+                        "items": [
+                            "weapon"
                         ]
                     }
                 ],

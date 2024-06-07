@@ -1,19 +1,44 @@
 import { Weapon, Armor, Potion, Gold } from '@/assets/models/itemsModel'
 import itemList from '@/assets/json/items.json'
-import { AllItemTypes, IArmor, IGold } from '@/interfaces/IItem'
+import { AllItemTypes, IGold } from '@/interfaces/IItem'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { ModifierItem } from '../models/modifierItemModel'
 import { modifierList } from '@/assets/json/modifiers.json'
 import { EModifierTypes } from '@/enums/EModifierTypes'
 
 class ItemGenerator {
-    private category: EItemCategory.Weapon | EItemCategory.Armor | EItemCategory.Potion | null
+    private category: string | EItemCategory.Weapon | EItemCategory.Armor | EItemCategory.Potion | null
     private quality: ModifierItem | null
     constructor() {
         this.category = null
         this.quality = null
     }
 
+    getItemBase = (category: string): AllItemTypes => {
+        let itemBase: AllItemTypes = this.createItemBase(EItemCategory.Weapon)
+        if (category === EItemCategory.Weapon) {
+            itemBase = this.createItemBase(category)
+        } else if (category === EItemCategory.Armor) {
+            itemBase = this.createItemBase(category)
+        } else if (category === EItemCategory.Potion) {
+            itemBase = this.createItemBase(category)
+        }
+
+        return itemBase
+    }
+
+    getItemCategory = (category: string): EItemCategory => {
+        let itemCategory: EItemCategory = EItemCategory.Weapon
+        if (category === EItemCategory.Weapon) {
+            itemCategory = EItemCategory.Weapon
+        } else if (category === EItemCategory.Armor) {
+            itemCategory = EItemCategory.Armor
+        } else if (category === EItemCategory.Potion) {
+            itemCategory = EItemCategory.Potion
+        }
+
+        return itemCategory
+    }
     private createItemBase(category: EItemCategory.Weapon): Weapon
     private createItemBase(category: EItemCategory.Armor): Armor
     private createItemBase(category: EItemCategory.Potion): Potion
@@ -32,7 +57,7 @@ class ItemGenerator {
             itemObject = new Potion()
         }
 
-        const itemCategory = itemList[this.category]
+        const itemCategory = itemList[this.getItemCategory(this.category)]
         const randomItem = itemCategory.item[Math.floor(Math.random() * itemCategory.item.length)]
 
         const finalItem: AllItemTypes = Object.assign(itemObject, randomItem, {
@@ -64,7 +89,7 @@ class ItemGenerator {
         }
 
         const createdModifierList: ModifierItem[] = []
-        const itemCategory = itemList[this.category]
+        const itemCategory = itemList[this.getItemCategory(this.category)]
         const itemModifiersData = itemCategory?.item.find((item) => item.type === baseItem.type)?.modifiers
         itemModifiersData?.forEach((itemModifier) => {
             const modifierData = modifierList.find((mod) => {
@@ -112,7 +137,7 @@ class ItemGenerator {
         return result
     }
 
-    createItem(category: EItemCategory, tier = 1): AllItemTypes {
+    createItem(category: string, tier = 1): AllItemTypes {
         this.category = category
 
         if (!this.category) {

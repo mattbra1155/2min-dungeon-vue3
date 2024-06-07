@@ -16,6 +16,8 @@ import { monsterGenerator } from '@/App.vue'
 import instances from '@/assets/json/instances.json'
 import { usePlayerPositionStore } from './usePlayerPosition'
 import { IContainer } from '@/interfaces/IContainer'
+import { ItemGenerator } from '@/assets/generators/itemGenerator'
+import { EItemCategory } from '@/enums/ItemCategory'
 
 interface Instance {
     id: string
@@ -45,6 +47,8 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         // FIX: dont load saved instance  for now
         instance.value = undefined
         instanceList.value = []
+
+        const itemGenerator = new ItemGenerator()
         // if (instance.value?.id === instanceId && instanceList.value.length) {
         //     const entryLocation = instanceList.value.find((room) => room.name === entryId)
         //     if (!entryLocation) {
@@ -69,7 +73,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
             const location: Room = Object.assign(locationClass, locationData)
 
             if (location.roomObjects.length) {
-                location.roomObjects = location.roomObjects.map((objectItem: IContainer) => {
+                location.roomObjects = location.roomObjects.map((objectItem: any) => {
                     const item = new Container(
                         objectItem.type,
                         objectItem.image,
@@ -80,6 +84,17 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
                         objectItem.isSearched,
                         objectItem.isLocked
                     )
+
+                    if (objectItem.items) {
+                        console.log(objectItem)
+
+                        item.items = objectItem.items.map((itemData: string) => {
+                            console.log(itemData)
+
+                            const createdItem = itemGenerator.createItem(itemData)
+                            return createdItem
+                        })
+                    }
                     console.log(item)
 
                     return item
@@ -333,12 +348,23 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
                 newMonster.status = new Status()
                 return newMonster
             })
-            location.roomObjects = location.roomObjects.map((objectItem: IContainer) => {
-                const itemClass = new RoomObject()
-                const newObject = Object.assign(itemClass, objectItem)
+            if (location.roomObjects.length) {
+                location.roomObjects = location.roomObjects.map((objectItem: IContainer) => {
+                    const item = new Container(
+                        objectItem.type,
+                        objectItem.image,
+                        objectItem.imageSearched,
+                        objectItem.name,
+                        objectItem.description,
+                        objectItem.items,
+                        objectItem.isSearched,
+                        objectItem.isLocked
+                    )
+                    console.log(item)
 
-                return newObject
-            })
+                    return item
+                })
+            }
 
             if (location.name === 'Burned down farm') {
                 location.image = 'images/burnedDownFarm.jpeg'
