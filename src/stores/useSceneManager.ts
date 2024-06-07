@@ -85,12 +85,8 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
                         objectItem.isLocked
                     )
 
-                    if (objectItem.items) {
-                        console.log(objectItem)
-
+                    if (objectItem.items.length) {
                         item.items = objectItem.items.map((itemData: string) => {
-                            console.log(itemData)
-
                             const createdItem = itemGenerator.createItem(itemData)
                             return createdItem
                         })
@@ -330,6 +326,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         await localforage.setItem('savedSceneList', JSON.stringify(sceneList.value))
     }
     const loadScene = async () => {
+        const itemGenerator = new ItemGenerator()
         // load and save sceneList.value
         const sceneListData = JSON.parse((await localforage.getItem('savedSceneList')) as string)
 
@@ -349,7 +346,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
                 return newMonster
             })
             if (location.roomObjects.length) {
-                location.roomObjects = location.roomObjects.map((objectItem: IContainer) => {
+                location.roomObjects = location.roomObjects.map((objectItem: any) => {
                     const item = new Container(
                         objectItem.type,
                         objectItem.image,
@@ -360,6 +357,13 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
                         objectItem.isSearched,
                         objectItem.isLocked
                     )
+
+                    if (objectItem.items.length) {
+                        item.items = objectItem.items.map((itemData: string) => {
+                            const createdItem = itemGenerator.createItem(itemData)
+                            return createdItem
+                        })
+                    }
                     console.log(item)
 
                     return item
