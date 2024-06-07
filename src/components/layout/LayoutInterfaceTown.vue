@@ -2,8 +2,7 @@
 import { useInventory } from '@/composables/useInventory'
 import { useCharacterScreen } from '@/composables/useCharacterScreen'
 import { computed, onMounted, toRefs } from 'vue'
-import { Scene } from '@/assets/models/sceneModel'
-import { useSceneManager } from '@/composables/useSceneManager'
+import { useSceneManagerStore } from '@/stores/useSceneManager'
 import localtions from '@/assets/json/locations.json'
 import router from '@/router'
 import { useShop } from '@/composables/useShop'
@@ -11,7 +10,7 @@ import { EGameState } from '@/enums/EGameState'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { Town } from '@/assets/models/sceneTownModel'
 
-const { activeScene, setScene, sceneList } = useSceneManager()
+const sceneManager = useSceneManagerStore()
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
 const { setActiveShop } = useShop()
@@ -22,7 +21,7 @@ const props = defineProps<{
 }>()
 
 const { town } = toRefs(props)
-const lastScene = computed(() => sceneList.value.findLast((el) => el))
+const lastScene = computed(() => sceneManager.sceneList.findLast((el) => el))
 
 const addKeybindings = () => {
     window.addEventListener('keydown', (event) => {
@@ -47,37 +46,14 @@ const addKeybindings = () => {
     })
 }
 
-const moveToScene = (sceneId: string) => {
-    const isAlreadyExplored = sceneList.value.find((scene) => scene.id === sceneId)
+// MOVE TOWN TO COMPONENT
 
-    let sceneData: unknown = {}
-    if (isAlreadyExplored) {
-        sceneData = sceneList.value.find((scene) => scene.id === sceneId)
-    } else {
-        sceneData = localtions.find((scene) => scene.id === sceneId)
-    }
-
-    if (!activeScene.value) {
-        console.error('no active Scene')
-        return
-    }
-    if (!sceneData) {
-        console.error('no Scene found')
-        return
-    }
-
-    if (activeScene.value.id !== 'town' && sceneId === 'town') {
-        router.push({ name: 'town' })
-        return
-    }
+const exitTown = () => {
+    const townEntry = sceneManager.sceneList.find((location) => location.id === 'oakwood')
 
     activeGameState.value = EGameState.Travel
     town.value.activeShopId = undefined
     router.push({ name: 'home' })
-
-    const scene = Object.assign(new Scene(), sceneData)
-
-    setScene(scene)
 }
 
 const enterShop = (shopId: string) => {
@@ -91,8 +67,8 @@ onMounted(() => {
 </script>
 
 <template>
-    <div v-if="activeScene" class="o-interface --town">
-        <button class="a-button action__button" v-if="lastScene" @click="moveToScene(lastScene.id)">Leave Town</button>
+    <div v-if="sceneManager.activeRoom && lastScene" class="o-interface --town">
+        <button class="a-button action__button" @click="exitTown()">Leave Town</button>
         <div class="o-interface__row">
             <button
                 v-for="shop in town.shops"

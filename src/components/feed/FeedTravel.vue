@@ -1,18 +1,16 @@
 <script setup lang="ts">
 import { useFeedStore } from '@/stores/useFeed'
-import { useSceneManager } from '@/composables/useSceneManager'
+import { useSceneManagerStore } from '@/stores/useSceneManager'
 import { computed, onMounted, watch } from 'vue'
 
 const feedStore = useFeedStore()
-const { activeScene } = useSceneManager()
-const currentRoom = computed(() => activeScene.value?.currentRoom)
-const isSearched = computed(() => currentRoom.value?.isSearched)
+const sceneManager = useSceneManagerStore()
 
 const containers = computed(() => {
-    if (!currentRoom.value?.roomObjects.length) {
+    if (!sceneManager.activeRoom?.roomObjects.length) {
         return 'You see nothing worth taking.'
     }
-    const items = currentRoom.value?.roomObjects.map((roomObject) => {
+    const items = sceneManager.activeRoom.roomObjects.map((roomObject) => {
         const isEmpty = roomObject.isSearched && roomObject.items.length === 0 ? 'empty ' : ''
         const name = roomObject.name
         return `${isEmpty}${name}`
@@ -22,7 +20,7 @@ const containers = computed(() => {
 })
 
 watch(
-    () => isSearched.value,
+    () => sceneManager.activeRoom?.isSearched,
     (isSearched) => {
         if (isSearched) {
             feedStore.setTravelFeedItem(`You searched this room already.`)
@@ -36,18 +34,20 @@ watch(
         feedStore.setTravelFeedItem(containers.value)
     }
 )
-
-onMounted(() => {
-    feedStore.setTravelFeedItem('There is a chest in the room.')
-})
 </script>
 
 <template>
-    <div v-if="currentRoom" id="feed" class="o-feed">
-        <ul id="feedContainer" class="o-feed__container">
-            <img v-if="currentRoom.image" class="a-image" :src="currentRoom.image" alt="" />
-            <div v-html="currentRoom.description"></div>
-            <p v-for="feedItem in feedStore.feedTravelList" :key="feedItem">{{ feedItem }}</p>
-        </ul>
+    <div
+        v-if="sceneManager.activeRoom"
+        id="feed"
+        class="o-feed__travel"
+        :class="{ '--loading': sceneManager.loadingArea }"
+    >
+        <transition name="fade">
+            <ul v-if="!sceneManager.loadingArea" id="feedContainer" class="o-feed__container">
+                <img v-if="sceneManager.activeRoom.image" class="a-image" :src="sceneManager.activeRoom.image" alt="" />
+                <p v-for="feedItem in feedStore.feedTravelList" :key="feedItem">{{ feedItem }}</p>
+            </ul>
+        </transition>
     </div>
 </template>

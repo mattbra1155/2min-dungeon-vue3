@@ -488,6 +488,15 @@
                 "modifiers": [],
                 "encumbrance": 20,
                 "icon": ""
+            },
+            {
+                "name": "climbing equipment",
+                "baseValue": 0,
+                "type": "tools",
+                "price": 30,
+                "modifiers": [],
+                "encumbrance": 80,
+                "icon": ""
             }
         ],
         "quality": [
@@ -510,5 +519,19 @@
                 }
             }
         ]
+    },
+    "material": {
+        "item": [
+            {
+                "name": "iron scrap",
+                "baseValue": 0,
+                "type": "material",
+                "price": 10,
+                "modifiers": [],
+                "encumbrance": 20,
+                "icon": ""
+            }
+        ],
+        "quality": []
     }
 }

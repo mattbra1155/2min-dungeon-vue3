@@ -4,7 +4,7 @@ import { MonsterGenerator } from '@/assets/generators/monsterGenerator'
 
 class SceneManager {
     constructor() {
-        this.activeScene = store.getters['scene/activeScene']
+        this.activeRoom = store.getters['scene/activeRoom']
     }
     createMonster() {
         const monsterGenerator = new MonsterGenerator()
@@ -18,18 +18,18 @@ class SceneManager {
     getEnemy() {
         return store.getters['enemy/getEnemy']
     }
-    createScene() {
+    createLocations() {
         this.createMonster()
         const player = this.getPlayer()
         const enemy = this.getEnemy()
         const sceneGenerator = new SceneGenerator()
         const scene = sceneGenerator.create(player, enemy)
         store.dispatch('sceneManager/saveScene', scene)
-        this.setActiveScene(scene)
+        this.setactiveRoom(scene)
         return scene
     }
-    setActiveScene(scene) {
-        store.dispatch('sceneManager/setActiveScene', scene)
+    setactiveRoom(scene) {
+        store.dispatch('sceneManager/setactiveRoom', scene)
     }
     archiveScene(sceneId) {
         store.dispatch('sceneManager/archiveScene', sceneId)
@@ -48,7 +48,7 @@ class SceneManager {
 //             break
 //         case 'nextLevel': {
 //             console.log(`Next level`)
-//             const level = this.createScene('level')
+//             const level = this.createLocations('level')
 //             document
 //                 .querySelectorAll('.feed__item')
 //                 .forEach(item => item.remove())
@@ -58,13 +58,13 @@ class SceneManager {
 //         }
 //         case 'defeat': {
 //             console.log(`Defeat`)
-//             const defeat = this.createScene('defeat')
+//             const defeat = this.createLocations('defeat')
 //             this.currentScene = defeat
 //             break
 //         }
 //         case 'win': {
 //             console.log(`Cleard level`)
-//             const win = this.createScene('win')
+//             const win = this.createLocations('win')
 //             this.currentScene = win
 //             break
 //         }

@@ -2,7 +2,7 @@
     display: flex
     flex-flow: row wrap
     width: 100%
-    height: 100vh
+    height: 100dvh
     padding: 1rem
     position: fixed
     top: 0
@@ -47,21 +47,10 @@
         background: var(--backgroundColor)
         border: 1px solid var(--buttonBorderColor)
         border-radius: 8px
-        &:hover
-            .o-inventory__details
-                display: flex
+
         &.--equipped
             display: grid
             grid-template-columns: 1fr 3fr 1fr
             justify-content: flex-start
-    &__details
-        display: none
-        position: absolute
-        top: 0
-        left: 0
-        background: #FFF
-        width: 100%
-        height: 100%
-        z-index: 2
     &__actionButton
         margin-left: auto

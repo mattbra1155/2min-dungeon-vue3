@@ -131,7 +131,7 @@ const bestiary = [
             willpower: 89,
             charisma: 0,
         },
-        level: 4,
+        level: 3,
         type: 'humanoid',
         weapon: null,
         description:

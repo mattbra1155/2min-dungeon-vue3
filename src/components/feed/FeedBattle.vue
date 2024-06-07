@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { useSceneManager } from '@/composables/useSceneManager'
+import { useSceneManagerStore } from '@/stores/useSceneManager'
 import { useFeedStore } from '@/stores/useFeed'
 import { computed, nextTick, ref, watch } from 'vue'
-const { activeScene } = useSceneManager()
+const sceneManager = useSceneManagerStore()
 const feedStore = useFeedStore()
 
-const monsterList = computed(() => activeScene.value?.currentRoom?.monsterList.map((monster) => monster.name) || [])
+const monsterList = computed(() => sceneManager.activeRoom?.monsterList.map((monster) => monster.name) || [])
 
 feedStore.setBattleFeedItem(
     `You are being attacked by ${monsterList.value.length > 1 ? 'enemies' : 'enemy'}: ${monsterList.value}`

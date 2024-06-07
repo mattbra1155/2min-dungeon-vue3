@@ -1,8 +1,6 @@
 import { EGameState } from '@/enums/EGameState'
 import { reactive, toRefs } from 'vue'
-import { useSceneManager } from './useSceneManager'
-
-const { createScene } = useSceneManager()
+import { useSceneManagerStore } from '@/stores/useSceneManager'
 
 interface IGameStateState {
     activeGameState: EGameState
@@ -14,19 +12,20 @@ const state: IGameStateState = reactive({
 
 export const useGameStateManager = () => {
     const updateGameState = (newState: EGameState) => {
+        const sceneManager = useSceneManagerStore()
         state.activeGameState = newState
         switch (state.activeGameState) {
             case EGameState.Init:
                 console.log('GAME STATE: Init')
                 // changeActiveTurnState(ETurnState.Init)
-                // createScene()
+                // createLocations()
                 break
             case EGameState.CreateChar:
                 console.log('GAME STATE: Create Character')
                 break
             case EGameState.CreateLevel:
                 console.log('GAME STATE: Create Level')
-                createScene('0')
+                sceneManager.createLocations('northern_fields')
                 break
             case EGameState.Travel:
                 console.log('GAME STATE: Travel')

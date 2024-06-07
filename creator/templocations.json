@@ -1,0 +1,87 @@
+[
+    {
+        "id": "town",
+        "image": "empty",
+        "name": "Oakwood",
+        "description": "test",
+        "entityList": [],
+        "lootList": [],
+        "type": "entry",
+        "isDark": false,
+        "x": 111,
+        "y": 222,
+        "objects": [
+            {
+                "type": "chest",
+                "isLocked": true
+            },
+            {
+                "type": "chest",
+                "isLocked": false
+            }
+        ]
+    },
+    {
+        "id": "outskirts_north",
+        "image": "empty",
+        "name": "Outskirts North",
+        "description": "A vast country with a lot of ununsed and overgrown fields. Few desolated farms are scattered in the distance. Its a sad sight",
+        "entityList": [],
+        "lootList": [],
+        "type": "entry",
+        "isDark": false,
+        "x": 19,
+        "y": 20,
+        "objects": [
+            {
+                "type": "chest",
+                "isLocked": true
+            },
+            {
+                "type": "chest",
+                "isLocked": false
+            }
+        ]
+    },
+    {
+        "id": "old_shrine",
+        "image": "empty",
+        "name": "Old Shrine",
+        "description": "A old shrine",
+        "entityList": [
+            "lesser_goblin"
+        ],
+        "lootList": "",
+        "type": "monster",
+        "isDark": false,
+        "x": "",
+        "y": "",
+        "objects": [
+            {
+                "type": "chest",
+                "isLocked": true
+            }
+        ]
+    },
+    {
+        "id": "castle_drakenhof",
+        "image": "empty",
+        "name": "Castle Drakenhof",
+        "description": "A scary castle on a cliff overlooking a forest.",
+        "entityList": [],
+        "lootList": "",
+        "isDark": false,
+        "x": "",
+        "y": "",
+        "objects": [
+            {
+                "type": "chest",
+                "isLocked": true
+            }
+        ],
+        "connectedLocation": {
+            "id": "castle_drakenhof",
+            "entryId": "gate"
+        }
+    }
+]

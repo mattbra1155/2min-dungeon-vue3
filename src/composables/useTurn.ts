@@ -5,18 +5,18 @@ import { ETurnState } from '@/enums/ETurnState'
 import { EGameState } from '@/enums/EGameState'
 import { usePlayer } from '@/composables/usePlayer'
 import { useGameStateManager } from '@/composables/useGameStateManager'
-import { useSceneManager } from './useSceneManager'
+import { useSceneManagerStore } from '@/stores/useSceneManager'
 import { playAudio } from '@/helpers/playAudio'
 import { useFeedStore } from '@/stores/useFeed'
 import { useGlobalStore } from '@/stores/useGlobal'
 
 const { updateGameState } = useGameStateManager()
-const { activeScene } = useSceneManager()
 interface ITurn {
     turnNumber: number
     turnOrder: Array<PlayerModel | MonsterModel> | undefined
     activeCharacter: PlayerModel | MonsterModel | undefined
     activeTurnState: ETurnState
+    monsterList: Array<PlayerModel | MonsterModel> | undefined
 }
 
 const state: ITurn = reactive({
@@ -24,6 +24,7 @@ const state: ITurn = reactive({
     turnOrder: undefined,
     activeCharacter: undefined,
     activeTurnState: ETurnState.Init,
+    monsterList: undefined,
 })
 
 export const useTurn = () => {
@@ -36,9 +37,13 @@ export const useTurn = () => {
     const updateTurnStateMachine = (newTurnState: ETurnState) => {
         const { player } = usePlayer()
         const globalStore = useGlobalStore()
+        const sceneManager = useSceneManagerStore()
 
-        const monsterList = activeScene.value?.currentRoom?.monsterList
+        const monsterList = state.monsterList
 
+        if (monsterList?.length && !monsterList.find((item) => item !== player.value)) {
+            monsterList?.push(player.value)
+        }
         if (!player.value.isAlive) {
             return
         }
@@ -61,9 +66,8 @@ export const useTurn = () => {
                 console.log('TURN STATE:', ETurnState.SortOrder)
                 state.turnOrder = undefined
                 console.log(monsterList)
-                if (!monsterList) {
+                if (!monsterList?.length) {
                     console.error('no monster list')
-
                     return
                 }
 
@@ -162,8 +166,8 @@ export const useTurn = () => {
         if (player.value && player.value.currentStats.hp <= 0) {
             console.log('Player dead')
             feedStore.setBattleFeedItem(`${player.value.name} is dead`)
-            await playAudio(['14_human_death_spin'])
-            playAudio(['14_human_death_spin'])
+            await playAudio(['14_human_death_spin.wav'])
+            playAudio(['14_human_death_spin.wav'])
             player.value.isAlive = false
             updateGameState(EGameState.PlayerDead)
             return
@@ -186,10 +190,14 @@ export const useTurn = () => {
         const updatedTurnOrder = state.turnOrder.splice(deadPersonIndex, 1)
         return updatedTurnOrder
     }
+    const setMonsterList = (monsterList: MonsterModel[]) => {
+        state.monsterList = monsterList
+    }
     return {
         ...toRefs(state),
         updateTurnStateMachine,
         resetTurn,
         checkIfDead,
+        setMonsterList,
     }
 }

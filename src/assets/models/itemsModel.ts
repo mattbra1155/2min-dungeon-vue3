@@ -1,5 +1,5 @@
 import { iBodyPart } from '@/interfaces/BodyParts'
-import { IArmor, IGold, IItem, IPotion, IWeapon } from '@/interfaces/IItem'
+import { IArmor, IGold, IItem, IMaterial, IPotion, IWeapon } from '@/interfaces/IItem'
 import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { PlayerModel } from '@/assets/models/playerModel'
@@ -36,6 +36,24 @@ class Item implements IItem {
         this.ownerId = ownerId
         this.modifiers = modifiers
         this.icon = icon
+    }
+}
+
+class Material implements IMaterial {
+    constructor(
+        public id: string = `material-${crypto.randomUUID}`,
+        public name: string = 'placeholderName',
+        public description: string = 'placeholderDescription',
+        public type: string = 'placeholderType',
+        public category: EItemCategory = EItemCategory.Material,
+        public ownerId: string | undefined = undefined,
+        public price: number = 0,
+        public icon: string | undefined = 'placeholderIcon'
+    ) {
+        this.description
+        this.category
+        this.type
+        this.ownerId = ownerId
     }
 }
 
@@ -244,11 +262,30 @@ class Potion extends Item implements IPotion {
     }
 }
 
-// class Utility extends Item {
-//     constructor(name, description, category) {
-//         super(name, description, category)
-//     }
-// }
+class Utility extends Item {
+    constructor(
+        public id: string = `utility-${crypto.randomUUID}`,
+        public name: string = 'placeholderName',
+        public description: string = 'placeholderDescription',
+        public category: EItemCategory = EItemCategory.Utility,
+        public type: string = '',
+        public isEquipped: boolean = false,
+        public ownerId: string | undefined = undefined,
+        public modifiers: ModifierItem[] = [],
+        public price: number = 0,
+        public encumbrance: number = 0,
+        public icon: string = 'placeholderIcon'
+    ) {
+        super(id, name, description, type, category, isEquipped, ownerId, modifiers, price, encumbrance, icon)
+        this.name = name
+        this.description = description
+        this.type = type
+        this.modifiers = modifiers
+        this.price = price
+        this.encumbrance = encumbrance
+        this.icon = icon
+    }
+}
 
 // let items = {
 //     weapons: [
@@ -279,4 +316,4 @@ class Potion extends Item implements IPotion {
 //     ],
 // }
 
-export { Item, Weapon, Armor, Potion, Gold }
+export { Item, Weapon, Armor, Potion, Utility, Gold, Material }

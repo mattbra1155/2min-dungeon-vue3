@@ -1,22 +1,64 @@
-import { Weapon, Armor, Potion, Gold } from '@/assets/models/itemsModel'
+import { Weapon, Armor, Potion, Gold, Material, Utility } from '@/assets/models/itemsModel'
 import itemList from '@/assets/json/items.json'
-import { AllItemTypes, IArmor, IGold } from '@/interfaces/IItem'
+import { AllItemTypes, IGold } from '@/interfaces/IItem'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { ModifierItem } from '../models/modifierItemModel'
 import { modifierList } from '@/assets/json/modifiers.json'
 import { EModifierTypes } from '@/enums/EModifierTypes'
 
 class ItemGenerator {
-    private category: EItemCategory.Weapon | EItemCategory.Armor | EItemCategory.Potion | null
+    private category:
+        | string
+        | EItemCategory.Weapon
+        | EItemCategory.Armor
+        | EItemCategory.Potion
+        | EItemCategory.Utility
+        | EItemCategory.Material
+        | null
     private quality: ModifierItem | null
     constructor() {
         this.category = null
         this.quality = null
     }
 
+    getItemBase = (category: string): AllItemTypes => {
+        let itemBase: AllItemTypes = this.createItemBase(EItemCategory.Weapon)
+        if (category === EItemCategory.Weapon) {
+            itemBase = this.createItemBase(category)
+        } else if (category === EItemCategory.Armor) {
+            itemBase = this.createItemBase(category)
+        } else if (category === EItemCategory.Potion) {
+            itemBase = this.createItemBase(category)
+        } else if (category === EItemCategory.Utility) {
+            itemBase = this.createItemBase(category)
+        } else if (category === EItemCategory.Material) {
+            itemBase = this.createItemBase(category)
+        }
+
+        return itemBase
+    }
+
+    getItemCategory = (category: string): EItemCategory => {
+        let itemCategory: EItemCategory = EItemCategory.Weapon
+        if (category === EItemCategory.Weapon) {
+            itemCategory = EItemCategory.Weapon
+        } else if (category === EItemCategory.Armor) {
+            itemCategory = EItemCategory.Armor
+        } else if (category === EItemCategory.Potion) {
+            itemCategory = EItemCategory.Potion
+        } else if (category === EItemCategory.Utility) {
+            itemCategory = EItemCategory.Utility
+        } else {
+            itemCategory = EItemCategory.Material
+        }
+
+        return itemCategory
+    }
     private createItemBase(category: EItemCategory.Weapon): Weapon
     private createItemBase(category: EItemCategory.Armor): Armor
     private createItemBase(category: EItemCategory.Potion): Potion
+    private createItemBase(category: EItemCategory.Utility): Utility
+    private createItemBase(category: EItemCategory.Material): Material
     private createItemBase(category: any): any {
         if (!this.category) {
             throw Error('no category')
@@ -30,9 +72,13 @@ class ItemGenerator {
             itemObject = new Armor()
         } else if (this.category === EItemCategory.Potion) {
             itemObject = new Potion()
+        } else if (this.category === EItemCategory.Utility) {
+            itemObject = new Utility()
+        } else {
+            itemObject = new Material()
         }
 
-        const itemCategory = itemList[this.category]
+        const itemCategory = itemList[this.getItemCategory(this.category)]
         const randomItem = itemCategory.item[Math.floor(Math.random() * itemCategory.item.length)]
 
         const finalItem: AllItemTypes = Object.assign(itemObject, randomItem, {
@@ -44,7 +90,7 @@ class ItemGenerator {
 
     private createDescription(baseItem: AllItemTypes) {
         if (!this.quality) {
-            return `This is a ${baseItem.type}. Nothing out of the ordinary`
+            return `This is a ${baseItem.name ? baseItem.name : baseItem.type}. Nothing out of the ordinary`
         } else {
             return `This is a ${baseItem.type}. It's ${this.quality.name}`
         }
@@ -64,7 +110,7 @@ class ItemGenerator {
         }
 
         const createdModifierList: ModifierItem[] = []
-        const itemCategory = itemList[this.category]
+        const itemCategory = itemList[this.getItemCategory(this.category)]
         const itemModifiersData = itemCategory?.item.find((item) => item.type === baseItem.type)?.modifiers
         itemModifiersData?.forEach((itemModifier) => {
             const modifierData = modifierList.find((mod) => {
@@ -112,33 +158,21 @@ class ItemGenerator {
         return result
     }
 
-    createItem(category: EItemCategory, tier = 1): AllItemTypes {
+    createItem(category: string, tier = 1): AllItemTypes {
         this.category = category
 
         if (!this.category) {
             throw Error('no category')
         }
 
-        const getItemBase = (): AllItemTypes => {
-            let itemBase: AllItemTypes = this.createItemBase(EItemCategory.Weapon)
-            if (category === EItemCategory.Weapon) {
-                itemBase = this.createItemBase(category)
-            } else if (category === EItemCategory.Armor) {
-                itemBase = this.createItemBase(category)
-            } else if (category === EItemCategory.Potion) {
-                itemBase = this.createItemBase(category)
-            }
-
-            return itemBase
-        }
-
-        const itemBase = getItemBase()
+        const itemBase = this.getItemBase(this.category)
 
         const description = this.createDescription(itemBase)
         const id = this.addId()
         const modifiers = this.createModifiers(itemBase)
         let item = itemBase
 
+        console.log(itemBase)
         switch (category) {
             case EItemCategory.Weapon:
                 item = Object.assign(itemBase as Weapon, {
@@ -161,6 +195,24 @@ class ItemGenerator {
             case EItemCategory.Potion:
                 item = Object.assign(itemBase, {
                     name: `Potion of ${itemBase.type}`,
+                    id,
+                    description,
+                    category,
+                    modifiers,
+                })
+                break
+            case EItemCategory.Utility:
+                item = Object.assign(itemBase, {
+                    name: `${itemBase.name}`,
+                    id,
+                    description,
+                    category,
+                    modifiers,
+                })
+                break
+            case EItemCategory.Material:
+                item = Object.assign(itemBase, {
+                    name: `${itemBase.name}`,
                     id,
                     description,
                     category,

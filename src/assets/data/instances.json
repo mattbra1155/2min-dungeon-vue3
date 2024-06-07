@@ -1,0 +1,77 @@
+[
+    {
+        "id": "castle_drakenhof",
+        "locations": [
+            {
+                "id": "gate",
+                "image": "",
+                "roomObjects": [
+                    {
+                        "id": "chest",
+                        "type": "container",
+                        "items": [
+                            "weapon"
+                        ]
+                    }
+                ],
+                "description": "Big gate leading to the inside of the castle. It's opened and looks like nobody used it in a long time.",
+                "entityList": [],
+                "lootList": [],
+                "name": "Entry gate",
+                "type": "entry",
+                "isDark": false,
+                "connectedLocation": {
+                    "id": "overworld",
+                    "entryId": "castle_drakenhof"
+                }
+            },
+            {
+                "id": "courtyard",
+                "image": "",
+                "roomObjects": [],
+                "description": "A big open square with cobblestone floor and some buildings. You see a door to the dunegon and the main entrence to the castle.",
+                "entityList": [],
+                "lootList": [],
+                "name": "Courtyard",
+                "type": "room",
+                "isDark": false,
+                "connectedLocation": false
+            },
+            {
+                "id": "dungeon",
+                "image": "",
+                "roomObjects": [],
+                "description": "Dark and slimy stairs lead to the castle's jail cells.",
+                "entityList": [],
+                "lootList": [],
+                "name": "Dungeon entrence",
+                "type": "exit",
+                "isDark": false,
+                "connectedLocation": {
+                    "id": "castle_drakenhof_dungeon",
+                    "entryId": "dungeon_entrence"
+                }
+            }
+        ]
+    },
+    {
+        "id": "castle_drakenhof_dungeon",
+        "locations": [
+            {
+                "id": "dungeon_entrence",
+                "image": "",
+                "roomObjects": [],
+                "description": "Dark and damp stairs leading up.",
+                "entityList": [],
+                "lootList": [],
+                "name": "Dungeon entrence",
+                "type": "exit",
+                "isDark": false,
+                "connectedLocation": {
+                    "id": "castle_drakenhof",
+                    "entryId": "dungeon"
+                }
+            }
+        ]
+    }
+]
