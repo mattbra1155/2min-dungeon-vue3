@@ -121,8 +121,9 @@ const createInventoryItems = () => {
     const weapon = new ItemGenerator().createItem(EItemCategory.Weapon)
     const armor = new ItemGenerator().createItem(EItemCategory.Armor)
     const potion = new ItemGenerator().createItem(EItemCategory.Potion)
-
-    itemList.push(weapon, armor, potion)
+    const utility = new ItemGenerator().createItem(EItemCategory.Utility)
+    const material = new ItemGenerator().createItem(EItemCategory.Material)
+    itemList.push(weapon, armor, potion, utility, material)
 
     itemList.forEach((item) => playerObject.value.inventory.addItem(item, playerObject.value.id))
 }

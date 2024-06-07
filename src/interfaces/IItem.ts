@@ -1,7 +1,7 @@
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { iBodyPart } from './BodyParts'
 import { PlayerModel } from '@/assets/models/playerModel'
-import { Armor, Potion, Weapon } from '@/assets/models/itemsModel'
+import { Armor, Material, Potion, Utility, Weapon } from '@/assets/models/itemsModel'
 import { ModifierItem } from '@/assets/models/modifierItemModel'
 import { EDice } from '@/enums/EDice'
 
@@ -52,7 +52,11 @@ export interface IGold {
 
 export type iUtility = IItem
 
-export type AllItemTypes = Weapon | Armor | Potion
+export type IMaterial = Omit<IItem, 'isEquipped' | 'modifiers'> & {
+    ownerId: string | undefined
+}
+
+export type AllItemTypes = Weapon | Armor | Potion | Utility | Material
 
 export interface ILootItem {
     isTaken: boolean
