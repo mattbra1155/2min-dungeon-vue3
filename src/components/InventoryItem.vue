@@ -22,6 +22,7 @@ const getSkillNames = () =>
 
 <template>
     <div v-if="item" class="m-inventoryItem">
+        <!-- TO FIX IMPORT ICON -->
         <AIcon :icon="getItemIcon(item)" />
         <div class="m-inventoryItem__details">
             <h2 class="a-text m-inventoryItem__title m-inventoryItem__detailsItem --fullWidth">{{ item.name }}</h2>
