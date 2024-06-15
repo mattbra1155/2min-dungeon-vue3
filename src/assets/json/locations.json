@@ -2096,10 +2096,14 @@
         "isDark": false,
         "x": 15,
         "y": 7,
-        "objects": [
+        "roomObjects": [
             {
-                "type": "chest",
-                "isLocked": true
+                "name": "chest",
+                "type": "container",
+                "items": [
+                    "armor",
+                    "weapon"
+                ]
             }
         ],
         "connectedLocation": {
@@ -2422,10 +2426,14 @@
         "isDark": false,
         "x": 19,
         "y": 8,
-        "objects": [
+        "roomObjects": [
             {
-                "type": "chest",
-                "isLocked": true
+                "name": "chest",
+                "type": "container",
+                "items": [
+                    "armor",
+                    "weapon"
+                ]
             }
         ]
     },
@@ -6284,14 +6292,22 @@
         "isDark": false,
         "x": 19,
         "y": 22,
-        "objects": [
+        "roomObjects": [
             {
-                "type": "chest",
-                "isLocked": true
+                "name": "chest",
+                "type": "container",
+                "items": [
+                    "armor",
+                    "weapon"
+                ]
             },
             {
-                "type": "chest",
-                "isLocked": false
+                "name": "chest",
+                "type": "container",
+                "items": [
+                    "armor",
+                    "weapon"
+                ]
             }
         ]
     },

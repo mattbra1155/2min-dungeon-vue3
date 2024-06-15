@@ -114,15 +114,37 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         localforage.setItem('instanceList', JSON.stringify(locationList))
     }
     const createLocations = (locationId: string) => {
+        const itemGenerator = new ItemGenerator()
         const locationList: Room[] = locations.map((locationData) => {
             const locationClass = new Room()
-            const location = Object.assign(locationClass, locationData)
-            // location.roomObjects = location.objects.map((objectItem) => {
-            //     const itemClass = new RoomObject()
-            //     const newObject = Object.assign(itemClass, objectItem)
+            const location: Room = Object.assign(locationClass, locationData)
 
-            //     return newObject
-            // })
+            if (location.roomObjects.length) {
+                location.roomObjects = location.roomObjects.map((objectItem: any) => {
+                    const item = new Container(
+                        objectItem.type,
+                        objectItem.image,
+                        objectItem.imageSearched,
+                        objectItem.name,
+                        objectItem.description,
+                        objectItem.items,
+                        objectItem.isSearched,
+                        objectItem.isLocked
+                    )
+
+                    if (objectItem.items.length) {
+                        item.items = objectItem.items.map((itemData: string) => {
+                            const createdItem = itemGenerator.createItem(itemData)
+                            return createdItem
+                        })
+                    }
+                    console.log(item)
+
+                    return item
+                })
+                console.log(location.roomObjects)
+            }
+
             sceneList.value.push(location)
             return location
         })

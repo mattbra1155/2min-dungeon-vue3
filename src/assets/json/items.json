@@ -527,7 +527,6 @@
                 "baseValue": 0,
                 "type": "material",
                 "price": 10,
-                "modifiers": [],
                 "encumbrance": 20,
                 "icon": ""
             }

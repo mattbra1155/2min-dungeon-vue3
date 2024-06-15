@@ -10,7 +10,7 @@
         "isDark": false,
         "x": 111,
         "y": 222,
-        "objects": [
+        "roomObjects": [
             {
                 "type": "chest",
                 "isLocked": true
@@ -32,7 +32,7 @@
         "isDark": false,
         "x": 19,
         "y": 20,
-        "objects": [
+        "roomObjects": [
             {
                 "type": "chest",
                 "isLocked": true
@@ -56,7 +56,7 @@
         "isDark": false,
         "x": "",
         "y": "",
-        "objects": [
+        "roomObjects": [
             {
                 "type": "chest",
                 "isLocked": true
@@ -73,7 +73,7 @@
         "isDark": false,
         "x": "",
         "y": "",
-        "objects": [
+        "roomObjects": [
             {
                 "type": "chest",
                 "isLocked": true
