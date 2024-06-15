@@ -424,6 +424,7 @@
     "potion": {
         "item": [
             {
+                "name": "health potion",
                 "type": "health",
                 "baseValue": "k6",
                 "modifiers": [],
