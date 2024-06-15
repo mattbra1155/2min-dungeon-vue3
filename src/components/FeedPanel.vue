@@ -10,6 +10,7 @@ const { activeGameState } = useGameStateManager()
 
 <template>
     <div class="o-feed">
+        {{ activeGameState }}
         <FeedBattle v-if="activeGameState === EGameState.Battle" />
         <FeedLoot v-else-if="activeGameState === EGameState.Loot" />
         <FeedTravel v-else />

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { RoomObject } from '@/assets/models/RoomObjectModel'
+import { useGameStateManager } from '@/composables/useGameStateManager'
 import { usePlayer } from '@/composables/usePlayer'
+import { EGameState } from '@/enums/EGameState'
 import { IContainer } from '@/interfaces/IContainer'
 import { AllItemTypes } from '@/interfaces/IItem'
 import { useFeedStore } from '@/stores/useFeed'
@@ -8,6 +10,7 @@ import { ref } from 'vue'
 
 const { player } = usePlayer()
 const feedStore = useFeedStore()
+const { updateGameState } = useGameStateManager()
 const containerMessage = ref<string>()
 
 const openContainer = (item: IContainer) => {
@@ -30,6 +33,11 @@ const getItem = (container: IContainer, item: AllItemTypes) => {
         feedStore.setTravelFeedItem(`You took everything from ${container.name}`)
     }
 }
+
+const close = () => {
+    feedStore.setActiveRoomObject(undefined)
+    updateGameState(EGameState.Travel)
+}
 </script>
 
 <template>
@@ -38,7 +46,7 @@ const getItem = (container: IContainer, item: AllItemTypes) => {
             <img
                 class="a-image --contain o-feed__image"
                 v-if="feedStore.activeRoomObject.image && !feedStore.activeRoomObject.isSearched"
-                :src="feedStore.activeRoomObject.image"
+                :src="feedStore.activeRoomObject.image || `Treasure Chest open 254x254.png`"
                 alt=""
             />
             <img
@@ -74,6 +82,8 @@ const getItem = (container: IContainer, item: AllItemTypes) => {
             <transition name="slide">
                 <p v-if="containerMessage" class="test">{{ containerMessage }}</p>
             </transition>
+            <!-- ADD CLOSE LOOT WINDOW -->
+            <button class="a-button" @click="close">Close</button>
         </div>
     </div>
 </template>
