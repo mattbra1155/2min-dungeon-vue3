@@ -30,6 +30,9 @@ export const useGameStateManager = () => {
             case EGameState.Travel:
                 console.log('GAME STATE: Travel')
                 break
+            case EGameState.Loot:
+                console.log('GAME STATE: Loot')
+                break
             case EGameState.Town:
                 console.log('GAME STATE: Town')
                 break

@@ -11,6 +11,8 @@ const containers = computed(() => {
         return 'You see nothing worth taking.'
     }
     const items = sceneManager.activeRoom.roomObjects.map((roomObject) => {
+        console.log(roomObject)
+
         const isEmpty = roomObject.isSearched && roomObject.items.length === 0 ? 'empty ' : ''
         const name = roomObject.name
         return `${isEmpty}${name}`
@@ -29,7 +31,7 @@ watch(
 )
 
 watch(
-    () => containers.value,
+    () => containers.value && sceneManager.activeRoom?.isSearched,
     () => {
         feedStore.setTravelFeedItem(containers.value)
     }

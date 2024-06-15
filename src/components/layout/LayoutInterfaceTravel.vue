@@ -19,6 +19,7 @@ import { playAudio } from '@/helpers/playAudio'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { EGameState } from '@/enums/EGameState'
 import { Container } from '@/assets/models/RoomObjectModel'
+import { useGlobalStore } from '@/stores/useGlobal'
 
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
@@ -27,10 +28,9 @@ const feedStore = useFeedStore()
 const sceneManager = useSceneManagerStore()
 const randomEncounters = useRandomEncounters()
 const { updateGameState } = useGameStateManager()
-
+const globalStore = useGlobalStore()
 const isSearched = computed(() => sceneManager.activeRoom?.isSearched)
 
-const isMoving = ref<boolean>(false)
 const addKeybindings = () => {
     window.addEventListener('keydown', (event) => {
         if (event.key === 'i') {
@@ -76,7 +76,7 @@ const move = async (index: number) => {
         return
     }
 
-    isMoving.value = true
+    globalStore.isMoving = true
 
     const footstepsOne = [
         'footsteps/Steps_dirt-001.ogg',
@@ -161,7 +161,7 @@ const move = async (index: number) => {
     await sceneManager.saveScene({ x: playerPosition.coords.x, y: playerPosition.coords.y }, sceneManager.sceneList)
     setTimeout(() => {
         sceneManager.loadingArea = false
-        isMoving.value = false
+        globalStore.isMoving = false
     }, 800)
 }
 
@@ -192,14 +192,14 @@ const enterInstance = async (instanceId: string, entryId: string) => {
     if (!sceneManager.activeRoom || !instanceId || !entryId) {
         return
     }
-    isMoving.value = true
+    globalStore.isMoving = true
 
     if (instanceId === 'overworld') {
         const exitLocation = sceneManager.sceneList.find((location) => location.id === entryId)
 
         if (!exitLocation) {
             console.error('no exit location found')
-            isMoving.value = false
+            globalStore.isMoving = false
             return
         }
         sceneManager.instance = undefined
@@ -209,7 +209,7 @@ const enterInstance = async (instanceId: string, entryId: string) => {
         feedStore.setTravelFeedItem(`You have entered ${sceneManager.activeRoom?.name}`)
         feedStore.setTravelFeedItem(`${sceneManager.activeRoom?.description}`)
         sceneManager.getClosestTiles()
-        isMoving.value = false
+        globalStore.isMoving = false
         return
     }
 
@@ -222,10 +222,11 @@ const enterInstance = async (instanceId: string, entryId: string) => {
     feedStore.setTravelFeedItem(`You have entered ${sceneManager.activeRoom?.name}`)
     feedStore.setTravelFeedItem(`${sceneManager.activeRoom?.description}`)
     sceneManager.getClosestTiles()
-    isMoving.value = false
+    globalStore.isMoving = false
 }
 
 const openContainer = (container: Container) => {
+    globalStore.isMoving = true
     updateGameState(EGameState.Loot)
     feedStore.setActiveRoomObject(container)
 }
@@ -240,21 +241,13 @@ onMounted(() => {
         <div class="o-interface__row o-interface__objectActions">
             <template v-for="roomObject in sceneManager.activeRoom?.roomObjects" :key="roomObject.id">
                 <button
-                    v-if="feedStore.activeRoomObject?.id !== roomObject.id"
+                    v-if="feedStore.activeRoomObject?.id !== roomObject.id && sceneManager.activeRoom.isSearched"
                     class="a-button action__button"
                     @click="openContainer(roomObject)"
                 >
-                    <!-- {{ roomObject }} -->
                     Search {{ roomObject.name }}
                 </button>
             </template>
-            <!-- <button
-                v-if="feedStore.activeRoomObject"
-                class="a-button action__button"
-                @click="feedStore.setActiveRoomObject(undefined)"
-            >
-                Description
-            </button> -->
             <button class="a-button action__button" v-if="!isSearched" @click="searchRoom">Search Room</button>
             <template v-if="sceneManager.activeRoom && sceneManager.activeRoom.connectedLocation !== undefined">
                 <button
@@ -274,14 +267,14 @@ onMounted(() => {
                 v-if="sceneManager.activeRoom.id === 'oakwood'"
                 class="a-button action__button"
                 @click="$router.push({ name: 'town' })"
-                :disabled="isMoving"
+                :disabled="globalStore.isMoving"
             >
                 Enter {{ sceneManager.activeRoom.name }}
             </button>
         </div>
         <div class="o-interface__row o-interface__directionWrapper">
             <template v-for="(destinationId, index) in 4" :key="index">
-                <button class="a-button action__button" @click="move(index)" :disabled="isMoving">
+                <button class="a-button action__button" @click="move(index)" :disabled="globalStore.isMoving">
                     {{ directionButton(index) }}
                 </button>
             </template>

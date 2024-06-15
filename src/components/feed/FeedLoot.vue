@@ -6,11 +6,13 @@ import { EGameState } from '@/enums/EGameState'
 import { IContainer } from '@/interfaces/IContainer'
 import { AllItemTypes } from '@/interfaces/IItem'
 import { useFeedStore } from '@/stores/useFeed'
+import { useGlobalStore } from '@/stores/useGlobal'
 import { ref } from 'vue'
 
 const { player } = usePlayer()
 const feedStore = useFeedStore()
 const { updateGameState } = useGameStateManager()
+const globalStore = useGlobalStore()
 const containerMessage = ref<string>()
 
 const openContainer = (item: IContainer) => {
@@ -36,6 +38,7 @@ const getItem = (container: IContainer, item: AllItemTypes) => {
 
 const close = () => {
     feedStore.setActiveRoomObject(undefined)
+    globalStore.isMoving = false
     updateGameState(EGameState.Travel)
 }
 </script>
