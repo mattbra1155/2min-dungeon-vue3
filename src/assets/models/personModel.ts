@@ -94,7 +94,7 @@ abstract class PersonModel implements IPerson {
         if (diceRollHitResult > attackStats.melee) {
             feedStore.setBattleFeedItem(`${this.name} missed`)
             console.log(`${this.name} missed`)
-            playAudio(['27_sword_miss_1.wav', '27_sword_miss_2.wav', '27_sword_miss_3.wav'])
+            playRandomAudio(['27_sword_miss_1.wav', '27_sword_miss_2.wav', '27_sword_miss_3.wav'])
             return
         }
 

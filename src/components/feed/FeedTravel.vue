@@ -16,14 +16,14 @@ const containers = computed(() => {
         return `${isEmpty}${name}`
     })
 
-    return `There is a ${items} in the room.`
+    return `There is a ${items} here.`
 })
 
 watch(
     () => sceneManager.activeRoom?.isSearched,
     (isSearched) => {
         if (isSearched) {
-            feedStore.setTravelFeedItem(`You searched this room already.`)
+            feedStore.setTravelFeedItem(`You searched this room.`)
         }
     }
 )
