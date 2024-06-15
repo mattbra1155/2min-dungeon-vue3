@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, watch } from 'vue'
-import LayoutInterface from '@/components/layout/LayoutInterface.vue'
+import LayoutInterfaceCombat from '@/components/layout/LayoutInterfaceCombat.vue'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { EGameState } from '@/enums/EGameState'
 import { useTurn } from '@/composables/useTurn'
@@ -52,7 +52,7 @@ onMounted(async () => {
     <div class="home">
         <LayoutTopBar />
         <FeedPanel />
-        <LayoutInterface v-if="activeGameState === EGameState.Battle" />
+        <LayoutInterfaceCombat v-if="activeGameState === EGameState.Battle" />
         <LayoutInterfaceTravel v-if="activeGameState === EGameState.Travel" />
     </div>
 </template>

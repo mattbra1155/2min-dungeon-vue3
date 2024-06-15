@@ -15,8 +15,9 @@ import { StatusAttackBonusDamage } from './statusItemModel'
 import { toRaw } from 'vue'
 import { EStats } from '@/enums/EStats'
 import { ISkill } from '@/interfaces/ISkill'
-import { playAudio } from '@/helpers/playAudio'
+import { playAudio, playRandomAudio } from '@/helpers/playAudio'
 import { useFeedStore } from '@/stores/useFeed'
+import { EItemCategory } from '@/enums/ItemCategory'
 abstract class PersonModel implements IPerson {
     constructor(
         public id: string = self.crypto.randomUUID(),
@@ -75,6 +76,9 @@ abstract class PersonModel implements IPerson {
 
         const addBonusStatModifiers = () => {
             this.inventory.inventory.forEach((item) => {
+                if (item instanceof Weapon === false) {
+                    return
+                }
                 item.modifiers.forEach((itemModifier) => {
                     if (itemModifier.type !== EModifierTypes.AttackBonusStats) {
                         return
@@ -85,12 +89,19 @@ abstract class PersonModel implements IPerson {
         }
 
         addBonusStatModifiers()
+        // Add critical failure 98,99,100
+        if (diceRollHitResult >= 98) {
+            const criticalDamageRoll = diceRollK6()
+            this.currentStats.hp -= criticalDamageRoll
+            feedStore.setBattleFeedItem(`${this.name} hit himself for ${criticalDamageRoll} damage`)
+            return
+        }
 
         // check if attack hits
         if (diceRollHitResult > attackStats.melee) {
             feedStore.setBattleFeedItem(`${this.name} missed`)
             console.log(`${this.name} missed`)
-            playAudio(['27_sword_miss_1.wav', '27_sword_miss_2.wav', '27_sword_miss_3.wav'])
+            playRandomAudio(['27_sword_miss_1.wav', '27_sword_miss_2.wav', '27_sword_miss_3.wav'])
             return
         }
 
@@ -120,7 +131,7 @@ abstract class PersonModel implements IPerson {
         }
 
         const hitBodyPart = getBodyPart()
-        feedStore.setBattleFeedItem(`${this.name} hit ${enemy.name} in the ${hitBodyPart?.name}`)
+
         const enemyArmorPoints = hitBodyPart?.armor.item?.armorPoints
 
         // Calculate damage
@@ -137,6 +148,9 @@ abstract class PersonModel implements IPerson {
 
             const addBonusDamageModifiers = () => {
                 this.inventory.inventory.forEach((item) => {
+                    if (item instanceof Weapon === false) {
+                        return
+                    }
                     item.modifiers.forEach((itemModifier) => {
                         if (itemModifier.type !== EModifierTypes.AttackBonusDamage) {
                             return
@@ -169,12 +183,20 @@ abstract class PersonModel implements IPerson {
             damagePoints += damageDiceRoll
             damagePoints += modifierDamage()
             damagePoints += mightyBlowSkill()
+            // double damage if critial success
+            if (diceRollHitResult === 1) {
+                damagePoints *= 2
+            }
             damagePoints -= enemyArmorPoints ? enemyArmorPoints : 0
             damagePoints -= enemy.currentStats.thoughtness
 
             if (damagePoints < 0) {
                 damagePoints = 0
             }
+
+            feedStore.setBattleFeedItem(
+                `${this.name} hit ${enemy.name} in the ${hitBodyPart?.name} for ${damagePoints} damage`
+            )
             console.log('damage', damagePoints)
             return damagePoints
         }
@@ -191,6 +213,9 @@ abstract class PersonModel implements IPerson {
 
         const applyAttackStatusEffects = () => {
             this.inventory.inventory.forEach((item) => {
+                if (item instanceof Weapon === false) {
+                    return
+                }
                 if (!item.isEquipped) {
                     return
                 }
@@ -208,7 +233,7 @@ abstract class PersonModel implements IPerson {
         console.log(`${enemy.name} took ${finalDamage} damage`)
         enemy.currentStats.hp -= finalDamage
 
-        playAudio(['26_sword_hit_1.wav', '26_sword_hit_2.wav', '26_sword_hit_3/wav'])
+        playRandomAudio(['26_sword_hit_1.wav', '26_sword_hit_2.wav', '26_sword_hit_3.wav'])
         return finalDamage | 0
     }
     // } else {

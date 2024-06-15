@@ -16,6 +16,9 @@ import { Room } from '@/assets/models/RoomModel'
 import { ERoomTypes } from '@/enums/ERoomTypes'
 import instances from '@/assets/json/instances.json'
 import { playAudio } from '@/helpers/playAudio'
+import { useGameStateManager } from '@/composables/useGameStateManager'
+import { EGameState } from '@/enums/EGameState'
+import { Container } from '@/assets/models/RoomObjectModel'
 
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
@@ -23,6 +26,7 @@ const playerPosition = usePlayerPositionStore()
 const feedStore = useFeedStore()
 const sceneManager = useSceneManagerStore()
 const randomEncounters = useRandomEncounters()
+const { updateGameState } = useGameStateManager()
 
 const isSearched = computed(() => sceneManager.activeRoom?.isSearched)
 
@@ -221,6 +225,11 @@ const enterInstance = async (instanceId: string, entryId: string) => {
     isMoving.value = false
 }
 
+const openContainer = (container: Container) => {
+    updateGameState(EGameState.Loot)
+    feedStore.setActiveRoomObject(container)
+}
+
 onMounted(() => {
     addKeybindings()
 })
@@ -233,18 +242,18 @@ onMounted(() => {
                 <button
                     v-if="feedStore.activeRoomObject?.id !== roomObject.id"
                     class="a-button action__button"
-                    @click="feedStore.setActiveRoomObject(roomObject)"
+                    @click="openContainer(roomObject)"
                 >
                     Search {{ roomObject.name }}
                 </button>
             </template>
-            <button
+            <!-- <button
                 v-if="feedStore.activeRoomObject"
                 class="a-button action__button"
                 @click="feedStore.setActiveRoomObject(undefined)"
             >
                 Description
-            </button>
+            </button> -->
             <button class="a-button action__button" v-if="!isSearched" @click="searchRoom">Search Room</button>
             <template v-if="sceneManager.activeRoom && sceneManager.activeRoom.connectedLocation !== undefined">
                 <button

@@ -22,6 +22,7 @@ const getSkillNames = () =>
 
 <template>
     <div v-if="item" class="m-inventoryItem">
+        <!-- TO FIX IMPORT ICON -->
         <AIcon :icon="getItemIcon(item)" />
         <div class="m-inventoryItem__details">
             <h2 class="a-text m-inventoryItem__title m-inventoryItem__detailsItem --fullWidth">{{ item.name }}</h2>
@@ -48,6 +49,7 @@ const getSkillNames = () =>
             <p class="a-text m-inventoryItem__detailsItem" v-if="item.category === EItemCategory.Armor">
                 Armor: {{ getTotalArmorPoints(item as Armor) }}
             </p>
+            <p class="a-text m-inventoryItem__detailsItem --fullWidth">Encumbrance: {{ item.encumbrance }} pts.</p>
             <p class="a-text m-inventoryItem__detailsItem --fullWidth">{{ item.description }}</p>
         </div>
         <div class="a-text m-inventoryItem__details">

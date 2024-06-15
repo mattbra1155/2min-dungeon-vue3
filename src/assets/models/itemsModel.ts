@@ -47,8 +47,11 @@ class Material implements IMaterial {
         public type: string = 'placeholderType',
         public category: EItemCategory = EItemCategory.Material,
         public ownerId: string | undefined = undefined,
+        public isEquipped: boolean = false,
         public price: number = 0,
-        public icon: string | undefined = 'placeholderIcon'
+        public icon: string | undefined = 'placeholderIcon',
+        public encumbrance: number = 0,
+        public modifiers: ModifierItem[] = []
     ) {
         this.description
         this.category

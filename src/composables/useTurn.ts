@@ -159,7 +159,7 @@ export const useTurn = () => {
                 feedStore.setBattleFeedItem(`${enemy.name} is dead`)
                 console.log(`${enemy.name} is dead`)
                 enemy.isAlive = false
-                playAudio(['24_orc_death_spin'])
+                playAudio(['24_orc_death_spin.wav'])
                 removeDeadFromOrder(enemy)
             }
         })
