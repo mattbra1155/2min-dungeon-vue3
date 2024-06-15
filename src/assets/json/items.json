@@ -528,7 +528,8 @@
                 "type": "material",
                 "price": 10,
                 "encumbrance": 20,
-                "icon": ""
+                "icon": "",
+                "modifiers": []
             }
         ],
         "quality": []

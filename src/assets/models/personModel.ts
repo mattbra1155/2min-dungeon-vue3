@@ -89,6 +89,13 @@ abstract class PersonModel implements IPerson {
         }
 
         addBonusStatModifiers()
+        // Add critical failure 98,99,100
+        if (diceRollHitResult >= 98) {
+            const criticalDamageRoll = diceRollK6()
+            this.currentStats.hp -= criticalDamageRoll
+            feedStore.setBattleFeedItem(`${this.name} hit himself for ${criticalDamageRoll} damage`)
+            return
+        }
 
         // check if attack hits
         if (diceRollHitResult > attackStats.melee) {
@@ -124,7 +131,7 @@ abstract class PersonModel implements IPerson {
         }
 
         const hitBodyPart = getBodyPart()
-        feedStore.setBattleFeedItem(`${this.name} hit ${enemy.name} in the ${hitBodyPart?.name}`)
+
         const enemyArmorPoints = hitBodyPart?.armor.item?.armorPoints
 
         // Calculate damage
@@ -176,12 +183,20 @@ abstract class PersonModel implements IPerson {
             damagePoints += damageDiceRoll
             damagePoints += modifierDamage()
             damagePoints += mightyBlowSkill()
+            // double damage if critial success
+            if (diceRollHitResult === 1) {
+                damagePoints *= 2
+            }
             damagePoints -= enemyArmorPoints ? enemyArmorPoints : 0
             damagePoints -= enemy.currentStats.thoughtness
 
             if (damagePoints < 0) {
                 damagePoints = 0
             }
+
+            feedStore.setBattleFeedItem(
+                `${this.name} hit ${enemy.name} in the ${hitBodyPart?.name} for ${damagePoints} damage`
+            )
             console.log('damage', damagePoints)
             return damagePoints
         }

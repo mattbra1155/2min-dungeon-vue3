@@ -48,6 +48,7 @@ const getSkillNames = () =>
             <p class="a-text m-inventoryItem__detailsItem" v-if="item.category === EItemCategory.Armor">
                 Armor: {{ getTotalArmorPoints(item as Armor) }}
             </p>
+            <p class="a-text m-inventoryItem__detailsItem --fullWidth">Encumbrance: {{ item.encumbrance }} pts.</p>
             <p class="a-text m-inventoryItem__detailsItem --fullWidth">{{ item.description }}</p>
         </div>
         <div class="a-text m-inventoryItem__details">

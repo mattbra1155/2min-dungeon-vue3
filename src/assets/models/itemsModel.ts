@@ -50,7 +50,8 @@ class Material implements IMaterial {
         public isEquipped: boolean = false,
         public price: number = 0,
         public icon: string | undefined = 'placeholderIcon',
-        public encumbrance: number = 0
+        public encumbrance: number = 0,
+        public modifiers: ModifierItem[] = []
     ) {
         this.description
         this.category
