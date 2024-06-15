@@ -2100,6 +2100,7 @@
             {
                 "name": "chest",
                 "type": "container",
+                "isHidden": true,
                 "items": [
                     "armor",
                     "weapon"

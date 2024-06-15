@@ -55,7 +55,7 @@ const close = () => {
                 :src="feedStore.activeRoomObject.imageSearched"
                 alt=""
             />
-            <p class="a-text">
+            <p class="a-text --center">
                 {{
                     feedStore.activeRoomObject.isLocked
                         ? `Locked ${feedStore.activeRoomObject.name}`
@@ -70,7 +70,7 @@ const close = () => {
                         <button class="a-button" @click="getItem(feedStore.activeRoomObject!, lootItem)">take</button>
                     </p>
                 </template>
-                <p v-else>empty!</p>
+                <p class="a-text --center" v-else>empty!</p>
             </template>
             <button
                 v-if="!feedStore.activeRoomObject.isSearched"

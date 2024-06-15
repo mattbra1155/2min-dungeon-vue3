@@ -75,6 +75,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
             if (location.roomObjects.length) {
                 location.roomObjects = location.roomObjects.map((objectItem: any) => {
                     const item = new Container(
+                        objectItem.id,
                         objectItem.type,
                         objectItem.image,
                         objectItem.imageSearched,
@@ -82,7 +83,8 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
                         objectItem.description,
                         objectItem.items,
                         objectItem.isSearched,
-                        objectItem.isLocked
+                        objectItem.isLocked,
+                        objectItem.isHidden
                     )
 
                     if (objectItem.items.length) {
@@ -122,6 +124,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
             if (location.roomObjects.length) {
                 location.roomObjects = location.roomObjects.map((objectItem: any) => {
                     const item = new Container(
+                        objectItem.id,
                         objectItem.type,
                         objectItem.image,
                         objectItem.imageSearched,
@@ -129,7 +132,8 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
                         objectItem.description,
                         objectItem.items,
                         objectItem.isSearched,
-                        objectItem.isLocked
+                        objectItem.isLocked,
+                        objectItem.isHidden
                     )
 
                     if (objectItem.items.length) {

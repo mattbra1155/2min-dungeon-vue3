@@ -8,6 +8,7 @@ export interface IContainer extends IRoomObject {
     items: AllItemTypes[]
     isSearched: boolean
     isLocked: boolean
+    isHidden: boolean
     setIsSearch(state: boolean): void
     unlock(person: PlayerModel): boolean
 }

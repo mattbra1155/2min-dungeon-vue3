@@ -9,11 +9,13 @@ class RoomObject implements IRoomObject {
         public image: string = '',
         public imageSearched: string = '',
         public name: string = '',
-        public description: string = ''
+        public description: string = '',
+        public isHidden: boolean = false
     ) {
         this.type = type
         this.name = name
         this.description = description
+        this.isHidden = false
     }
 }
 
@@ -29,6 +31,7 @@ interface Container {
 
 class Container extends RoomObject implements Container {
     constructor(
+        public id: string = '',
         public type: string = 'container',
         public image: string,
         public imageSearched: string,
@@ -36,14 +39,16 @@ class Container extends RoomObject implements Container {
         public description: string,
         public items: AllItemTypes[] = [],
         public isSearched: boolean = false,
-        public isLocked: boolean = false
+        public isLocked: boolean = false,
+        public isHidden: boolean = false
     ) {
-        super(type, image, imageSearched, name, description)
+        super(id, type, image, imageSearched, name, description, isHidden)
         this.id = `${type}-${crypto.randomUUID()}`
         this.items = items
         this.type = type
         this.isSearched = isSearched
         this.isLocked = isLocked
+        this.isHidden = isHidden
     }
 
     setIsSearch(state: boolean) {

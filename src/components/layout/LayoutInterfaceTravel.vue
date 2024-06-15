@@ -244,6 +244,7 @@ onMounted(() => {
                     class="a-button action__button"
                     @click="openContainer(roomObject)"
                 >
+                    <!-- {{ roomObject }} -->
                     Search {{ roomObject.name }}
                 </button>
             </template>

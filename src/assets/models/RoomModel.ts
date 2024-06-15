@@ -72,8 +72,8 @@ class Room implements IRoom {
         if (initiativeRoll <= player.value.currentStats.initiative) {
             return true
         }
-
         this.isSearched = true
+
         return false
     }
 }

@@ -172,7 +172,6 @@ class ItemGenerator {
         const modifiers = this.createModifiers(itemBase)
         let item = itemBase
 
-        console.log(itemBase)
         switch (category) {
             case EItemCategory.Weapon:
                 item = Object.assign(itemBase as Weapon, {
