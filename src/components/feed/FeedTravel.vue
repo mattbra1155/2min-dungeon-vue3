@@ -22,18 +22,18 @@ const containers = computed(() => {
 })
 
 watch(
+    () => containers.value && sceneManager.activeRoom?.isSearched,
+    () => {
+        feedStore.setTravelFeedItem(containers.value)
+    }
+)
+
+watch(
     () => sceneManager.activeRoom?.isSearched,
     (isSearched) => {
         if (isSearched) {
             feedStore.setTravelFeedItem(`You searched this room.`)
         }
-    }
-)
-
-watch(
-    () => containers.value && sceneManager.activeRoom?.isSearched,
-    () => {
-        feedStore.setTravelFeedItem(containers.value)
     }
 )
 </script>
