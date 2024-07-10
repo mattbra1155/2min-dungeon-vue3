@@ -9,6 +9,7 @@ import { EShops } from '@/enums/EShops'
 import { Town } from '@/assets/models/sceneTownModel'
 import { onMounted, ref } from 'vue'
 import { makeGrid, updateGrid } from '@/helpers/makeGrid'
+import BlacksmithShop from '@/components/shops/BlacksmithShop.vue'
 
 const { activeRoom } = useSceneManagerStore()
 const { activeShopId } = useShop()
@@ -72,5 +73,6 @@ onMounted(() => {
         </div>
         <LayoutInterfaceTown :town="town" v-if="activeShopId === undefined" />
         <MerchantShop v-if="activeShopId === EShops.Merchant" />
+        <BlacksmithShop v-if="activeShopId === EShops.Blacksmith" />
     </div>
 </template>

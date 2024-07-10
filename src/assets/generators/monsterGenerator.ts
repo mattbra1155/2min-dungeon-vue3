@@ -23,6 +23,7 @@ class MonsterGenerator {
             return self.crypto.randomUUID()
         }
         const bestiaryCopy = structuredClone(bestiary)
+        console.log(monsterId)
         let monsterData: IMonsterData | null = null
         if (!monsterId) {
             monsterData = bestiaryCopy[Math.floor(Math.random() * bestiaryCopy.length)]

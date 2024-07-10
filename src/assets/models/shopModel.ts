@@ -1,6 +1,6 @@
 import { AllItemTypes } from '@/interfaces/IItem'
 import { ItemGenerator } from '../generators/itemGenerator'
-import { diceRollK3 } from '../scripts/diceRoll'
+import { diceRollK2, diceRollK3, diceRollK4 } from '../scripts/diceRoll'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { Armor, Potion, Weapon } from './itemsModel'
 import { usePlayer } from '@/composables/usePlayer'
@@ -28,7 +28,7 @@ class Shop implements IShop {
         this.gold = gold
     }
 
-    sellItem(itemId: string) {
+    sellItem(itemId: string, multiplier = 1) {
         const foundItem = this.inventory.find((inventoryItem) => inventoryItem.id === itemId)
         if (!foundItem) {
             console.error('SHOP: no item found')
@@ -38,16 +38,16 @@ class Shop implements IShop {
 
         this.inventory.splice(itemIndex, 1)
 
-        player.value.inventory.gold = player.value.inventory.gold - foundItem.price
+        player.value.inventory.gold = player.value.inventory.gold - foundItem.price / multiplier
         this.gold = this.gold + foundItem.price
 
         player.value.inventory.addItem(foundItem, player.value.id)
     }
 
-    buyItem(item: AllItemTypes) {
+    buyItem(item: AllItemTypes, multiplier = 1) {
         player.value.inventory.removeItem(item.id)
         this.gold = this.gold - item.price
-        player.value.inventory.gold = player.value.inventory.gold + item.price / 0.5
+        player.value.inventory.gold = player.value.inventory.gold + item.price / multiplier
         this.inventory.push(item)
     }
 }
@@ -83,4 +83,34 @@ class Merchant extends Shop {
     }
 }
 
-export { Merchant }
+class Blacksmith extends Shop {
+    constructor(
+        public id: string = 'blacksmith',
+        public name: string = 'blacksmith',
+        public description: string = 'lorem ipsum',
+        public inventory: AllItemTypes[] = []
+    ) {
+        super(id, name, description, inventory)
+    }
+
+    fillInventory(numberOfItems: number) {
+        let count = 0
+
+        const itemGenerator = new ItemGenerator()
+        while (count < numberOfItems) {
+            count++
+            const itemCategory = diceRollK2()
+            let item: AllItemTypes | undefined = undefined
+            if (itemCategory === 1) {
+                item = itemGenerator.createItem(EItemCategory.Weapon) as Weapon
+            } else {
+                item = itemGenerator.createItem(EItemCategory.Armor) as Armor
+            }
+            console.log()
+
+            this.inventory.push(item)
+        }
+    }
+}
+
+export { Merchant, Blacksmith }

@@ -67,7 +67,7 @@ export const useRandomEncounters = defineStore('randomEncounters', () => {
             }
         }
         if (locationType === 'dark_forest') {
-            monsters = ['ork', 'ogre', 'liche']
+            monsters = ['ork', 'ogr', 'liche']
             if (roll.value <= threshold.darkForest) {
                 isBattle.value = true
             }
