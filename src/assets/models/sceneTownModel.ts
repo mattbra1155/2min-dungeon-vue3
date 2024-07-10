@@ -23,9 +23,11 @@ class Town {
     constructor() {
         this.id = 'town'
         this.name = 'Oakwood'
-        this.shortDescription = town?.shortDescription
         this.description = town?.description
-        this.shops = [{ id: 'merchant', name: 'merchant', inventory: [] }]
+        this.shops = [
+            { id: 'merchant', name: 'merchant', inventory: [] },
+            { id: 'blacksmith', name: 'blacksmith', inventory: [] },
+        ]
         this.activeShopId = undefined
     }
 
