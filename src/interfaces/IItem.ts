@@ -20,7 +20,7 @@ export interface IItem {
 
 export interface IWeapon extends IItem {
     damage: number
-    traits: string[]
+    isTwoHanded: boolean
     wield(owner: PlayerModel | MonsterModel): void
     unequip(owner: PlayerModel | MonsterModel): void
     requiredSkills: string[]
@@ -29,7 +29,6 @@ export interface IWeapon extends IItem {
 export interface IArmor extends IItem {
     bodyPart: string[]
     armorPoints: number
-    traits: string[]
     material: string
     equip(owner: PlayerModel | MonsterModel): void
     unequip(owner: PlayerModel | MonsterModel): void
@@ -58,6 +57,14 @@ export type IMaterial = Omit<IItem, 'isEquipped' | 'modifiers'> & {
 
 export type AllItemTypes = Weapon | Armor | Potion | Utility | Material
 
+export function identity<Type>(arg: Type): Type {
+    return arg
+}
+
 export interface ILootItem {
     isTaken: boolean
+}
+
+export function instanceOfArmor(object: any): object is Armor {
+    return 'material' in object
 }

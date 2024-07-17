@@ -18,6 +18,7 @@ import { usePlayerPositionStore } from './usePlayerPosition'
 import { IContainer } from '@/interfaces/IContainer'
 import { ItemGenerator } from '@/assets/generators/itemGenerator'
 import { EItemCategory } from '@/enums/ItemCategory'
+import { AllItemTypes } from '@/interfaces/IItem'
 
 interface Instance {
     id: string
@@ -89,6 +90,8 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
 
                     if (objectItem.items.length) {
                         item.items = objectItem.items.map((itemData: string) => {
+                            console.log('hehre', itemData)
+
                             const createdItem = itemGenerator.createItem(itemData)
                             return createdItem
                         })
@@ -372,7 +375,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
                 return newMonster
             })
             if (location.roomObjects.length) {
-                location.roomObjects = location.roomObjects.map((objectItem: any) => {
+                location.roomObjects = location.roomObjects.map((objectItem: Container) => {
                     const item = new Container(
                         objectItem.id,
                         objectItem.type,
@@ -387,8 +390,8 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
                     )
 
                     if (objectItem.items.length) {
-                        item.items = objectItem.items.map((itemData: string) => {
-                            const createdItem = itemGenerator.createItem(itemData)
+                        item.items = objectItem.items.map((itemData: AllItemTypes) => {
+                            const createdItem = itemGenerator.createItem(itemData.category)
                             return createdItem
                         })
                     }

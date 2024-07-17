@@ -1,19 +1,13 @@
 import { MonsterModel } from '@/assets/models/monsterModel'
-import { IScene } from '@/interfaces/IScene'
 import { Room } from '@/assets/models/RoomModel'
 import { PlayerModel } from './playerModel'
-import locations from '@/assets/json/locations.json'
 import { monsterGenerator } from '@/App.vue'
 import { EGameState } from '@/enums/EGameState'
 import { useGameStateManager } from '@/composables/useGameStateManager'
-import roomObjects from '@/assets/json/roomObjects.json'
-import { RoomObject } from './RoomObjectModel'
-import { ItemGenerator } from '@/assets/generators/itemGenerator'
-import { EItemCategory } from '@/enums/ItemCategory'
 import { useFeedStore } from '@/stores/useFeed'
 import { usePlayer } from '@/composables/usePlayer'
 
-class Scene implements IScene {
+class Scene {
     constructor(
         public id: string = '0',
         public name: string = '',
@@ -50,7 +44,7 @@ class Scene implements IScene {
             return
         }
 
-        feedStore.setActiveRoomObject(null)
+        feedStore.setActiveRoomObject(undefined)
         this.currentRoom = currentRoom
 
         // If Room is explored - monster defeated before - don't create another one
@@ -82,70 +76,72 @@ class Scene implements IScene {
         return enemyList
     }
 
-    fetchSceneDetails(id: string): Scene | undefined {
-        const sceneDetails = locations.find((scene) => scene.id === id.toString())
+    // fetchSceneDetails(id: string): Scene | undefined {
+    //     const sceneDetails = locations.find((scene) => scene.id === id.toString())
 
-        if (!sceneDetails) {
-            console.error('No scene details fetched')
-            return
-        }
-        this.id = sceneDetails.id
-        this.name = sceneDetails.name
+    //     if (!sceneDetails) {
+    //         console.error('No scene details fetched')
+    //         return
+    //     }
+    //     this.id = sceneDetails.id
+    //     this.name = sceneDetails.name
 
-        sceneDetails?.roomList?.forEach((roomData) => {
-            const monsterList = this.createEnemyList(roomData.entityList)
-            const createObjects = () => {
-                const list: any = []
-                roomData.objects.forEach((object) => {
-                    const objectData = roomObjects.containers.find((item) => item.type === object.type)
-                    if (!objectData) {
-                        console.error('no roomObject container found')
-                        return
-                    }
-                    const getItems = () => {
-                        const items = objectData.items.map((item) => {
-                            const itemGenerator = new ItemGenerator()
-                            const itemCategory = Object.values(EItemCategory).find((eItem) => eItem === item)
-                            return itemGenerator.createItem(itemCategory!)
-                        })
-                        return items
-                    }
+    //     sceneDetails.roomList?.forEach((roomData) => {
+    //         const monsterList = this.createEnemyList(roomData.entityList)
+    //         const createObjects = () => {
+    //             const list: any = []
+    //             roomData.objects.forEach((object) => {
+    //                 const objectData = roomObjects.containers.find((item) => item.type === object.type)
+    //                 if (!objectData) {
+    //                     console.error('no roomObject container found')
+    //                     return
+    //                 }
+    //                 const getItems = () => {
+    //                     const items = objectData.items.map((item) => {
+    //                         const itemGenerator = new ItemGenerator()
+    //                         const itemCategory = Object.values(EItemCategory).find((eItem) => eItem === item)
+    //                         return itemGenerator.createItem(itemCategory!)
+    //                     })
+    //                     return items
+    //                 }
 
-                    const createdObject = new RoomObject(
-                        `container-${crypto.randomUUID()}`,
-                        objectData.type,
-                        objectData.image,
-                        objectData.imageSearched,
-                        objectData.name,
-                        objectData.description,
-                        getItems(),
-                        false,
-                        object.isLocked
-                    )
+    //                 const createdObject = new RoomObject(
+    //                     `container-${crypto.randomUUID()}`,
+    //                     objectData.type,
+    //                     objectData.image,
+    //                     objectData.imageSearched,
+    //                     objectData.name,
+    //                     objectData.description,
+    //                     false
+    //                 )
 
-                    list.push(createdObject)
-                })
-                return list
-            }
+    //                 list.push(createdObject)
+    //             })
+    //             return list
+    //         }
 
-            this.roomList.push(
-                new Room(
-                    roomData.id,
-                    roomData.name,
-                    roomData.image,
-                    roomData.description,
-                    monsterList,
-                    createObjects(),
-                    roomData.lootList,
-                    roomData.exits,
-                    false,
-                    false,
-                    roomData.isDark
-                )
-            )
-        })
-        return this
-    }
+    //         this.roomList.push(
+    //             new Room(
+    //                 roomData.id,
+    //                 roomData.roomX,
+    //                 roomData.roomY,
+    //                 roomData.name,
+    //                 roomData.image,
+    //                 roomData.description,
+    //                 monsterList,
+    //                 createObjects(),
+    //                 roomData.lootList,
+    //                 roomData.exits,
+    //                 false,
+    //                 false,
+    //                 roomData.isDark,
+    //                 roomData.type,
+    //                 roomData.connectedLocations
+    //             )
+    //         )
+    //     })
+    //     return this
+    // }
 }
 
 export { Scene }

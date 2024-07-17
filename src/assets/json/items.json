@@ -457,7 +457,7 @@
             {
                 "name": "torch",
                 "baseValue": 0,
-                "type": "illumination",
+                "type": "torch",
                 "price": 0.1,
                 "modifiers": [],
                 "encumbrance": 5,
@@ -526,7 +526,7 @@
             {
                 "name": "iron scrap",
                 "baseValue": 0,
-                "type": "material",
+                "type": "iron scrap",
                 "price": 10,
                 "encumbrance": 20,
                 "icon": "",

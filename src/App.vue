@@ -7,6 +7,7 @@ import { useFeedStore } from './stores/useFeed'
 import localforage from 'localforage'
 import { ref } from 'vue'
 import { useGlobalStore } from './stores/useGlobal'
+import { ItemGenerator } from './assets/generators/itemGenerator'
 
 const monsterGenerator = new MonsterGenerator()
 
