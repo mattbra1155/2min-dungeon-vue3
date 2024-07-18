@@ -129,8 +129,6 @@ const createInventoryItems = () => {
     }
     itemList.push(weapon, armor, potion, utility, material)
 
-    // console.log(itemList)
-
     itemList.forEach((item) => {
         const { status, message } = playerObject.value.inventory.addItem(item, playerObject.value.id)
         if (!status) {

@@ -18,6 +18,7 @@ const bestiary = [
         },
         level: 1,
         type: 'humanoid',
+        loot: 'goblin',
         weapon: null,
         description:
             'Goblins are by far the most common of the goblinoid races (i.e., lesser Goblins, Hobgoblins, Orcs, Black Orcs, and Snotlings). They love to inflict pain and suffering on other creatures, and squabble amongst themselves if they have no one else to fight. Lacking fighting discipline, they make very poor warriors and often run away at the first opportunity. In spite of their numbers, Goblins are so disunited and undisciplined that they rarely present anything other than a transitory threat to Human settlements. Their favorite mounts are Wolves or Boars.',
@@ -41,6 +42,7 @@ const bestiary = [
         },
         level: 1,
         type: 'humanoid',
+        loot: 'goblin',
         weapon: null,
         description:
             'Goblins are by far the most common of the goblinoid races (i.e., lesser Goblins, Hobgoblins, Orcs, Black Orcs, and Snotlings). They love to inflict pain and suffering on other creatures, and squabble amongst themselves if they have no one else to fight. Lacking fighting discipline, they make very poor warriors and often run away at the first opportunity. In spite of their numbers, Goblins are so disunited and undisciplined that they rarely present anything other than a transitory threat to Human settlements. Their favorite mounts are Wolves or Boars.',
