@@ -119,18 +119,25 @@ const createInventoryItems = () => {
     playerObject.value.inventory.inventory = []
     const itemList = []
     const weapon = new ItemGenerator().createItemById('sword')
-    const armor = new ItemGenerator().createItemById('sleeved coat')
+    const armor = new ItemGenerator().createItemById('jacket')
     const potion = new ItemGenerator().createItemById('health')
     const utility = new ItemGenerator().createItemById('torch')
     const material = new ItemGenerator().createItemById('iron scrap')
     if (!weapon || !armor || !potion || !utility || !material) {
-        console.log(weapon, armor, potion, utility, material)
-        console.error('cant craete item')
+        console.error('cant create item')
         return
     }
     itemList.push(weapon, armor, potion, utility, material)
 
-    itemList.forEach((item) => playerObject.value.inventory.addItem(item, playerObject.value.id))
+    // console.log(itemList)
+
+    itemList.forEach((item) => {
+        const { status, message } = playerObject.value.inventory.addItem(item, playerObject.value.id)
+        if (!status) {
+            throw Error(message)
+        }
+        console.log(message)
+    })
 }
 
 const rollForGold = () => {
