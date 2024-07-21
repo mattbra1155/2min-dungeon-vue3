@@ -1,4 +1,22 @@
 export const lootLists = {
+    materials: [
+        {
+            item: 'ancient metal scrap',
+            probability: 10,
+        },
+        {
+            item: 'iron scrap',
+            probability: 20,
+        },
+        {
+            item: 'wood',
+            probability: 70,
+        },
+        {
+            item: 'stone',
+            probability: 50,
+        },
+    ],
     goblin: [
         {
             item: 'staff',
