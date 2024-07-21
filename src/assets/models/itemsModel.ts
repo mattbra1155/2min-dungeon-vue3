@@ -66,6 +66,7 @@ class Gold implements IGold {
     public description = 'Coins made of gold'
     public type = 'gold'
     public category = 'gold'
+    public price = 1
     public ownerId: string | undefined
     public amount: number
 

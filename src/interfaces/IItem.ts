@@ -1,7 +1,7 @@
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { iBodyPart } from './BodyParts'
 import { PlayerModel } from '@/assets/models/playerModel'
-import { Armor, Material, Potion, Utility, Weapon } from '@/assets/models/itemsModel'
+import { Armor, Gold, Material, Potion, Utility, Weapon } from '@/assets/models/itemsModel'
 import { ModifierItem } from '@/assets/models/modifierItemModel'
 import { EDice } from '@/enums/EDice'
 
@@ -45,6 +45,7 @@ export interface IGold {
     name: string
     description: string
     amount: number
+    price: number
     category: string
     ownerId: string | undefined
 }
@@ -55,7 +56,7 @@ export type IMaterial = Omit<IItem, 'isEquipped' | 'modifiers'> & {
     ownerId: string | undefined
 }
 
-export type AllItemTypes = Weapon | Armor | Potion | Utility | Material
+export type AllItemTypes = Weapon | Armor | Potion | Utility | Gold | Material
 
 export function identity<Type>(arg: Type): Type {
     return arg

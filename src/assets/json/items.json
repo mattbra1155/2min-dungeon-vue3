@@ -534,5 +534,19 @@
             }
         ],
         "quality": []
+    },
+    "valuables": {
+        "item": [
+            {
+                "name": "gold coin",
+                "baseValue": 0,
+                "type": "gold",
+                "price": 1,
+                "encumbrance": 0.01,
+                "icon": "",
+                "modifiers": []
+            }
+        ],
+        "quality": []
     }
 }

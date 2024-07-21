@@ -6,6 +6,7 @@ import { ModifierItem } from '../models/modifierItemModel'
 import { modifierList } from '@/assets/json/modifiers.json'
 import { EModifierTypes } from '@/enums/EModifierTypes'
 import { key } from 'localforage'
+import { diceRollK10 } from '../scripts/diceRoll'
 
 class ItemGenerator {
     private category:
@@ -117,7 +118,7 @@ class ItemGenerator {
         const createdModifierList: ModifierItem[] = []
         const itemCategory = itemList[this.getItemCategory(this.category)]
         const itemModifiersData = itemCategory?.item.find((item) => item.type === baseItem.type)?.modifiers
-        itemModifiersData?.forEach((itemModifier) => {
+        itemModifiersData?.forEach((itemModifier: string) => {
             const modifierData = modifierList.find((mod) => {
                 return mod.id === itemModifier
             })
@@ -155,6 +156,7 @@ class ItemGenerator {
             category: 'gold',
             ownerId: undefined,
             name: 'gold',
+            price: amount,
             amount,
         }
 
@@ -234,7 +236,7 @@ class ItemGenerator {
         return item
     }
 
-    createItemById(type: string) {
+    createItemById(type: string, amount = 1) {
         let category
         let item: AllItemTypes
         const getItemData = () => {
@@ -302,7 +304,8 @@ class ItemGenerator {
                 modifiers: itemData.modifiers,
             })
             return item
-        } else {
+        }
+        if (category === EItemCategory.Material) {
             const material = new Material()
             item = Object.assign(material, {
                 name: `${itemData.type}`,
@@ -312,6 +315,9 @@ class ItemGenerator {
                 modifiers: itemData.modifiers,
             })
             return item
+        }
+        if (category === EItemCategory.Valuables) {
+            return this.createGold(diceRollK10())
         }
     }
 }

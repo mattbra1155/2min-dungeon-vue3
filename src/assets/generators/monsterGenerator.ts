@@ -32,7 +32,9 @@ class MonsterGenerator {
         }
         console.log(monsterData)
 
-        const generatedWeapon = new ItemGenerator().createItem(EItemCategory.Weapon)
+        // TO DO
+        // Generate Weapon for each monster
+        const generatedWeapon = new ItemGenerator().createItemById('spear')
         const monsterClass = new MonsterModel()
 
         const monster: MonsterModel = Object.assign(monsterClass, monsterData, {
