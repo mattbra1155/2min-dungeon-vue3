@@ -56,7 +56,7 @@ export type IMaterial = Omit<IItem, 'isEquipped' | 'modifiers'> & {
     ownerId: string | undefined
 }
 
-export type AllItemTypes = Weapon | Armor | Potion | Utility | Gold | Material
+export type AllItemTypes = Weapon | Armor | Potion | Utility | Material
 
 export function identity<Type>(arg: Type): Type {
     return arg

@@ -50,10 +50,7 @@ export const useLoot = () => {
             console.error('Could not generate item')
             return
         }
-        console.log(item)
-
         state.lootList.push(item)
-        console.log(state.lootList)
 
         return item
     }

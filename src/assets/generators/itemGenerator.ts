@@ -87,13 +87,10 @@ class ItemGenerator {
             category: this.category,
         })
 
-        console.log(finalItem)
         return finalItem
     }
 
     private createDescription(baseItem: AllItemTypes) {
-        console.log(baseItem)
-
         if (!this.quality) {
             return `This is a ${baseItem.name ? baseItem.name : baseItem.type}. Nothing out of the ordinary`
         } else {
@@ -167,7 +164,6 @@ class ItemGenerator {
 
     createItem(category: string, tier = 1): AllItemTypes {
         this.category = category
-        console.log(category)
 
         if (!this.category) {
             throw Error('no category')
@@ -179,8 +175,6 @@ class ItemGenerator {
         const id = this.addId()
         const modifiers = this.createModifiers(itemBase)
         let item = itemBase
-
-        console.log('category', category)
 
         switch (category) {
             case EItemCategory.Weapon:

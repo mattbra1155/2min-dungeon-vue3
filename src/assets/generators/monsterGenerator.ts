@@ -23,15 +23,12 @@ class MonsterGenerator {
             return self.crypto.randomUUID()
         }
         const bestiaryCopy = structuredClone(bestiary)
-        console.log(monsterId)
         let monsterData: IMonsterData | null = null
         if (!monsterId) {
             monsterData = bestiaryCopy[Math.floor(Math.random() * bestiaryCopy.length)]
         } else {
             monsterData = bestiary.find((monster) => monster.id === monsterId) as IMonsterData
         }
-        console.log(monsterData)
-
         // TO DO
         // Generate Weapon for each monster
         const generatedWeapon = new ItemGenerator().createItemById('spear')
