@@ -12,7 +12,10 @@ export const lootLists = {
             item: 'spear',
             probability: 30,
         },
-
+        {
+            item: 'torch',
+            probability: 40,
+        },
         {
             item: 'dagger',
             probability: 50,
