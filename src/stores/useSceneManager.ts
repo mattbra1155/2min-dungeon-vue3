@@ -90,14 +90,10 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
 
                     if (objectItem.items.length) {
                         item.items = objectItem.items.map((itemData: string) => {
-                            console.log('hehre', itemData)
-
                             const createdItem = itemGenerator.createItem(itemData)
                             return createdItem
                         })
                     }
-                    console.log(item)
-
                     return item
                 })
             }
@@ -145,11 +141,8 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
                             return createdItem
                         })
                     }
-                    console.log(item)
-
                     return item
                 })
-                console.log(location.roomObjects)
             }
 
             sceneList.value.push(location)
@@ -395,8 +388,6 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
                             return createdItem
                         })
                     }
-                    console.log(item)
-
                     return item
                 })
             }
