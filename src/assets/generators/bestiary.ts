@@ -66,6 +66,7 @@ const bestiary = [
         },
         level: 2,
         type: 'humanoid',
+        loot: 'orc',
         weapon: null,
         description:
             'Orcs are powerful warriors - the toughest of the goblinoid races - and often install themselves as leaders of their weaker cousins. They are repulsive monsters who love inflicting pain and delight in cruelty and slaughter. Orcs are always fighting and, if they cannot find enemies to fight, they will fight each other. The whole of Orc technology and culture is geared towards conflict. They are dangerous individual foes, but lack the organisation or motivation to present any real long-term threat to humanity. Orcs speak the common Goblin tongue, usually about four octaves lower than any Goblin.',

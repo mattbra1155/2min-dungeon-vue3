@@ -1,12 +1,11 @@
 import { defineStore } from 'pinia'
-import { reactive, ref, toRaw, toRefs } from 'vue'
-import { ILocation } from '@/interfaces/ILocation'
+import { ref } from 'vue'
 import { Room } from '@/assets/models/RoomModel'
 import localforage from 'localforage'
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { Status } from '@/assets/models/statusModel'
 import { Inventory } from '@/assets/models/inventoryModel'
-import { Container, RoomObject } from '@/assets/models/RoomObjectModel'
+import { Container } from '@/assets/models/RoomObjectModel'
 import { EGameState } from '@/enums/EGameState'
 import { useFeedStore } from '@/stores/useFeed'
 import { useGameStateManager } from '@/composables/useGameStateManager'
@@ -15,9 +14,7 @@ import locations from '@/assets/json/locations.json'
 import { monsterGenerator } from '@/App.vue'
 import instances from '@/assets/json/instances.json'
 import { usePlayerPositionStore } from './usePlayerPosition'
-import { IContainer } from '@/interfaces/IContainer'
 import { ItemGenerator } from '@/assets/generators/itemGenerator'
-import { EItemCategory } from '@/enums/ItemCategory'
 import { AllItemTypes } from '@/interfaces/IItem'
 
 interface Instance {
@@ -97,8 +94,6 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
                     return item
                 })
             }
-            // console.log(location.roomObjects)
-
             instanceList.value.push(location)
             return location
         })

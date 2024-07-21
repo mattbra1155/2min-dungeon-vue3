@@ -1,13 +1,18 @@
 export const lootLists = {
     goblin: [
         {
-            item: 'spear',
-            probability: 20,
-        },
-        {
             item: 'staff',
             probability: 10,
         },
+        {
+            item: 'iron scrap',
+            probability: 20,
+        },
+        {
+            item: 'spear',
+            probability: 30,
+        },
+
         {
             item: 'dagger',
             probability: 50,
