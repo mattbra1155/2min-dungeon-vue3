@@ -5,7 +5,7 @@ import { diceRollK100, diceRollK4 } from '@/assets/scripts/diceRoll'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { AllItemTypes } from '@/interfaces/IItem'
 import { reactive, toRefs } from 'vue'
-
+import { useWieghtedList } from '@/composables/useWieghtedList'
 interface ILootState {
     baseLootChance: number
     baseChanceForHigherTierLoot: number
@@ -34,18 +34,10 @@ const state: ILootState = reactive({
 
 export const useLoot = () => {
     const weightedRandom = (options: { item: string; probability: number }[]) => {
-        let i
-
-        const weights = [options[0].probability]
-        for (i = 1; i < options.length; i++) {
-            weights[i] = options[i].probability + weights[i - 1]
-        }
-        const random = Math.random() * weights[weights.length - 1]
-        for (i = 0; i < weights.length; i++) {
-            if (weights[i] > random) break
-        }
         const itemGenerator = new ItemGenerator()
-        const item = itemGenerator.createItemById(options[i].item)
+        const { getWeightedItem } = useWieghtedList()
+        const weightedItem = getWeightedItem(options)
+        const item = itemGenerator.createItemById(weightedItem)
         if (!item) {
             console.error('Could not generate item')
             return

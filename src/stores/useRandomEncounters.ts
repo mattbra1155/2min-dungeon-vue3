@@ -5,6 +5,9 @@ import { diceRollK100 } from '@/assets/scripts/diceRoll'
 import { EGameState } from '@/enums/EGameState'
 import { useGameStateManager } from '@/composables/useGameStateManager'
 import { useTurn } from '@/composables/useTurn'
+import { useWieghtedList } from '@/composables/useWieghtedList'
+import { encounterList } from '@/assets/data/encounterList'
+import { ELocationTypes } from '@/enums/ELocationTypes'
 interface coords {
     x: number
     y: number
@@ -19,7 +22,7 @@ export const useRandomEncounters = defineStore('randomEncounters', () => {
     const isBattle = ref<boolean>(false)
     const numberOfEnemies = ref<number>(0)
 
-    const rollEncounter = (locationType: string) => {
+    const rollEncounter = (locationType: ELocationTypes) => {
         roll.value = undefined
         isBattle.value = false
 
@@ -37,25 +40,25 @@ export const useRandomEncounters = defineStore('randomEncounters', () => {
         let monsters: string[] = []
 
         if (locationType === 'road') {
-            monsters = ['lesserGoblin']
+            // monsters = ['lesserGoblin']
             if (roll.value <= threshold.road) {
                 isBattle.value = true
             }
         }
         if (locationType === 'grassland') {
-            monsters = ['lesserGoblin', 'goblin']
+            // monsters = ['lesserGoblin', 'goblin']
             if (roll.value <= threshold.grassland) {
                 isBattle.value = true
             }
         }
         if (locationType === 'fields') {
-            monsters = ['lesserGoblin', 'goblin']
+            // monsters = ['lesserGoblin', 'goblin']
             if (roll.value <= threshold.fields) {
                 isBattle.value = true
             }
         }
         if (locationType === 'forest') {
-            monsters = ['lesserGoblin', 'goblin', 'ork', 'skeleton']
+            // monsters = ['lesserGoblin', 'goblin', 'ork', 'skeleton']
             if (roll.value <= threshold.forest) {
                 isBattle.value = true
             }
@@ -66,7 +69,7 @@ export const useRandomEncounters = defineStore('randomEncounters', () => {
                 isBattle.value = true
             }
         }
-        if (locationType === 'dark_forest') {
+        if (locationType === 'darkForest') {
             monsters = ['ork', 'ogr', 'liche']
             if (roll.value <= threshold.darkForest) {
                 isBattle.value = true
@@ -79,10 +82,14 @@ export const useRandomEncounters = defineStore('randomEncounters', () => {
 
         const list: string[] = []
 
-        for (let x = 0; x <= numberOfEnemies.value; x++) {
-            const index = Math.floor(Math.random() * monsters.length)
-            list.push(monsters[index])
-        }
+        const { getWeightedItem } = useWieghtedList()
+
+        const weightedItem = getWeightedItem(encounterList[locationType])
+        list.push(weightedItem)
+        // for (let x = 0; x <= numberOfEnemies.value; x++) {
+        //     const index = Math.floor(Math.random() * monsters.length)
+        //     list.push(monsters[index])
+        // }
         const monsterList = sceneManager.createEnemyList(list)
         updateGameState(EGameState.Battle)
         setMonsterList(monsterList)
