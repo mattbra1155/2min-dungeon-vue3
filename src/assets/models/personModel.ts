@@ -136,8 +136,6 @@ abstract class PersonModel implements IPerson {
             return
         }
         const enemyArmorPoints = hitBodyPart.armor.items.reduce((acc: number, currItem: Armor): number => {
-            console.log(acc, currItem)
-
             return (acc + currItem.armorPoints) | 0
         }, 0)
 

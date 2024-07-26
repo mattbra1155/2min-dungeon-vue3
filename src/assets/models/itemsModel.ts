@@ -191,10 +191,8 @@ class Armor extends Item implements IArmor {
         this.bodyPart.forEach((element) => {
             //unequip currently equiped item item
             const bodyPartItems = owner.bodyParts[element as keyof iBodyPart].armor.items
-            console.log(bodyPartItems?.includes(this), this)
-
-            if (bodyPartItems?.includes(this)) {
-                const foundItem = bodyPartItems?.find((item) => item === this)
+            if (bodyPartItems.includes(this)) {
+                const foundItem = bodyPartItems.find((item) => item === this)
                 if (!foundItem) {
                     console.error('not found item to uneqip')
                     return
@@ -203,10 +201,9 @@ class Armor extends Item implements IArmor {
                 console.log(`unequipped ${this.name}`)
             }
             // equip the item
-            console.log(bodyPartItems)
-
-            bodyPartItems?.push(this)
-            console.log(bodyPartItems)
+            bodyPartItems.push(this)
+            // SUM armor points from all items
+            owner.bodyParts[element as keyof iBodyPart].armor.armorPoints += this.armorPoints
             console.log(`equiped ${this.name} on ${element}`)
         })
 
@@ -223,7 +220,6 @@ class Armor extends Item implements IArmor {
 
             modifier.use(owner)
         })
-        console.log(owner)
 
         // TO DO apply/update stats
         // owner.modifiers.updateCurrentStats(owner)
@@ -232,19 +228,24 @@ class Armor extends Item implements IArmor {
     unequip(owner: PlayerModel | MonsterModel) {
         this.bodyPart.forEach((element) => {
             const bodyPartItems = owner.bodyParts[element as keyof iBodyPart].armor.items
-            const itemIndexToUnequip = bodyPartItems?.findIndex((item) => item === this)
-            if (!itemIndexToUnequip) {
+            if (!bodyPartItems.includes(this)) {
+                console.error('no item to remove')
+                return
+            }
+            const itemIndexToUnequip = bodyPartItems?.findIndex((item) => {
+                console.log(item === this)
+                return item === this
+            })
+            if (itemIndexToUnequip === -1) {
                 console.error('cant unequip item - cant find index')
                 return
             }
-            bodyPartItems?.slice(itemIndexToUnequip, 1)
-            console.log(bodyPartItems)
-
+            // SUM armor points after uneqipping
+            owner.bodyParts[element as keyof iBodyPart].armor.armorPoints -= this.armorPoints
+            bodyPartItems?.splice(itemIndexToUnequip)
             console.log(`unequiped ${this.name} on ${element}`)
         })
-
         this.isEquipped = false
-        console.log(owner)
     }
 }
 
