@@ -240,7 +240,7 @@ class Armor extends Item implements IArmor {
                 console.error('cant unequip item - cant find index')
                 return
             }
-            // SUM armor points after uneqipping
+            // SUM armor points after unequipping
             owner.bodyParts[element as keyof iBodyPart].armor.armorPoints -= this.armorPoints
             bodyPartItems?.splice(itemIndexToUnequip)
             console.log(`unequiped ${this.name} on ${element}`)

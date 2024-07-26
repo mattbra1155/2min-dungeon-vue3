@@ -135,7 +135,7 @@ abstract class PersonModel implements IPerson {
             console.error('hitBodyPart undefined')
             return
         }
-        const enemyArmorPoints = hitBodyPart.armor.items.reduce((acc: number, currItem: Armor): number => {
+        const enemyArmorPoints = hitBodyPart.armor.items?.reduce((acc: number, currItem: Armor): number => {
             return (acc + currItem.armorPoints) | 0
         }, 0)
 
