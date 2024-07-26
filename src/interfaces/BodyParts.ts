@@ -7,7 +7,7 @@ export type iBodyPart = {
         name: string
         armor: {
             armorPoints: number
-            item: Armor | null
+            items: Armor[]
         }
     }
 }
@@ -16,42 +16,42 @@ export interface iBodyParts {
         name: 'Head'
         armor: {
             armorPoints: number
-            item: IArmor | null
+            items: IArmor[]
         }
     }
     rightArm: {
         name: 'Right arm'
         armor: {
             armorPoints: number
-            item: IArmor | null
+            items: IArmor[]
         }
     }
     leftArm: {
         name: 'Left arm'
         armor: {
             armorPoints: number
-            item: IArmor | null
+            items: IArmor[]
         }
     }
     torso: {
         name: 'Torso'
         armor: {
             armorPoints: number
-            item: IArmor | null
+            items: IArmor[]
         }
     }
     rightLeg: {
         name: 'Right leg'
         armor: {
             armorPoints: number
-            item: IArmor | null
+            items: IArmor[]
         }
     }
     leftLeg: {
         name: 'Left leg'
         armor: {
             armorPoints: number
-            item: IArmor | null
+            items: IArmor[]
         }
     }
 }

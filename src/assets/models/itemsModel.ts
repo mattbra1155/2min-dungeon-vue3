@@ -190,12 +190,20 @@ class Armor extends Item implements IArmor {
 
         this.bodyPart.forEach((element) => {
             //unequip currently equiped item item
-            if (owner.bodyParts[element as keyof iBodyPart].armor.item) {
-                owner.bodyParts[element as keyof iBodyPart].armor.item?.unequip(owner)
+            const bodyPartItems = owner.bodyParts[element as keyof iBodyPart].armor.items
+            if (bodyPartItems.includes(this)) {
+                const foundItem = bodyPartItems.find((item) => item === this)
+                if (!foundItem) {
+                    console.error('not found item to uneqip')
+                    return
+                }
+                foundItem.unequip(owner)
                 console.log(`unequipped ${this.name}`)
             }
             // equip the item
-            owner.bodyParts[element as keyof iBodyPart].armor.item = this
+            bodyPartItems.push(this)
+            // SUM armor points from all items
+            owner.bodyParts[element as keyof iBodyPart].armor.armorPoints += this.armorPoints
             console.log(`equiped ${this.name} on ${element}`)
         })
 
@@ -212,16 +220,31 @@ class Armor extends Item implements IArmor {
 
             modifier.use(owner)
         })
+
         // TO DO apply/update stats
         // owner.modifiers.updateCurrentStats(owner)
     }
 
     unequip(owner: PlayerModel | MonsterModel) {
         this.bodyPart.forEach((element) => {
-            owner.bodyParts[element as keyof iBodyPart].armor.item = null
+            const bodyPartItems = owner.bodyParts[element as keyof iBodyPart].armor.items
+            if (!bodyPartItems.includes(this)) {
+                console.error('no item to remove')
+                return
+            }
+            const itemIndexToUnequip = bodyPartItems?.findIndex((item) => {
+                console.log(item === this)
+                return item === this
+            })
+            if (itemIndexToUnequip === -1) {
+                console.error('cant unequip item - cant find index')
+                return
+            }
+            // SUM armor points after uneqipping
+            owner.bodyParts[element as keyof iBodyPart].armor.armorPoints -= this.armorPoints
+            bodyPartItems?.splice(itemIndexToUnequip)
             console.log(`unequiped ${this.name} on ${element}`)
         })
-
         this.isEquipped = false
     }
 }

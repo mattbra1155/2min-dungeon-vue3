@@ -102,7 +102,6 @@ const unequip = (item: AllItemTypes) => {
                 <h3 class="a-text">Equipped</h3>
                 <ul class="o-inventory__list --noScroll">
                     <template v-for="item in player?.inventory.inventory" :key="item.id">
-                        {{ item.category }}
                         <li v-if="item && item.id && item.isEquipped" class="o-inventory__item --equipped">
                             <template v-if="item instanceof Armor">
                                 <div>
