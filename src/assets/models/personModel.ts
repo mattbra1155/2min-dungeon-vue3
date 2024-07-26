@@ -4,7 +4,7 @@ import { IPerson } from '@/interfaces/Person'
 import { iBodyPart } from '@/interfaces/BodyParts'
 import { Inventory } from '@/assets/models/inventoryModel'
 import { PlayerModel } from '@/assets/models//playerModel'
-import { Weapon } from '@/assets/models//itemsModel'
+import { Armor, Weapon } from '@/assets/models//itemsModel'
 import { Modifiers } from '@/assets/models/modifiersModel'
 import { IStats } from '@/interfaces/IStats'
 import { EModifierTypes } from '@/enums/EModifierTypes'
@@ -131,8 +131,15 @@ abstract class PersonModel implements IPerson {
         }
 
         const hitBodyPart = getBodyPart()
+        if (!hitBodyPart) {
+            console.error('hitBodyPart undefined')
+            return
+        }
+        const enemyArmorPoints = hitBodyPart.armor.items.reduce((acc: number, currItem: Armor): number => {
+            console.log(acc, currItem)
 
-        const enemyArmorPoints = hitBodyPart?.armor.item?.armorPoints
+            return (acc + currItem.armorPoints) | 0
+        }, 0)
 
         // Calculate damage
         const damage = () => {

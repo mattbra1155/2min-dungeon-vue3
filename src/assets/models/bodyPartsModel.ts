@@ -1,46 +1,46 @@
-import { iBodyPart, iBodyParts } from '@/interfaces/BodyParts'
+import { iBodyPart } from '@/interfaces/BodyParts'
 
 export const bodyPartsModel: iBodyPart = {
     head: {
         name: 'Head',
         armor: {
             armorPoints: 0,
-            item: null,
+            items: [],
         },
     },
     rightArm: {
         name: 'Right arm',
         armor: {
             armorPoints: 0,
-            item: null,
+            items: [],
         },
     },
     leftArm: {
         name: 'Left arm',
         armor: {
             armorPoints: 0,
-            item: null,
+            items: [],
         },
     },
     torso: {
         name: 'Torso',
         armor: {
             armorPoints: 0,
-            item: null,
+            items: [],
         },
     },
     rightLeg: {
         name: 'Right leg',
         armor: {
             armorPoints: 0,
-            item: null,
+            items: [],
         },
     },
     leftLeg: {
         name: 'Left leg',
         armor: {
             armorPoints: 0,
-            item: null,
+            items: [],
         },
     },
 }

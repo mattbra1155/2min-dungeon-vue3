@@ -190,12 +190,23 @@ class Armor extends Item implements IArmor {
 
         this.bodyPart.forEach((element) => {
             //unequip currently equiped item item
-            if (owner.bodyParts[element as keyof iBodyPart].armor.item) {
-                owner.bodyParts[element as keyof iBodyPart].armor.item?.unequip(owner)
+            const bodyPartItems = owner.bodyParts[element as keyof iBodyPart].armor.items
+            console.log(bodyPartItems?.includes(this), this)
+
+            if (bodyPartItems?.includes(this)) {
+                const foundItem = bodyPartItems?.find((item) => item === this)
+                if (!foundItem) {
+                    console.error('not found item to uneqip')
+                    return
+                }
+                foundItem.unequip(owner)
                 console.log(`unequipped ${this.name}`)
             }
             // equip the item
-            owner.bodyParts[element as keyof iBodyPart].armor.item = this
+            console.log(bodyPartItems)
+
+            bodyPartItems?.push(this)
+            console.log(bodyPartItems)
             console.log(`equiped ${this.name} on ${element}`)
         })
 
@@ -212,17 +223,28 @@ class Armor extends Item implements IArmor {
 
             modifier.use(owner)
         })
+        console.log(owner)
+
         // TO DO apply/update stats
         // owner.modifiers.updateCurrentStats(owner)
     }
 
     unequip(owner: PlayerModel | MonsterModel) {
         this.bodyPart.forEach((element) => {
-            owner.bodyParts[element as keyof iBodyPart].armor.item = null
+            const bodyPartItems = owner.bodyParts[element as keyof iBodyPart].armor.items
+            const itemIndexToUnequip = bodyPartItems?.findIndex((item) => item === this)
+            if (!itemIndexToUnequip) {
+                console.error('cant unequip item - cant find index')
+                return
+            }
+            bodyPartItems?.slice(itemIndexToUnequip, 1)
+            console.log(bodyPartItems)
+
             console.log(`unequiped ${this.name} on ${element}`)
         })
 
         this.isEquipped = false
+        console.log(owner)
     }
 }
 
