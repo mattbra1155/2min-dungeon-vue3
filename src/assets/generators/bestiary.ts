@@ -1,3 +1,5 @@
+import { lootLists } from '../data/lootList'
+
 const bestiary = [
     {
         id: 'lesserGoblin',
@@ -90,6 +92,7 @@ const bestiary = [
         },
         level: 3,
         type: 'humanoid',
+        lootLists: 'ogr',
         weapon: null,
         description:
             'Ogres are gross, ugly humanoids who love to fight and kill. However, they are not particularly discriminating and will hire their services out to the higest bidder. They are not an overly cruel race, but they are brutal and have little respect for the weak or helpless.',
@@ -114,6 +117,7 @@ const bestiary = [
         level: 1,
         type: 'humanoid',
         weapon: null,
+        lootLists: 'goblin',
         description:
             'A Skeleton is magically formed from the remains of a long-dead humanoid. Skeletons lack strong wills of their own and are sustained only by magic.',
     },
@@ -136,6 +140,7 @@ const bestiary = [
         },
         level: 3,
         type: 'humanoid',
+        lootLists: 'ogr',
         weapon: null,
         description:
             'Liches are Undead Necromancers. They have become foul, twisted, and tormented by years of evil toil. Their mental and bodily functions are preserved by powerful magic, but their bodies continue to decompose as if they were truly dead.',
