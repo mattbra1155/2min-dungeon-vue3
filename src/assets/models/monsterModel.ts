@@ -7,6 +7,7 @@ import { Modifiers } from '@/assets/models/modifiersModel'
 import { Weapon } from '@/assets/models/itemsModel'
 import { stats as statsModel } from '@/assets/models/statsModel'
 import { IStats } from '@/interfaces/IStats'
+import { lootLists } from '../data/lootList'
 
 class MonsterModel extends PersonModel implements IMonster {
     constructor(
@@ -25,7 +26,8 @@ class MonsterModel extends PersonModel implements IMonster {
         public prefferedPosition: string = '',
         public offHand: Weapon | null = null,
         public level: number = 1,
-        public isHostile: boolean = true
+        public isHostile: boolean = true,
+        public loot: any[] = lootLists.goblin
     ) {
         super(
             id,

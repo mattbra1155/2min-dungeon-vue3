@@ -41,7 +41,7 @@ class Item implements IItem {
 
 class Material implements IMaterial {
     constructor(
-        public id: string = `material-${crypto.randomUUID}`,
+        public id: string = `material-${crypto.randomUUID()}`,
         public name: string = 'placeholderName',
         public description: string = 'placeholderDescription',
         public type: string = 'placeholderType',
@@ -66,6 +66,7 @@ class Gold implements IGold {
     public description = 'Coins made of gold'
     public type = 'gold'
     public category = 'gold'
+    public price = 1
     public ownerId: string | undefined
     public amount: number
 
@@ -88,9 +89,9 @@ class Weapon extends Item implements IWeapon {
         public type: string = '',
         public isEquipped: boolean = false,
         public modifiers: ModifierItem[] = [],
-        public traits: string[] = [],
         public ownerId: string | undefined = undefined,
-        public requiredSkills: string[] = []
+        public requiredSkills: string[] = [],
+        public isTwoHanded: boolean = false
     ) {
         super(id, name, description, type, category, isEquipped, ownerId, modifiers)
         this.id = id
@@ -101,6 +102,7 @@ class Weapon extends Item implements IWeapon {
         this.isEquipped = isEquipped
         this.ownerId = ownerId
         this.requiredSkills = requiredSkills
+        this.isTwoHanded = isTwoHanded
     }
 
     wield(owner: PlayerModel | MonsterModel) {
@@ -167,8 +169,7 @@ class Armor extends Item implements IArmor {
         public armorPoints: number = 0,
         public isEquipped: boolean = false,
         public ownerId: string | undefined = undefined,
-        public modifiers: ModifierItem[] = [],
-        public traits: string[] = []
+        public modifiers: ModifierItem[] = []
     ) {
         super(id, name, description, type, category, isEquipped, ownerId, modifiers)
         this.id = id
@@ -179,7 +180,6 @@ class Armor extends Item implements IArmor {
         this.description = description
         this.isEquipped = isEquipped
         this.modifiers = modifiers
-        this.traits = []
     }
 
     equip(owner: PlayerModel | MonsterModel) {

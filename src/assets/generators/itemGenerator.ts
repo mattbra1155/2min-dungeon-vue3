@@ -1,10 +1,12 @@
 import { Weapon, Armor, Potion, Gold, Material, Utility } from '@/assets/models/itemsModel'
 import itemList from '@/assets/json/items.json'
-import { AllItemTypes, IGold } from '@/interfaces/IItem'
+import { AllItemTypes, IGold, instanceOfArmor, identity } from '@/interfaces/IItem'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { ModifierItem } from '../models/modifierItemModel'
 import { modifierList } from '@/assets/json/modifiers.json'
 import { EModifierTypes } from '@/enums/EModifierTypes'
+import { key } from 'localforage'
+import { diceRollK10 } from '../scripts/diceRoll'
 
 class ItemGenerator {
     private category:
@@ -100,7 +102,8 @@ class ItemGenerator {
         if (!this.category) {
             throw Error('no category')
         }
-        const id = self.crypto.randomUUID()
+        const id = window.crypto.randomUUID()
+
         return `${this.category}-${id}`
     }
 
@@ -112,7 +115,7 @@ class ItemGenerator {
         const createdModifierList: ModifierItem[] = []
         const itemCategory = itemList[this.getItemCategory(this.category)]
         const itemModifiersData = itemCategory?.item.find((item) => item.type === baseItem.type)?.modifiers
-        itemModifiersData?.forEach((itemModifier) => {
+        itemModifiersData?.forEach((itemModifier: string) => {
             const modifierData = modifierList.find((mod) => {
                 return mod.id === itemModifier
             })
@@ -150,6 +153,7 @@ class ItemGenerator {
             category: 'gold',
             ownerId: undefined,
             name: 'gold',
+            price: amount,
             amount,
         }
 
@@ -224,6 +228,91 @@ class ItemGenerator {
         this.quality = null
 
         return item
+    }
+
+    createItemById(type: string, amount = 1) {
+        let category
+        let item: AllItemTypes
+        const getItemData = () => {
+            let found
+            for (const categoryFromList of Object.entries(itemList)) {
+                found = categoryFromList[1].item.find((item) => item.type == type)
+                category = categoryFromList[0]
+
+                if (found) break
+            }
+            return found
+        }
+        const itemData = getItemData()
+
+        if (!category || !itemData) {
+            return
+        }
+
+        if (category === EItemCategory.Weapon) {
+            const weapon = new Weapon()
+            item = Object.assign(
+                weapon,
+                {
+                    name: `${itemData.type}`,
+                    id: `${type}-${crypto.randomUUID()}`,
+                    category,
+                },
+                itemData
+            )
+            return item
+        }
+        if (category === EItemCategory.Armor) {
+            const armor = new Armor()
+            item = Object.assign(
+                armor,
+                {
+                    name: `${instanceOfArmor(itemData) ? itemData.material : ''} ${itemData.type}`,
+                    id: `${type}-${crypto.randomUUID()}`,
+                    category,
+                    type: itemData.type,
+                    modifiers: itemData.modifiers,
+                },
+                itemData
+            )
+            return item
+        }
+        if (category === EItemCategory.Potion) {
+            const potion = new Potion()
+            item = Object.assign(potion, {
+                name: `Potion of ${itemData.type}`,
+                id: `${type}-${crypto.randomUUID()}`,
+                category,
+                type: itemData.type,
+                modifiers: itemData.modifiers,
+            })
+            return item
+        }
+        if (category === EItemCategory.Utility) {
+            const utility = new Utility()
+            item = Object.assign(utility, {
+                name: `${itemData.type}`,
+                id: `${type}-${crypto.randomUUID()}`,
+                category,
+                type: itemData.type,
+                modifiers: itemData.modifiers,
+            })
+            return item
+        }
+        if (category === EItemCategory.Material) {
+            const material = new Material()
+            item = Object.assign(material, {
+                name: `${itemData.type}`,
+                id: `${type}-${window.crypto.randomUUID()}`,
+                category,
+                type: itemData.type,
+                modifiers: itemData.modifiers,
+            })
+            return item
+        }
+        if (category === EItemCategory.Valuables) {
+            return this.createGold(diceRollK10())
+        }
     }
 }
 

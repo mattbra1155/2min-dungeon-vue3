@@ -71,8 +71,6 @@ const addKeybindings = () => {
 
 const move = async (index: number) => {
     if (!sceneManager || playerPosition.coords.x === undefined || playerPosition.coords.y === undefined) {
-        console.log(playerPosition.coords.x)
-
         return
     }
 
@@ -155,8 +153,6 @@ const move = async (index: number) => {
 
     // Get closes tiles names
     sceneManager.getClosestTiles()
-
-    console.log(sceneManager.activeRoom)
 
     await sceneManager.saveScene({ x: playerPosition.coords.x, y: playerPosition.coords.y }, sceneManager.sceneList)
     setTimeout(() => {

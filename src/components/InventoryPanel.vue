@@ -5,7 +5,7 @@ import { useInventory } from '@/composables/useInventory'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { getTotalDamage } from '@/helpers/getTotalDamage'
 import { getTotalArmorPoints } from '@/helpers/getTotalArmorPoints'
-import { Armor, Potion, Weapon } from '@/assets/models/itemsModel'
+import { Armor, Gold, Potion, Weapon } from '@/assets/models/itemsModel'
 import { AllItemTypes } from '@/interfaces/IItem'
 import InventoryItem from './InventoryItem.vue'
 
@@ -102,6 +102,7 @@ const unequip = (item: AllItemTypes) => {
                 <h3 class="a-text">Equipped</h3>
                 <ul class="o-inventory__list --noScroll">
                     <template v-for="item in player?.inventory.inventory" :key="item.id">
+                        {{ item.category }}
                         <li v-if="item && item.id && item.isEquipped" class="o-inventory__item --equipped">
                             <template v-if="item instanceof Armor">
                                 <div>

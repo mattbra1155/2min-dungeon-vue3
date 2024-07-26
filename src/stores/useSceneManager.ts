@@ -1,12 +1,11 @@
 import { defineStore } from 'pinia'
-import { reactive, ref, toRaw, toRefs } from 'vue'
-import { ILocation } from '@/interfaces/ILocation'
+import { ref } from 'vue'
 import { Room } from '@/assets/models/RoomModel'
 import localforage from 'localforage'
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { Status } from '@/assets/models/statusModel'
 import { Inventory } from '@/assets/models/inventoryModel'
-import { Container, RoomObject } from '@/assets/models/RoomObjectModel'
+import { Container } from '@/assets/models/RoomObjectModel'
 import { EGameState } from '@/enums/EGameState'
 import { useFeedStore } from '@/stores/useFeed'
 import { useGameStateManager } from '@/composables/useGameStateManager'
@@ -15,9 +14,8 @@ import locations from '@/assets/json/locations.json'
 import { monsterGenerator } from '@/App.vue'
 import instances from '@/assets/json/instances.json'
 import { usePlayerPositionStore } from './usePlayerPosition'
-import { IContainer } from '@/interfaces/IContainer'
 import { ItemGenerator } from '@/assets/generators/itemGenerator'
-import { EItemCategory } from '@/enums/ItemCategory'
+import { AllItemTypes } from '@/interfaces/IItem'
 
 interface Instance {
     id: string
@@ -93,13 +91,9 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
                             return createdItem
                         })
                     }
-                    console.log(item)
-
                     return item
                 })
             }
-            // console.log(location.roomObjects)
-
             instanceList.value.push(location)
             return location
         })
@@ -142,11 +136,8 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
                             return createdItem
                         })
                     }
-                    console.log(item)
-
                     return item
                 })
-                console.log(location.roomObjects)
             }
 
             sceneList.value.push(location)
@@ -372,7 +363,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
                 return newMonster
             })
             if (location.roomObjects.length) {
-                location.roomObjects = location.roomObjects.map((objectItem: any) => {
+                location.roomObjects = location.roomObjects.map((objectItem: Container) => {
                     const item = new Container(
                         objectItem.id,
                         objectItem.type,
@@ -387,13 +378,11 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
                     )
 
                     if (objectItem.items.length) {
-                        item.items = objectItem.items.map((itemData: string) => {
-                            const createdItem = itemGenerator.createItem(itemData)
+                        item.items = objectItem.items.map((itemData: AllItemTypes) => {
+                            const createdItem = itemGenerator.createItem(itemData.category)
                             return createdItem
                         })
                     }
-                    console.log(item)
-
                     return item
                 })
             }

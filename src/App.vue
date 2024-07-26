@@ -3,9 +3,7 @@ import { MonsterGenerator } from './assets/generators/monsterGenerator'
 import InventoryPanel from './components/InventoryPanel.vue'
 import CharacterScreen from './components/CharacterScreen.vue'
 import LoadingScreen from './components/LoadingScreen.vue'
-import { useFeedStore } from './stores/useFeed'
 import localforage from 'localforage'
-import { ref } from 'vue'
 import { useGlobalStore } from './stores/useGlobal'
 
 const monsterGenerator = new MonsterGenerator()

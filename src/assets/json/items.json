@@ -457,7 +457,7 @@
             {
                 "name": "torch",
                 "baseValue": 0,
-                "type": "illumination",
+                "type": "torch",
                 "price": 0.1,
                 "modifiers": [],
                 "encumbrance": 5,
@@ -466,7 +466,7 @@
             {
                 "name": "lantern",
                 "baseValue": 0,
-                "type": "illumination",
+                "type": "lantern",
                 "price": 0.1,
                 "modifiers": [],
                 "encumbrance": 20,
@@ -475,7 +475,7 @@
             {
                 "name": "tinderbox",
                 "baseValue": 0,
-                "type": "household",
+                "type": "tinderbox",
                 "price": 0.3,
                 "modifiers": [],
                 "encumbrance": 5,
@@ -484,7 +484,7 @@
             {
                 "name": "lockpick",
                 "baseValue": 0,
-                "type": "tools",
+                "type": "lockpick",
                 "price": 10,
                 "modifiers": [],
                 "encumbrance": 20,
@@ -493,7 +493,7 @@
             {
                 "name": "climbing equipment",
                 "baseValue": 0,
-                "type": "tools",
+                "type": "climbing equipment",
                 "price": 30,
                 "modifiers": [],
                 "encumbrance": 80,
@@ -526,9 +526,50 @@
             {
                 "name": "iron scrap",
                 "baseValue": 0,
-                "type": "material",
+                "type": "iron scrap",
                 "price": 10,
                 "encumbrance": 20,
+                "icon": "",
+                "modifiers": []
+            },
+            {
+                "name": "ancient metal scrap",
+                "baseValue": 0,
+                "type": "ancient metal",
+                "price": 30,
+                "encumbrance": 20,
+                "icon": "",
+                "modifiers": []
+            },
+            {
+                "name": "wood",
+                "baseValue": 0,
+                "type": "wood",
+                "price": 20,
+                "encumbrance": 50,
+                "icon": "",
+                "modifiers": []
+            },
+            {
+                "name": "stone",
+                "baseValue": 0,
+                "type": "stone",
+                "price": 40,
+                "encumbrance": 60,
+                "icon": "",
+                "modifiers": []
+            }
+        ],
+        "quality": []
+    },
+    "valuables": {
+        "item": [
+            {
+                "name": "gold coin",
+                "baseValue": 0,
+                "type": "gold",
+                "price": 1,
+                "encumbrance": 0.01,
                 "icon": "",
                 "modifiers": []
             }

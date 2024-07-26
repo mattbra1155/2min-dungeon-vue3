@@ -1,7 +1,7 @@
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { iBodyPart } from './BodyParts'
 import { PlayerModel } from '@/assets/models/playerModel'
-import { Armor, Material, Potion, Utility, Weapon } from '@/assets/models/itemsModel'
+import { Armor, Gold, Material, Potion, Utility, Weapon } from '@/assets/models/itemsModel'
 import { ModifierItem } from '@/assets/models/modifierItemModel'
 import { EDice } from '@/enums/EDice'
 
@@ -20,7 +20,7 @@ export interface IItem {
 
 export interface IWeapon extends IItem {
     damage: number
-    traits: string[]
+    isTwoHanded: boolean
     wield(owner: PlayerModel | MonsterModel): void
     unequip(owner: PlayerModel | MonsterModel): void
     requiredSkills: string[]
@@ -29,7 +29,6 @@ export interface IWeapon extends IItem {
 export interface IArmor extends IItem {
     bodyPart: string[]
     armorPoints: number
-    traits: string[]
     material: string
     equip(owner: PlayerModel | MonsterModel): void
     unequip(owner: PlayerModel | MonsterModel): void
@@ -46,6 +45,7 @@ export interface IGold {
     name: string
     description: string
     amount: number
+    price: number
     category: string
     ownerId: string | undefined
 }
@@ -58,6 +58,14 @@ export type IMaterial = Omit<IItem, 'isEquipped' | 'modifiers'> & {
 
 export type AllItemTypes = Weapon | Armor | Potion | Utility | Material
 
+export function identity<Type>(arg: Type): Type {
+    return arg
+}
+
 export interface ILootItem {
     isTaken: boolean
+}
+
+export function instanceOfArmor(object: any): object is Armor {
+    return 'material' in object
 }

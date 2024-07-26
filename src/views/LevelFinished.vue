@@ -12,11 +12,11 @@ import { useSceneManagerStore } from '@/stores/useSceneManager'
 import { onMounted, ref } from 'vue'
 import { useFeedStore } from '@/stores/useFeed'
 import { usePlayerPositionStore } from '@/stores/usePlayerPosition'
-
+import { lootLists } from '@/assets/data/lootList'
 const { updateTurnStateMachine, resetTurn } = useTurn()
 const router = useRouter()
 const { player } = usePlayer()
-const { isLootSearched, lootList, generateLoot } = useLoot()
+const { isLootSearched, lootList, weightedRandom } = useLoot()
 const sceneManager = useSceneManagerStore()
 const playerPosition = usePlayerPositionStore()
 const { updateGameState } = useGameStateManager()
@@ -67,7 +67,9 @@ onMounted(async () => {
             <h1 class="o-levelFinished__title">Enemies defeated!</h1>
             <template v-if="!isLootSearched">
                 <p>Search for loot</p>
-                <button class="a-button" @click="generateLoot()">Search</button>
+                <button class="a-button" @click="weightedRandom(lootLists.goblin), (isLootSearched = true)">
+                    Search
+                </button>
             </template>
             <template v-else>
                 <p class="o-levelFinished__text">You found:</p>

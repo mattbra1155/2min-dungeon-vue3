@@ -1,3 +1,4 @@
+import { lootLists } from '@/assets/data/lootList'
 import { ItemGenerator } from '@/assets/generators/itemGenerator'
 import { Armor, Gold, Potion, Weapon } from '@/assets/models/itemsModel'
 import { diceRollK100, diceRollK4 } from '@/assets/scripts/diceRoll'
@@ -32,51 +33,73 @@ const state: ILootState = reactive({
 })
 
 export const useLoot = () => {
-    const generateLoot = () => {
-        state.isLootSearched = true
-        const roll = diceRollK100()
-        if (roll > state.baseLootChance) {
-            console.log(`${roll}/${state.baseLootChance} = no loot generated`)
+    const weightedRandom = (options: { item: string; probability: number }[]) => {
+        let i
+
+        const weights = [options[0].probability]
+        for (i = 1; i < options.length; i++) {
+            weights[i] = options[i].probability + weights[i - 1]
+        }
+        const random = Math.random() * weights[weights.length - 1]
+        for (i = 0; i < weights.length; i++) {
+            if (weights[i] > random) break
+        }
+        const itemGenerator = new ItemGenerator()
+        const item = itemGenerator.createItemById(options[i].item)
+        if (!item) {
+            console.error('Could not generate item')
             return
         }
+        state.lootList.push(item)
 
-        const lootAmount = diceRollK4()
-        console.log(lootAmount)
-
-        for (let x = 1; x <= lootAmount; x++) {
-            const generatedItem = generateLootItem(1)
-            state.lootList.push(generatedItem)
-        }
-        console.log(state.isLootSearched)
+        return item
     }
-    const generateLootItem = (enemyLootTier: number) => {
-        const itemGenerator = new ItemGenerator()
-        // TO DO Tier loot
+    // const generateLoot = () => {
+    //     state.isLootSearched = true
+    //     const roll = diceRollK100()
+    //     if (roll > state.baseLootChance) {
+    //         console.log(`${roll}/${state.baseLootChance} = no loot generated`)
+    //         return
+    //     }
 
-        const rollForItemType = diceRollK100()
+    //     const lootAmount = diceRollK4()
+    //     console.log(lootAmount)
 
-        if (state.baseLootChance <= state.baseChanceForHigherTierLoot) {
-            console.log('roll higher chance loot to implement')
-            state.isHigherTierLoot = true
-        }
-        console.log(rollForItemType)
-        if (rollForItemType <= state.baseChanceForWeapon) {
-            console.log('roll Weapon')
-            return itemGenerator.createItem(EItemCategory.Weapon)
-        } else if (rollForItemType > state.baseChanceForWeapon && rollForItemType <= state.baseChanceForArmor) {
-            console.log('roll Armor')
-            return itemGenerator.createItem(EItemCategory.Armor)
-        } else if (rollForItemType > state.baseChanceForArmor && rollForItemType <= state.baseChanceForPotion) {
-            console.log('roll Potion')
-            return itemGenerator.createItem(EItemCategory.Potion)
-        } else {
-            console.log('roll Gold')
-            return itemGenerator.createGold(diceRollK4())
-        }
-    }
+    //     for (let x = 1; x <= lootAmount; x++) {
+    //         const generatedItem = generateLootItem(1)
+    //         state.lootList.push(generatedItem)
+    //     }
+    //     console.log(state.isLootSearched)
+    // }
+    // const generateLootItem = (enemyLootTier: number) => {
+    //     const itemGenerator = new ItemGenerator()
+    //     // TO DO Tier loot
+
+    //     const rollForItemType = diceRollK100()
+
+    //     if (state.baseLootChance <= state.baseChanceForHigherTierLoot) {
+    //         console.log('roll higher chance loot to implement')
+    //         state.isHigherTierLoot = true
+    //     }
+    //     console.log(rollForItemType)
+    //     if (rollForItemType <= state.baseChanceForWeapon) {
+    //         console.log('roll Weapon')
+    //         return itemGenerator.createItem(EItemCategory.Weapon)
+    //     } else if (rollForItemType > state.baseChanceForWeapon && rollForItemType <= state.baseChanceForArmor) {
+    //         console.log('roll Armor')
+    //         return itemGenerator.createItem(EItemCategory.Armor)
+    //     } else if (rollForItemType > state.baseChanceForArmor && rollForItemType <= state.baseChanceForPotion) {
+    //         console.log('roll Potion')
+    //         return itemGenerator.createItem(EItemCategory.Potion)
+    //     } else {
+    //         console.log('roll Gold')
+    //         return itemGenerator.createGold(diceRollK4())
+    //     }
+    // }
     return {
         ...toRefs(state),
-        generateLoot,
-        generateLootItem,
+        // generateLoot,
+        // generateLootItem,
+        weightedRandom,
     }
 }

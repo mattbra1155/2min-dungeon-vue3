@@ -106,8 +106,6 @@ class Blacksmith extends Shop {
             } else {
                 item = itemGenerator.createItem(EItemCategory.Armor) as Armor
             }
-            console.log()
-
             this.inventory.push(item)
         }
     }
