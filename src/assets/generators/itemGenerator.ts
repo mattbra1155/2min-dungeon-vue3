@@ -1,6 +1,6 @@
-import { Weapon, Armor, Potion, Gold, Material, Utility } from '@/assets/models/itemsModel'
+import { Weapon, Armor, Potion, Gold, Material, Utility, Food } from '@/assets/models/itemsModel'
 import itemList from '@/assets/json/items.json'
-import { AllItemTypes, IGold, instanceOfArmor, hasIcon } from '@/interfaces/IItem'
+import { AllItemTypes, IGold, instanceOfArmor, hasIcon, identity, hasName } from '@/interfaces/IItem'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { ModifierItem } from '../models/modifierItemModel'
 import { modifierList } from '@/assets/json/modifiers.json'
@@ -15,6 +15,7 @@ class ItemGenerator {
         | EItemCategory.Potion
         | EItemCategory.Utility
         | EItemCategory.Material
+        | EItemCategory.Food
         | null
     private quality: ModifierItem | null
     constructor() {
@@ -34,6 +35,8 @@ class ItemGenerator {
             itemBase = this.createItemBase(category)
         } else if (category === EItemCategory.Material) {
             itemBase = this.createItemBase(category)
+        } else if (category === EItemCategory.Food) {
+            itemBase = this.createItemBase(category)
         }
 
         return itemBase
@@ -49,6 +52,8 @@ class ItemGenerator {
             itemCategory = EItemCategory.Potion
         } else if (category === EItemCategory.Utility) {
             itemCategory = EItemCategory.Utility
+        } else if (category === EItemCategory.Food) {
+            itemCategory = EItemCategory.Food
         } else {
             itemCategory = EItemCategory.Material
         }
@@ -60,6 +65,7 @@ class ItemGenerator {
     private createItemBase(category: EItemCategory.Potion): Potion
     private createItemBase(category: EItemCategory.Utility): Utility
     private createItemBase(category: EItemCategory.Material): Material
+    private createItemBase(category: EItemCategory.Food): Food
     private createItemBase(category: any): any {
         if (!this.category) {
             throw Error('no category')
@@ -75,6 +81,8 @@ class ItemGenerator {
             itemObject = new Potion()
         } else if (this.category === EItemCategory.Utility) {
             itemObject = new Utility()
+        } else if (this.category === EItemCategory.Food) {
+            itemObject = new Food()
         } else {
             itemObject = new Material()
         }
@@ -140,8 +148,6 @@ class ItemGenerator {
 
             createdModifierList.push(modifier)
         })
-
-        console.log(createdModifierList)
 
         return createdModifierList
     }
@@ -223,6 +229,15 @@ class ItemGenerator {
                     modifiers,
                 })
                 break
+            case EItemCategory.Food:
+                item = Object.assign(itemBase, {
+                    name: `${itemBase.name}`,
+                    id,
+                    description,
+                    category,
+                    modifiers,
+                })
+                break
         }
 
         this.category = null
@@ -264,7 +279,6 @@ class ItemGenerator {
             )
             const modifiers = this.createModifiers(item)
             item.modifiers = modifiers
-            console.log(item)
 
             return item
         }
@@ -323,6 +337,22 @@ class ItemGenerator {
                 material,
                 {
                     name: `${itemData.type}`,
+                    id: `${type}-${window.crypto.randomUUID()}`,
+                    category,
+                    type: itemData.type,
+                    modifiers: itemData.modifiers,
+                    icon: hasIcon(itemData) ? itemData.icon : 'placeholderIcon',
+                },
+                itemData
+            )
+            return item
+        }
+        if (category === EItemCategory.Food) {
+            const food = new Food()
+            item = Object.assign(
+                food,
+                {
+                    name: hasName(itemData) ? itemData.name : '',
                     id: `${type}-${window.crypto.randomUUID()}`,
                     category,
                     type: itemData.type,

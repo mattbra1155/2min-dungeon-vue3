@@ -41,7 +41,7 @@ const init = async () => {
 
         try {
             console.time('qq')
-            sceneManager.createLocations('castle_drakenhof')
+            sceneManager.createLocations('oakwood')
             console.timeEnd('qq')
         } catch (error) {
             console.error(error)

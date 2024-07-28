@@ -2,7 +2,7 @@ import { AllItemTypes } from '@/interfaces/IItem'
 import { ItemGenerator } from '../generators/itemGenerator'
 import { diceRollK2, diceRollK3, diceRollK4 } from '../scripts/diceRoll'
 import { EItemCategory } from '@/enums/ItemCategory'
-import { Armor, Potion, Weapon } from './itemsModel'
+import { Armor, Food, Potion, Weapon } from './itemsModel'
 import { usePlayer } from '@/composables/usePlayer'
 
 const { player } = usePlayer()
@@ -111,4 +111,28 @@ class Blacksmith extends Shop {
     }
 }
 
-export { Merchant, Blacksmith }
+class Tavern extends Shop {
+    constructor(
+        public id: string = 'tavern',
+        public name: string = 'Under Three Drops tavern',
+        public description: string = 'lorem ipsum',
+        public inventory: AllItemTypes[] = []
+    ) {
+        super(id, name, description, inventory)
+    }
+
+    fillInventory(numberOfItems: number) {
+        let count = 0
+
+        const itemGenerator = new ItemGenerator()
+        while (count < numberOfItems) {
+            count++
+            let item: AllItemTypes | undefined = undefined
+            item = itemGenerator.createItem(EItemCategory.Food) as Food
+
+            this.inventory.push(item)
+        }
+    }
+}
+
+export { Merchant, Blacksmith, Tavern }

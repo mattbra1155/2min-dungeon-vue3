@@ -576,5 +576,46 @@
             }
         ],
         "quality": []
+    },
+    "food": {
+        "item": [
+            {
+                "name": "bread",
+                "baseValue": 0,
+                "type": "bread",
+                "price": 1,
+                "modifiers": [],
+                "encumbrance": 5,
+                "icon": "FoodIcon"
+            },
+            {
+                "name": "herring",
+                "baseValue": 0,
+                "type": "herring",
+                "price": 1,
+                "modifiers": [],
+                "encumbrance": 5,
+                "icon": "FoodIcon"
+            },
+            {
+                "name": "smoked beacon",
+                "baseValue": 1,
+                "type": "beacon",
+                "price": 2,
+                "modifiers": [],
+                "encumbrance": 5,
+                "icon": "FoodIcon"
+            },
+            {
+                "name": "roasted meat",
+                "baseValue": 2,
+                "type": "roasted meat",
+                "price": 5,
+                "modifiers": [],
+                "encumbrance": 5,
+                "icon": "FoodIcon"
+            }
+        ],
+        "quality": []
     }
 }
