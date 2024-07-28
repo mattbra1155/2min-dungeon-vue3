@@ -116,7 +116,9 @@ class Tavern extends Shop {
         public id: string = 'tavern',
         public name: string = 'Under Three Drops tavern',
         public description: string = 'lorem ipsum',
-        public inventory: AllItemTypes[] = []
+        public inventory: AllItemTypes[] = [],
+        public gossipList: string[] = [],
+        public gossipWelcome: string = ''
     ) {
         super(id, name, description, inventory)
     }
@@ -132,6 +134,24 @@ class Tavern extends Shop {
 
             this.inventory.push(item)
         }
+    }
+
+    gossip() {
+        this.gossipWelcome = `You want to know what's going on in the area?
+        You came to the best place!`
+
+        this.gossipList = [
+            `You probably heard about the scary old castle on the mountainside. It's called Drakehof`,
+            `There is a old dwaren shrien somwhere in the mountains. It probably has some tresure hidden form the good old days`,
+        ]
+        return {
+            gossipWelcome: this.gossipWelcome,
+            gossipList: this.gossipList,
+        }
+    }
+    getGossipMessage = () => {
+        console.log(Math.floor(Math.random() * this.gossipList.length))
+        return this.gossipList[Math.floor(Math.random() * this.gossipList.length)]
     }
 }
 

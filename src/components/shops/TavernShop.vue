@@ -10,9 +10,14 @@ const { player } = usePlayer()
 const { setActiveShop } = useShop()
 
 const words = ref<string>('')
+const gossipMessage = ref<string>()
 const tavern = reactive(new Tavern())
-tavern.fillInventory(2 + diceRollK10())
 const isWriting = ref<boolean>(false)
+const isShop = ref<boolean>(false)
+const isGossip = ref<boolean>(false)
+
+tavern.fillInventory(2 + diceRollK10())
+tavern.gossip()
 
 // Move this to a standalone function
 const writeAnimation = (text: string) => {
@@ -59,6 +64,12 @@ const playerBuyItem = (item: AllItemTypes) => {
     tavern.sellItem(item.id, 0.8)
 }
 
+const startGossip = () => {
+    isGossip.value = true
+    words.value = tavern.gossipWelcome
+    gossipMessage.value = tavern.getGossipMessage()
+}
+
 onMounted(() => {
     writeAnimation('Stay a while and listen...')
 })
@@ -69,12 +80,17 @@ onMounted(() => {
         <div class="o-merchant__header">
             <h1 class="o-merchant__title">Tavern</h1>
             Your Gold: {{ player.inventory.gold }} <br />
-
             Tavern Keeper's Gold: {{ tavern.gold }} GC
             <p class="a-text o-merchant__talk">{{ words }}</p>
+            <p v-if="isGossip">{{ gossipMessage }}</p>
+
             <button class="a-button o-merchant__close" @click="exitMerchant()">X</button>
+            <div>
+                <button class="a-button" @click="startGossip()">Gossip</button>
+                <button class="a-button" @click="isShop = !isShop">Buy/sell</button>
+            </div>
         </div>
-        <div class="o-merchant__table">
+        <div v-if="isShop" class="o-merchant__table">
             <div class="o-merchant__itemList">
                 SELL:
                 <template
