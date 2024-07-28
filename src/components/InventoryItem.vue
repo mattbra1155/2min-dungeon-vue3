@@ -23,7 +23,8 @@ const getSkillNames = () =>
 <template>
     <div v-if="item" class="m-inventoryItem">
         <!-- TO FIX IMPORT ICON -->
-        <AIcon :icon="getItemIcon(item)" />
+        {{ item.icon }}
+        <AIcon v-if="item.icon" :icon="getItemIcon(item)" />
         <div class="m-inventoryItem__details">
             <h2 class="a-text m-inventoryItem__title m-inventoryItem__detailsItem --fullWidth">{{ item.name }}</h2>
             <p class="a-text m-inventoryItem__detailsItem --fullWidth">Type: {{ item.type }}</p>
@@ -53,7 +54,7 @@ const getSkillNames = () =>
             <p class="a-text m-inventoryItem__detailsItem --fullWidth">{{ item.description }}</p>
         </div>
         <div class="a-text m-inventoryItem__details">
-            <h2 class="a-text m-inventoryItem__title m-inventoryItem__detailsItem --fullWidth">Modifiers</h2>
+            <h2 class="a-text m-inventoryItem__title m-inventoryItem__detailsItem">Modifiers</h2>
             <p v-for="modifier in item.modifiers" :key="modifier.id" class="a-text">{{ modifier.name }}</p>
         </div>
     </div>

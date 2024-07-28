@@ -547,7 +547,7 @@
                 "type": "wood",
                 "price": 20,
                 "encumbrance": 50,
-                "icon": "",
+                "icon": "logIcon",
                 "modifiers": []
             },
             {

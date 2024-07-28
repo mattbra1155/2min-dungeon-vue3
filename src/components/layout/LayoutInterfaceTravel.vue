@@ -20,6 +20,7 @@ import { useGameStateManager } from '@/composables/useGameStateManager'
 import { EGameState } from '@/enums/EGameState'
 import { Container } from '@/assets/models/RoomObjectModel'
 import { useGlobalStore } from '@/stores/useGlobal'
+import { ELocationTypes } from '@/enums/ELocationTypes'
 
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
@@ -145,7 +146,7 @@ const move = async (index: number) => {
 
     if (location) {
         // check if there is a monster here
-        randomEncounters.rollEncounter(location.id)
+        randomEncounters.rollEncounter(location.id as ELocationTypes)
     }
 
     feedStore.setTravelFeedItem(`You have entered ${sceneManager.activeRoom?.name}.`)

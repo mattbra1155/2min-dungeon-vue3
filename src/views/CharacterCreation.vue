@@ -124,13 +124,18 @@ const createInventoryItems = () => {
     const potion = new ItemGenerator().createItemById('health')
     const utility = new ItemGenerator().createItemById('torch')
     const material = new ItemGenerator().createItemById('iron scrap')
-    if (!weapon || !armor || !potion || !utility || !material || !armor1) {
-        console.error('cant create item')
-        return
-    }
-    itemList.push(weapon, armor, potion, utility, material, armor1)
+    const material2 = new ItemGenerator().createItemById('iron scrap')
+    // if (!weapon || !armor || !potion || !utility || !material || !armor1) {
+    //     console.error('cant create item')
+    //     return
+    // }
+    itemList.push(weapon, armor, potion, utility, material, armor1, material2)
 
     itemList.forEach((item) => {
+        if (!item) {
+            console.error('cant create item')
+            return
+        }
         const { status, message } = playerObject.value.inventory.addItem(item, playerObject.value.id)
         if (!status) {
             throw Error(message)

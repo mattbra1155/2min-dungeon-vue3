@@ -142,6 +142,8 @@ class ItemGenerator {
             createdModifierList.push(modifier)
         })
 
+        console.log(createdModifierList)
+
         return createdModifierList
     }
 
@@ -238,7 +240,7 @@ class ItemGenerator {
             for (const categoryFromList of Object.entries(itemList)) {
                 found = categoryFromList[1].item.find((item) => item.type == type)
                 category = categoryFromList[0]
-
+                this.category = category
                 if (found) break
             }
             return found
@@ -260,6 +262,10 @@ class ItemGenerator {
                 },
                 itemData
             )
+            const modifiers = this.createModifiers(item)
+            item.modifiers = modifiers
+            console.log(item)
+
             return item
         }
         if (category === EItemCategory.Armor) {
@@ -275,6 +281,7 @@ class ItemGenerator {
                 },
                 itemData
             )
+
             return item
         }
         if (category === EItemCategory.Potion) {
@@ -310,6 +317,7 @@ class ItemGenerator {
             })
             return item
         }
+
         if (category === EItemCategory.Valuables) {
             return this.createGold(diceRollK10())
         }

@@ -72,6 +72,21 @@ const unequip = (item: AllItemTypes) => {
         item.unequip(player.value)
     }
 }
+
+const uniqueItems = computed(() => {
+    const seen = new Set()
+    return player.value.inventory.inventory.filter((item) => {
+        console.log(item)
+
+        if (!seen.has(item.type)) {
+            console.log(seen)
+
+            seen.add(item.type)
+            return true
+        }
+        return false
+    })
+})
 </script>
 
 <template>
@@ -101,7 +116,7 @@ const unequip = (item: AllItemTypes) => {
             <template v-if="!activeItemId">
                 <h3 class="a-text">Equipped</h3>
                 <ul class="o-inventory__list --noScroll">
-                    <template v-for="item in player?.inventory.inventory" :key="item.id">
+                    <template v-for="item in player.inventory.inventory" :key="item.id">
                         <li v-if="item && item.id && item.isEquipped" class="o-inventory__item --equipped">
                             <template v-if="item instanceof Armor">
                                 <div>
@@ -133,15 +148,26 @@ const unequip = (item: AllItemTypes) => {
             <InventoryItem v-if="activeItemId" :item-id="activeItemId" />
             <ul v-else id="inventoryList" class="o-inventory__list">
                 <p v-for="(notification, index) in notifications" :key="index">{{ notification }}</p>
-                <template v-for="item in player?.inventory.inventory" :key="item.id">
+                <template v-for="item in uniqueItems" :key="item.id">
                     <li v-if="item && item.id && !item.isEquipped" class="o-inventory__item">
-                        <p @click="setactiveItemId(item.id)">
-                            {{ item.name }}
-                            {{ getItemValue(item) }}
-                        </p>
-                        <button class="a-button" @click="submitAction(item)">
-                            {{ getButtonType(item) }}
-                        </button>
+                        <template v-if="item.category === EItemCategory.Material">
+                            <p @click="setactiveItemId(item.id)">
+                                {{ item.name }} x{{
+                                    player.inventory.inventory.filter((obj) => obj.type === item.type).length
+                                }}
+                                {{ getItemValue(item) }}
+                            </p>
+                            <p></p>
+                        </template>
+                        <template v-else>
+                            <p @click="setactiveItemId(item.id)">
+                                {{ item.name }}
+                                {{ getItemValue(item) }}
+                            </p>
+                            <button class="a-button" @click="submitAction(item)">
+                                {{ getButtonType(item) }}
+                            </button>
+                        </template>
                     </li>
                 </template>
             </ul>
