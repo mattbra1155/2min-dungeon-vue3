@@ -1,7 +1,7 @@
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { iBodyPart } from './BodyParts'
 import { PlayerModel } from '@/assets/models/playerModel'
-import { Armor, Gold, Material, Potion, Utility, Weapon } from '@/assets/models/itemsModel'
+import { Armor, Gold, Item, Material, Potion, Utility, Weapon } from '@/assets/models/itemsModel'
 import { ModifierItem } from '@/assets/models/modifierItemModel'
 import { EDice } from '@/enums/EDice'
 
@@ -68,4 +68,8 @@ export interface ILootItem {
 
 export function instanceOfArmor(object: any): object is Armor {
     return 'material' in object
+}
+
+export function hasIcon(object: any): object is IItem {
+    return 'icon' in object
 }

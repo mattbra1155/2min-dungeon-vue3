@@ -22,10 +22,8 @@ const getSkillNames = () =>
 
 <template>
     <div v-if="item" class="m-inventoryItem">
-        <!-- TO FIX IMPORT ICON -->
-        {{ item.icon }}
-        <AIcon v-if="item.icon" :icon="getItemIcon(item)" />
         <div class="m-inventoryItem__details">
+            <AIcon class="--inventoryItem" v-if="item.icon" :icon="getItemIcon(item)" />
             <h2 class="a-text m-inventoryItem__title m-inventoryItem__detailsItem --fullWidth">{{ item.name }}</h2>
             <p class="a-text m-inventoryItem__detailsItem --fullWidth">Type: {{ item.type }}</p>
             <p class="a-text m-inventoryItem__detailsItem --fullWidth" v-if="item instanceof Weapon">

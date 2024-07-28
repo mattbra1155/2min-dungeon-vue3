@@ -1,11 +1,10 @@
 import { Weapon, Armor, Potion, Gold, Material, Utility } from '@/assets/models/itemsModel'
 import itemList from '@/assets/json/items.json'
-import { AllItemTypes, IGold, instanceOfArmor, identity } from '@/interfaces/IItem'
+import { AllItemTypes, IGold, instanceOfArmor, hasIcon } from '@/interfaces/IItem'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { ModifierItem } from '../models/modifierItemModel'
 import { modifierList } from '@/assets/json/modifiers.json'
 import { EModifierTypes } from '@/enums/EModifierTypes'
-import { key } from 'localforage'
 import { diceRollK10 } from '../scripts/diceRoll'
 
 class ItemGenerator {
@@ -259,6 +258,7 @@ class ItemGenerator {
                     name: `${itemData.type}`,
                     id: `${type}-${crypto.randomUUID()}`,
                     category,
+                    icon: hasIcon(itemData) ? itemData.icon : 'placeholderIcon',
                 },
                 itemData
             )
@@ -278,6 +278,7 @@ class ItemGenerator {
                     category,
                     type: itemData.type,
                     modifiers: itemData.modifiers,
+                    icon: hasIcon(itemData) ? itemData.icon : 'placeholderIcon',
                 },
                 itemData
             )
@@ -286,35 +287,50 @@ class ItemGenerator {
         }
         if (category === EItemCategory.Potion) {
             const potion = new Potion()
-            item = Object.assign(potion, {
-                name: `Potion of ${itemData.type}`,
-                id: `${type}-${crypto.randomUUID()}`,
-                category,
-                type: itemData.type,
-                modifiers: itemData.modifiers,
-            })
+            item = Object.assign(
+                potion,
+                {
+                    name: `Potion of ${itemData.type}`,
+                    id: `${type}-${crypto.randomUUID()}`,
+                    category,
+                    type: itemData.type,
+                    modifiers: itemData.modifiers,
+                    icon: hasIcon(itemData) ? itemData.icon : 'placeholderIcon',
+                },
+                itemData
+            )
             return item
         }
         if (category === EItemCategory.Utility) {
             const utility = new Utility()
-            item = Object.assign(utility, {
-                name: `${itemData.type}`,
-                id: `${type}-${crypto.randomUUID()}`,
-                category,
-                type: itemData.type,
-                modifiers: itemData.modifiers,
-            })
+            item = Object.assign(
+                utility,
+                {
+                    name: `${itemData.type}`,
+                    id: `${type}-${crypto.randomUUID()}`,
+                    category,
+                    type: itemData.type,
+                    modifiers: itemData.modifiers,
+                    icon: hasIcon(itemData) ? itemData.icon : 'placeholderIcon',
+                },
+                itemData
+            )
             return item
         }
         if (category === EItemCategory.Material) {
             const material = new Material()
-            item = Object.assign(material, {
-                name: `${itemData.type}`,
-                id: `${type}-${window.crypto.randomUUID()}`,
-                category,
-                type: itemData.type,
-                modifiers: itemData.modifiers,
-            })
+            item = Object.assign(
+                material,
+                {
+                    name: `${itemData.type}`,
+                    id: `${type}-${window.crypto.randomUUID()}`,
+                    category,
+                    type: itemData.type,
+                    modifiers: itemData.modifiers,
+                    icon: hasIcon(itemData) ? itemData.icon : 'placeholderIcon',
+                },
+                itemData
+            )
             return item
         }
 
