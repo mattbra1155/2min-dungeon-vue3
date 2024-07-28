@@ -123,8 +123,8 @@ const createInventoryItems = () => {
     const armor1 = new ItemGenerator().createItemById('sleeves')
     const potion = new ItemGenerator().createItemById('health')
     const utility = new ItemGenerator().createItemById('torch')
-    const material = new ItemGenerator().createItemById('iron scrap')
-    const material2 = new ItemGenerator().createItemById('iron scrap')
+    const material = new ItemGenerator().createItemById('metal scrap')
+    const material2 = new ItemGenerator().createItemById('metal scrap')
     // if (!weapon || !armor || !potion || !utility || !material || !armor1) {
     //     console.error('cant create item')
     //     return

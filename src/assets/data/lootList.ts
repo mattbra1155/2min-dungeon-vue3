@@ -5,7 +5,7 @@ export const lootLists = {
             probability: 10,
         },
         {
-            item: 'iron scrap',
+            item: 'metal scrap',
             probability: 20,
         },
         {
@@ -23,7 +23,7 @@ export const lootLists = {
             probability: 10,
         },
         {
-            item: 'iron scrap',
+            item: 'metal scrap',
             probability: 20,
         },
         {

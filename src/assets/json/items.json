@@ -524,9 +524,9 @@
     "material": {
         "item": [
             {
-                "name": "iron scrap",
+                "name": "metal scrap",
                 "baseValue": 0,
-                "type": "iron scrap",
+                "type": "metal scrap",
                 "price": 10,
                 "encumbrance": 20,
                 "icon": "",
