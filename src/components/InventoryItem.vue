@@ -53,7 +53,9 @@ const getSkillNames = () =>
         </div>
         <div class="a-text m-inventoryItem__details">
             <h2 class="a-text m-inventoryItem__title m-inventoryItem__detailsItem">Modifiers</h2>
-            <p v-for="modifier in item.modifiers" :key="modifier.id" class="a-text">{{ modifier.name }}</p>
+            <p v-for="modifier in item.modifiers" :key="modifier.id" class="a-text --firstLetterUpperCase">
+                {{ modifier.name }}
+            </p>
         </div>
     </div>
 </template>

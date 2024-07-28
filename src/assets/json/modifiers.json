@@ -69,7 +69,7 @@
         },
         {
             "id": "stat_bonus_melee_10",
-            "name": "add bonus melee +10",
+            "name": "bonus melee +10",
             "chanceToApply": 100,
             "statusId": "stat_bonus_melee_10_status",
             "type": "passive"
