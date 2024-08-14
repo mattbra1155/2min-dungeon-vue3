@@ -137,8 +137,7 @@ class Tavern extends Shop {
     }
 
     gossip() {
-        this.gossipWelcome = `You want to know what's going on in the area?
-        You came to the best place!`
+        this.gossipWelcome = `Here is some rumors I heard:`
 
         this.gossipList = [
             `You probably heard about the scary old castle on the mountainside. It's called Drakehof`,
@@ -150,7 +149,6 @@ class Tavern extends Shop {
         }
     }
     getGossipMessage = () => {
-        console.log(Math.floor(Math.random() * this.gossipList.length))
         return this.gossipList[Math.floor(Math.random() * this.gossipList.length)]
     }
 }

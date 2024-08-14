@@ -59,7 +59,7 @@ onMounted(() => {
         writeAnimation(town.shortDescription)
     }
 
-    console.log(gridWrapper)
+    console.log(gridWrapper.value)
 })
 </script>
 

@@ -9,7 +9,9 @@ import { AllItemTypes } from '@/interfaces/IItem'
 const { player } = usePlayer()
 const { setActiveShop } = useShop()
 
+const arr = ref<string[]>([])
 const words = ref<string>('')
+const gossipWelcome = ref<string>()
 const gossipMessage = ref<string>()
 const tavern = reactive(new Tavern())
 const isWriting = ref<boolean>(false)
@@ -21,22 +23,38 @@ tavern.gossip()
 
 // Move this to a standalone function
 const writeAnimation = (text: string) => {
-    let i = 0
-    const txt = text
-    const speed = 50
-    words.value = ''
-    isWriting.value = true
+    if (!isWriting.value) {
+        isWriting.value = true
+        let i = 0
+        const txt = text
+        const speed = 50
+        words.value = ''
 
-    function typeWriter() {
-        if (i < txt.length) {
-            words.value += txt.charAt(i)
-            i++
-            setTimeout(typeWriter, speed)
+        const typeWriter = () => {
+            if (i < txt.length) {
+                words.value += txt.charAt(i)
+                i++
+                setTimeout(typeWriter, speed)
+                // console.log(words.value, i, txt.length)
+                // console.log('tt')
+                // console.log(isWriting.value)
+                // console.log('length', i === txt.length)
+
+                if (i === txt.length) {
+                    // console.log(isWriting.value)
+                    isWriting.value = false
+                    arr.value.push(words.value)
+
+                    return
+                }
+                // console.log(isWriting.value)
+                isWriting.value = true
+            }
         }
+        typeWriter()
+        // arr.value.push(words.value)
+        // console.log(arr.value)
     }
-    isWriting.value = false
-
-    typeWriter()
 }
 
 const exitMerchant = () => {
@@ -66,10 +84,21 @@ const playerBuyItem = (item: AllItemTypes) => {
 
 const startGossip = () => {
     isGossip.value = true
-    words.value = tavern.gossipWelcome
-    gossipMessage.value = tavern.getGossipMessage()
+    isShop.value = false
+    // words.value = '123'
+    // words.value = tavern.gossipWelcome
+    console.log('here')
+    writeAnimation(tavern.gossipWelcome)
+    console.log('here1')
+    writeAnimation(tavern.getGossipMessage())
+    console.log('here2')
 }
-
+const startShop = () => {
+    words.value = ''
+    writeAnimation('Here are my wares')
+    isGossip.value = false
+    isShop.value = true
+}
 onMounted(() => {
     writeAnimation('Stay a while and listen...')
 })
@@ -82,12 +111,17 @@ onMounted(() => {
             Your Gold: {{ player.inventory.gold }} <br />
             Tavern Keeper's Gold: {{ tavern.gold }} GC
             <p class="a-text o-merchant__talk">{{ words }}</p>
-            <p v-if="isGossip">{{ gossipMessage }}</p>
+            {{ isWriting }}
+            {{ arr }}
+            <template v-if="isGossip">
+                <p>{{ gossipWelcome }}</p>
+                <p>{{ gossipMessage }}</p>
+            </template>
 
             <button class="a-button o-merchant__close" @click="exitMerchant()">X</button>
             <div>
                 <button class="a-button" @click="startGossip()">Gossip</button>
-                <button class="a-button" @click="isShop = !isShop">Buy/sell</button>
+                <button class="a-button" @click="startShop()">Buy/sell</button>
             </div>
         </div>
         <div v-if="isShop" class="o-merchant__table">
