@@ -10,6 +10,7 @@ import { Town } from '@/assets/models/sceneTownModel'
 import { onMounted, ref } from 'vue'
 import { makeGrid, updateGrid } from '@/helpers/makeGrid'
 import BlacksmithShop from '@/components/shops/BlacksmithShop.vue'
+import TavernShop from '@/components/shops/TavernShop.vue'
 
 const { activeRoom } = useSceneManagerStore()
 const { activeShopId } = useShop()
@@ -58,7 +59,7 @@ onMounted(() => {
         writeAnimation(town.shortDescription)
     }
 
-    console.log(gridWrapper)
+    console.log(gridWrapper.value)
 })
 </script>
 
@@ -74,5 +75,6 @@ onMounted(() => {
         <LayoutInterfaceTown :town="town" v-if="activeShopId === undefined" />
         <MerchantShop v-if="activeShopId === EShops.Merchant" />
         <BlacksmithShop v-if="activeShopId === EShops.Blacksmith" />
+        <TavernShop v-if="activeShopId === EShops.Tavern" />
     </div>
 </template>

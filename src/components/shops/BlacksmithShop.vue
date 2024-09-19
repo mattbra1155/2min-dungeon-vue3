@@ -87,7 +87,6 @@ onMounted(() => {
                     )"
                     :key="item.id"
                 >
-                    {{ typeof item }}
                     <button v-if="!item.isEquipped" class="a-button o-merchant__item" @click="playerSellItem(item)">
                         <p class="o-merchant__itemName">{{ item.name }}</p>
                         <p class="o-merchant__itemPrice">{{ (item.price / 2).toFixed() }} GC</p>

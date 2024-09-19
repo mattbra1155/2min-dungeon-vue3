@@ -5,4 +5,5 @@ export enum EItemCategory {
     Utility = 'utility',
     Material = 'material',
     Valuables = 'valuables',
+    Food = 'food',
 }

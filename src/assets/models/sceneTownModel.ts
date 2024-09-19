@@ -25,8 +25,9 @@ class Town {
         this.name = 'Oakwood'
         this.description = town?.description
         this.shops = [
-            { id: 'merchant', name: 'merchant', inventory: [] },
-            { id: 'blacksmith', name: 'blacksmith', inventory: [] },
+            { id: 'merchant', name: 'Merchant', inventory: [] },
+            { id: 'blacksmith', name: 'Blacksmith', inventory: [] },
+            { id: 'tavern', name: 'Tavern', inventory: [] },
         ]
         this.activeShopId = undefined
     }

@@ -313,6 +313,31 @@ class Utility extends Item {
     }
 }
 
+class Food extends Item {
+    constructor(
+        public id: string = `food-${crypto.randomUUID}`,
+        public name: string = 'placeholderName',
+        public description: string = 'placeholderDescription',
+        public category: EItemCategory = EItemCategory.Food,
+        public type: string = '',
+        public isEquipped: boolean = false,
+        public ownerId: string | undefined = undefined,
+        public modifiers: ModifierItem[] = [],
+        public price: number = 0,
+        public encumbrance: number = 0,
+        public icon: string = 'placeholderIcon'
+    ) {
+        super(id, name, description, type, category, isEquipped, ownerId, modifiers, price, encumbrance, icon)
+        this.name = name
+        this.description = description
+        this.type = type
+        this.modifiers = modifiers
+        this.price = price
+        this.encumbrance = encumbrance
+        this.icon = icon
+    }
+}
+
 // let items = {
 //     weapons: [
 //         new Weapon('Old sword', 'An old rusty sword'),
@@ -342,4 +367,4 @@ class Utility extends Item {
 //     ],
 // }
 
-export { Item, Weapon, Armor, Potion, Utility, Gold, Material }
+export { Item, Weapon, Armor, Potion, Utility, Gold, Material, Food }
