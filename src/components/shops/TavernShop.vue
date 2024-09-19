@@ -90,7 +90,9 @@ const startGossip = () => {
     console.log('here')
     writeAnimation(tavern.gossipWelcome)
     console.log('here1')
-    writeAnimation(tavern.getGossipMessage())
+    gossipMessage.value = tavern.getGossipMessage()
+    console.log(tavern.getGossipMessage())
+
     console.log('here2')
 }
 const startShop = () => {
@@ -111,18 +113,18 @@ onMounted(() => {
             Your Gold: {{ player.inventory.gold }} <br />
             Tavern Keeper's Gold: {{ tavern.gold }} GC
             <p class="a-text o-merchant__talk">{{ words }}</p>
-            {{ isWriting }}
-            {{ arr }}
-            <template v-if="isGossip">
-                <p>{{ gossipWelcome }}</p>
-                <p>{{ gossipMessage }}</p>
-            </template>
 
             <button class="a-button o-merchant__close" @click="exitMerchant()">X</button>
             <div>
                 <button class="a-button" @click="startGossip()">Gossip</button>
                 <button class="a-button" @click="startShop()">Buy/sell</button>
             </div>
+        </div>
+        <div v-if="isGossip" class="o-merchant__gossip">
+            <template v-if="isGossip">
+                <p>{{ gossipWelcome }}</p>
+                <p>{{ gossipMessage }}</p>
+            </template>
         </div>
         <div v-if="isShop" class="o-merchant__table">
             <div class="o-merchant__itemList">

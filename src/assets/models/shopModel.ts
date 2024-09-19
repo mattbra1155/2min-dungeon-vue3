@@ -141,7 +141,7 @@ class Tavern extends Shop {
 
         this.gossipList = [
             `You probably heard about the scary old castle on the mountainside. It's called Drakehof`,
-            `There is a old dwaren shrien somwhere in the mountains. It probably has some tresure hidden form the good old days`,
+            `There is a old dwaren shrine somewhere in the mountains. It probably has some tresure hidden form the good old days`,
         ]
         return {
             gossipWelcome: this.gossipWelcome,
