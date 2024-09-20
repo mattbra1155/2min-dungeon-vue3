@@ -4,9 +4,9 @@ import { PlayerModel } from './playerModel'
 import { IStatusBonusDamage, IStatusBonusStats, IStatusDamageOverTime, IStatusItem } from '@/interfaces/IStatus'
 import { AllItemTypes } from '@/interfaces/IItem'
 import { PersonModel } from './personModel'
-import { stats as StatsModel } from '@/assets/models/statsModel'
 import { EStats } from '@/enums/EStats'
 import { IStats } from '@/interfaces/IStats'
+import { useFeedStore } from '@/stores/useFeed'
 
 class StatusItem implements IStatusItem {
     constructor(
@@ -79,7 +79,9 @@ class StatusDamageOverTime extends StatusItem implements IStatusDamageOverTime {
         this.duration = duration
     }
     use() {
+        const feedStore = useFeedStore()
         this.target.currentStats.hp -= 1
+        feedStore.setBattleFeedItem(`${this.target.name} is bleeding for 1 hp`)
         console.log(`${this.target.name} is bleeding for 1 hp`)
     }
 }

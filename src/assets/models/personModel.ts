@@ -93,6 +93,7 @@ abstract class PersonModel implements IPerson {
         if (diceRollHitResult >= 98) {
             const criticalDamageRoll = diceRollK6()
             this.currentStats.hp -= criticalDamageRoll
+
             feedStore.setBattleFeedItem(`${this.name} hit himself for ${criticalDamageRoll} damage`)
             return
         }
@@ -190,6 +191,7 @@ abstract class PersonModel implements IPerson {
             damagePoints += mightyBlowSkill()
             // double damage if critial success
             if (diceRollHitResult === 1) {
+                feedStore.setBattleFeedItem(`${this.name} scores a critical hit!`)
                 damagePoints *= 2
             }
             damagePoints -= enemyArmorPoints ? enemyArmorPoints : 0
@@ -205,17 +207,10 @@ abstract class PersonModel implements IPerson {
             console.log('damage', damagePoints)
             return damagePoints
         }
-        /*  turn.turns.unshift({
-                person: this,
-                action: `${this.name} rolls: ${diceRollHitResult} and hit's ${
-                    enemy.name
-                } in ${enemyArmorName} for ${damage()} damage with ${
-                    this.weapon.name
-                }`
-            }) */
 
         const finalDamage = damage()
 
+        // Apply weapon status on target
         const applyAttackStatusEffects = () => {
             this.inventory.inventory.forEach((item) => {
                 if (item instanceof Weapon === false) {
@@ -226,6 +221,8 @@ abstract class PersonModel implements IPerson {
                 }
                 item.modifiers.forEach((modifier) => {
                     if (modifier.type === EModifierTypes.DamageApplyEffect) {
+                        console.log(item.name, modifier.name)
+
                         modifier.use(enemy)
                         return
                     }
@@ -241,12 +238,5 @@ abstract class PersonModel implements IPerson {
         playRandomAudio(['26_sword_hit_1.wav', '26_sword_hit_2.wav', '26_sword_hit_3.wav'])
         return finalDamage | 0
     }
-    // } else {
-    //     // add action to the turn array
-    //     /* turn.turns.unshift({
-    //         person: this,
-    //         action: `${this.name} rolls: ${diceRollHitResult} and misses.`
-    //     }) */
-    // }
 }
 export { PersonModel }
