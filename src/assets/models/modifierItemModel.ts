@@ -8,6 +8,7 @@ import { statusList } from '@/assets/json/modifiers.json'
 import { AllItemTypes } from '@/interfaces/IItem'
 import { IAllStatusTypes } from '@/interfaces/IStatus'
 import { useTurn } from '@/composables/useTurn'
+import { useFeedStore } from '@/stores/useFeed'
 const { turnNumber } = useTurn()
 class ModifierItem implements IModifierItem {
     constructor(
@@ -27,6 +28,7 @@ class ModifierItem implements IModifierItem {
     }
 
     applyEffect(target: PlayerModel | MonsterModel, statusId: string) {
+        const feedStore = useFeedStore()
         const statusData = statusList.find((statusItem) => statusItem.id === statusId)
         if (!statusData) {
             console.error('No modifier found')
@@ -102,7 +104,8 @@ class ModifierItem implements IModifierItem {
             return
         }
         target.status.addItem(status, target)
-        console.log(`Applied status: ${statusData.name}`)
+        feedStore.setBattleFeedItem(`${target.name} gains status: ${status.name} `)
+        console.log(`Applied status: ${status.name}`)
     }
 
     use(target: any) {
