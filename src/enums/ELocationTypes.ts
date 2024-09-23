@@ -4,5 +4,5 @@ export enum ELocationTypes {
     Fields = 'fields',
     Forest = 'forest',
     Hinterlands = 'hinterlands',
-    DarkForest = 'darkForest',
+    DarkForest = 'dark_forest',
 }

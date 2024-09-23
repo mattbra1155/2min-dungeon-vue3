@@ -53,7 +53,6 @@ class Status implements IStatus {
             // status.duration.current++
             if (status.duration.current >= status.duration.max) {
                 this.removeItem(status.id, character)
-                console.log(`Removed status: ${status.name}`)
                 return
             }
 

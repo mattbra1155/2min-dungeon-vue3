@@ -57,7 +57,7 @@ export const encounterList = {
             probability: 60,
         },
     ],
-    darkForest: [
+    dark_forest: [
         {
             item: 'liche',
             probability: 10,

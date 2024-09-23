@@ -33,11 +33,13 @@ export const useRandomEncounters = defineStore('randomEncounters', () => {
             grassland: 20,
             hinterlands: 25,
             forest: 30,
-            darkForest: 35,
+            darkForest: 80,
         }
         console.log(roll.value)
 
         let monsters: string[] = []
+
+        console.log(locationType)
 
         if (locationType === 'road') {
             // monsters = ['lesserGoblin']
@@ -69,7 +71,7 @@ export const useRandomEncounters = defineStore('randomEncounters', () => {
                 isBattle.value = true
             }
         }
-        if (locationType === 'darkForest') {
+        if (locationType === 'dark_forest') {
             monsters = ['ork', 'ogr', 'liche']
             if (roll.value <= threshold.darkForest) {
                 isBattle.value = true

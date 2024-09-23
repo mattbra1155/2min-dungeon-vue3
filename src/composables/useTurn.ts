@@ -114,6 +114,7 @@ export const useTurn = () => {
                             }
 
                             enemy.status.updateStatusList(enemy, state.turnNumber)
+                            checkIfDead()
                             state.activeCharacter = enemy
                             console.log(`${enemy.name} attacks`)
                             state.activeCharacter.attack(player.value)
@@ -161,13 +162,13 @@ export const useTurn = () => {
                 enemy.isAlive = false
                 playAudio(['24_orc_death_spin.wav'])
                 removeDeadFromOrder(enemy)
+                return
             }
         })
         if (player.value && player.value.currentStats.hp <= 0) {
             console.log('Player dead')
             feedStore.setBattleFeedItem(`${player.value.name} is dead`)
             await playAudio(['14_human_death_spin.wav'])
-            playAudio(['14_human_death_spin.wav'])
             player.value.isAlive = false
             updateGameState(EGameState.PlayerDead)
             return
