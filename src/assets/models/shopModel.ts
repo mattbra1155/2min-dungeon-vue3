@@ -38,16 +38,17 @@ class Shop implements IShop {
 
         this.inventory.splice(itemIndex, 1)
 
-        player.value.inventory.gold = player.value.inventory.gold - foundItem.price / multiplier
-        this.gold = this.gold + foundItem.price
+        player.value.inventory.gold = player.value.inventory.gold - foundItem.price * multiplier
+        this.gold = this.gold + foundItem.price * multiplier
 
         player.value.inventory.addItem(foundItem, player.value.id)
     }
 
     buyItem(item: AllItemTypes, multiplier = 1) {
         player.value.inventory.removeItem(item.id)
-        this.gold = this.gold - item.price
-        player.value.inventory.gold = player.value.inventory.gold + item.price / multiplier
+        this.gold = this.gold - item.price * multiplier
+
+        player.value.inventory.gold = player.value.inventory.gold + item.price * multiplier
         this.inventory.push(item)
     }
 }

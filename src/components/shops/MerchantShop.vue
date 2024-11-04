@@ -2,7 +2,7 @@
 import { usePlayer } from '@/composables/usePlayer'
 import { Merchant } from '@/assets/models/shopModel'
 import { diceRollK10, diceRollK4 } from '@/assets/scripts/diceRoll'
-import { onMounted, reactive, ref } from 'vue'
+import { computed, ComputedRef, onMounted, reactive, ref } from 'vue'
 import { useShop } from '@/composables/useShop'
 import localforage from 'localforage'
 import { AllItemTypes } from '@/interfaces/IItem'
@@ -10,6 +10,8 @@ import { AllItemTypes } from '@/interfaces/IItem'
 const { player } = usePlayer()
 const { setActiveShop } = useShop()
 
+const sellMultiplier = ref<number>(3)
+const buyMultiplier = ref<number>(0.5)
 const words = ref<string>('')
 const merchant = reactive(new Merchant())
 merchant.fillInventory(diceRollK4())
@@ -47,7 +49,7 @@ const sellItem = (item: AllItemTypes) => {
     }
     console.log(isWriting.value)
     writeAnimation('Great doing business with you...')
-    merchant.buyItem(item, 3)
+    merchant.buyItem(item, buyMultiplier.value)
 }
 
 const buyItem = (item: AllItemTypes) => {
@@ -57,7 +59,7 @@ const buyItem = (item: AllItemTypes) => {
         return
     }
     writeAnimation(`This ${item.name} will help you greatly`)
-    merchant.sellItem(item.id, 0.5)
+    merchant.sellItem(item.id, sellMultiplier.value)
 }
 
 onMounted(() => {
@@ -81,7 +83,7 @@ onMounted(() => {
                 <template v-for="item in player.inventory.inventory" :key="item.id">
                     <button v-if="!item.isEquipped" class="a-button o-merchant__item" @click="sellItem(item)">
                         <p class="o-merchant__itemName">{{ item.name }}</p>
-                        <p class="o-merchant__itemPrice">{{ (item.price / 3).toFixed() }} GC</p>
+                        <p class="o-merchant__itemPrice">{{ item.price * buyMultiplier }} GC</p>
                     </button>
                 </template>
             </div>
@@ -94,7 +96,7 @@ onMounted(() => {
                     class="a-button o-merchant__item"
                 >
                     <p class="o-merchant__itemName">{{ item.name }}</p>
-                    <p class="o-merchant__itemPrice">{{ item.price / 0.5 }} GC</p>
+                    <p class="o-merchant__itemPrice">{{ item.price * sellMultiplier }} GC</p>
                 </button>
             </div>
         </div>
