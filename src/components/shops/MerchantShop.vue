@@ -41,7 +41,7 @@ const exitMerchant = () => {
     setActiveShop(undefined)
 }
 
-const sellItem = (item: AllItemTypes) => {
+const playerSellItem = (item: AllItemTypes) => {
     if (merchant.gold < item.price) {
         writeAnimation('I don`t have any more gold')
         console.log('SHOP: Merchant doesnt have enough gold')
@@ -52,7 +52,7 @@ const sellItem = (item: AllItemTypes) => {
     merchant.buyItem(item, buyMultiplier.value)
 }
 
-const buyItem = (item: AllItemTypes) => {
+const playerBuyItem = (item: AllItemTypes) => {
     if (player.value.inventory.gold < item.price) {
         writeAnimation(`You don't have enough gold for ${item.name}`)
         console.log('SHOP: Player doesnt have enough gold')
@@ -81,7 +81,7 @@ onMounted(() => {
             <div class="o-merchant__itemList">
                 SELL:
                 <template v-for="item in player.inventory.inventory" :key="item.id">
-                    <button v-if="!item.isEquipped" class="a-button o-merchant__item" @click="sellItem(item)">
+                    <button v-if="!item.isEquipped" class="a-button o-merchant__item" @click="playerSellItem(item)">
                         <p class="o-merchant__itemName">{{ item.name }}</p>
                         <p class="o-merchant__itemPrice">{{ item.price * buyMultiplier }} GC</p>
                     </button>
@@ -90,7 +90,7 @@ onMounted(() => {
             <div class="o-merchant__itemList">
                 BUY:
                 <button
-                    @click="buyItem(item)"
+                    @click="playerBuyItem(item)"
                     v-for="item in merchant.inventory"
                     :key="item.id"
                     class="a-button o-merchant__item"

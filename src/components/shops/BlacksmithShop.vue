@@ -10,6 +10,8 @@ import { AllItemTypes } from '@/interfaces/IItem'
 const { player } = usePlayer()
 const { setActiveShop } = useShop()
 
+const sellMultiplier = ref<number>(2)
+const buyMultiplier = ref<number>(0.5)
 const words = ref<string>('')
 const blacksmith = reactive(new Blacksmith())
 blacksmith.fillInventory(diceRollK10())
@@ -39,7 +41,7 @@ const exitMerchant = () => {
     setActiveShop(undefined)
 }
 
-const playerSellItem = (item: AllItemTypes) => {
+const playerSellitem = (item: AllItemTypes) => {
     if (blacksmith.gold < item.price) {
         writeAnimation('I don`t have any more gold')
         console.log('SHOP: Blacksmith doesnt have enough gold')
@@ -47,7 +49,7 @@ const playerSellItem = (item: AllItemTypes) => {
     }
     console.log(isWriting.value)
     writeAnimation('Great doing business with you...')
-    blacksmith.buyItem(item, 2)
+    blacksmith.buyItem(item, buyMultiplier.value)
 }
 
 const playerBuyItem = (item: AllItemTypes) => {
@@ -57,7 +59,7 @@ const playerBuyItem = (item: AllItemTypes) => {
         return
     }
     writeAnimation(`This ${item.name} will help you greatly`)
-    blacksmith.sellItem(item.id, 0.8)
+    blacksmith.sellItem(item.id, sellMultiplier.value)
 }
 
 onMounted(() => {
@@ -87,9 +89,9 @@ onMounted(() => {
                     )"
                     :key="item.id"
                 >
-                    <button v-if="!item.isEquipped" class="a-button o-merchant__item" @click="playerSellItem(item)">
+                    <button v-if="!item.isEquipped" class="a-button o-merchant__item" @click="playerSellitem(item)">
                         <p class="o-merchant__itemName">{{ item.name }}</p>
-                        <p class="o-merchant__itemPrice">{{ (item.price / 2).toFixed() }} GC</p>
+                        <p class="o-merchant__itemPrice">{{ item.price * buyMultiplier }} GC</p>
                     </button>
                 </template>
             </div>
@@ -102,7 +104,7 @@ onMounted(() => {
                     class="a-button o-merchant__item"
                 >
                     <p class="o-merchant__itemName">{{ item.name }}</p>
-                    <p class="o-merchant__itemPrice">{{ (item.price / 0.8).toFixed() }} GC</p>
+                    <p class="o-merchant__itemPrice">{{ item.price * sellMultiplier }} GC</p>
                 </button>
             </div>
         </div>

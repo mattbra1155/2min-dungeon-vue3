@@ -18,6 +18,8 @@ const isWriting = ref<boolean>(false)
 const isShop = ref<boolean>(false)
 const isGossip = ref<boolean>(false)
 
+const sellMultiplier = ref<number>(2)
+const buyMultiplier = ref<number>(0.5)
 tavern.fillInventory(2 + diceRollK10())
 tavern.gossip()
 
@@ -69,7 +71,7 @@ const playerSellItem = (item: AllItemTypes) => {
     }
     console.log(isWriting.value)
     writeAnimation('Great doing business with you...')
-    tavern.buyItem(item, 2)
+    tavern.buyItem(item, buyMultiplier.value)
 }
 
 const playerBuyItem = (item: AllItemTypes) => {
@@ -79,7 +81,7 @@ const playerBuyItem = (item: AllItemTypes) => {
         return
     }
     writeAnimation(`This ${item.name} will help you greatly`)
-    tavern.sellItem(item.id, 0.8)
+    tavern.sellItem(item.id, sellMultiplier.value)
 }
 
 const startGossip = () => {
@@ -135,7 +137,7 @@ onMounted(() => {
                 >
                     <button v-if="!item.isEquipped" class="a-button o-merchant__item" @click="playerSellItem(item)">
                         <p class="o-merchant__itemName">{{ item.name }}</p>
-                        <p class="o-merchant__itemPrice">{{ (item.price / 2).toFixed() }} GC</p>
+                        <p class="o-merchant__itemPrice">{{ item.price * buyMultiplier }} GC</p>
                     </button>
                 </template>
             </div>
@@ -148,7 +150,7 @@ onMounted(() => {
                     class="a-button o-merchant__item"
                 >
                     <p class="o-merchant__itemName">{{ item.name }}</p>
-                    <p class="o-merchant__itemPrice">{{ (item.price / 0.8).toFixed() }} GC</p>
+                    <p class="o-merchant__itemPrice">{{ item.price * sellMultiplier }} GC</p>
                 </button>
             </div>
         </div>
