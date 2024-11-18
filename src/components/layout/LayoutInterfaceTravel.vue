@@ -75,9 +75,13 @@ const move = async (index: number) => {
     if (!sceneManager || playerPosition.coords.x === undefined || playerPosition.coords.y === undefined) {
         return
     }
-
     globalStore.isMoving = true
-
+    sceneManager.loadingArea = true
+    let newPlayerPosition = {
+        x: 0,
+        y: 0,
+    }
+    const savedPlayerPosition = structuredClone(toRaw(playerPosition.coords))
     const footstepsOne = [
         'footsteps/Steps_dirt-001.ogg',
         'footsteps/Steps_dirt-002.ogg',
@@ -89,49 +93,46 @@ const move = async (index: number) => {
         'footsteps/Steps_dirt-006.ogg',
     ]
 
+    const location = sceneManager.getLocationData(playerPosition.coords.x, playerPosition.coords.y)
     const footstpes = Math.random() <= 0.5 ? footstepsOne : footstepsTwo
 
     playAudio(footstpes)
 
-    sceneManager.loadingArea = true
-
-    const savedPlayerPosition = structuredClone(toRaw(playerPosition.coords))
-    let newCoords = {
-        x: 0,
-        y: 0,
-    }
     feedStore.resetTravelFeed()
 
     if (index === EDirections.North) {
-        newCoords = {
+        newPlayerPosition = {
             x: playerPosition.coords.x,
             y: playerPosition.coords.y - 1,
         }
         feedStore.setTravelFeedItem(`You move north`)
     } else if (index === EDirections.East) {
-        newCoords = {
+        newPlayerPosition = {
             x: playerPosition.coords.x + 1,
             y: playerPosition.coords.y,
         }
         feedStore.setTravelFeedItem(`You move east`)
     } else if (index === EDirections.South) {
-        newCoords = {
+        newPlayerPosition = {
             x: playerPosition.coords.x,
             y: playerPosition.coords.y + 1,
         }
         feedStore.setTravelFeedItem(`You move south`)
     } else if (index === EDirections.West) {
-        newCoords = {
+        newPlayerPosition = {
             x: playerPosition.coords.x - 1,
             y: playerPosition.coords.y,
         }
         feedStore.setTravelFeedItem(`You move west`)
     }
-    playerPosition.updateCoords(newCoords.x, newCoords.y)
+    playerPosition.updateCoords(newPlayerPosition.x, newPlayerPosition.y)
 
-    const changedRoom = await sceneManager.changeActiveRoom(playerPosition.coords.x, playerPosition.coords.y)
+    const isChangeRoomPossible = await sceneManager.checkIfChangeRoomIsPossible(
+        playerPosition.coords.x,
+        playerPosition.coords.y
+    )
 
-    if (!changedRoom) {
+    if (!isChangeRoomPossible) {
         // if cant move to the next tile return the player to the previous place
         console.error('No current Room')
         if (savedPlayerPosition.x === undefined || savedPlayerPosition.y === undefined) {
@@ -139,11 +140,9 @@ const move = async (index: number) => {
             return
         }
         playerPosition.updateCoords(savedPlayerPosition.x, savedPlayerPosition.y)
-        await sceneManager.changeActiveRoom(playerPosition.coords.x, playerPosition.coords.y)
+        await sceneManager.checkIfChangeRoomIsPossible(playerPosition.coords.x, playerPosition.coords.y)
         feedStore.setTravelFeedItem(`You travel back.`)
     }
-
-    const location = sceneManager.getLocationData(playerPosition.coords.x, playerPosition.coords.y)
 
     if (location) {
         // check if there is a monster here

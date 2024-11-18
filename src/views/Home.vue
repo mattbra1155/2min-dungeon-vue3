@@ -52,7 +52,7 @@ onMounted(async () => {
     <div class="home">
         <LayoutTopBar />
         <FeedPanel />
-        <LayoutInterfaceCombat v-if="activeGameState.value === EGameState.Battle" />
+        <LayoutInterfaceCombat v-if="activeGameState === EGameState.Battle" />
         <LayoutInterfaceTravel v-else />
     </div>
 </template>

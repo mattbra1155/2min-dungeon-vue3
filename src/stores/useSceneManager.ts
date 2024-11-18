@@ -242,7 +242,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         return foundLocation
     }
 
-    const changeActiveRoom = async (roomX: number, roomY: number) => {
+    const checkIfChangeRoomIsPossible = async (roomX: number, roomY: number) => {
         const { player } = usePlayer()
         const { updateGameState } = useGameStateManager()
         const feedStore = useFeedStore()
@@ -252,36 +252,25 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         if (instance.value) {
             activeRoom.value = instanceList.value.find((room) => room.x === roomX && room.y === roomY)
         } else {
-            // const locationData = locations.find((room) => room.x === roomX && room.y === room Y)
             const locationData = getLocationData(roomX, roomY)
-
-            console.log(locationData);
-
             if (!locationData) {
                 return false
             }
-
             activeRoom.value = await createLocation(locationData.id)
-
         }
-        console.log(activeRoom.value);
-
 
         if (!activeRoom.value) {
             console.error('No Room found')
             return false
         }
-
         if (activeRoom.value.id === 'wall') {
             feedStore.setTravelFeedItem('You smash your face at a wall')
             return false
         }
-
         if (activeRoom.value.id === 'water') {
             feedStore.setTravelFeedItem('The water is to deep. You need a boat.')
             return false
         }
-
         if (
             activeRoom.value.id === 'mountains' &&
             !player.value.inventory.inventory.find((item) => item.id === 'climbing_equipment')
@@ -289,7 +278,6 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
             feedStore.setTravelFeedItem(`The mountains are too steep. You need climbing equipment to travel.`)
             return false
         }
-
         if (activeRoom.value.id === 'high_mountains') {
             feedStore.setTravelFeedItem(`The high mountains are too dangerous to travel. You can't go further.`)
             return false
@@ -436,18 +424,14 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         if (!savedSceneData) {
             console.error('CRATE SCENE: No saved scene')
             if (!activeRoom.value) {
+                console.error('Load: No active room');
                 return
             }
-            const entry = activeRoom.value
-            if (!entry) {
-                return
-            }
-
-            await changeActiveRoom(19, 22)
+            await checkIfChangeRoomIsPossible(19, 22)
             return
         }
 
-        await changeActiveRoom(savedSceneData.currentRoomCoords.x, savedSceneData.currentRoomCoords.y)
+        await checkIfChangeRoomIsPossible(savedSceneData.currentRoomCoords.x, savedSceneData.currentRoomCoords.y)
 
         // const location: Room = new Room()
         // location.fetchLocationDetails(savedSceneData.sceneId)
@@ -477,7 +461,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         //     return Object.assign(new Room(), room)
         // })
 
-        // location.changeActiveRoom(savedSceneData.currentRoom)
+        // location.checkIfChangeRoomIsPossible(savedSceneData.currentRoom)
     }
     return {
         loadingArea,
@@ -494,7 +478,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         resetRoomList,
         saveScene,
         loadScene,
-        changeActiveRoom,
+        checkIfChangeRoomIsPossible,
         getLocationData,
         createEnemyList,
     }
