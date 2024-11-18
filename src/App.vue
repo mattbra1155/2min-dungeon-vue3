@@ -41,7 +41,12 @@ const init = async () => {
 
         try {
             console.time('qq')
-            await sceneManager.createLocation('oakwood')
+            const location = await sceneManager.createLocation('oakwood')
+            if (!location) {
+                console.error('No location data')
+                return
+            }
+            sceneManager.setActiveScene(location)
             console.timeEnd('qq')
         } catch (error) {
             console.error(error)
@@ -50,6 +55,7 @@ const init = async () => {
         }
 
         if (sceneManager.activeRoom?.x === undefined && sceneManager.activeRoom?.y === undefined) {
+            console.error('No active room')
             return
         }
         sceneManager.moveToLocation(sceneManager.activeRoom?.x, sceneManager.activeRoom?.y)

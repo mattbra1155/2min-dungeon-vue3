@@ -193,7 +193,7 @@ const enterInstance = async (instanceId: string, entryId: string) => {
     globalStore.isMoving = true
 
     if (instanceId === 'overworld') {
-        const exitLocation = sceneManager.sceneList.find((location: ILocation) => location.id === entryId)
+        const exitLocation = sceneManager.sceneList.find((location: any) => location.id === entryId)
 
         if (!exitLocation) {
             console.error('no exit location found')

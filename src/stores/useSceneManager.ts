@@ -112,13 +112,11 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         localforage.setItem('instanceList', JSON.stringify(instanceList))
     }
     const createLocation = async (locationId?: string, x?: number, y?: number) => {
-        // const itemGenerator = new ItemGenerator()
-        console.log(locationId)
         const locationData = locations.find(
             (location) => location.id === locationId || (location.x === x && location.y === y)
         )
         if (!locationData) {
-            console.error('no location data');
+            console.error('no location data')
             return
         }
 
@@ -173,11 +171,15 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
             console.error('cant find location')
             return
         }
-        await createLocation(location.id)
-        // setActiveScene(location)
+        const createdLocation = await createLocation(location.id)
+        if (!createdLocation) {
+            console.error('No location crated');
+            return
+        }
+        setActiveScene(createdLocation)
+        getClosestTiles()
         feedStore.setTravelFeedItem(`You have entered ${activeRoom.value?.name}.`)
         feedStore.setTravelFeedItem(`${activeRoom.value?.description}`)
-        getClosestTiles()
     }
 
     const getClosestTiles = () => {
@@ -256,7 +258,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
             console.log(locationData);
 
             if (!locationData) {
-                return
+                return false
             }
 
             activeRoom.value = await createLocation(locationData.id)
@@ -374,7 +376,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         const sceneListData = JSON.parse((await localforage.getItem('savedSceneList')) as string)
 
         if (!sceneListData) {
-            console.log('no scene List saved')
+            console.error('Load: no scene List saved')
             return
         }
         sceneList.value = sceneListData.map((sceneData: Room) => {
