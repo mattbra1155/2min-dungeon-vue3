@@ -9,8 +9,6 @@ export const playAudio = async (fileNameList: string[]) => {
     audio.play()
     index++
     audio.onended = function () {
-        console.log(index, audio.src)
-
         if (index < fileNameList.length) {
             audio.src = `sounds/${fileNameList[index]}`
             audio.play()
