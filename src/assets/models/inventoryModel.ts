@@ -36,12 +36,12 @@ class Inventory implements IInventory {
             }
         }
         // check if encumbrance is equal or above max
-        if (this.encumbrance.current + item.encumbrance > this.encumbrance.max) {
-            return {
-                status: false,
-                message: 'Can`t add item - max encumbrance',
-            }
-        }
+        // if (this.encumbrance.current + item.encumbrance > this.encumbrance.max) {
+        //     return {
+        //         status: false,
+        //         message: 'Can`t add item - max encumbrance',
+        //     }
+        // }
 
         this.inventory.push(item)
         this._calculateEncubrance()

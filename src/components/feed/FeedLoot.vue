@@ -28,9 +28,13 @@ const openContainer = (item: IContainer) => {
     item.setIsSearch(true)
 }
 const getItem = (container: IContainer, item: AllItemTypes) => {
+    console.log(container, item)
+
+    player.value.inventory.addItem(item, player.value.id)
+    console.log(player.value.inventory.inventory)
+
     const itemToRemoveIndex = container.items.findIndex((findItem) => findItem.id === item.id)
     container.items.splice(itemToRemoveIndex, 1)
-    player.value.inventory.addItem(item, player.value.id)
     if (!container.items.length) {
         feedStore.setTravelFeedItem(`You took everything from ${container.name}`)
     }
@@ -70,7 +74,7 @@ const close = () => {
                     contains:
                     <p v-for="lootItem in feedStore.activeRoomObject.items" :key="lootItem.id" class="a-text">
                         {{ lootItem.name }}
-                        <button class="a-button" @click="getItem(feedStore.activeRoomObject!, lootItem)">take</button>
+                        <button class="a-button" @click="getItem(feedStore.activeRoomObject, lootItem)">take</button>
                     </p>
                 </template>
                 <p class="a-text --center" v-else>empty!</p>

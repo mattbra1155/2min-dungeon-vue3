@@ -31,6 +31,14 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
     const loadingArea = ref<boolean>(false)
     const itemGenerator = ref<any>(new ItemGenerator())
 
+
+    const addLocationToSceneList = (location: Room) => {
+        if (sceneList.value.includes(location)) {
+            return
+        }
+
+        sceneList.value.push(location)
+    }
     const setActiveInstance = (instanceId: string) => {
         const selectedInstance = instances.find((instanceItem) => instanceItem.id === instanceId)
 
@@ -148,7 +156,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
             })
         }
 
-        sceneList.value.push(location)
+        addLocationToSceneList(location)
 
         const currentList: any = await localforage.getItem('visitedLocationList')
         if (currentList) {
