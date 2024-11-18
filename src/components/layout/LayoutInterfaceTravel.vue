@@ -4,7 +4,7 @@ import { useCharacterScreen } from '@/composables/useCharacterScreen'
 import { computed, onMounted, ref, toRaw } from 'vue'
 import { EDirections } from '@/enums/EDirections'
 import { useSceneManagerStore } from '@/stores/useSceneManager'
-import localtions from '@/assets/json/locations.json'
+import locations from '@/assets/json/locations.json'
 import router from '@/router'
 import { useFeedStore } from '@/stores/useFeed'
 import AIcon from '@/components/AIcon.vue'
@@ -21,6 +21,7 @@ import { EGameState } from '@/enums/EGameState'
 import { Container } from '@/assets/models/RoomObjectModel'
 import { useGlobalStore } from '@/stores/useGlobal'
 import { ELocationTypes } from '@/enums/ELocationTypes'
+import { ILocation } from '@/interfaces/ILocation'
 
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
@@ -60,7 +61,7 @@ const addKeybindings = () => {
 //     if (instanceManager.isActive) {
 //         locationName = instances.find((scene) => scene.id === locationId.toString())?.name
 //     } else {
-//         locationName = localtions.find((scene) => scene.id === locationId.toString())?.name
+//         locationName = locations.find((scene) => scene.id === locationId.toString())?.name
 //     }
 
 //     if (locationName) {
@@ -128,7 +129,7 @@ const move = async (index: number) => {
     }
     playerPosition.updateCoords(newCoords.x, newCoords.y)
 
-    const changedRoom = sceneManager.changeActiveRoom(playerPosition.coords.x, playerPosition.coords.y)
+    const changedRoom = await sceneManager.changeActiveRoom(playerPosition.coords.x, playerPosition.coords.y)
 
     if (!changedRoom) {
         // if cant move to the next tile return the player to the previous place
@@ -138,7 +139,7 @@ const move = async (index: number) => {
             return
         }
         playerPosition.updateCoords(savedPlayerPosition.x, savedPlayerPosition.y)
-        sceneManager.changeActiveRoom(playerPosition.coords.x, playerPosition.coords.y)
+        await sceneManager.changeActiveRoom(playerPosition.coords.x, playerPosition.coords.y)
         feedStore.setTravelFeedItem(`You travel back.`)
     }
 
@@ -192,7 +193,7 @@ const enterInstance = async (instanceId: string, entryId: string) => {
     globalStore.isMoving = true
 
     if (instanceId === 'overworld') {
-        const exitLocation = sceneManager.sceneList.find((location) => location.id === entryId)
+        const exitLocation = sceneManager.sceneList.find((location: ILocation) => location.id === entryId)
 
         if (!exitLocation) {
             console.error('no exit location found')
@@ -263,7 +264,7 @@ onMounted(() => {
             <button
                 v-if="sceneManager.activeRoom.id === 'oakwood'"
                 class="a-button action__button"
-                @click="$router.push({ name: 'town' })"
+                @click="router.push({ name: 'town' })"
                 :disabled="globalStore.isMoving"
             >
                 Enter {{ sceneManager.activeRoom.name }}

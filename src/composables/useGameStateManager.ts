@@ -11,21 +11,21 @@ const state: IGameStateState = reactive({
 })
 
 export const useGameStateManager = () => {
-    const updateGameState = (newState: EGameState) => {
+    const updateGameState = async (newState: EGameState) => {
         const sceneManager = useSceneManagerStore()
         state.activeGameState = newState
         switch (state.activeGameState) {
             case EGameState.Init:
                 console.log('GAME STATE: Init')
                 // changeActiveTurnState(ETurnState.Init)
-                // createLocations()
+                // createLocation()
                 break
             case EGameState.CreateChar:
                 console.log('GAME STATE: Create Character')
                 break
             case EGameState.CreateLevel:
                 console.log('GAME STATE: Create Level')
-                sceneManager.createLocations('northern_fields')
+                await sceneManager.createLocation('northern_fields')
                 break
             case EGameState.Travel:
                 console.log('GAME STATE: Travel')

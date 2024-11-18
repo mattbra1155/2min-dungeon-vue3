@@ -16,6 +16,7 @@ import instances from '@/assets/json/instances.json'
 import { usePlayerPositionStore } from './usePlayerPosition'
 import { ItemGenerator } from '@/assets/generators/itemGenerator'
 import { AllItemTypes } from '@/interfaces/IItem'
+import { ILocation } from '@/interfaces/ILocation'
 
 interface Instance {
     id: string
@@ -28,6 +29,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
     const instanceList = ref<Room[]>([])
     const instance = ref<Instance>()
     const loadingArea = ref<boolean>(false)
+    const itemGenerator = ref<any>(new ItemGenerator())
 
     const setActiveInstance = (instanceId: string) => {
         const selectedInstance = instances.find((instanceItem) => instanceItem.id === instanceId)
@@ -66,7 +68,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
             return
         }
 
-        const locationList: Room[] = instance.value.map.map((locationData) => {
+        const visitedLocationList: Room[] = instance.value.map.map((locationData) => {
             const locationClass = new Room()
             const location: Room = Object.assign(locationClass, locationData)
 
@@ -107,68 +109,72 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
 
         setActiveScene(entryLocation)
 
-        localforage.setItem('instanceList', JSON.stringify(locationList))
+        localforage.setItem('instanceList', JSON.stringify(instanceList))
     }
-    const createLocations = (locationId: string) => {
-        const itemGenerator = new ItemGenerator()
-        const locationList: Room[] = locations.map((locationData) => {
-            const locationClass = new Room()
-            const location: Room = Object.assign(locationClass, locationData)
-
-            if (location.roomObjects.length) {
-                location.roomObjects = location.roomObjects.map((objectItem: any) => {
-                    const item = new Container(
-                        objectItem.id,
-                        objectItem.type,
-                        objectItem.image,
-                        objectItem.imageSearched,
-                        objectItem.name,
-                        objectItem.description,
-                        objectItem.items,
-                        objectItem.isSearched,
-                        objectItem.isLocked,
-                        objectItem.isHidden
-                    )
-
-                    if (objectItem.items.length) {
-                        item.items = objectItem.items.map((itemData: string) => {
-                            const createdItem = itemGenerator.createItem(itemData)
-                            return createdItem
-                        })
-                    }
-                    return item
-                })
-            }
-
-            sceneList.value.push(location)
-            return location
-        })
-        const getRoom = locationList.find((room) => room.id === locationId)
-
-        if (!getRoom) {
+    const createLocation = async (locationId?: string, x?: number, y?: number) => {
+        // const itemGenerator = new ItemGenerator()
+        console.log(locationId)
+        const locationData = locations.find(
+            (location) => location.id === locationId || (location.x === x && location.y === y)
+        )
+        if (!locationData) {
+            console.error('no location data');
             return
         }
 
-        setActiveScene(getRoom)
+        const locationClass = new Room()
+        const location: Room = Object.assign(locationClass, locationData)
 
-        localforage.setItem('locationList', locationList)
+        if (location.roomObjects.length) {
+            location.roomObjects = location.roomObjects.map((objectItem: any) => {
+                const item = new Container(
+                    objectItem.id,
+                    objectItem.type,
+                    objectItem.image,
+                    objectItem.imageSearched,
+                    objectItem.name,
+                    objectItem.description,
+                    objectItem.items,
+                    objectItem.isSearched,
+                    objectItem.isLocked,
+                    objectItem.isHidden
+                )
+
+                if (objectItem.items.length) {
+                    item.items = objectItem.items.map((itemData: string) => {
+                        const createdItem = itemGenerator.value.createItem(itemData)
+                        return createdItem
+                    })
+                }
+                return item
+            })
+        }
+
+        sceneList.value.push(location)
+
+        const currentList: any = await localforage.getItem('visitedLocationList')
+        if (currentList) {
+            localforage.setItem('visitedLocationList', currentList.push(location))
+        }
+
+        return location
     }
 
-    const moveToLocation = (x: number, y: number) => {
+    const moveToLocation = async (x: number, y: number) => {
         const feedStore = useFeedStore()
         let location = undefined
         if (instance.value) {
             location = instanceList.value.find((location) => location.x === x && location.y === y)
         } else {
-            location = sceneList.value.find((location) => location.x === x && location.y === y)
+            location = locations.find((location) => location.x === x && location.y === y)
         }
 
         if (!location) {
             console.error('cant find location')
             return
         }
-
-        setActiveScene(location)
+        await createLocation(location.id)
+        // setActiveScene(location)
         feedStore.setTravelFeedItem(`You have entered ${activeRoom.value?.name}.`)
         feedStore.setTravelFeedItem(`${activeRoom.value?.description}`)
         getClosestTiles()
@@ -197,6 +203,8 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         closesTiles.value.east = getLocationData(playerPosition.coords.x + 1, playerPosition.coords.y)
         closesTiles.value.west = getLocationData(playerPosition.coords.x - 1, playerPosition.coords.y)
 
+        console.log(closesTiles.value);
+
         if (closesTiles.value.north) {
             feedStore.setTravelFeedItem(`N: ${closesTiles.value.north.name}`)
         }
@@ -216,17 +224,23 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         if (instance.value) {
             foundLocation = instanceList.value.find((location) => location.x === x && location.y === y)
         } else {
-            foundLocation = sceneList.value.find((location) => location.x === x && location.y === y)
+            const locationData = locations.find((location) => location.x === x && location.y === y)
+
+            const locationClass = new Room()
+            const location: Room = Object.assign(locationClass, locationData)
+            foundLocation = location
         }
 
         if (!foundLocation) {
+
+
             return false
         }
 
         return foundLocation
     }
 
-    const changeActiveRoom = (roomX: number, roomY: number) => {
+    const changeActiveRoom = async (roomX: number, roomY: number) => {
         const { player } = usePlayer()
         const { updateGameState } = useGameStateManager()
         const feedStore = useFeedStore()
@@ -236,8 +250,20 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         if (instance.value) {
             activeRoom.value = instanceList.value.find((room) => room.x === roomX && room.y === roomY)
         } else {
-            activeRoom.value = sceneList.value.find((room) => room.x === roomX && room.y === roomY)
+            // const locationData = locations.find((room) => room.x === roomX && room.y === room Y)
+            const locationData = getLocationData(roomX, roomY)
+
+            console.log(locationData);
+
+            if (!locationData) {
+                return
+            }
+
+            activeRoom.value = await createLocation(locationData.id)
+
         }
+        console.log(activeRoom.value);
+
 
         if (!activeRoom.value) {
             console.error('No Room found')
@@ -320,7 +346,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         localforage.removeItem('exploredSceneList')
     }
 
-    const saveScene = async (currentRoom: { x: number; y: number }, locationList: Room[]) => {
+    const saveScene = async (currentRoom: { x: number; y: number }, visitedLocationList: Room[]) => {
         // TO DO
         // move all arguments here instead of passing it each time
         const seen: any = []
@@ -328,7 +354,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
 
         await localforage.setItem(
             'activeRoom',
-            JSON.stringify({ currentRoomCoords: currentRoom, locationList }, function (key, val) {
+            JSON.stringify({ currentRoomCoords: currentRoom, visitedLocationList }, function (key, val) {
                 if (val != null && typeof val == 'object') {
                     if (seen.indexOf(val) >= 0) {
                         return
@@ -400,7 +426,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
                 x: number
                 y: number
             }
-            locationList: Room[]
+            visitedLocationList: Room[]
         }
         const data: string = (await localforage.getItem('activeRoom')) as string
         const savedSceneData: payload = JSON.parse(data)
@@ -415,11 +441,11 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
                 return
             }
 
-            changeActiveRoom(19, 22)
+            await changeActiveRoom(19, 22)
             return
         }
 
-        changeActiveRoom(savedSceneData.currentRoomCoords.x, savedSceneData.currentRoomCoords.y)
+        await changeActiveRoom(savedSceneData.currentRoomCoords.x, savedSceneData.currentRoomCoords.y)
 
         // const location: Room = new Room()
         // location.fetchLocationDetails(savedSceneData.sceneId)
@@ -457,7 +483,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         activeRoom,
         sceneList,
         instanceList,
-        createLocations,
+        createLocation,
         createInstanceLocations,
         setActiveScene,
         moveToLocation,

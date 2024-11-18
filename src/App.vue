@@ -41,7 +41,7 @@ const init = async () => {
 
         try {
             console.time('qq')
-            sceneManager.createLocations('oakwood')
+            await sceneManager.createLocation('oakwood')
             console.timeEnd('qq')
         } catch (error) {
             console.error(error)
@@ -60,7 +60,7 @@ const resetStorage = () => {
     localforage.removeItem('activeRoom')
     localforage.removeItem('initPlayer')
     localforage.removeItem('instanceList')
-    localforage.removeItem('locationList')
+    localforage.removeItem('visitedLocationList')
     localforage.removeItem('player')
     localforage.removeItem('savedSceneList')
 

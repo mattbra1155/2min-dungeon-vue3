@@ -18,7 +18,7 @@ class SceneManager {
     getEnemy() {
         return store.getters['enemy/getEnemy']
     }
-    createLocations() {
+    createLocation() {
         this.createMonster()
         const player = this.getPlayer()
         const enemy = this.getEnemy()
@@ -48,7 +48,7 @@ class SceneManager {
 //             break
 //         case 'nextLevel': {
 //             console.log(`Next level`)
-//             const level = this.createLocations('level')
+//             const level = this.createLocation('level')
 //             document
 //                 .querySelectorAll('.feed__item')
 //                 .forEach(item => item.remove())
@@ -58,13 +58,13 @@ class SceneManager {
 //         }
 //         case 'defeat': {
 //             console.log(`Defeat`)
-//             const defeat = this.createLocations('defeat')
+//             const defeat = this.createLocation('defeat')
 //             this.currentScene = defeat
 //             break
 //         }
 //         case 'win': {
 //             console.log(`Cleard level`)
-//             const win = this.createLocations('win')
+//             const win = this.createLocation('win')
 //             this.currentScene = win
 //             break
 //         }
