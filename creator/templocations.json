@@ -83,5 +83,26 @@
             "id": "castle_drakenhof",
             "entryId": "gate"
         }
+    },
+    {
+        "id": "abandoned_farmsted",
+        "image": "empty",
+        "name": "Abandoned Farmsted",
+        "description": "Burned down ruins",
+        "entityList": [],
+        "lootList": "",
+        "isDark": false,
+        "x": "",
+        "y": "",
+        "roomObjects": [
+            {
+                "type": "chest",
+                "isLocked": true
+            }
+        ],
+        "connectedLocation": {
+            "id": "castle_drakenhof",
+            "entryId": "gate"
+        }
     }
 ]

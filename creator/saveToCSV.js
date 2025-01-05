@@ -2,7 +2,7 @@
 
 // console.log(locations);
 import fs from 'fs'
-import locations from '/home/mbrania/serwer/2min-dungeon-vue3/src/assets/json/locations.json' assert {type: 'json'}
+import locations from '/home/mbrania/serwer/2min-dungeon-vue3/src/assets/json/locations.json'
 import converter from 'json-2-csv'
 
 const saveToCSV = async (jsonFile, outputName) => {

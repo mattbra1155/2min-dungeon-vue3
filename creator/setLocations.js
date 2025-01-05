@@ -34,12 +34,11 @@ const getLocationMap = async (location) => {
             const resultItem = {
                 name: item,
                 y: columnIndex,
-                x: rowIndex
+                x: rowIndex,
             }
             mapLocations.push(resultItem)
             return resultItem
         })
-
     })
     // console.log(mapLocations);
     console.log(`mapLocations - done`);
