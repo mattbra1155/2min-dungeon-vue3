@@ -97,7 +97,6 @@ const init = async () => {
     await getLocationMap()
     await createLocationsJSON()
 
-    console.log(mapGrid[21][19])
 }
 
 init()

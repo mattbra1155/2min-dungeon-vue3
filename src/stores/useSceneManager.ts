@@ -146,7 +146,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
                     objectItem.isHidden
                 )
 
-                if (objectItem.items.length) {
+                if (objectItem.items && objectItem.items.length) {
                     item.items = objectItem.items.map((itemData: string) => {
                         const createdItem = itemGenerator.value.createItem(itemData)
                         return createdItem

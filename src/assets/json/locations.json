@@ -2098,13 +2098,8 @@
         "y": 7,
         "roomObjects": [
             {
-                "name": "chest",
-                "type": "container",
-                "isHidden": true,
-                "items": [
-                    "armor",
-                    "weapon"
-                ]
+                "type": "chest",
+                "isLocked": true
             }
         ],
         "connectedLocation": {
@@ -2429,12 +2424,8 @@
         "y": 8,
         "roomObjects": [
             {
-                "name": "chest",
-                "type": "container",
-                "items": [
-                    "armor",
-                    "weapon"
-                ]
+                "type": "chest",
+                "isLocked": true
             }
         ]
     },
@@ -6007,10 +5998,25 @@
         "description": "An old, overgrown road winds its way through the landscape, its once smooth surface now cracked and weathered. Thick vegetation encroaches from all sides, reclaiming the path inch by inch. Nature's relentless advance has transformed the road into a forgotten trail, a relic of a bygone era."
     },
     {
+        "id": "abandoned_farmsted",
+        "image": "empty",
         "name": "abandoned farmsted",
-        "y": 21,
+        "description": "Burned down ruins",
+        "entityList": [],
+        "lootList": "",
+        "isDark": false,
         "x": 21,
-        "id": "abandoned_farmsted"
+        "y": 21,
+        "roomObjects": [
+            {
+                "type": "chest",
+                "isLocked": true
+            }
+        ],
+        "connectedLocation": {
+            "id": "castle_drakenhof",
+            "entryId": "gate"
+        }
     },
     {
         "name": "fields",
@@ -6295,20 +6301,12 @@
         "y": 22,
         "roomObjects": [
             {
-                "name": "chest",
-                "type": "container",
-                "items": [
-                    "armor",
-                    "weapon"
-                ]
+                "type": "chest",
+                "isLocked": true
             },
             {
-                "name": "chest",
-                "type": "container",
-                "items": [
-                    "armor",
-                    "weapon"
-                ]
+                "type": "chest",
+                "isLocked": false
             }
         ]
     },
