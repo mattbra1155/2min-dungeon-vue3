@@ -1,9 +1,9 @@
 import { MonsterModel } from '@/assets/models/monsterModel'
-import { PlayerModel } from '@/assets/models/playerModel'
 import { ERoomTypes } from '@/enums/ERoomTypes'
-import { diceRollK100 } from '../scripts/diceRoll'
-import { usePlayer } from '@/composables/usePlayer'
+import { diceRollK100 } from '../../helpers/diceRoll'
 import { IContainer } from '@/interfaces/IContainer'
+import { IPlayer } from '@/interfaces/IPlayer'
+import { usePlayerStore } from '@/stores/usePlayer'
 export interface IRoomExit {
     sceneId: string
     roomId: string
@@ -16,7 +16,7 @@ interface IRoom {
     image: string
     name: string
     description: string
-    monsterList: Array<PlayerModel | MonsterModel>
+    monsterList: Array<IPlayer | MonsterModel>
     roomObjects: IContainer[]
     lootList: string[]
     exits: Array<number | IRoomExit>
@@ -24,7 +24,7 @@ interface IRoom {
     isExplored: boolean
     isSearched: boolean
     isDark: boolean
-    searchRoom(player: PlayerModel): boolean
+    searchRoom(player: IPlayer): boolean
     connectedLocation: { id: string; entryId: string } | undefined
 }
 
@@ -67,9 +67,12 @@ class Room implements IRoom {
     }
     searchRoom() {
         const initiativeRoll = diceRollK100()
-        const { player } = usePlayer()
-
-        if (initiativeRoll <= player.value.currentStats.initiative) {
+        const playerStore = usePlayerStore()
+        if (!playerStore.player) {
+            console.log('No player')
+            return false
+        }
+        if (initiativeRoll <= playerStore.player.currentStats.initiative) {
             return true
         }
         this.isSearched = true

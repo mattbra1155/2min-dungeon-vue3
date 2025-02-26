@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { useAttack } from '@/composables/useAttack'
-import { useTurn } from '@/composables/useTurn'
 import { useSceneManagerStore } from '@/stores/useSceneManager'
 import { computed } from 'vue'
 import { EGameState } from '@/enums/EGameState'
-import { useGameStateManager } from '@/composables/useGameStateManager'
+import { useGameStateStore } from '@/stores/useGameStateManager'
+import { useTurnStore } from '@/stores/useTurn'
 
 const { targetToAttack, setTargetToAttack } = useAttack()
 const sceneManager = useSceneManagerStore()
-const { activeGameState } = useGameStateManager()
-const { activeTurnState, turnNumber, turnOrder } = useTurn()
+const gameStateStore = useGameStateStore()
+const turnStore = useTurnStore()
 
-const enemyList = computed(() => turnOrder.value)
+const enemyList = computed(() => turnStore.turnOrder)
 const instance = computed(() => sceneManager.instanceList.find((location) => location.id === sceneManager.instance?.id))
 </script>
 
@@ -19,9 +19,9 @@ const instance = computed(() => sceneManager.instanceList.find((location) => loc
     <div id="top-bar" class="o-header">
         <h2 v-if="sceneManager.activeRoom" id="levelName" class="level__name">{{ sceneManager.activeRoom.name }}</h2>
         <p v-if="sceneManager.instance" style="text-align: center">{{ instance }}</p>
-        <div v-if="activeGameState === EGameState.Battle">
-            <p style="text-align: center">{{ activeTurnState }}</p>
-            <p style="text-align: center">Turn: {{ turnNumber }}</p>
+        <div v-if="gameStateStore.activeGameState === EGameState.Battle">
+            <p style="text-align: center">{{ turnStore.activeTurnState }}</p>
+            <p style="text-align: center">Turn: {{ turnStore.turnNumber }}</p>
         </div>
         <div class="o-header__healthWrapper">
             <template v-for="enemy in enemyList" :key="enemy.id">

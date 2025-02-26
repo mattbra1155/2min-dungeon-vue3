@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { usePlayer } from '@/composables/usePlayer'
 import { Tavern } from '@/assets/models/shopModel'
-import { diceRollK10 } from '@/assets/scripts/diceRoll'
+import { diceRollK10 } from '@/helpers/diceRoll'
 import { onMounted, reactive, ref } from 'vue'
 import { useShop } from '@/composables/useShop'
 import { AllItemTypes } from '@/interfaces/IItem'
 
-const { player } = usePlayer()
+const playerStore = usePlayerStore()
 const { setActiveShop } = useShop()
 
 const arr = ref<string[]>([])
@@ -75,7 +75,7 @@ const playerSellItem = (item: AllItemTypes) => {
 }
 
 const playerBuyItem = (item: AllItemTypes) => {
-    if (player.value.inventory.gold < item.price) {
+    if (playerStore.player.inventory.gold < item.price) {
         writeAnimation(`You don't have enough gold for ${item.name}`)
         console.log('SHOP: Player doesnt have enough gold')
         return

@@ -1,16 +1,16 @@
 import { EModifierTypes } from '@/enums/EModifierTypes'
 import { MonsterModel } from '@/assets/models/monsterModel'
-import { PlayerModel } from '@/assets/models/playerModel'
-import { AllItemTypes } from './IItem'
+import { AllItemTypes } from '@/interfaces/IItem'
 import { PersonModel } from '@/assets/models/personModel'
-import { IStats } from './IStats'
+import { IStats } from '@/interfaces/IStats'
+import { IPlayer } from '@/interfaces/IPlayer'
 
 export interface IStatusItem {
     id: string
     name: string
     type: EModifierTypes | null
-    origin: PlayerModel | MonsterModel | AllItemTypes | undefined
-    target: PersonModel | undefined
+    origin: IPlayer | MonsterModel | AllItemTypes | undefined
+    target: IPlayer | MonsterModel | undefined
     duration: {
         isInfinite: boolean
         isActive: boolean
@@ -26,7 +26,7 @@ export interface IStatusDamageOverTime extends IStatusItem {
 
 export interface IStatusBonusStats extends IStatusItem {
     bonusStatList: Partial<IStats> | undefined
-    use(target: PlayerModel | MonsterModel): void
+    use(target: IPlayer | MonsterModel): void
 }
 
 export interface IStatusBonusDamage extends IStatusItem {

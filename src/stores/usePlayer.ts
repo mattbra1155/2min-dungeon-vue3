@@ -1,47 +1,45 @@
-import { reactive, toRefs } from 'vue'
 import localforage from 'localforage'
+import { ref } from 'vue'
+import { defineStore } from 'pinia'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { Armor, Potion, Weapon } from '@/assets/models/itemsModel'
-import { PlayerModel } from '@/assets/models/playerModel'
 import { Inventory } from '@/assets/models/inventoryModel'
 import { AllItemTypes } from '@/interfaces/IItem'
 import { ModifierItem } from '@/assets/models/modifierItemModel'
 import { Modifiers } from '@/assets/models/modifiersModel'
 import { Status } from '@/assets/models/statusModel'
+import { IPlayer } from '@/interfaces/IPlayer'
+import { PlayerModel } from '@/assets/models/playerModel'
 
-interface iPlayerState {
-    player: PlayerModel
-    initPlayer: PlayerModel
-}
-const state: iPlayerState = reactive({
-    initPlayer: new PlayerModel(),
-    player: new PlayerModel(),
-})
+export const usePlayerStore = defineStore('player', () => {
+    const initPlayer = ref<IPlayer>()
+    const player = ref<IPlayer>()
 
-export const usePlayer = () => {
-    const setPlayer = async (payload: PlayerModel) => {
-        await storePlayerModel()
-        state.player = payload
+    const setPlayer = async (payload: IPlayer) => {
+        await storeIPlayer()
+        player.value = payload
         await localforage.setItem('player', JSON.stringify(payload))
-        return state.player
+        return player.value
     }
 
-    const createPlayer = async (payload: PlayerModel | null) => {
-        if (payload) {
-            state.player = Object.assign(state.player, payload)
-            state.player.currentStats = JSON.parse(JSON.stringify(state.player.stats))
-
-            state.player.isAlive = true
-
-            const stringifiedPlayer = JSON.stringify(state.player)
-            await localforage.setItem('player', stringifiedPlayer)
-            return state.player
+    const createPlayer = async (payload: IPlayer | null) => {
+        if (!payload) {
+            return
         }
+        player.value = new PlayerModel()
+        player.value = Object.assign(player.value, payload)
+        player.value.currentStats = JSON.parse(JSON.stringify(player.value.stats))
+
+        player.value.isAlive = true
+
+        const stringifiedPlayer = JSON.stringify(player.value)
+        await localforage.setItem('player', stringifiedPlayer)
+        return player.value
     }
 
-    const storePlayerModel = async () => {
+    const storeIPlayer = async () => {
         try {
-            const result = await localforage.setItem('initPlayer', JSON.stringify(state.initPlayer))
+            const result = await localforage.setItem('initPlayer', JSON.stringify(initPlayer.value))
             return result
         } catch (error: any) {
             throw Error(error)
@@ -57,7 +55,7 @@ export const usePlayer = () => {
                 //create new EMPTY player class
                 const playerClass = new PlayerModel()
                 // assign data to player class
-                const newPlayer: PlayerModel = Object.assign(playerClass, playerData)
+                const newPlayer: IPlayer = Object.assign(playerClass, playerData)
                 // create new inventory class
                 const inventory = new Inventory()
                 // create new modifiers class
@@ -120,32 +118,31 @@ export const usePlayer = () => {
     }
 
     const resetPlayer = async () => {
-        const player = new PlayerModel()
-        Object.assign(state.player, player)
-        console.log(state.player)
-
-        //     const payload: string | null = await localforage.getItem('initPlayer')
-        //     if (payload) {
-        //         const playerData = JSON.parse(payload)
-        //         Object.assign(state.player, playerData)
-        //         console.log('Player reset')
-        //     } else {
-        //         console.log('Player reset: Cant get initPlayer from storage')
-        //     }
+        if (!player.value) {
+            console.error('No Player')
+            return
+        }
+        const IPlayer = new PlayerModel()
+        Object.assign(player.value, IPlayer)
     }
 
     const deadPlayer = () => {
-        state.player.isAlive = false
+        if (!player.value) {
+            console.error('No Player')
+            return
+        }
+        player.value.isAlive = false
         localforage.removeItem('player')
         resetPlayer()
     }
 
     return {
-        ...toRefs(state),
+        player,
+        initPlayer,
         setPlayer,
         createPlayer,
         fetchPlayer,
         deadPlayer,
         resetPlayer,
     }
-}
+})

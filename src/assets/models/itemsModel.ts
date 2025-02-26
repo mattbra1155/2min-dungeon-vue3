@@ -1,16 +1,14 @@
 import { iBodyPart } from '@/interfaces/BodyParts'
 import { IArmor, IGold, IItem, IMaterial, IPotion, IWeapon } from '@/interfaces/IItem'
-import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
 import { MonsterModel } from '@/assets/models/monsterModel'
-import { PlayerModel } from '@/assets/models/playerModel'
-import { EBodyParts } from '@/enums/EBodyParts'
 import { ModifierItem } from './modifierItemModel'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { EModifierTypes } from '@/enums/EModifierTypes'
 import { EPotionTypes } from '@/enums/EPotionTypes'
-import { diceRollK6 } from '../scripts/diceRoll'
+import { diceRollK6 } from '../../helpers/diceRoll'
 import { EDice } from '@/enums/EDice'
 import { useInventory } from '@/composables/useInventory'
+import { IPlayer } from '@/interfaces/IPlayer'
 
 class Item implements IItem {
     constructor(
@@ -105,7 +103,7 @@ class Weapon extends Item implements IWeapon {
         this.isTwoHanded = isTwoHanded
     }
 
-    wield(owner: PlayerModel | MonsterModel) {
+    wield(owner: IPlayer | MonsterModel) {
         const { setTravelFeedItem } = useInventory()
         if (!this) {
             console.error(`no weapon to wield!!`)
@@ -144,7 +142,7 @@ class Weapon extends Item implements IWeapon {
         console.log('wielded', this)
     }
 
-    unequip(owner: PlayerModel | MonsterModel) {
+    unequip(owner: IPlayer | MonsterModel) {
         owner.weapon = null
         this.isEquipped = false
         owner.inventory._calculateEncubrance()
@@ -182,7 +180,7 @@ class Armor extends Item implements IArmor {
         this.modifiers = modifiers
     }
 
-    equip(owner: PlayerModel | MonsterModel) {
+    equip(owner: IPlayer | MonsterModel) {
         if (!this) {
             console.log('no item to equip')
             return
@@ -225,7 +223,7 @@ class Armor extends Item implements IArmor {
         // owner.modifiers.updateCurrentStats(owner)
     }
 
-    unequip(owner: PlayerModel | MonsterModel) {
+    unequip(owner: IPlayer | MonsterModel) {
         this.bodyPart.forEach((element) => {
             const bodyPartItems = owner.bodyParts[element as keyof iBodyPart].armor.items
             if (!bodyPartItems.includes(this)) {
@@ -267,7 +265,7 @@ class Potion extends Item implements IPotion {
         this.baseValue = baseValue
     }
 
-    quaff(person: PlayerModel | MonsterModel) {
+    quaff(person: IPlayer | MonsterModel) {
         if (this.type === EPotionTypes.health) {
             if (person.currentStats.hp === person.stats.hp) {
                 console.log(`${person.name} is max health`)

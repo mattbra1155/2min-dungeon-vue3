@@ -1,9 +1,9 @@
 import { reactive, toRefs } from 'vue'
 import { MonsterModel } from '@/assets/models/monsterModel'
-import { PlayerModel } from '@/assets/models/playerModel'
+import { IPlayer } from '@/interfaces/IPlayer'
 
 interface IAttackState {
-    targetToAttack: MonsterModel | PlayerModel | null
+    targetToAttack: MonsterModel | IPlayer | null
 }
 
 const state: IAttackState = reactive({
@@ -11,7 +11,7 @@ const state: IAttackState = reactive({
 })
 
 export const useAttack = () => {
-    const setTargetToAttack = (enemy: MonsterModel | PlayerModel | null) => {
+    const setTargetToAttack = (enemy: MonsterModel | IPlayer | null) => {
         state.targetToAttack = enemy
     }
     return {

@@ -2,13 +2,13 @@
 import { iBodyPart } from '@/interfaces/BodyParts'
 import { Inventory } from './inventoryModel'
 import { bodyPartsModel } from './bodyPartsModel'
-import { IPlayer } from '@/interfaces/IPlayer'
 import { PersonModel } from './personModel'
 import { Modifiers } from './modifiersModel'
 import { Weapon } from './itemsModel'
 import { IStats } from '@/interfaces/IStats'
 import { Profession } from './professionModel'
 import { stats as statsModel } from '@/assets/models/statsModel'
+import { IPlayer } from '@/interfaces/IPlayer'
 
 class PlayerModel extends PersonModel implements IPlayer {
     constructor(

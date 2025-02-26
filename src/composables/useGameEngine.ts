@@ -6,8 +6,6 @@ const state = reactive({
 })
 
 export default function useGameEngine() {
-    const setActiveState = (payload: string) => (state.activeState = payload)
-
     const getActiveState = () => state.activeState
 
     return {

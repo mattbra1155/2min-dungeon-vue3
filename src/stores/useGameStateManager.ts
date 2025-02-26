@@ -1,24 +1,17 @@
+import { ref } from 'vue'
+import { defineStore } from 'pinia'
 import { EGameState } from '@/enums/EGameState'
-import { reactive, toRefs } from 'vue'
 import { useSceneManagerStore } from '@/stores/useSceneManager'
 
-interface IGameStateState {
-    activeGameState: EGameState
-}
+export const useGameStateStore = defineStore('gameState', () => {
+    const sceneManager = useSceneManagerStore()
+    const activeGameState = ref<EGameState>(EGameState.Init)
 
-const state: IGameStateState = reactive({
-    activeGameState: EGameState.Init,
-})
-
-export const useGameStateManager = () => {
     const updateGameState = async (newState: EGameState) => {
-        const sceneManager = useSceneManagerStore()
-        state.activeGameState = newState
-        switch (state.activeGameState) {
+        activeGameState.value = newState
+        switch (activeGameState.value) {
             case EGameState.Init:
                 console.log('GAME STATE: Init')
-                // changeActiveTurnState(ETurnState.Init)
-                // createLocation()
                 break
             case EGameState.CreateChar:
                 console.log('GAME STATE: Create Character')
@@ -54,7 +47,7 @@ export const useGameStateManager = () => {
         }
     }
     return {
-        ...toRefs(state),
         updateGameState,
+        activeGameState,
     }
-}
+})

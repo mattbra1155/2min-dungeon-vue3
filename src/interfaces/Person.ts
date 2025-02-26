@@ -4,8 +4,9 @@ import { ISkill } from '@/interfaces/ISkill'
 import { IStats } from '@/interfaces/IStats'
 import { Inventory } from '@/assets/models/inventoryModel'
 import { Modifiers } from '@/assets/models/modifiersModel'
-import { PlayerModel } from '@/assets/models/playerModel'
 import { MonsterModel } from '@/assets/models/monsterModel'
+import { Status } from '@/assets/models/statusModel'
+import { IPlayer } from './IPlayer'
 export interface IPerson {
     id: string
     name: string
@@ -19,7 +20,8 @@ export interface IPerson {
     isAlive: boolean
     modifiers: Modifiers
     skills: ISkill[]
+    status: Status
     image: string | null
     clearCurrentStats(): void
-    attack(enemy: PlayerModel | MonsterModel): number | undefined
+    attack(enemy: IPlayer | MonsterModel): number | undefined
 }

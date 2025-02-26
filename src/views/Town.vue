@@ -1,24 +1,23 @@
 <script setup lang="ts">
 import LayoutInterfaceTown from '@/components/layout/LayoutInterfaceTown.vue'
 import MerchantShop from '@/components/shops/MerchantShop.vue'
-import { useGameStateManager } from '@/composables/useGameStateManager'
 import { useSceneManagerStore } from '@/stores/useSceneManager'
 import { useShop } from '@/composables/useShop'
 import { EGameState } from '@/enums/EGameState'
 import { EShops } from '@/enums/EShops'
 import { Town } from '@/assets/models/sceneTownModel'
 import { onMounted, ref } from 'vue'
-import { makeGrid, updateGrid } from '@/helpers/makeGrid'
 import BlacksmithShop from '@/components/shops/BlacksmithShop.vue'
 import TavernShop from '@/components/shops/TavernShop.vue'
+import { useGameStateStore } from '@/stores/useGameStateManager'
 
 const { activeRoom } = useSceneManagerStore()
 const { activeShopId } = useShop()
-const { activeGameState } = useGameStateManager()
+const gameStateStore = useGameStateStore()
 
 const town = new Town()
 
-activeGameState.value = EGameState.Town
+gameStateStore.activeGameState = EGameState.Town
 
 const descriptionShort = ref<string>('')
 const descriptionLong = ref<string>('')

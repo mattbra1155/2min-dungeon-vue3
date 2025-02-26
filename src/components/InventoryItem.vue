@@ -3,18 +3,20 @@ import { computed } from 'vue'
 import { skills } from '@/assets/json/skills'
 import { Armor, Weapon } from '@/assets/models/itemsModel'
 import AIcon from '@/components/AIcon.vue'
-import { usePlayer } from '@/composables/usePlayer'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { getTotalDamage } from '@/helpers/getTotalDamage'
 import { getTotalArmorPoints } from '@/helpers/getTotalArmorPoints'
 import { getItemIcon } from '@/helpers/getItemIcon'
+import { usePlayerStore } from '@/stores/usePlayer'
 
 const props = defineProps<{
     itemId: string
 }>()
 
-const { player } = usePlayer()
-const item = computed(() => player.value.inventory.inventory.find((inventoryItem) => inventoryItem.id === props.itemId))
+const playerStore = usePlayerStore()
+const item = computed(() =>
+    playerStore.player?.inventory.inventory.find((inventoryItem) => inventoryItem.id === props.itemId)
+)
 
 const getSkillNames = () =>
     (item.value as Weapon).requiredSkills.map((skill) => skills.find((rrr) => rrr.id === skill)?.name)

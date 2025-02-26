@@ -1,5 +1,5 @@
-import { ISkill } from './ISkill'
-import { IStats } from './IStats'
+import { ISkill } from '@/interfaces/ISkill'
+import { IStats } from '@/interfaces/IStats'
 
 export interface IProfessionPayload {
     id: string

@@ -1,9 +1,8 @@
 import { MonsterModel } from '@/assets/models/monsterModel'
-import { iBodyPart } from './BodyParts'
-import { PlayerModel } from '@/assets/models/playerModel'
-import { Armor, Food, Gold, Item, Material, Potion, Utility, Weapon } from '@/assets/models/itemsModel'
+import { Armor, Food, Material, Potion, Utility, Weapon } from '@/assets/models/itemsModel'
 import { ModifierItem } from '@/assets/models/modifierItemModel'
 import { EDice } from '@/enums/EDice'
+import { IPlayer } from '@/interfaces/IPlayer'
 
 export interface IItem {
     id: string | undefined
@@ -21,8 +20,8 @@ export interface IItem {
 export interface IWeapon extends IItem {
     damage: number
     isTwoHanded: boolean
-    wield(owner: PlayerModel | MonsterModel): void
-    unequip(owner: PlayerModel | MonsterModel): void
+    wield(owner: IPlayer | MonsterModel): void
+    unequip(owner: IPlayer | MonsterModel): void
     requiredSkills: string[]
 }
 
@@ -30,8 +29,8 @@ export interface IArmor extends IItem {
     bodyPart: string[]
     armorPoints: number
     material: string
-    equip(owner: PlayerModel | MonsterModel): void
-    unequip(owner: PlayerModel | MonsterModel): void
+    equip(owner: IPlayer | MonsterModel): void
+    unequip(owner: IPlayer | MonsterModel): void
 }
 
 export interface IPotion extends IItem {

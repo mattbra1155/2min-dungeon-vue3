@@ -5,6 +5,8 @@ import CharacterScreen from './components/CharacterScreen.vue'
 import LoadingScreen from './components/LoadingScreen.vue'
 import localforage from 'localforage'
 import { useGlobalStore } from './stores/useGlobal'
+import { onUnmounted } from 'vue'
+import { useGameStateStore } from './stores/useGameStateManager'
 
 const monsterGenerator = new MonsterGenerator()
 
@@ -12,54 +14,17 @@ export { monsterGenerator }
 </script>
 
 <script setup lang="ts">
-import { usePlayer } from './composables/usePlayer'
 import { useRouter } from 'vue-router'
-import { useGameStateManager } from './composables/useGameStateManager'
 import { EGameState } from './enums/EGameState'
-import { PlayerModel } from './assets/models/playerModel'
 import { useSceneManagerStore } from '@/stores/useSceneManager'
 const sceneManager = useSceneManagerStore()
-const { fetchPlayer, setPlayer } = usePlayer()
-const { activeGameState, updateGameState } = useGameStateManager()
+const { updateGameState } = useGameStateStore()
 const router = useRouter()
 const globalStore = useGlobalStore()
 globalStore.toggleIsLoading()
 
 const init = async () => {
     updateGameState(EGameState.Init)
-    if (activeGameState.value === EGameState.Init) {
-        const player: PlayerModel | undefined = await fetchPlayer()
-        if (player) {
-            await setPlayer(player)
-            updateGameState(EGameState.Travel)
-
-            router.push({ name: 'home' })
-        } else {
-            updateGameState(EGameState.CreateChar)
-            router.push({ name: 'characterCreation' })
-        }
-
-        try {
-            console.time('qq')
-            const location = await sceneManager.createLocation('oakwood')
-            if (!location) {
-                console.error('No location data')
-                return
-            }
-            sceneManager.setActiveScene(location)
-            console.timeEnd('qq')
-        } catch (error) {
-            console.error(error)
-        } finally {
-            globalStore.toggleIsLoading()
-        }
-
-        if (sceneManager.activeRoom?.x === undefined && sceneManager.activeRoom?.y === undefined) {
-            console.error('No active room')
-            return
-        }
-        sceneManager.moveToLocation(sceneManager.activeRoom?.x, sceneManager.activeRoom?.y)
-    }
 }
 
 const resetStorage = () => {
@@ -75,6 +40,13 @@ const resetStorage = () => {
 
 // starts the app
 init()
+
+onUnmounted(() => {
+    const savedPosX = sceneManager.activeRoom?.x
+    const savedPosY = sceneManager.activeRoom?.y
+
+    localforage.setItem('savedPosition', { x: savedPosX, y: savedPosY })
+})
 </script>
 
 <template>

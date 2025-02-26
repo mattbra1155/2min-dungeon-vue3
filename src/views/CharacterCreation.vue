@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import { usePlayer } from '@/composables/usePlayer'
-import { diceRollK2, diceRollK3, diceRollK10, diceRollK6 } from '@/assets/scripts/diceRoll'
-import { useRouter } from 'vue-router'
-import { EGameState } from '@/enums/EGameState'
-import { useGameStateManager } from '@/composables/useGameStateManager'
-import { PlayerModel } from '@/assets/models/playerModel'
-import { ref } from 'vue'
-import { ItemGenerator } from '@/assets/generators/itemGenerator'
-import { EItemCategory } from '@/enums/ItemCategory'
 import professions from '@/assets/json/professions.json'
-import { EStats } from '@/enums/EStats'
-import { IProfessionPayload } from '@/interfaces/IProfession'
-import { Profession } from '@/assets/models/professionModel'
-import { skills as skillList } from '@/assets/json/skills'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { ISkill } from '@/interfaces/ISkill'
+import { IPlayer } from '@/interfaces/IPlayer'
+import { IProfessionPayload } from '@/interfaces/IProfession'
+import { EGameState } from '@/enums/EGameState'
+import { EStats } from '@/enums/EStats'
+import { Profession } from '@/assets/models/professionModel'
+import { usePlayerStore } from '@/stores/usePlayer'
+import { useGameStateStore } from '@/stores/useGameStateManager'
+import { ItemGenerator } from '@/assets/generators/itemGenerator'
+import { skills as skillList } from '@/assets/json/skills'
+import { diceRollK2, diceRollK3, diceRollK10, diceRollK6 } from '@/helpers/diceRoll'
+import { PlayerModel } from '@/assets/models/playerModel'
 
 const router = useRouter()
-const { initPlayer, createPlayer, resetPlayer } = usePlayer()
-const { updateGameState } = useGameStateManager()
-const playerObject = ref<PlayerModel>(initPlayer.value)
+const playerStore = usePlayerStore()
+const { updateGameState } = useGameStateStore()
+const playerObject = ref<IPlayer>(new PlayerModel())
 
 const getProfessionSkillName = (id: string) => {
     const skill = skillList.find((skillItem: ISkill) => skillItem.id === id)
@@ -28,7 +28,7 @@ const getProfessionSkillName = (id: string) => {
 }
 const rollStats = () => {
     if (!playerObject.value) {
-        throw new Error('No Player object to roll stats')
+        return
     }
     if (playerObject.value.race === 'human') {
         const updated = {
@@ -47,6 +47,9 @@ const rollStats = () => {
         }
 
         Object.entries(updated).forEach(([key, stat]) => {
+            if (!playerObject.value) {
+                return
+            }
             const statName: EStats = Object.values(EStats).find((item) => item === key) as EStats
             if (!statName) return
             playerObject.value.stats[statName] = stat
@@ -151,8 +154,8 @@ const rollForGold = () => {
 
 const savePlayer = async () => {
     if (playerObject.value) {
-        await resetPlayer()
-        createPlayer(playerObject.value)
+        await playerStore.resetPlayer()
+        playerStore.createPlayer(playerObject.value)
         updateGameState(EGameState.Travel)
         router.push({ name: 'home' })
     }

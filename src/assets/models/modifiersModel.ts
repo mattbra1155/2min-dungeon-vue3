@@ -1,7 +1,7 @@
 import { IModifiers } from '@/interfaces/IModifiers'
 import { ModifierItem } from '@/assets/models/modifierItemModel'
 import { MonsterModel } from '@/assets/models/monsterModel'
-import { PlayerModel } from '@/assets/models/playerModel'
+import { IPlayer } from '@/assets/models/IPlayer'
 import { EStats } from '@/enums/EStats'
 
 class Modifiers implements IModifiers {
@@ -28,7 +28,7 @@ class Modifiers implements IModifiers {
         }
     }
 
-    // updateModifiers(character: PlayerModel | MonsterModel, turn: number) {
+    // updateModifiers(character: IPlayer | MonsterModel, turn: number) {
     //     // check duration and remove
     //     this.list.forEach((modifier) => {
     //         if (status.duration.current === status.duration.max) {
@@ -40,7 +40,7 @@ class Modifiers implements IModifiers {
     //     })
     // }
 
-    // updateCurrentStats(character: PlayerModel | MonsterModel) {
+    // updateCurrentStats(character: IPlayer | MonsterModel) {
     //     // remove all applied modifiers
     //     character.clearCurrentStats()
     //     // check and add new modifiers

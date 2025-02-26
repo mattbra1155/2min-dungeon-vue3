@@ -1,14 +1,14 @@
 import { IAllStatusTypes, IStatus } from '@/interfaces/IStatus'
 import { MonsterModel } from '@/assets/models/monsterModel'
-import { PlayerModel } from '@/assets/models/playerModel'
 import { EStats } from '@/enums/EStats'
 import { StatusBonusStat, StatusDamageOverTime } from './statusItemModel'
+import { IPlayer } from '@/interfaces/IPlayer'
 class Status implements IStatus {
     constructor(public list: IAllStatusTypes[] = []) {
         this.list = list
     }
 
-    addItem(status: IAllStatusTypes, character: PlayerModel | MonsterModel) {
+    addItem(status: IAllStatusTypes, character: IPlayer | MonsterModel) {
         const itemExists = this.list.find((element) => element.id === status.id)
 
         if (!itemExists) {
@@ -22,7 +22,7 @@ class Status implements IStatus {
         }
     }
 
-    removeItem(statusId: string, character: PlayerModel | MonsterModel) {
+    removeItem(statusId: string, character: IPlayer | MonsterModel) {
         const statusToRemove = this.list.find((element) => element.id === statusId)
         if (statusToRemove) {
             const itemIndex = this.list.findIndex((element) => element.id === statusToRemove.id)
@@ -36,7 +36,7 @@ class Status implements IStatus {
         }
     }
 
-    updateStatusList(character: PlayerModel | MonsterModel, turn: number) {
+    updateStatusList(character: IPlayer | MonsterModel, turn: number) {
         // check duration and remove
         this.list.forEach((status) => {
             if (!status.duration.isActive) {
@@ -62,7 +62,7 @@ class Status implements IStatus {
         })
     }
 
-    updateCurrentStats(status: IAllStatusTypes, character: PlayerModel | MonsterModel, isNegative: boolean) {
+    updateCurrentStats(status: IAllStatusTypes, character: IPlayer | MonsterModel, isNegative: boolean) {
         if (status instanceof StatusBonusStat) {
             Object.entries(status.bonusStatList).forEach((statusItem) => {
                 const statName = Object.values(EStats).find((stat) => stat === statusItem[0])

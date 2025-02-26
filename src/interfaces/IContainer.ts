@@ -1,6 +1,6 @@
-import { PlayerModel } from '@/assets/models/playerModel'
 import { AllItemTypes } from '@/interfaces/IItem'
-import { IRoomObject } from './IRoomObject'
+import { IRoomObject } from '@/interfaces/IRoomObject'
+import { IPlayer } from '@/interfaces/IPlayer'
 
 export interface IContainer extends IRoomObject {
     id: string
@@ -10,5 +10,5 @@ export interface IContainer extends IRoomObject {
     isLocked: boolean
     isHidden: boolean
     setIsSearch(state: boolean): void
-    unlock(person: PlayerModel): boolean
+    unlock(person: IPlayer): boolean
 }

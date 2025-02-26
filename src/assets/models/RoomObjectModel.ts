@@ -1,6 +1,6 @@
 import { AllItemTypes } from '@/interfaces/IItem'
 import { IRoomObject } from '@/interfaces/IRoomObject'
-import { PlayerModel } from './playerModel'
+import { IPlayer } from './IPlayer'
 
 class RoomObject implements IRoomObject {
     constructor(
@@ -26,7 +26,7 @@ interface Container {
     isSearched: boolean
     isLocked: boolean
     setIsSearch(state: boolean): void
-    unlock(person: PlayerModel): boolean
+    unlock(person: IPlayer): boolean
 }
 
 class Container extends RoomObject implements Container {
@@ -54,7 +54,7 @@ class Container extends RoomObject implements Container {
     setIsSearch(state: boolean) {
         this.isSearched = state
     }
-    unlock(person: PlayerModel) {
+    unlock(person: IPlayer) {
         if (person.skills.find((skill) => skill.id === 'lockpicking')) {
             this.isLocked = false
             return true

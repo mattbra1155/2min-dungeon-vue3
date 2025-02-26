@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { usePlayer } from '@/composables/usePlayer'
 import { Merchant } from '@/assets/models/shopModel'
-import { diceRollK10, diceRollK4 } from '@/assets/scripts/diceRoll'
+import { diceRollK10, diceRollK4 } from '@/helpers/diceRoll'
 import { computed, ComputedRef, onMounted, reactive, ref } from 'vue'
 import { useShop } from '@/composables/useShop'
 import localforage from 'localforage'
 import { AllItemTypes } from '@/interfaces/IItem'
 // import { writeAnimation } from '@/utils/writeAnimation'
-const { player } = usePlayer()
+const playerStore = usePlayerStore()
 const { setActiveShop } = useShop()
 
 const sellMultiplier = ref<number>(3)
@@ -53,7 +53,7 @@ const playerSellItem = (item: AllItemTypes) => {
 }
 
 const playerBuyItem = (item: AllItemTypes) => {
-    if (player.value.inventory.gold < item.price) {
+    if (playerStore.player.inventory.gold < item.price) {
         writeAnimation(`You don't have enough gold for ${item.name}`)
         console.log('SHOP: Player doesnt have enough gold')
         return

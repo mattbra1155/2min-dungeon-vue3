@@ -1,11 +1,11 @@
 import { AllItemTypes } from '@/interfaces/IItem'
 import { ItemGenerator } from '../generators/itemGenerator'
-import { diceRollK2, diceRollK3, diceRollK4 } from '../scripts/diceRoll'
+import { diceRollK2, diceRollK3, diceRollK4 } from '../../helpers/diceRoll'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { Armor, Food, Potion, Weapon } from './itemsModel'
-import { usePlayer } from '@/composables/usePlayer'
+import { usePlayerStore } from '@/stores/usePlayer'
 
-const { player } = usePlayer()
+const playerStore = usePlayerStore()
 interface IShop {
     id: string
     name: string
@@ -29,6 +29,10 @@ class Shop implements IShop {
     }
 
     sellItem(itemId: string, multiplier = 1) {
+        if (!playerStore.player) {
+            console.error('No Player')
+            return
+        }
         const foundItem = this.inventory.find((inventoryItem) => inventoryItem.id === itemId)
         if (!foundItem) {
             console.error('SHOP: no item found')
@@ -38,17 +42,21 @@ class Shop implements IShop {
 
         this.inventory.splice(itemIndex, 1)
 
-        player.value.inventory.gold = player.value.inventory.gold - foundItem.price * multiplier
+        playerStore.player.inventory.gold = playerStore.player.inventory.gold - foundItem.price * multiplier
         this.gold = this.gold + foundItem.price * multiplier
 
-        player.value.inventory.addItem(foundItem, player.value.id)
+        playerStore.player.inventory.addItem(foundItem, playerStore.player.id)
     }
 
     buyItem(item: AllItemTypes, multiplier = 1) {
-        player.value.inventory.removeItem(item.id)
+        if (!playerStore.player) {
+            console.error('No Player')
+            return
+        }
+        playerStore.player.inventory.removeItem(item.id)
         this.gold = this.gold - item.price * multiplier
 
-        player.value.inventory.gold = player.value.inventory.gold + item.price * multiplier
+        playerStore.player.inventory.gold = playerStore.player.inventory.gold + item.price * multiplier
         this.inventory.push(item)
     }
 }

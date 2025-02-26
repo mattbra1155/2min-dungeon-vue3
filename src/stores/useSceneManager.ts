@@ -8,8 +8,6 @@ import { Inventory } from '@/assets/models/inventoryModel'
 import { Container } from '@/assets/models/RoomObjectModel'
 import { EGameState } from '@/enums/EGameState'
 import { useFeedStore } from '@/stores/useFeed'
-import { useGameStateManager } from '@/composables/useGameStateManager'
-import { usePlayer } from '@/composables/usePlayer'
 import locations from '@/assets/json/locations.json'
 import { monsterGenerator } from '@/App.vue'
 import instances from '@/assets/json/instances.json'
@@ -17,6 +15,8 @@ import { usePlayerPositionStore } from './usePlayerPosition'
 import { ItemGenerator } from '@/assets/generators/itemGenerator'
 import { AllItemTypes } from '@/interfaces/IItem'
 import { ILocation } from '@/interfaces/ILocation'
+import { usePlayerStore } from './usePlayer'
+import { useGameStateStore } from './useGameStateManager'
 
 interface Instance {
     id: string
@@ -30,7 +30,6 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
     const instance = ref<Instance>()
     const loadingArea = ref<boolean>(false)
     const itemGenerator = ref<any>(new ItemGenerator())
-
 
     const addLocationToSceneList = (location: Room) => {
         if (sceneList.value.includes(location)) {
@@ -119,10 +118,11 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
 
         localforage.setItem('instanceList', JSON.stringify(instanceList))
     }
-    const createLocation = async (locationId?: string, x?: number, y?: number) => {
-        const locationData = locations.find(
-            (location) => location.id === locationId || (location.x === x && location.y === y)
-        )
+    const createLocation = async (locationId?: string | null, x?: number, y?: number) => {
+        const locationData = locations.find((location) => location.x === x && location.y === y)
+
+        console.log(locationData)
+
         if (!locationData) {
             console.error('no location data')
             return
@@ -168,6 +168,8 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
 
     const moveToLocation = async (x: number, y: number) => {
         const feedStore = useFeedStore()
+        console.log(useSceneManagerStore().activeRoom)
+
         let location = undefined
         if (instance.value) {
             location = instanceList.value.find((location) => location.x === x && location.y === y)
@@ -181,10 +183,13 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         }
         const createdLocation = await createLocation(location.id)
         if (!createdLocation) {
-            console.error('No location crated');
+            console.error('No location crated')
             return
         }
         setActiveScene(createdLocation)
+        console.log(createdLocation)
+
+        console.log(useSceneManagerStore().activeRoom)
         getClosestTiles()
         feedStore.setTravelFeedItem(`You have entered ${activeRoom.value?.name}.`)
         feedStore.setTravelFeedItem(`${activeRoom.value?.description}`)
@@ -213,7 +218,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         closesTiles.value.east = getLocationData(playerPosition.coords.x + 1, playerPosition.coords.y)
         closesTiles.value.west = getLocationData(playerPosition.coords.x - 1, playerPosition.coords.y)
 
-        console.log(closesTiles.value);
+        console.log(closesTiles.value)
 
         if (closesTiles.value.north) {
             feedStore.setTravelFeedItem(`N: ${closesTiles.value.north.name}`)
@@ -242,8 +247,6 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         }
 
         if (!foundLocation) {
-
-
             return false
         }
 
@@ -251,10 +254,14 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
     }
 
     const checkIfChangeRoomIsPossible = async (roomX: number, roomY: number) => {
-        const { player } = usePlayer()
-        const { updateGameState } = useGameStateManager()
+        const playerStore = usePlayerStore()
+        const gameStateStore = useGameStateStore()
         const feedStore = useFeedStore()
 
+        if (!playerStore.player) {
+            console.error('No Player')
+            return
+        }
         console.log('x', roomX, 'y', roomY)
 
         if (instance.value) {
@@ -264,6 +271,8 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
             if (!locationData) {
                 return false
             }
+            console.log(locationData)
+
             activeRoom.value = await createLocation(locationData.id)
         }
 
@@ -281,7 +290,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         }
         if (
             activeRoom.value.id === 'mountains' &&
-            !player.value.inventory.inventory.find((item) => item.id === 'climbing_equipment')
+            !playerStore.player?.inventory.inventory.find((item: any) => item.id === 'climbing_equipment')
         ) {
             feedStore.setTravelFeedItem(`The mountains are too steep. You need climbing equipment to travel.`)
             return false
@@ -292,7 +301,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         }
 
         // if player is not holding torch and room is dark stop him from entering
-        if (activeRoom.value.isDark && player.value.offHand?.id !== 'torch') {
+        if (activeRoom.value.isDark && playerStore.player.offHand?.id !== 'torch') {
             feedStore.setTravelFeedItem('The room is completely dark. You need a lightsource to enter')
             return false
         }
@@ -311,7 +320,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         }
 
         createEnemyList(activeRoom.value.monsterList.map((monster) => monster.originId))
-        updateGameState(EGameState.Battle)
+        gameStateStore.updateGameState(EGameState.Battle)
         return true
     }
 
@@ -432,7 +441,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         if (!savedSceneData) {
             console.error('CRATE SCENE: No saved scene')
             if (!activeRoom.value) {
-                console.error('Load: No active room');
+                console.error('Load: No active room')
                 return
             }
             await checkIfChangeRoomIsPossible(19, 22)

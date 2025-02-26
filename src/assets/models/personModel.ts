@@ -1,9 +1,8 @@
-import { diceRollK100, diceRollK6 } from '@/assets/scripts/diceRoll'
+import { diceRollK100, diceRollK6 } from '@/helpers/diceRoll'
 import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
 import { IPerson } from '@/interfaces/Person'
 import { iBodyPart } from '@/interfaces/BodyParts'
 import { Inventory } from '@/assets/models/inventoryModel'
-import { PlayerModel } from '@/assets/models//playerModel'
 import { Armor, Weapon } from '@/assets/models//itemsModel'
 import { Modifiers } from '@/assets/models/modifiersModel'
 import { IStats } from '@/interfaces/IStats'
@@ -15,9 +14,11 @@ import { StatusAttackBonusDamage } from './statusItemModel'
 import { toRaw } from 'vue'
 import { EStats } from '@/enums/EStats'
 import { ISkill } from '@/interfaces/ISkill'
-import { playAudio, playRandomAudio } from '@/helpers/playAudio'
+import { playRandomAudio } from '@/helpers/playAudio'
 import { useFeedStore } from '@/stores/useFeed'
-import { EItemCategory } from '@/enums/ItemCategory'
+import { IWeapon } from '@/interfaces/IItem'
+import { IPlayer } from '@/interfaces/IPlayer'
+import { PlayerModel } from './playerModel'
 abstract class PersonModel implements IPerson {
     constructor(
         public id: string = self.crypto.randomUUID(),
@@ -26,7 +27,7 @@ abstract class PersonModel implements IPerson {
         public stats: IStats = structuredClone(statsModel),
         public currentStats: IStats = structuredClone(statsModel),
         public bodyParts: iBodyPart = bodyPartsModel,
-        public weapon: Weapon | null = null,
+        public weapon: IWeapon | null = null,
         public offHand: Weapon | null = null,
         public description: string = '',
         public inventory: Inventory,
@@ -63,7 +64,7 @@ abstract class PersonModel implements IPerson {
             })
         }
     }
-    attack(enemy: MonsterModel | PlayerModel) {
+    attack(enemy: MonsterModel | IPlayer) {
         const feedStore = useFeedStore()
         feedStore.setBattleFeedItem(`${this.name} attacks!`)
         // dice roll

@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { useSceneManagerStore } from './useSceneManager'
 interface coords {
     x: number | undefined
     y: number | undefined

@@ -1,22 +1,18 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useSceneManagerStore } from './useSceneManager'
-import { diceRollK100 } from '@/assets/scripts/diceRoll'
+import { diceRollK100 } from '@/helpers/diceRoll'
 import { EGameState } from '@/enums/EGameState'
-import { useGameStateManager } from '@/composables/useGameStateManager'
-import { useTurn } from '@/composables/useTurn'
 import { useWieghtedList } from '@/composables/useWieghtedList'
 import { encounterList } from '@/assets/data/encounterList'
 import { ELocationTypes } from '@/enums/ELocationTypes'
-interface coords {
-    x: number
-    y: number
-}
+import { useGameStateStore } from './useGameStateManager'
+import { useTurnStore } from '@/stores/useTurn'
 
 export const useRandomEncounters = defineStore('randomEncounters', () => {
     const sceneManager = useSceneManagerStore()
-    const { updateGameState } = useGameStateManager()
-    const { setMonsterList } = useTurn()
+    const gameStateStore = useGameStateStore()
+    const { setMonsterList } = useTurnStore()
 
     const roll = ref<number>()
     const isBattle = ref<boolean>(false)
@@ -88,12 +84,8 @@ export const useRandomEncounters = defineStore('randomEncounters', () => {
 
         const weightedItem = getWeightedItem(encounterList[locationType])
         list.push(weightedItem)
-        // for (let x = 0; x <= numberOfEnemies.value; x++) {
-        //     const index = Math.floor(Math.random() * monsters.length)
-        //     list.push(monsters[index])
-        // }
         const monsterList = sceneManager.createEnemyList(list)
-        updateGameState(EGameState.Battle)
+        gameStateStore.updateGameState(EGameState.Battle)
         setMonsterList(monsterList)
     }
     return {

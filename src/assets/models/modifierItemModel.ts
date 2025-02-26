@@ -1,21 +1,21 @@
 import { IModifierItem } from '@/interfaces/IModifiers'
 import { MonsterModel } from '@/assets/models/monsterModel'
-import { PlayerModel } from './playerModel'
-import { diceRollK100 } from '@/assets/scripts/diceRoll'
+import { diceRollK100 } from '@/helpers/diceRoll'
 import { EModifierTypes } from '@/enums/EModifierTypes'
-import { StatusAttackBonusDamage, StatusBonusStat, StatusDamageOverTime, StatusItem } from './statusItemModel'
+import { StatusAttackBonusDamage, StatusBonusStat, StatusDamageOverTime } from './statusItemModel'
 import { statusList } from '@/assets/json/modifiers.json'
 import { AllItemTypes } from '@/interfaces/IItem'
 import { IAllStatusTypes } from '@/interfaces/IStatus'
-import { useTurn } from '@/composables/useTurn'
 import { useFeedStore } from '@/stores/useFeed'
-const { turnNumber } = useTurn()
+import { IPlayer } from '@/interfaces/IPlayer'
+import { useTurnStore } from '@/stores/useTurn'
+
 class ModifierItem implements IModifierItem {
     constructor(
         public id: string,
         public name: string,
         public type: EModifierTypes | null,
-        public owner: PlayerModel | MonsterModel | AllItemTypes | undefined,
+        public owner: IPlayer | MonsterModel | AllItemTypes | undefined,
         public chanceToApply: number | null,
         public statusId: string
     ) {
@@ -27,7 +27,8 @@ class ModifierItem implements IModifierItem {
         this.statusId = statusId
     }
 
-    applyEffect(target: PlayerModel | MonsterModel, statusId: string) {
+    applyEffect(target: IPlayer | MonsterModel, statusId: string) {
+        const turnStore = useTurnStore()
         const feedStore = useFeedStore()
         const statusData = statusList.find((statusItem) => statusItem.id === statusId)
         if (!statusData) {
@@ -92,7 +93,7 @@ class ModifierItem implements IModifierItem {
                     {
                         isInfinite: statusData.duration?.isInfinite,
                         isActive: statusData.duration.isActive,
-                        max: statusData.duration.max ? statusData.duration.max + turnNumber.value : undefined,
+                        max: statusData.duration.max ? statusData.duration.max + turnStore.turnNumber : undefined,
                         current: undefined,
                     },
                     statusData.updateOnBeginning
@@ -122,3 +123,6 @@ class ModifierItem implements IModifierItem {
 }
 
 export { ModifierItem }
+function useTurn() {
+    throw new Error('Function not implemented.')
+}

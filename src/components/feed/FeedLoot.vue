@@ -1,23 +1,25 @@
 <script setup lang="ts">
-import { RoomObject } from '@/assets/models/RoomObjectModel'
-import { useGameStateManager } from '@/composables/useGameStateManager'
-import { usePlayer } from '@/composables/usePlayer'
 import { EGameState } from '@/enums/EGameState'
 import { IContainer } from '@/interfaces/IContainer'
 import { AllItemTypes } from '@/interfaces/IItem'
 import { useFeedStore } from '@/stores/useFeed'
+import { useGameStateStore } from '@/stores/useGameStateManager'
 import { useGlobalStore } from '@/stores/useGlobal'
+import { usePlayerStore } from '@/stores/usePlayer'
 import { ref } from 'vue'
 
-const { player } = usePlayer()
+const playerStore = usePlayerStore()
 const feedStore = useFeedStore()
-const { updateGameState } = useGameStateManager()
+const { updateGameState } = useGameStateStore()
 const globalStore = useGlobalStore()
 const containerMessage = ref<string>()
 
 const openContainer = (item: IContainer) => {
+    if (!playerStore.player) {
+        return
+    }
     if (item.isLocked) {
-        const canPlayerUnlock = item.unlock(player.value)
+        const canPlayerUnlock = item.unlock(playerStore.player)
         if (canPlayerUnlock) {
             item.setIsSearch(true)
         } else {
@@ -30,8 +32,8 @@ const openContainer = (item: IContainer) => {
 const getItem = (container: IContainer, item: AllItemTypes) => {
     console.log(container, item)
 
-    player.value.inventory.addItem(item, player.value.id)
-    console.log(player.value.inventory.inventory)
+    playerStore.player?.inventory.addItem(item, playerStore.player?.id)
+    console.log(playerStore.player?.inventory.inventory)
 
     const itemToRemoveIndex = container.items.findIndex((findItem) => findItem.id === item.id)
     container.items.splice(itemToRemoveIndex, 1)

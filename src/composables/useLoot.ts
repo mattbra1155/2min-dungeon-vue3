@@ -1,7 +1,7 @@
 import { lootLists } from '@/assets/data/lootList'
 import { ItemGenerator } from '@/assets/generators/itemGenerator'
 import { Armor, Gold, Potion, Weapon } from '@/assets/models/itemsModel'
-import { diceRollK100, diceRollK4 } from '@/assets/scripts/diceRoll'
+import { diceRollK100, diceRollK4 } from '@/helpers/diceRoll'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { AllItemTypes } from '@/interfaces/IItem'
 import { reactive, toRefs } from 'vue'

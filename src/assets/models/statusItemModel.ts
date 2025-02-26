@@ -1,20 +1,20 @@
 import { EModifierTypes } from '@/enums/EModifierTypes'
 import { MonsterModel } from '@/assets/models/monsterModel'
-import { PlayerModel } from './playerModel'
 import { IStatusBonusDamage, IStatusBonusStats, IStatusDamageOverTime, IStatusItem } from '@/interfaces/IStatus'
 import { AllItemTypes } from '@/interfaces/IItem'
 import { PersonModel } from './personModel'
 import { EStats } from '@/enums/EStats'
 import { IStats } from '@/interfaces/IStats'
 import { useFeedStore } from '@/stores/useFeed'
+import { IPlayer } from '@/interfaces/IPlayer'
 
 class StatusItem implements IStatusItem {
     constructor(
         public id: string = `status-${self.crypto.randomUUID()}`,
         public name: string,
         public type: EModifierTypes,
-        public origin: PlayerModel | MonsterModel | AllItemTypes | undefined,
-        public target: PersonModel | undefined,
+        public origin: IPlayer | MonsterModel | AllItemTypes | undefined,
+        public target: IPlayer | MonsterModel | undefined,
         public duration: {
             isInfinite: boolean
             isActive: boolean
@@ -33,8 +33,8 @@ class StatusBonusStat extends StatusItem implements IStatusBonusStats {
         public id: string,
         public name: string,
         public type: EModifierTypes,
-        public origin: PlayerModel | MonsterModel | AllItemTypes | undefined,
-        public target: PersonModel,
+        public origin: IPlayer | MonsterModel | AllItemTypes | undefined,
+        public target: IPlayer | MonsterModel,
         public duration: {
             isInfinite: boolean
             isActive: boolean
@@ -46,7 +46,7 @@ class StatusBonusStat extends StatusItem implements IStatusBonusStats {
     ) {
         super(id, name, type, origin, target, duration, updateOnBeginning)
     }
-    use(target: PlayerModel | MonsterModel) {
+    use(target: IPlayer | MonsterModel) {
         Object.entries(this.bonusStatList).forEach((bonusStat) => {
             const statName = Object.values(EStats).find((stat) => stat === bonusStat[0])
             if (!statName) {
@@ -65,8 +65,8 @@ class StatusDamageOverTime extends StatusItem implements IStatusDamageOverTime {
         public id: string,
         public name: string,
         public type: EModifierTypes,
-        public origin: PlayerModel | MonsterModel | AllItemTypes | undefined,
-        public target: PersonModel,
+        public origin: IPlayer | MonsterModel | AllItemTypes | undefined,
+        public target: IPlayer | MonsterModel,
         public duration: {
             isInfinite: boolean
             isActive: boolean
@@ -91,8 +91,8 @@ class StatusAttackBonusDamage extends StatusItem implements IStatusBonusDamage {
         public id: string,
         public name: string,
         public type: EModifierTypes,
-        public origin: PlayerModel | MonsterModel | AllItemTypes | undefined,
-        public target: PersonModel | undefined,
+        public origin: IPlayer | MonsterModel | AllItemTypes | undefined,
+        public target: IPlayer | MonsterModel | undefined,
         public duration: {
             isInfinite: boolean
             isActive: boolean

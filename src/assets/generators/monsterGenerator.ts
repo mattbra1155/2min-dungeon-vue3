@@ -4,7 +4,7 @@ import { ItemGenerator } from '@/assets/generators/itemGenerator'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { EStats } from '@/enums/EStats'
 import { stats as statsModel } from '@/assets/models/statsModel'
-import { diceRollK6 } from '../scripts/diceRoll'
+import { diceRollK6 } from '../../helpers/diceRoll'
 import { IStats } from '@/interfaces/IStats'
 import { Weapon } from '../models/itemsModel'
 

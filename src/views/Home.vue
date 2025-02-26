@@ -1,35 +1,35 @@
 <script setup lang="ts">
 import { onMounted, watch } from 'vue'
-import LayoutInterfaceCombat from '@/components/layout/LayoutInterfaceCombat.vue'
-import { useGameStateManager } from '@/composables/useGameStateManager'
-import { EGameState } from '@/enums/EGameState'
-import { useTurn } from '@/composables/useTurn'
-import { ETurnState } from '@/enums/ETurnState'
-import { usePlayer } from '@/composables/usePlayer'
 import { useRouter } from 'vue-router'
+import LayoutInterfaceCombat from '@/components/layout/LayoutInterfaceCombat.vue'
+import { EGameState } from '@/enums/EGameState'
+import { ETurnState } from '@/enums/ETurnState'
 import LayoutTopBar from '@/components/layout/LayoutTopBar.vue'
 import LayoutInterfaceTravel from '@/components/layout/LayoutInterfaceTravel.vue'
 import { useSceneManagerStore } from '@/stores/useSceneManager'
 import FeedPanel from '@/components/FeedPanel.vue'
+import { useGameStateStore } from '@/stores/useGameStateManager'
+import { usePlayerStore } from '@/stores/usePlayer'
+import { useTurnStore } from '@/stores/useTurn'
 
 const sceneManger = useSceneManagerStore()
-const { activeGameState } = useGameStateManager()
-const { updateTurnStateMachine } = useTurn()
-const { player } = usePlayer()
+const gameStateStore = useGameStateStore()
+const turnStore = useTurnStore()
+const playerStore = usePlayerStore()
 const router = useRouter()
 
-if (activeGameState.value === EGameState.Battle) {
-    updateTurnStateMachine(ETurnState.Init)
+if (gameStateStore.activeGameState === EGameState.Battle) {
+    turnStore.updateTurnStateMachine(ETurnState.Init)
 }
 
 watch(
-    () => activeGameState.value,
+    () => gameStateStore.activeGameState,
     (state) => {
         if (state === EGameState.Travel) {
-            updateTurnStateMachine(ETurnState.Disabled)
+            turnStore.updateTurnStateMachine(ETurnState.Disabled)
         }
         if (state === EGameState.Battle) {
-            updateTurnStateMachine(ETurnState.Init)
+            turnStore.updateTurnStateMachine(ETurnState.Init)
         }
         if (state === EGameState.LevelCleared) {
             router.push({ name: 'levelFinished' })
@@ -37,11 +37,14 @@ watch(
     }
 )
 
-watch(player.value, () => {
-    if (player.value.isAlive === false) {
-        router.push({ name: 'playerDead' })
+watch(
+    () => playerStore.player,
+    () => {
+        if (playerStore.player?.isAlive === false) {
+            router.push({ name: 'playerDead' })
+        }
     }
-})
+)
 
 onMounted(async () => {
     await sceneManger.loadScene()
@@ -52,7 +55,7 @@ onMounted(async () => {
     <div class="home">
         <LayoutTopBar />
         <FeedPanel />
-        <LayoutInterfaceCombat v-if="activeGameState === EGameState.Battle" />
+        <LayoutInterfaceCombat v-if="gameStateStore.activeGameState === EGameState.Battle" />
         <LayoutInterfaceTravel v-else />
     </div>
 </template>

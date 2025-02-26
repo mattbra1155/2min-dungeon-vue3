@@ -1,20 +1,19 @@
 <script setup lang="ts">
+import router from '@/router'
 import { useInventory } from '@/composables/useInventory'
 import { useCharacterScreen } from '@/composables/useCharacterScreen'
 import { computed, onMounted, toRefs } from 'vue'
 import { useSceneManagerStore } from '@/stores/useSceneManager'
-import localtions from '@/assets/json/locations.json'
-import router from '@/router'
 import { useShop } from '@/composables/useShop'
 import { EGameState } from '@/enums/EGameState'
-import { useGameStateManager } from '@/composables/useGameStateManager'
 import { Town } from '@/assets/models/sceneTownModel'
+import { useGameStateStore } from '@/stores/useGameStateManager'
 
 const sceneManager = useSceneManagerStore()
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
 const { setActiveShop } = useShop()
-const { activeGameState } = useGameStateManager()
+const gameStateStore = useGameStateStore()
 
 const props = defineProps<{
     town: Town
@@ -32,7 +31,7 @@ const addKeybindings = () => {
             toggleCharacterScreen()
         }
         if (event.key === 'w') {
-            // player.value.moveTo()
+            // playerStore.player.moveTo()
         }
         if (event.key === 'd') {
             // toggleCharacterScreen()
@@ -51,7 +50,7 @@ const addKeybindings = () => {
 const exitTown = () => {
     const townEntry = sceneManager.sceneList.find((location) => location.id === 'oakwood')
 
-    activeGameState.value = EGameState.Travel
+    gameStateStore.activeGameState = EGameState.Travel
     town.value.activeShopId = undefined
     router.push({ name: 'home' })
 }

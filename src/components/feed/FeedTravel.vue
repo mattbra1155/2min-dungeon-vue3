@@ -16,7 +16,7 @@ const containers = computed(() => {
         return `${isEmpty}${name}`
     })
 
-    return `There is a ${items} here.`
+    return `There are items here: ${items}`
 })
 
 watch(

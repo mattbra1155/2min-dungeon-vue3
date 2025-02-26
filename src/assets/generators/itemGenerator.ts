@@ -5,7 +5,7 @@ import { EItemCategory } from '@/enums/ItemCategory'
 import { ModifierItem } from '../models/modifierItemModel'
 import { modifierList } from '@/assets/json/modifiers.json'
 import { EModifierTypes } from '@/enums/EModifierTypes'
-import { diceRollK10 } from '../scripts/diceRoll'
+import { diceRollK10 } from '../../helpers/diceRoll'
 
 class ItemGenerator {
     private category:

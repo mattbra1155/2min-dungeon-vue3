@@ -1,33 +1,34 @@
 <script setup lang="ts">
 import { useAttack } from '@/composables/useAttack'
-import { useTurn } from '@/composables/useTurn'
 import { ETurnState } from '@/enums/ETurnState'
-import { usePlayer } from '@/composables/usePlayer'
 import { useInventory } from '@/composables/useInventory'
 import { useCharacterScreen } from '@/composables/useCharacterScreen'
-import { onMounted, ref } from 'vue'
-import { useGameStateManager } from '@/composables/useGameStateManager'
+import { onMounted } from 'vue'
 import { EGameState } from '@/enums/EGameState'
 import AIcon from '@/components/AIcon.vue'
 import KnapsackIcon from '../icons/KnapsackIcon.vue'
 import CharacterScreenIcon from '../icons/CharacterScreenIcon.vue'
 import { useGlobalStore } from '@/stores/useGlobal'
+import { useGameStateStore } from '@/stores/useGameStateManager'
+import { usePlayerStore } from '@/stores/usePlayer'
+import { useTurnStore } from '@/stores/useTurn'
 
 const globalStore = useGlobalStore()
-const { activeGameState } = useGameStateManager()
-const { activeTurnState, checkIfDead, updateTurnStateMachine } = useTurn()
+const gameStateStore = useGameStateStore()
+const turnStore = useTurnStore()
 const { targetToAttack } = useAttack()
-const { player } = usePlayer()
+const playerStore = usePlayerStore()
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
 
 const playerAttack = () => {
-    console.log(globalStore.isAttacking)
-
+    if (!playerStore.player) {
+        return
+    }
     if (targetToAttack.value && !globalStore.isAttacking) {
-        player.value.attack(targetToAttack.value)
-        checkIfDead()
-        updateTurnStateMachine(ETurnState.EnemyAttack)
+        playerStore.player.attack(targetToAttack.value)
+        turnStore.checkIfDead()
+        turnStore.updateTurnStateMachine(ETurnState.EnemyAttack)
     }
 }
 const addKeybindings = () => {
@@ -40,7 +41,7 @@ const addKeybindings = () => {
             toggleCharacterScreen()
             return
         }
-        if (activeGameState.value === EGameState.Battle && event.code === 'Space') {
+        if (gameStateStore.activeGameState === EGameState.Battle && event.code === 'Space') {
             playerAttack()
             return
         }
@@ -54,10 +55,16 @@ onMounted(() => {
 
 <template>
     <div class="o-interface">
-        <div class="o-header__healthItem --player">
-            <h2 class="o-header__name">{{ player?.name }}</h2>
-            <meter class="o-header__meter" min="0" :max="player.stats.hp" low="30" :value="player.currentStats.hp">
-                {{ player.currentStats.hp ? player.currentStats.hp : 0 }}
+        <div v-if="playerStore.player" class="o-header__healthItem --player">
+            <h2 class="o-header__name">{{ playerStore.player.name }}</h2>
+            <meter
+                class="o-header__meter"
+                min="0"
+                :max="playerStore.player.stats.hp"
+                low="30"
+                :value="playerStore.player.currentStats.hp"
+            >
+                {{ playerStore.player.currentStats.hp ? playerStore.player.currentStats.hp : 0 }}
             </meter>
             <p id="playerHp"></p>
         </div>
@@ -67,7 +74,11 @@ onMounted(() => {
             class="a-button action__button"
             :class="{ '--disabled': globalStore.isAttacking }"
             @click="playerAttack"
-            :disbaled="activeTurnState !== ETurnState.PlayerAttack || globalStore.isAttacking || !player.isAlive"
+            :disbaled="
+                turnStore.activeTurnState !== ETurnState.PlayerAttack ||
+                globalStore.isAttacking ||
+                !playerStore.player?.isAlive
+            "
         >
             Attack
         </button>

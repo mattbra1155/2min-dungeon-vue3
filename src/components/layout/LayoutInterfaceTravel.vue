@@ -1,27 +1,22 @@
 <script setup lang="ts">
-import { useInventory } from '@/composables/useInventory'
-import { useCharacterScreen } from '@/composables/useCharacterScreen'
-import { computed, onMounted, ref, toRaw } from 'vue'
-import { EDirections } from '@/enums/EDirections'
-import { useSceneManagerStore } from '@/stores/useSceneManager'
-import locations from '@/assets/json/locations.json'
-import router from '@/router'
-import { useFeedStore } from '@/stores/useFeed'
 import AIcon from '@/components/AIcon.vue'
 import KnapsackIcon from '../icons/KnapsackIcon.vue'
 import CharacterScreenIcon from '../icons/CharacterScreenIcon.vue'
+import { computed, onMounted, toRaw } from 'vue'
+import router from '@/router'
+import { useInventory } from '@/composables/useInventory'
+import { useCharacterScreen } from '@/composables/useCharacterScreen'
+import { EDirections } from '@/enums/EDirections'
+import { useSceneManagerStore } from '@/stores/useSceneManager'
+import { useFeedStore } from '@/stores/useFeed'
 import { usePlayerPositionStore } from '@/stores/usePlayerPosition'
 import { useRandomEncounters } from '@/stores/useRandomEncounters'
-import { Room } from '@/assets/models/RoomModel'
-import { ERoomTypes } from '@/enums/ERoomTypes'
-import instances from '@/assets/json/instances.json'
 import { playAudio } from '@/helpers/playAudio'
-import { useGameStateManager } from '@/composables/useGameStateManager'
 import { EGameState } from '@/enums/EGameState'
 import { Container } from '@/assets/models/RoomObjectModel'
 import { useGlobalStore } from '@/stores/useGlobal'
 import { ELocationTypes } from '@/enums/ELocationTypes'
-import { ILocation } from '@/interfaces/ILocation'
+import { useGameStateStore } from '@/stores/useGameStateManager'
 
 const { toggleInventory } = useInventory()
 const { toggleCharacterScreen } = useCharacterScreen()
@@ -29,7 +24,7 @@ const playerPosition = usePlayerPositionStore()
 const feedStore = useFeedStore()
 const sceneManager = useSceneManagerStore()
 const randomEncounters = useRandomEncounters()
-const { updateGameState } = useGameStateManager()
+const { updateGameState } = useGameStateStore()
 const globalStore = useGlobalStore()
 const isSearched = computed(() => sceneManager.activeRoom?.isSearched)
 
@@ -42,7 +37,7 @@ const addKeybindings = () => {
             toggleCharacterScreen()
         }
         if (event.key === 'w') {
-            // player.value.moveTo()
+            // playerStore.player.moveTo()
         }
         if (event.key === 'd') {
             // toggleCharacterScreen()

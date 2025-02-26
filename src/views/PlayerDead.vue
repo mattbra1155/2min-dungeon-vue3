@@ -1,33 +1,32 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import { useTurn } from '@/composables/useTurn'
 import { useRouter } from 'vue-router'
-import { usePlayer } from '@/composables/usePlayer'
-import { useSceneManagerStore } from '@/stores/useSceneManager'
-import { ETurnState } from '@/enums/ETurnState'
-import { useGameStateManager } from '@/composables/useGameStateManager'
 import { EGameState } from '@/enums/EGameState'
 import { useFeedStore } from '@/stores/useFeed'
+import { useTurnStore } from '@/stores/useTurn'
+import { useGameStateStore } from '@/stores/useGameStateManager'
 
-const { deadPlayer } = usePlayer()
+const playerStore = usePlayer()
 const router = useRouter()
 const feedStore = useFeedStore()
-const { activeCharacter, resetTurn } = useTurn()
-const sceneManager = useSceneManagerStore()
-const { updateGameState } = useGameStateManager()
+const turnStore = useTurnStore()
+const gameStateStore = useGameStateStore()
 
 const init = () => {
-    deadPlayer()
-    updateGameState(EGameState.PlayerDead)
+    playerStore.deadPlayer()
+    gameStateStore.updateGameState(EGameState.PlayerDead)
     feedStore.resetBattleFeed()
 }
 
 const closeView = () => {
-    resetTurn()
+    turnStore.resetTurn()
     router.push({ name: 'characterCreation' })
 }
 
 init()
+
+function usePlayer(): { deadPlayer: any } {
+    throw new Error('Function not implemented.')
+}
 </script>
 
 <template>
@@ -36,7 +35,7 @@ init()
             <h1 class="o-playerDead__title">YOU DIED</h1>
             <p class="o-playerDead__text">
                 you were killed by:<br />
-                {{ activeCharacter?.name }} with a {{ activeCharacter?.weapon?.name }}
+                {{ turnStore.activeCharacter?.name }} with a {{ turnStore.activeCharacter?.weapon?.name }}
             </p>
             <button @click="closeView" class="a-button">Try again</button>
         </div>

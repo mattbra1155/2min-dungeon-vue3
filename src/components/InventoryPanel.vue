@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { usePlayer } from '@/composables/usePlayer'
 import { useInventory } from '@/composables/useInventory'
 import { EItemCategory } from '@/enums/ItemCategory'
 import { getTotalDamage } from '@/helpers/getTotalDamage'
@@ -8,12 +7,14 @@ import { getTotalArmorPoints } from '@/helpers/getTotalArmorPoints'
 import { Armor, Gold, Potion, Weapon } from '@/assets/models/itemsModel'
 import { AllItemTypes } from '@/interfaces/IItem'
 import InventoryItem from './InventoryItem.vue'
+import { usePlayerStore } from '@/stores/usePlayer'
 
-const { player } = usePlayer()
+const playerStore = usePlayerStore()
+
 const { activeItemId, isOpen, toggleInventory, setactiveItemId, notifications } = useInventory()
 
-const encumbranceMax = computed(() => player.value.inventory.encumbrance.max)
-const encumbranceCurrent = computed(() => player.value.inventory.encumbrance.current)
+const encumbranceMax = computed(() => playerStore.player?.inventory.encumbrance.max)
+const encumbranceCurrent = computed(() => playerStore.player?.inventory.encumbrance.current)
 const getButtonType = (item: AllItemTypes) => {
     if (item.category === EItemCategory.Weapon) {
         return 'Wield'
@@ -54,12 +55,15 @@ const getItemValue = (item: AllItemTypes) => {
 }
 
 const submitAction = (item: AllItemTypes) => {
+    if (!playerStore.player) {
+        return
+    }
     if (item instanceof Weapon) {
-        item.wield(player.value)
+        item.wield(playerStore.player)
     } else if (item instanceof Armor) {
-        item.equip(player.value)
+        item.equip(playerStore.player)
     } else if (item instanceof Potion) {
-        item.quaff(player.value)
+        item.quaff(playerStore.player)
     }
 }
 
@@ -68,14 +72,20 @@ const closeItemDetails = () => {
 }
 
 const unequip = (item: AllItemTypes) => {
+    if (!playerStore.player) {
+        return
+    }
     if (item instanceof Weapon || item instanceof Armor) {
-        item.unequip(player.value)
+        item.unequip(playerStore.player)
     }
 }
 
 const uniqueItems = computed(() => {
+    if (!playerStore.player) {
+        return
+    }
     const seen = new Set()
-    return player.value.inventory.inventory.filter((item) => {
+    return playerStore.player.inventory.inventory.filter((item) => {
         console.log(item)
 
         if (!seen.has(item.type)) {
@@ -90,7 +100,7 @@ const uniqueItems = computed(() => {
 </script>
 
 <template>
-    <div v-if="isOpen" id="inventory" class="o-inventory">
+    <div v-if="isOpen && playerStore.player" id="inventory" class="o-inventory">
         <div class="o-inventory__header">
             <h2 class="o-inventory__title">Inventory</h2>
             <button v-if="activeItemId" class="a-button --secondary o-inventory__close" @click="closeItemDetails">
@@ -107,7 +117,7 @@ const uniqueItems = computed(() => {
         </div>
         <div class="o-inventory__content">
             <div class="o-inventory__goldWrapper">
-                <p>Gold: {{ player.inventory.gold }}</p>
+                <p>Gold: {{ playerStore.player.inventory.gold }}</p>
                 <p>Encumbrance: {{ encumbranceCurrent }}/{{ encumbranceMax }}</p>
             </div>
             ---
@@ -116,7 +126,7 @@ const uniqueItems = computed(() => {
             <template v-if="!activeItemId">
                 <h3 class="a-text">Equipped</h3>
                 <ul class="o-inventory__list --noScroll">
-                    <template v-for="item in player.inventory.inventory" :key="item.id">
+                    <template v-for="item in playerStore.player.inventory.inventory" :key="item.id">
                         <li v-if="item && item.id && item.isEquipped" class="o-inventory__item --equipped">
                             <template v-if="item instanceof Armor">
                                 <div>
@@ -153,7 +163,8 @@ const uniqueItems = computed(() => {
                         <template v-if="item.category === EItemCategory.Material">
                             <p @click="setactiveItemId(item.id)">
                                 {{ item.name }} x{{
-                                    player.inventory.inventory.filter((obj) => obj.type === item.type).length
+                                    playerStore.player.inventory.inventory.filter((obj) => obj.type === item.type)
+                                        .length
                                 }}
                                 {{ getItemValue(item) }}
                             </p>

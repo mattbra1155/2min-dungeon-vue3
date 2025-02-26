@@ -1,27 +1,27 @@
 <script setup lang="ts">
-import { useLoot } from '@/composables/useLoot'
-import { usePlayer } from '@/composables/usePlayer'
-import { useTurn } from '@/composables/useTurn'
-import { ETurnState } from '@/enums/ETurnState'
+import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useLoot } from '@/composables/useLoot'
+import { ETurnState } from '@/enums/ETurnState'
 import { AllItemTypes } from '@/interfaces/IItem'
 import { Gold } from '@/assets/models/itemsModel'
-import { useGameStateManager } from '@/composables/useGameStateManager'
 import { EGameState } from '@/enums/EGameState'
 import { useSceneManagerStore } from '@/stores/useSceneManager'
-import { onMounted, ref } from 'vue'
 import { useFeedStore } from '@/stores/useFeed'
 import { usePlayerPositionStore } from '@/stores/usePlayerPosition'
 import { lootLists } from '@/assets/data/lootList'
-const { updateTurnStateMachine, resetTurn } = useTurn()
+import { useTurnStore } from '@/stores/useTurn'
+import { usePlayerStore } from '@/stores/usePlayer'
+import { useGameStateStore } from '@/stores/useGameStateManager'
+const turnStore = useTurnStore()
 const router = useRouter()
-const { player } = usePlayer()
+const playerStore = usePlayerStore()
 const { isLootSearched, lootList, weightedRandom } = useLoot()
 const sceneManager = useSceneManagerStore()
 const playerPosition = usePlayerPositionStore()
-const { updateGameState } = useGameStateManager()
+const gameStateStore = useGameStateStore()
 const feedStore = useFeedStore()
-updateTurnStateMachine(ETurnState.Disabled)
+turnStore.updateTurnStateMachine(ETurnState.Disabled)
 feedStore.resetBattleFeed()
 
 const setRoomExploredStatus = async () => {
@@ -37,11 +37,14 @@ const setRoomExploredStatus = async () => {
         return
     }
     await sceneManager.saveScene({ x: playerPosition.coords.x, y: playerPosition.coords.y }, sceneManager.sceneList)
-    resetTurn()
+    turnStore.resetTurn()
 }
 
 const takeItem = (lootItem: AllItemTypes | Gold) => {
-    const isAdded = player.value.inventory.addItem(lootItem, player.value.id)
+    if (!playerStore.player) {
+        return
+    }
+    const isAdded = playerStore.player.inventory.addItem(lootItem, playerStore.player.id)
     if (!isAdded.status) {
         console.log(isAdded.message)
         return
@@ -53,7 +56,7 @@ const takeItem = (lootItem: AllItemTypes | Gold) => {
 const closeScreen = async () => {
     isLootSearched.value = false
     router.push({ name: 'home', state: { nextLevel: true } })
-    updateGameState(EGameState.Travel)
+    gameStateStore.updateGameState(EGameState.Travel)
 }
 
 onMounted(async () => {
