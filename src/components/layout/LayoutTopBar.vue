@@ -12,7 +12,9 @@ const gameStateStore = useGameStateStore()
 const turnStore = useTurnStore()
 
 const enemyList = computed(() => turnStore.turnOrder)
-const instance = computed(() => sceneManager.instanceList.find((location) => location.id === sceneManager.instance?.id))
+const instance = computed(() =>
+    sceneManager.instanceList.find((location: any) => location.id === sceneManager.instance?.id)
+)
 </script>
 
 <template>

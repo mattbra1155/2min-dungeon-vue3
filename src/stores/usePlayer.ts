@@ -122,8 +122,7 @@ export const usePlayerStore = defineStore('player', () => {
             console.error('No Player')
             return
         }
-        const IPlayer = new PlayerModel()
-        Object.assign(player.value, IPlayer)
+        player.value = undefined
     }
 
     const deadPlayer = () => {

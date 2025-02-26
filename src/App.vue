@@ -5,7 +5,6 @@ import CharacterScreen from './components/CharacterScreen.vue'
 import LoadingScreen from './components/LoadingScreen.vue'
 import localforage from 'localforage'
 import { useGlobalStore } from './stores/useGlobal'
-import { onUnmounted } from 'vue'
 import { useGameStateStore } from './stores/useGameStateManager'
 
 const monsterGenerator = new MonsterGenerator()
@@ -40,13 +39,6 @@ const resetStorage = () => {
 
 // starts the app
 init()
-
-onUnmounted(() => {
-    const savedPosX = sceneManager.activeRoom?.x
-    const savedPosY = sceneManager.activeRoom?.y
-
-    localforage.setItem('savedPosition', { x: savedPosX, y: savedPosY })
-})
 </script>
 
 <template>

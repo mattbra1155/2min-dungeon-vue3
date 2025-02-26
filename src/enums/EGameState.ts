@@ -1,7 +1,7 @@
 export enum EGameState {
     Init = 'Init',
     CreateChar = 'Create Character',
-    CreateLevel = 'Create Level',
+    StartGame = 'Start Game',
     Travel = 'Travel',
     Loot = 'Loot',
     Battle = 'Battle',

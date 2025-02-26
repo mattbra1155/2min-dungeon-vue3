@@ -2,9 +2,13 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { EGameState } from '@/enums/EGameState'
 import { useSceneManagerStore } from '@/stores/useSceneManager'
+import { usePlayerStore } from './usePlayer'
+import { useRouter } from 'vue-router'
 
 export const useGameStateStore = defineStore('gameState', () => {
+    const router = useRouter()
     const sceneManager = useSceneManagerStore()
+    const playerStore = usePlayerStore()
     const activeGameState = ref<EGameState>(EGameState.Init)
 
     const updateGameState = async (newState: EGameState) => {
@@ -12,16 +16,25 @@ export const useGameStateStore = defineStore('gameState', () => {
         switch (activeGameState.value) {
             case EGameState.Init:
                 console.log('GAME STATE: Init')
+                if (playerStore.player) {
+                    updateGameState(EGameState.StartGame)
+                    break
+                } else {
+                    updateGameState(EGameState.CreateChar)
+                }
                 break
             case EGameState.CreateChar:
                 console.log('GAME STATE: Create Character')
+                router.push({ name: 'characterCreation' })
                 break
-            case EGameState.CreateLevel:
-                console.log('GAME STATE: Create Level')
-                await sceneManager.createLocation('northern_fields')
+            case EGameState.StartGame:
+                console.log('GAME STATE: Start Game')
+                await sceneManager.createLocation('oakwood')
+                updateGameState(EGameState.Travel)
                 break
             case EGameState.Travel:
                 console.log('GAME STATE: Travel')
+                router.push({ name: 'home' })
                 break
             case EGameState.Loot:
                 console.log('GAME STATE: Loot')

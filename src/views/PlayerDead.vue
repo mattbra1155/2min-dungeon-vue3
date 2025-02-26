@@ -4,8 +4,9 @@ import { EGameState } from '@/enums/EGameState'
 import { useFeedStore } from '@/stores/useFeed'
 import { useTurnStore } from '@/stores/useTurn'
 import { useGameStateStore } from '@/stores/useGameStateManager'
+import { usePlayerStore } from '@/stores/usePlayer'
 
-const playerStore = usePlayer()
+const playerStore = usePlayerStore()
 const router = useRouter()
 const feedStore = useFeedStore()
 const turnStore = useTurnStore()
@@ -23,10 +24,6 @@ const closeView = () => {
 }
 
 init()
-
-function usePlayer(): { deadPlayer: any } {
-    throw new Error('Function not implemented.')
-}
 </script>
 
 <template>

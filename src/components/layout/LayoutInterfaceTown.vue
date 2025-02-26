@@ -20,7 +20,7 @@ const props = defineProps<{
 }>()
 
 const { town } = toRefs(props)
-const lastScene = computed(() => sceneManager.sceneList.findLast((el) => el))
+const lastScene = computed(() => sceneManager.sceneList.findLast((el: any) => el))
 
 const addKeybindings = () => {
     window.addEventListener('keydown', (event) => {
@@ -48,7 +48,7 @@ const addKeybindings = () => {
 // MOVE TOWN TO COMPONENT
 
 const exitTown = () => {
-    const townEntry = sceneManager.sceneList.find((location) => location.id === 'oakwood')
+    const townEntry = sceneManager.sceneList.find((location: any) => location.id === 'oakwood')
 
     gameStateStore.activeGameState = EGameState.Travel
     town.value.activeShopId = undefined

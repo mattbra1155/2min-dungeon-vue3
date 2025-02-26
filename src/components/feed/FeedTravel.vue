@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useFeedStore } from '@/stores/useFeed'
 import { useSceneManagerStore } from '@/stores/useSceneManager'
-import { computed, onMounted, watch } from 'vue'
+import { computed, watch } from 'vue'
 
 const feedStore = useFeedStore()
 const sceneManager = useSceneManagerStore()
@@ -10,7 +10,7 @@ const containers = computed(() => {
     if (!sceneManager.activeRoom?.roomObjects.length) {
         return 'You see nothing worth taking.'
     }
-    const items = sceneManager.activeRoom.roomObjects.map((roomObject) => {
+    const items = sceneManager.activeRoom.roomObjects.map((roomObject: any) => {
         const isEmpty = roomObject.isSearched && roomObject.items.length === 0 ? 'empty ' : ''
         const name = roomObject.name
         return `${isEmpty}${name}`

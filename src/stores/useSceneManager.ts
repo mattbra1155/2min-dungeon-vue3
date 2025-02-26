@@ -1,20 +1,18 @@
 import { defineStore } from 'pinia'
+import localforage from 'localforage'
+import locations from '@/assets/json/locations.json'
 import { ref } from 'vue'
 import { Room } from '@/assets/models/RoomModel'
-import localforage from 'localforage'
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { Status } from '@/assets/models/statusModel'
 import { Inventory } from '@/assets/models/inventoryModel'
 import { Container } from '@/assets/models/RoomObjectModel'
 import { EGameState } from '@/enums/EGameState'
 import { useFeedStore } from '@/stores/useFeed'
-import locations from '@/assets/json/locations.json'
 import { monsterGenerator } from '@/App.vue'
-import instances from '@/assets/json/instances.json'
 import { usePlayerPositionStore } from './usePlayerPosition'
 import { ItemGenerator } from '@/assets/generators/itemGenerator'
 import { AllItemTypes } from '@/interfaces/IItem'
-import { ILocation } from '@/interfaces/ILocation'
 import { usePlayerStore } from './usePlayer'
 import { useGameStateStore } from './useGameStateManager'
 
@@ -38,87 +36,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
 
         sceneList.value.push(location)
     }
-    const setActiveInstance = (instanceId: string) => {
-        const selectedInstance = instances.find((instanceItem) => instanceItem.id === instanceId)
-
-        if (!selectedInstance) {
-            console.error('No selectedInstance found')
-            return
-        }
-
-        instance.value = selectedInstance
-
-        return selectedInstance
-    }
-    const createInstanceLocations = async (instanceId: string, entryId: string) => {
-        // FIX: dont load saved instance  for now
-        instance.value = undefined
-        instanceList.value = []
-
-        const itemGenerator = new ItemGenerator()
-        // if (instance.value?.id === instanceId && instanceList.value.length) {
-        //     const entryLocation = instanceList.value.find((room) => room.name === entryId)
-        //     if (!entryLocation) {
-        //         console.error('no Entry location')
-        //         return
-        //     }
-        //     console.log(instanceId)
-        //     setActiveScene(entryLocation)
-        //     localforage.setItem('instanceList', toRaw(instanceList.value))
-        //     return
-        // }
-        instance.value = setActiveInstance(instanceId)
-
-        if (!instance.value) {
-            console.error('No Active instance')
-
-            return
-        }
-
-        const visitedLocationList: Room[] = instance.value.map.map((locationData) => {
-            const locationClass = new Room()
-            const location: Room = Object.assign(locationClass, locationData)
-
-            if (location.roomObjects.length) {
-                location.roomObjects = location.roomObjects.map((objectItem: any) => {
-                    const item = new Container(
-                        objectItem.id,
-                        objectItem.type,
-                        objectItem.image,
-                        objectItem.imageSearched,
-                        objectItem.name,
-                        objectItem.description,
-                        objectItem.items,
-                        objectItem.isSearched,
-                        objectItem.isLocked,
-                        objectItem.isHidden
-                    )
-
-                    if (objectItem.items.length) {
-                        item.items = objectItem.items.map((itemData: string) => {
-                            const createdItem = itemGenerator.createItem(itemData)
-                            return createdItem
-                        })
-                    }
-                    return item
-                })
-            }
-            instanceList.value.push(location)
-            return location
-        })
-
-        const entryLocation = instanceList.value.find((room) => room.id === entryId)
-
-        if (!entryLocation) {
-            console.error('no Entry location')
-            return
-        }
-
-        setActiveScene(entryLocation)
-
-        localforage.setItem('instanceList', JSON.stringify(instanceList))
-    }
-    const createLocation = async (locationId?: string | null, x?: number, y?: number) => {
+    const createLocation = async (locationId?: string, x?: number, y?: number) => {
         const locationData = locations.find((location) => location.x === x && location.y === y)
 
         console.log(locationData)
@@ -487,7 +405,6 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         sceneList,
         instanceList,
         createLocation,
-        createInstanceLocations,
         setActiveScene,
         moveToLocation,
         getClosestTiles,

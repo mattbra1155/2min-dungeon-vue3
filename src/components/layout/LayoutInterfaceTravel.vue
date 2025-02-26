@@ -207,7 +207,7 @@ const enterInstance = async (instanceId: string, entryId: string) => {
 
     console.log('start creating locations')
     console.time('tt')
-    await sceneManager.createInstanceLocations(instanceId, entryId)
+    // await sceneManager.createInstanceLocations(instanceId, entryId)
     console.timeEnd('tt')
     console.log('end creating locations')
     feedStore.resetTravelFeed()

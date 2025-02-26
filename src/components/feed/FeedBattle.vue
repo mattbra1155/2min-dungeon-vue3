@@ -2,10 +2,13 @@
 import { useSceneManagerStore } from '@/stores/useSceneManager'
 import { useFeedStore } from '@/stores/useFeed'
 import { computed, nextTick, ref, watch } from 'vue'
+import { MonsterModel } from '@/assets/models/monsterModel'
 const sceneManager = useSceneManagerStore()
 const feedStore = useFeedStore()
 
-const monsterList = computed(() => sceneManager.activeRoom?.monsterList.map((monster) => monster.name) || [])
+const monsterList = computed(
+    () => sceneManager.activeRoom?.monsterList.map((monster: MonsterModel) => monster.name) || []
+)
 
 feedStore.setBattleFeedItem(`You are being attacked by: ${monsterList.value}`)
 
