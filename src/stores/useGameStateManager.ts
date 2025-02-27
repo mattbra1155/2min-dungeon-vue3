@@ -4,11 +4,14 @@ import { EGameState } from '@/enums/EGameState'
 import { useSceneManagerStore } from '@/stores/useSceneManager'
 import { usePlayerStore } from './usePlayer'
 import { useRouter } from 'vue-router'
+import { useTurnStore } from './useTurn'
+import { ETurnState } from '@/enums/ETurnState'
 
 export const useGameStateStore = defineStore('gameState', () => {
     const router = useRouter()
     const sceneManager = useSceneManagerStore()
     const playerStore = usePlayerStore()
+    const turnStore = useTurnStore()
     const activeGameState = ref<EGameState>(EGameState.Init)
 
     const updateGameState = async (newState: EGameState) => {
@@ -34,6 +37,7 @@ export const useGameStateStore = defineStore('gameState', () => {
                 break
             case EGameState.Travel:
                 console.log('GAME STATE: Travel')
+                turnStore.updateTurnStateMachine(ETurnState.Disabled)
                 router.push({ name: 'home' })
                 break
             case EGameState.Loot:
@@ -44,12 +48,15 @@ export const useGameStateStore = defineStore('gameState', () => {
                 break
             case EGameState.Battle:
                 console.log('GAME STATE: Battle started')
+                turnStore.updateTurnStateMachine(ETurnState.Init)
                 break
             case EGameState.LevelCleared:
                 console.log('GAME STATE: Level cleared')
+                turnStore.updateTurnStateMachine(ETurnState.Disabled)
                 break
             case EGameState.PlayerDead:
                 console.log('GAME STATE: Player dead')
+                turnStore.updateTurnStateMachine(ETurnState.Disabled)
                 break
             case EGameState.Playing:
                 console.log('GAME STATE: Playing')

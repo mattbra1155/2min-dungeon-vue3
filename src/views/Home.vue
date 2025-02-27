@@ -21,22 +21,6 @@ const router = useRouter()
 if (gameStateStore.activeGameState === EGameState.Battle) {
     turnStore.updateTurnStateMachine(ETurnState.Init)
 }
-
-watch(
-    () => gameStateStore.activeGameState,
-    (state) => {
-        if (state === EGameState.Travel) {
-            turnStore.updateTurnStateMachine(ETurnState.Disabled)
-        }
-        if (state === EGameState.Battle) {
-            turnStore.updateTurnStateMachine(ETurnState.Init)
-        }
-        if (state === EGameState.LevelCleared) {
-            router.push({ name: 'levelFinished' })
-        }
-    }
-)
-
 watch(
     () => playerStore.player,
     () => {
@@ -46,13 +30,15 @@ watch(
     }
 )
 
-onMounted(async () => {
-    await sceneManger.loadScene()
-})
+// onMounted(async () => {
+//     await sceneManger.loadScene()
+// })
 </script>
 
 <template>
     <div class="home">
+        {{ gameStateStore.activeGameState }}
+        {{ sceneManger.activeRoom }}
         <LayoutTopBar />
         <FeedPanel />
         <LayoutInterfaceCombat v-if="gameStateStore.activeGameState === EGameState.Battle" />

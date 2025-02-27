@@ -1,7 +1,6 @@
 import { EModifierTypes } from '@/enums/EModifierTypes'
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { AllItemTypes } from '@/interfaces/IItem'
-import { PersonModel } from '@/assets/models/personModel'
 import { IStats } from '@/interfaces/IStats'
 import { IPlayer } from '@/interfaces/IPlayer'
 
@@ -21,7 +20,7 @@ export interface IStatusItem {
 }
 
 export interface IStatusDamageOverTime extends IStatusItem {
-    use(target: PersonModel | MonsterModel): number | void
+    use(target: IPlayer | MonsterModel): number | void
 }
 
 export interface IStatusBonusStats extends IStatusItem {
@@ -31,7 +30,7 @@ export interface IStatusBonusStats extends IStatusItem {
 
 export interface IStatusBonusDamage extends IStatusItem {
     bonusDamage: number
-    use(target: PersonModel | MonsterModel): number | void
+    use(target: IPlayer | MonsterModel): number | void
 }
 
 export type IAllStatusTypes = IStatusItem | IStatusDamageOverTime | IStatusBonusDamage | IStatusBonusStats

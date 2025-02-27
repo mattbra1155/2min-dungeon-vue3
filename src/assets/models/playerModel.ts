@@ -1,16 +1,17 @@
-// import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
+import { PersonModel } from './personModel'
 import { iBodyPart } from '@/interfaces/BodyParts'
 import { Inventory } from './inventoryModel'
 import { bodyPartsModel } from './bodyPartsModel'
-import { PersonModel } from './personModel'
 import { Modifiers } from './modifiersModel'
 import { Weapon } from './itemsModel'
 import { IStats } from '@/interfaces/IStats'
 import { Profession } from './professionModel'
 import { stats as statsModel } from '@/assets/models/statsModel'
 import { IPlayer } from '@/interfaces/IPlayer'
+import { Status } from './statusModel'
+import { ISkill } from '@/interfaces/ISkill'
 
-class PlayerModel extends PersonModel implements IPlayer {
+class PlayerModel implements IPlayer {
     constructor(
         public id: string = self.crypto.randomUUID(),
         public name: string = 'Charname',
@@ -25,23 +26,11 @@ class PlayerModel extends PersonModel implements IPlayer {
         public description: string = '',
         public inventory: Inventory = new Inventory(),
         public isAlive: boolean = true,
-        public player: boolean = true,
-        public modifiers: Modifiers = new Modifiers()
-    ) {
-        super(
-            id,
-            name,
-            race,
-            stats,
-            currentStats,
-            bodyParts,
-            weapon,
-            offHand,
-            description,
-            inventory,
-            isAlive,
-            modifiers
-        )
-    }
+        public isPlayer: boolean = true,
+        public modifiers: Modifiers = new Modifiers(),
+        public status: Status = new Status(),
+        public skills: ISkill[] = [],
+        public image: string | null = null
+    ) {}
 }
 export { PlayerModel }

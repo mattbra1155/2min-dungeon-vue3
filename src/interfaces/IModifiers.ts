@@ -1,7 +1,6 @@
 import { EModifierTypes } from '@/enums/EModifierTypes'
 import { MonsterModel } from '@/assets/models/monsterModel'
 import { ModifierItem } from '@/assets/models/modifierItemModel'
-import { PersonModel } from '@/assets/models/personModel'
 import { AllItemTypes } from '@/interfaces/IItem'
 import { IPlayer } from '@/interfaces/IPlayer'
 
@@ -13,7 +12,7 @@ export interface IModifierItem {
     chanceToApply: number | null
     statusId: string
 
-    use(target: PersonModel): void
+    use(target: IPlayer | MonsterModel): void
 }
 
 export interface IModifiers {

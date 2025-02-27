@@ -39,6 +39,8 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
     const createLocation = async (locationId?: string, x?: number, y?: number) => {
         const locationData = locations.find((location) => location.x === x && location.y === y)
 
+        console.log('here')
+
         console.log(locationData)
 
         if (!locationData) {

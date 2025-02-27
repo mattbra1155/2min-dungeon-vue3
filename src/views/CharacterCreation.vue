@@ -155,7 +155,7 @@ const rollForGold = () => {
 const savePlayer = async () => {
     if (playerObject.value) {
         playerStore.createPlayer(playerObject.value)
-        updateGameState(EGameState.Travel)
+        updateGameState(EGameState.StartGame)
     }
 }
 </script>

@@ -13,12 +13,8 @@ export { monsterGenerator }
 </script>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
-import { EGameState } from './enums/EGameState'
-import { useSceneManagerStore } from '@/stores/useSceneManager'
-const sceneManager = useSceneManagerStore()
+import { EGameState } from '@/enums/EGameState'
 const { updateGameState } = useGameStateStore()
-const router = useRouter()
 const globalStore = useGlobalStore()
 globalStore.toggleIsLoading()
 
