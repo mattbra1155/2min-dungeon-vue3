@@ -1,6 +1,6 @@
 import { diceRollK100, diceRollK6 } from '@/helpers/diceRoll'
 import { bodyPartsModel } from '@/assets/models/bodyPartsModel'
-import { IPerson } from '@/interfaces/Person'
+import { IPerson } from '@/interfaces/IPerson'
 import { iBodyPart } from '@/interfaces/BodyParts'
 import { Inventory } from '@/assets/models/inventoryModel'
 import { Armor, Weapon } from '@/assets/models//itemsModel'
@@ -11,14 +11,11 @@ import { MonsterModel } from '@/assets/models/monsterModel'
 import { stats as statsModel } from '@/assets/models/statsModel'
 import { Status } from './statusModel'
 import { StatusAttackBonusDamage } from './statusItemModel'
-import { toRaw } from 'vue'
-import { EStats } from '@/enums/EStats'
 import { ISkill } from '@/interfaces/ISkill'
 import { playRandomAudio } from '@/helpers/playAudio'
 import { useFeedStore } from '@/stores/useFeed'
 import { IWeapon } from '@/interfaces/IItem'
 import { IPlayer } from '@/interfaces/IPlayer'
-import { PlayerModel } from './playerModel'
 abstract class PersonModel implements IPerson {
     constructor(
         public id: string = self.crypto.randomUUID(),
@@ -38,32 +35,32 @@ abstract class PersonModel implements IPerson {
         public image: string | null = null
     ) {}
 
-    async clearCurrentStats() {
-        const baseStats = structuredClone(toRaw(this.stats))
+    // async clearCurrentStats() {
+    //     const baseStats = structuredClone(toRaw(this.stats))
 
-        this.currentStats = baseStats
+    //     this.currentStats = baseStats
 
-        // Add already advanced stats from professions to current stats
-        if (this instanceof PlayerModel) {
-            const advancedStats = structuredClone(toRaw(this.advancedStats))
+    //     // Add already advanced stats from professions to current stats
+    //     // if (this instanceof PlayerModel) {
+    //     const advancedStats = structuredClone(toRaw(this.advancedStats))
 
-            Object.entries(advancedStats).forEach((statItem) => {
-                const foundStat = Object.entries(this.currentStats).find((stat) => stat[0] === statItem[0])
-                if (!foundStat) {
-                    return
-                }
-                const statName = Object.values(EStats).find((stat) => stat === foundStat[0])
+    //     Object.entries(advancedStats).forEach((statItem) => {
+    //         const foundStat = Object.entries(this.currentStats).find((stat) => stat[0] === statItem[0])
+    //         if (!foundStat) {
+    //             return
+    //         }
+    //         const statName = Object.values(EStats).find((stat) => stat === foundStat[0])
 
-                if (!statName) {
-                    return
-                }
-                foundStat[1] += statItem[1]
-                this.currentStats[statName] = foundStat[1]
+    //         if (!statName) {
+    //             return
+    //         }
+    //         foundStat[1] += statItem[1]
+    //         this.currentStats[statName] = foundStat[1]
 
-                return foundStat
-            })
-        }
-    }
+    //         return foundStat
+    //     })
+    // }
+    // }
     attack(enemy: MonsterModel | IPlayer) {
         const feedStore = useFeedStore()
         feedStore.setBattleFeedItem(`${this.name} attacks!`)

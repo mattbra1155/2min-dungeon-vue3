@@ -11,7 +11,7 @@ import { IPlayer } from '@/interfaces/IPlayer'
 import { Status } from './statusModel'
 import { ISkill } from '@/interfaces/ISkill'
 
-class PlayerModel implements IPlayer {
+class PlayerModel extends PersonModel implements IPlayer {
     constructor(
         public id: string = self.crypto.randomUUID(),
         public name: string = 'Charname',
@@ -31,6 +31,21 @@ class PlayerModel implements IPlayer {
         public status: Status = new Status(),
         public skills: ISkill[] = [],
         public image: string | null = null
-    ) {}
+    ) {
+        super(
+            id,
+            name,
+            race,
+            stats,
+            currentStats,
+            bodyParts,
+            weapon,
+            offHand,
+            description,
+            inventory,
+            isAlive,
+            modifiers
+        )
+    }
 }
 export { PlayerModel }

@@ -1,8 +1,5 @@
 import { IModifiers } from '@/interfaces/IModifiers'
 import { ModifierItem } from '@/assets/models/modifierItemModel'
-import { MonsterModel } from '@/assets/models/monsterModel'
-import { IPlayer } from '@/assets/models/IPlayer'
-import { EStats } from '@/enums/EStats'
 
 class Modifiers implements IModifiers {
     constructor(public list: ModifierItem[] = []) {

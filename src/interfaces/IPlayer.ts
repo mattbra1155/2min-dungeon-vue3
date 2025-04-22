@@ -8,8 +8,9 @@ import { Status } from '@/assets/models/statusModel'
 import { iBodyPart } from './BodyParts'
 import { IWeapon } from './IItem'
 import { ISkill } from './ISkill'
+import { IPerson } from './IPerson'
 
-export interface IPlayer {
+export interface IPlayer extends IPerson {
     id: string
     name: string
     race: string
@@ -28,4 +29,5 @@ export interface IPlayer {
     profession: Profession | undefined
     advancedStats: Partial<IStats>
     offHand: Weapon | null
+    attack(enemy: IPlayer | MonsterModel): number | undefined
 }

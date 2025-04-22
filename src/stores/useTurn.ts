@@ -30,12 +30,12 @@ export const useTurnStore = defineStore('turn', () => {
         const globalStore = useGlobalStore()
         const sceneManager = useSceneManagerStore()
 
-        if (!playerStore.player) {
+        if (!playerStore.player || !monsterList.value) {
             return
         }
 
-        if (monsterList.value?.length && !monsterList.value.find((item) => item !== playerStore.player)) {
-            monsterList.value?.push(playerStore.player)
+        if (monsterList.value.length && !monsterList.value.find((item) => item !== playerStore.player)) {
+            monsterList.value.push(playerStore.player)
         }
         if (!playerStore.player.isAlive) {
             return
@@ -58,8 +58,8 @@ export const useTurnStore = defineStore('turn', () => {
             case ETurnState.SortOrder:
                 console.log('TURN STATE:', ETurnState.SortOrder)
                 turnOrder.value = undefined
-                console.log(monsterList)
-                if (!monsterList.value?.length) {
+                console.log(monsterList.value)
+                if (!monsterList.value.length) {
                     console.error('no monster list')
                     return
                 }

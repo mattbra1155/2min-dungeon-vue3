@@ -85,7 +85,6 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         console.log(useSceneManagerStore().activeRoom)
 
         let location = undefined
-        console.log('rrrrrrrr', x, y)
 
         if (instance.value) {
             location = instanceList.value.find((location) => location.x === x && location.y === y)
