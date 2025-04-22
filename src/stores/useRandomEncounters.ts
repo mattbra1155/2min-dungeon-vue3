@@ -12,7 +12,7 @@ import { useTurnStore } from '@/stores/useTurn'
 export const useRandomEncounters = defineStore('randomEncounters', () => {
     const sceneManager = useSceneManagerStore()
     const gameStateStore = useGameStateStore()
-    const { setMonsterList } = useTurnStore()
+    const turnStore = useTurnStore()
 
     const roll = ref<number>()
     const isBattle = ref<boolean>(false)
@@ -84,9 +84,9 @@ export const useRandomEncounters = defineStore('randomEncounters', () => {
 
         const weightedItem = getWeightedItem(encounterList[locationType])
         list.push(weightedItem)
-        const monsterList = sceneManager.createEnemyList(list)
+
+        sceneManager.createEnemyList(list)
         gameStateStore.updateGameState(EGameState.Battle)
-        setMonsterList(monsterList)
     }
     return {
         roll,

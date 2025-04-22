@@ -26,43 +26,43 @@ class Scene {
         this.links = links
     }
 
-    changeCurrentRoom(roomId: string) {
-        const playerStore = usePlayerStore()
-        const gameStateStore = useGameStateStore()
-        const feedStore = useFeedStore()
-        if (!playerStore.player) {
-            return
-        }
-        feedStore.resetTravelFeed()
+    // changeCurrentRoom(roomId: string) {
+    //     const playerStore = usePlayerStore()
+    //     const gameStateStore = useGameStateStore()
+    //     const feedStore = useFeedStore()
+    //     if (!playerStore.player) {
+    //         return
+    //     }
+    //     feedStore.resetTravelFeed()
 
-        const currentRoom = this.roomList.find((room) => room.id === roomId.toString())
-        if (!currentRoom) {
-            console.error('No Room found')
-            return
-        }
-        // if player is not holding torch and room is dark stop him from entering
-        if (currentRoom.isDark && playerStore.player.offHand?.id !== 'torch') {
-            feedStore.setTravelFeedItem('The room is completely dark. You need a lightsource to enter')
-            return
-        }
+    //     const currentRoom = this.roomList.find((room) => room.id === roomId.toString())
+    //     if (!currentRoom) {
+    //         console.error('No Room found')
+    //         return
+    //     }
+    //     // if player is not holding torch and room is dark stop him from entering
+    //     if (currentRoom.isDark && playerStore.player.offHand?.id !== 'torch') {
+    //         feedStore.setTravelFeedItem('The room is completely dark. You need a lightsource to enter')
+    //         return
+    //     }
 
-        feedStore.setActiveRoomObject(undefined)
-        this.currentRoom = currentRoom
+    //     feedStore.setActiveRoomObject(undefined)
+    //     this.currentRoom = currentRoom
 
-        // If Room is explored - monster defeated before - don't create another one
-        if (this.currentRoom.isExplored) {
-            return
-        }
+    //     // If Room is explored - monster defeated before - don't create another one
+    //     if (this.currentRoom.isExplored) {
+    //         return
+    //     }
 
-        // If Room is not explored and there is no monsters present - set Room as explored
-        if (!this.currentRoom.monsterList.length) {
-            this.currentRoom.isExplored = true
-            return
-        }
+    //     // If Room is not explored and there is no monsters present - set Room as explored
+    //     if (!this.currentRoom.monsterList.length) {
+    //         this.currentRoom.isExplored = true
+    //         return
+    //     }
 
-        this.createEnemyList(this.currentRoom.monsterList.map((monster) => monster.originId))
-        gameStateStore.updateGameState(EGameState.Battle)
-    }
+    //     this.createEnemyList(this.currentRoom.monsterList.map((monster) => monster.originId))
+    //     gameStateStore.updateGameState(EGameState.Battle)
+    // }
 
     createMonster = (monsterId?: string) => {
         const monster = monsterGenerator.create(monsterId)

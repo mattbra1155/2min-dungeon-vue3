@@ -15,6 +15,7 @@ import { ItemGenerator } from '@/assets/generators/itemGenerator'
 import { AllItemTypes } from '@/interfaces/IItem'
 import { usePlayerStore } from './usePlayer'
 import { useGameStateStore } from './useGameStateManager'
+import { useTurnStore } from './useTurn'
 
 interface Instance {
     id: string
@@ -28,6 +29,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
     const instance = ref<Instance>()
     const loadingArea = ref<boolean>(false)
     const itemGenerator = ref<any>(new ItemGenerator())
+    const turnStore = useTurnStore()
 
     const addLocationToSceneList = (location: Room) => {
         if (sceneList.value.includes(location)) {
@@ -229,13 +231,15 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         }
 
         // If Room is not explored and there is no monsters present - set Room as explored
-        if (!activeRoom.value.monsterList.length) {
-            activeRoom.value.isExplored = true
-            return true
-        }
+        // if (!activeRoom.value.monsterList.length) {
+        //     activeRoom.value.isExplored = true
+        //     return true
+        // }
 
-        createEnemyList(activeRoom.value.monsterList.map((monster) => monster.originId))
-        gameStateStore.updateGameState(EGameState.Battle)
+        // createEnemyList(activeRoom.value.monsterList.map((monster) => monster.originId))
+        // console.log('hhh')
+
+        // gameStateStore.updateGameState(EGameState.Battle)
         return true
     }
 
@@ -245,12 +249,10 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
     }
 
     const createEnemyList = (enemiesToCreate: string[]) => {
-        const enemyList: MonsterModel[] = []
         enemiesToCreate.forEach((monsterId: string) => {
             const enemy = createMonster(monsterId)
-            enemyList.push(enemy)
+            turnStore.monsterList.push(enemy)
         })
-        return enemyList
     }
 
     const setActiveLocation = (location: Room) => {
