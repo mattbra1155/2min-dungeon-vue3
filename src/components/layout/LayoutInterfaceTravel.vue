@@ -134,6 +134,7 @@ const move = async (index: number) => {
             console.error('No previous player position')
             return
         }
+
         playerPosition.updateCoords(savedPlayerPosition.x, savedPlayerPosition.y)
         await sceneManager.checkIfChangeRoomIsPossible(playerPosition.coords.x, playerPosition.coords.y)
         feedStore.setTravelFeedItem(`You travel back.`)
@@ -196,7 +197,7 @@ const enterInstance = async (instanceId: string, entryId: string) => {
         }
         sceneManager.instance = undefined
 
-        sceneManager.setActiveScene(exitLocation)
+        sceneManager.setActiveLocation(exitLocation)
         feedStore.resetTravelFeed()
         feedStore.setTravelFeedItem(`You have entered ${sceneManager.activeRoom?.name}`)
         feedStore.setTravelFeedItem(`${sceneManager.activeRoom?.description}`)

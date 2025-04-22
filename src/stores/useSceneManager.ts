@@ -36,12 +36,11 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
 
         sceneList.value.push(location)
     }
-    const createLocation = async (locationId?: string, x?: number, y?: number) => {
-        const locationData = locations.find((location) => location.x === x && location.y === y)
-
-        console.log('here')
-
-        console.log(locationData)
+    const createLocation = async (x: number, y: number, locationId?: string) => {
+        // find the location by ID or coords
+        const locationData = locations.find(
+            (location) => location.id === locationId || (location.x === x && location.y === y)
+        )
 
         if (!locationData) {
             console.error('no location data')
@@ -78,11 +77,6 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
 
         addLocationToSceneList(location)
 
-        const currentList: any = await localforage.getItem('visitedLocationList')
-        if (currentList) {
-            localforage.setItem('visitedLocationList', currentList.push(location))
-        }
-
         return location
     }
 
@@ -91,6 +85,8 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         console.log(useSceneManagerStore().activeRoom)
 
         let location = undefined
+        console.log('rrrrrrrr', x, y)
+
         if (instance.value) {
             location = instanceList.value.find((location) => location.x === x && location.y === y)
         } else {
@@ -101,12 +97,12 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
             console.error('cant find location')
             return
         }
-        const createdLocation = await createLocation(location.id)
+        const createdLocation = await createLocation(location.x, location.y)
         if (!createdLocation) {
             console.error('No location crated')
             return
         }
-        setActiveScene(createdLocation)
+        setActiveLocation(createdLocation)
         console.log(createdLocation)
 
         console.log(useSceneManagerStore().activeRoom)
@@ -193,7 +189,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
             }
             console.log(locationData)
 
-            activeRoom.value = await createLocation(locationData.id)
+            activeRoom.value = await createLocation(locationData.x, locationData.y)
         }
 
         if (!activeRoom.value) {
@@ -258,9 +254,9 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         return enemyList
     }
 
-    const setActiveScene = (scene: Room) => {
+    const setActiveLocation = (location: Room) => {
         const playerPosition = usePlayerPositionStore()
-        activeRoom.value = scene
+        activeRoom.value = location
         playerPosition.updateCoords(activeRoom.value.x, activeRoom.value.y)
     }
 
@@ -407,7 +403,7 @@ export const useSceneManagerStore = defineStore('sceneManager', () => {
         sceneList,
         instanceList,
         createLocation,
-        setActiveScene,
+        setActiveLocation,
         moveToLocation,
         getClosestTiles,
         resetRoom,

@@ -30,11 +30,17 @@ export const useGameStateStore = defineStore('gameState', () => {
                 console.log('GAME STATE: Create Character')
                 router.push({ name: 'characterCreation' })
                 break
-            case EGameState.StartGame:
+            case EGameState.StartGame: {
                 console.log('GAME STATE: Start Game')
-                await sceneManager.createLocation('oakwood')
+                // const location = await sceneManager.createLocation(undefined, 11, 11)
+                // if (!location) {
+                //     return
+                // }
+                sceneManager.moveToLocation(11, 11)
+                // sceneManager.setActiveLocation()
                 updateGameState(EGameState.Travel)
                 break
+            }
             case EGameState.Travel:
                 console.log('GAME STATE: Travel')
                 turnStore.updateTurnStateMachine(ETurnState.Disabled)

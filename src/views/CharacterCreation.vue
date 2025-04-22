@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import professions from '@/assets/json/professions.json'
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ISkill } from '@/interfaces/ISkill'
 import { IPlayer } from '@/interfaces/IPlayer'

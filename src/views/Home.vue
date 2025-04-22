@@ -38,7 +38,7 @@ watch(
 <template>
     <div class="home">
         {{ gameStateStore.activeGameState }}
-        {{ sceneManger.activeRoom }}
+        <!-- {{ sceneManger.activeRoom }} -->
         <LayoutTopBar />
         <FeedPanel />
         <LayoutInterfaceCombat v-if="gameStateStore.activeGameState === EGameState.Battle" />
