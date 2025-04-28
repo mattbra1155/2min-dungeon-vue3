@@ -1,98 +1,60 @@
 <script setup lang="ts">
-import { EGameState } from '@/enums/EGameState'
-import { IContainer } from '@/interfaces/IContainer'
+import { useLoot } from '@/composables/useLoot'
 import { AllItemTypes } from '@/interfaces/IItem'
-import { useFeedStore } from '@/stores/useFeed'
-import { useGameStateStore } from '@/stores/useGameStateManager'
-import { useGlobalStore } from '@/stores/useGlobal'
-import { usePlayerStore } from '@/stores/usePlayer'
-import { ref } from 'vue'
+import { useTurnStore } from '@/stores/useTurn'
+import { onMounted, ref } from 'vue'
+import { lootLists } from '@/assets/data/lootList'
+import { Gold } from '@/assets/models/itemsModel'
 
-const playerStore = usePlayerStore()
-const feedStore = useFeedStore()
-const { updateGameState } = useGameStateStore()
-const globalStore = useGlobalStore()
-const containerMessage = ref<string>()
+const turnStore = useTurnStore()
+const { weightedRandom, generateItem } = useLoot()
+const lootList = ref<Array<AllItemTypes | Gold>>([])
 
-const openContainer = (item: IContainer) => {
-    if (!playerStore.player) {
+const getlootList = () => console.log(turnStore.monsterList)
+
+turnStore.monsterList.map((monster) => {
+    const itemId = weightedRandom(lootLists['goblin'])
+
+    const item = generateItem(itemId)
+    console.log(item)
+
+    if (!item) {
         return
     }
-    if (item.isLocked) {
-        const canPlayerUnlock = item.unlock(playerStore.player)
-        if (canPlayerUnlock) {
-            item.setIsSearch(true)
-        } else {
-            containerMessage.value = `You are unable to open the ${item.name}. You need a lockpicking skill.`
-        }
-        return
-    }
-    item.setIsSearch(true)
-}
-const getItem = (container: IContainer, item: AllItemTypes) => {
-    console.log(container, item)
+    lootList.value.push(item)
+})
+// const getItem = (container: IContainer, item: AllItemTypes) => {
+//     console.log(container, item)
 
-    playerStore.player?.inventory.addItem(item, playerStore.player?.id)
-    console.log(playerStore.player?.inventory.inventory)
+//     playerStore.player?.inventory.addItem(item, playerStore.player?.id)
+//     console.log(playerStore.player?.inventory.inventory)
 
-    const itemToRemoveIndex = container.items.findIndex((findItem) => findItem.id === item.id)
-    container.items.splice(itemToRemoveIndex, 1)
-    if (!container.items.length) {
-        feedStore.setTravelFeedItem(`You took everything from ${container.name}`)
-    }
-}
+//     const itemToRemoveIndex = container.items.findIndex((findItem) => findItem.id === item.id)
+//     container.items.splice(itemToRemoveIndex, 1)
+//     if (!container.items.length) {
+//         feedStore.setTravelFeedItem(`You took everything from ${container.name}`)
+//     }
+// }
 
-const close = () => {
-    feedStore.setActiveRoomObject(undefined)
-    globalStore.isMoving = false
-    updateGameState(EGameState.Travel)
-}
+// const close = () => {
+//     feedStore.setActiveRoomObject(undefined)
+//     globalStore.isMoving = false
+//     updateGameState(EGameState.Travel)
+// }
+onMounted(() => {
+    getlootList()
+})
 </script>
 
 <template>
-    <div v-if="feedStore.activeRoomObject">
-        <div class="o-feed__item">
-            <img
-                class="a-image --contain o-feed__image"
-                v-if="feedStore.activeRoomObject.image && !feedStore.activeRoomObject.isSearched"
-                :src="feedStore.activeRoomObject.image || `Treasure Chest open 254x254.png`"
-                alt=""
-            />
-            <img
-                class="a-image --contain o-feed__image"
-                v-else-if="feedStore.activeRoomObject.imageSearched && feedStore.activeRoomObject.isSearched"
-                :src="feedStore.activeRoomObject.imageSearched"
-                alt=""
-            />
-            <p class="a-text --center">
-                {{
-                    feedStore.activeRoomObject.isLocked
-                        ? `Locked ${feedStore.activeRoomObject.name}`
-                        : feedStore.activeRoomObject.name
-                }}
-            </p>
-            <template v-if="feedStore.activeRoomObject.isSearched">
-                <template v-if="feedStore.activeRoomObject.items.length">
-                    contains:
-                    <p v-for="lootItem in feedStore.activeRoomObject.items" :key="lootItem.id" class="a-text">
-                        {{ lootItem.name }}
-                        <button class="a-button" @click="getItem(feedStore.activeRoomObject, lootItem)">take</button>
-                    </p>
-                </template>
-                <p class="a-text --center" v-else>empty!</p>
-            </template>
-            <button
-                v-if="!feedStore.activeRoomObject.isSearched"
-                @click="openContainer(feedStore.activeRoomObject!)"
-                class="a-button action__button"
-            >
-                {{ feedStore.activeRoomObject.isLocked ? 'Unlock' : 'Open' }}
-            </button>
-            <transition name="slide">
-                <p v-if="containerMessage" class="test">{{ containerMessage }}</p>
-            </transition>
-            <!-- ADD CLOSE LOOT WINDOW -->
-            <button class="a-button" @click="close">Close</button>
+    <div class="o-feed__loot">
+        {{ lootList }}
+        <div class="lootList" v-for="loot in lootList" :key="loot.id">
+            <div class="lootItem">
+                <h2 class="lootItem__name">{{ loot.name }}</h2>
+            </div>
         </div>
     </div>
 </template>
+
+<style lang="sass"></style>

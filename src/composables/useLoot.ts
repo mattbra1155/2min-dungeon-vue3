@@ -34,10 +34,13 @@ const state: ILootState = reactive({
 
 export const useLoot = () => {
     const weightedRandom = (options: { item: string; probability: number }[]) => {
-        const itemGenerator = new ItemGenerator()
         const { getWeightedItem } = useWieghtedList()
         const weightedItem = getWeightedItem(options)
-        const item = itemGenerator.createItemById(weightedItem)
+        return weightedItem
+    }
+    const generateItem = (itemId: string) => {
+        const itemGenerator = new ItemGenerator()
+        const item = itemGenerator.createItemById(itemId)
         if (!item) {
             console.error('Could not generate item')
             return
@@ -92,6 +95,7 @@ export const useLoot = () => {
         ...toRefs(state),
         // generateLoot,
         // generateLootItem,
+        generateItem,
         weightedRandom,
     }
 }

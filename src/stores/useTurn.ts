@@ -29,13 +29,15 @@ export const useTurnStore = defineStore('turn', () => {
         const playerStore = usePlayerStore()
         const globalStore = useGlobalStore()
         const sceneManager = useSceneManagerStore()
-
+        const feedStore = useFeedStore()
         activeTurnState.value = newTurnState
 
         switch (activeTurnState.value) {
             case ETurnState.Disabled: {
                 turnNumber.value = 0
                 turnOrder.value = []
+                feedStore.resetBattleFeed()
+
                 activeCharacter.value = undefined
                 console.log('turn state: ', activeTurnState.value)
                 break
@@ -181,9 +183,9 @@ export const useTurnStore = defineStore('turn', () => {
         const updatedTurnOrder = turnOrder.value.splice(deadPersonIndex, 1)
         return updatedTurnOrder
     }
-    // const setMonsterList = (monsterListPayload: MonsterModel[]) => {
-    //     monsterList.value = monsterListPayload
-    // }
+    const setMonsterList = (monsterListPayload: MonsterModel[]) => {
+        monsterList.value = monsterListPayload
+    }
     return {
         activeCharacter,
         activeTurnState,
@@ -193,6 +195,6 @@ export const useTurnStore = defineStore('turn', () => {
         updateTurnStateMachine,
         resetTurn,
         checkIfDead,
-        // setMonsterList,
+        setMonsterList,
     }
 })
