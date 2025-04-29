@@ -17,7 +17,7 @@ export const useGameStateStore = defineStore('gameState', () => {
     const updateGameState = async (newState: EGameState) => {
         activeGameState.value = newState
         switch (activeGameState.value) {
-            case EGameState.Init:
+            case EGameState.Init: {
                 console.log('GAME STATE: Init')
                 if (playerStore.player) {
                     updateGameState(EGameState.StartGame)
@@ -26,10 +26,12 @@ export const useGameStateStore = defineStore('gameState', () => {
                     updateGameState(EGameState.CreateChar)
                 }
                 break
-            case EGameState.CreateChar:
+            }
+            case EGameState.CreateChar: {
                 console.log('GAME STATE: Create Character')
                 router.push({ name: 'characterCreation' })
                 break
+            }
             case EGameState.StartGame: {
                 console.log('GAME STATE: Start Game')
                 // const location = await sceneManager.createLocation(undefined, 11, 11)
@@ -41,36 +43,44 @@ export const useGameStateStore = defineStore('gameState', () => {
                 updateGameState(EGameState.Travel)
                 break
             }
-            case EGameState.Travel:
+            case EGameState.Travel: {
                 console.log('GAME STATE: Travel')
                 turnStore.updateTurnStateMachine(ETurnState.Disabled)
                 router.push({ name: 'home' })
                 break
-            case EGameState.Loot:
-                console.log('GAME STATE: Loot')
-                break
-            case EGameState.Town:
+            }
+            case EGameState.Town: {
                 console.log('GAME STATE: Town')
                 break
-            case EGameState.Battle:
+            }
+            case EGameState.Battle: {
                 console.log('GAME STATE: Battle started')
                 turnStore.updateTurnStateMachine(ETurnState.Init)
                 break
-            case EGameState.LevelCleared:
+            }
+            case EGameState.Loot: {
+                console.log('GAME STATE: Loot')
+                break
+            }
+            case EGameState.LevelCleared: {
                 console.log('GAME STATE: Level cleared')
                 turnStore.updateTurnStateMachine(ETurnState.Disabled)
-                updateGameState(EGameState.Loot)
+                // updateGameState(EGameState.Travel) <-- to check if this should be triggered somewhere else
                 break
-            case EGameState.PlayerDead:
+            }
+            case EGameState.PlayerDead: {
                 console.log('GAME STATE: Player dead')
                 turnStore.updateTurnStateMachine(ETurnState.Disabled)
                 break
-            case EGameState.Playing:
+            }
+            case EGameState.Playing: {
                 console.log('GAME STATE: Playing')
                 break
-            default:
+            }
+            default: {
                 console.log('GAME STATE: unset')
                 break
+            }
         }
     }
     return {

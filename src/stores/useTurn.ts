@@ -71,7 +71,7 @@ export const useTurnStore = defineStore('turn', () => {
                 sortTurnOrder(monsterList.value)
                 updateTurnStateMachine(ETurnState.PlayerAttack)
                 break
-            case ETurnState.PlayerAttack:
+            case ETurnState.PlayerAttack: {
                 console.log('<====>')
                 if (!playerStore.player) return
                 playerStore.player.status.updateStatusList(playerStore.player, turnNumber.value)
@@ -83,13 +83,14 @@ export const useTurnStore = defineStore('turn', () => {
                 console.log('TURN STATE:', ETurnState.PlayerAttack)
                 activeCharacter.value = playerStore.player
                 break
+            }
             case ETurnState.EnemyAttack: {
                 console.log('TURN STATE:', ETurnState.EnemyAttack)
                 const isCleared = !turnOrder.value.find((enemy) => enemy.isAlive)
 
                 if (isCleared) {
                     console.log('No enemies left')
-                    gameStateStore.updateGameState(EGameState.LevelCleared)
+                    gameStateStore.updateGameState(EGameState.Loot)
                     return
                 }
                 const enemyAttack = () => {
@@ -122,19 +123,20 @@ export const useTurnStore = defineStore('turn', () => {
 
                 break
             }
-            case ETurnState.CalculateDamage:
+            case ETurnState.CalculateDamage: {
                 console.log('TURN STATE:', ETurnState.CalculateDamage)
-
                 break
-            case ETurnState.EndTurn:
+            }
+            case ETurnState.EndTurn: {
                 console.log('TURN STATE:', ETurnState.EndTurn)
                 turnNumber.value++
                 updateTurnStateMachine(ETurnState.PlayerAttack)
                 break
-
-            default:
+            }
+            default: {
                 console.log('no state')
                 break
+            }
         }
     }
 
