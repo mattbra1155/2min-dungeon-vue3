@@ -5,8 +5,11 @@ import { useTurnStore } from '@/stores/useTurn'
 import { onMounted, ref } from 'vue'
 import { lootLists } from '@/assets/data/lootList'
 import { Gold } from '@/assets/models/itemsModel'
+import { usePlayerStore } from '@/stores/usePlayer'
+import { useGameStateStore } from '@/stores/useGameStateManager'
 
 const turnStore = useTurnStore()
+const playerStore = usePlayerStore()
 const { weightedRandom, generateItem } = useLoot()
 const lootList = ref<Array<AllItemTypes | Gold>>([])
 
@@ -21,40 +24,39 @@ turnStore.monsterList.map((monster) => {
     if (!item) {
         return
     }
-    lootList.value.push(item)
+    lootList.value.push(item as AllItemTypes)
 })
-// const getItem = (container: IContainer, item: AllItemTypes) => {
-//     console.log(container, item)
+const getItem = (item: AllItemTypes | Gold) => {
+    console.log(item)
 
-//     playerStore.player?.inventory.addItem(item, playerStore.player?.id)
-//     console.log(playerStore.player?.inventory.inventory)
+    playerStore.player?.inventory.addItem(item, playerStore.player?.id)
 
-//     const itemToRemoveIndex = container.items.findIndex((findItem) => findItem.id === item.id)
-//     container.items.splice(itemToRemoveIndex, 1)
-//     if (!container.items.length) {
-//         feedStore.setTravelFeedItem(`You took everything from ${container.name}`)
-//     }
-// }
+    lootList.value = lootList.value.filter((loot) => loot !== item) // Remove the item from the lootList
+}
 
-// const close = () => {
-//     feedStore.setActiveRoomObject(undefined)
-//     globalStore.isMoving = false
-//     updateGameState(EGameState.Travel)
-// }
 onMounted(() => {
     getlootList()
 })
 </script>
 
 <template>
-    <div class="o-feed__loot">
-        {{ lootList }}
+    <div class="o-feed__container">
+        <p class="a-text --center">You defeated your enemies</p>
+        <p class="a-text --center">and found:</p>
         <div class="lootList" v-for="loot in lootList" :key="loot.id">
             <div class="lootItem">
-                <h2 class="lootItem__name">{{ loot.name }}</h2>
+                <p class="lootItem__name">{{ loot.name }}</p>
+                <button class="a-button" @click="getItem(loot)">Add</button>
             </div>
         </div>
     </div>
 </template>
 
-<style lang="sass"></style>
+<style lang="sass">
+
+.lootItem
+    display: flex
+    justify-content: space-between
+    align-items: center
+    margin-bottom: 1rem
+</style>

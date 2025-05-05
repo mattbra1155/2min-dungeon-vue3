@@ -20,7 +20,7 @@ export const useTurnStore = defineStore('turn', () => {
     const monsterList = ref<Array<IPlayer | MonsterModel>>([])
 
     const sortTurnOrder = (entityList: Array<IPlayer | MonsterModel>) => {
-        const sorted = entityList.sort((a, b) => b.currentStats.initiative - a.currentStats.initiative)
+        const sorted = [...entityList].sort((a, b) => b.currentStats.initiative - a.currentStats.initiative)
         turnOrder.value = sorted
         return sorted
     }
@@ -36,6 +36,7 @@ export const useTurnStore = defineStore('turn', () => {
             case ETurnState.Disabled: {
                 turnNumber.value = 0
                 turnOrder.value = []
+                monsterList.value = []
                 feedStore.resetBattleFeed()
 
                 activeCharacter.value = undefined
@@ -44,6 +45,7 @@ export const useTurnStore = defineStore('turn', () => {
             }
             case ETurnState.Init: {
                 console.log('TURN STATE:', ETurnState.Init)
+                console.log(playerStore.player, monsterList.value)
                 if (!playerStore.player || !monsterList.value?.length) {
                     console.log(playerStore.player, monsterList.value)
                     console.log('no player or monster list')
@@ -73,15 +75,18 @@ export const useTurnStore = defineStore('turn', () => {
                 break
             case ETurnState.PlayerAttack: {
                 console.log('<====>')
-                if (!playerStore.player) return
-                playerStore.player.status.updateStatusList(playerStore.player, turnNumber.value)
-
+                console.log('TURN STATE:', ETurnState.PlayerAttack)
+                if (!playerStore.player) {
+                    return
+                }
                 if (!turnOrder.value.length) {
                     console.log('turn Order empty')
                     return
                 }
-                console.log('TURN STATE:', ETurnState.PlayerAttack)
                 activeCharacter.value = playerStore.player
+                playerStore.player.status.updateStatusList(playerStore.player, turnNumber.value)
+                checkIfDead()
+
                 break
             }
             case ETurnState.EnemyAttack: {
@@ -145,10 +150,10 @@ export const useTurnStore = defineStore('turn', () => {
         const feedStore = useFeedStore()
 
         console.log('checking who is dead...')
-        if (!turnOrder.value.length) {
-            console.error('no turn order')
-            return
-        }
+        // if (!turnOrder.value.length) {
+        //     console.error('no turn order')
+        //     return
+        // }
         turnOrder.value.forEach((enemy) => {
             if (enemy.currentStats.hp <= 0) {
                 feedStore.setBattleFeedItem(`${enemy.name} is dead`)
@@ -173,17 +178,16 @@ export const useTurnStore = defineStore('turn', () => {
         updateTurnStateMachine(ETurnState.Disabled)
     }
 
-    const removeDeadFromOrder = (dead: MonsterModel | IPlayer) => {
+    const removeDeadFromOrder = (dead: MonsterModel | IPlayer): void => {
         if (!turnOrder.value.length) {
             console.error('No turn order')
             return
         }
         console.log('dead')
+        console.log(monsterList.value)
 
-        const deadPerson = turnOrder.value.find((character) => character === dead)
-        const deadPersonIndex = turnOrder.value.findIndex((character) => character === deadPerson)
-        const updatedTurnOrder = turnOrder.value.splice(deadPersonIndex, 1)
-        return updatedTurnOrder
+        turnOrder.value = turnOrder.value.filter((character) => character !== dead)
+        console.log(turnOrder.value)
     }
     const setMonsterList = (monsterListPayload: MonsterModel[]) => {
         monsterList.value = monsterListPayload

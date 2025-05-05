@@ -1,5 +1,5 @@
 import { MonsterModel } from '@/assets/models/monsterModel'
-import { Armor, Food, Material, Potion, Utility, Weapon } from '@/assets/models/itemsModel'
+import { Armor, Food, Gold, Material, Potion, Utility, Weapon } from '@/assets/models/itemsModel'
 import { ModifierItem } from '@/assets/models/modifierItemModel'
 import { EDice } from '@/enums/EDice'
 import { IPlayer } from '@/interfaces/IPlayer'

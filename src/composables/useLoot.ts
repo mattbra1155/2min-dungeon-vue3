@@ -42,8 +42,7 @@ export const useLoot = () => {
         const itemGenerator = new ItemGenerator()
         const item = itemGenerator.createItemById(itemId)
         if (!item) {
-            console.error('Could not generate item')
-            return
+            throw Error('Could not generate item')
         }
         state.lootList.push(item)
 

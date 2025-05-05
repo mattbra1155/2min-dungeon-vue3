@@ -71,6 +71,7 @@ export const useGameStateStore = defineStore('gameState', () => {
             case EGameState.PlayerDead: {
                 console.log('GAME STATE: Player dead')
                 turnStore.updateTurnStateMachine(ETurnState.Disabled)
+                updateGameState(EGameState.Init)
                 break
             }
             case EGameState.Playing: {

@@ -19,7 +19,13 @@ const instance = computed(() =>
 
 <template>
     <div id="top-bar" class="o-header">
-        <h2 v-if="sceneManager.activeRoom" id="levelName" class="level__name">{{ sceneManager.activeRoom.name }}</h2>
+        <h2
+            v-if="sceneManager.activeRoom && gameStateStore.activeGameState === EGameState.Travel"
+            id="levelName"
+            class="level__name"
+        >
+            {{ sceneManager.activeRoom.name }}
+        </h2>
         <p v-if="sceneManager.instance" style="text-align: center">{{ instance }}</p>
         <div v-if="gameStateStore.activeGameState === EGameState.Battle">
             <p style="text-align: center">{{ turnStore.activeTurnState }}</p>
