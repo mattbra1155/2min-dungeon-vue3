@@ -6,6 +6,7 @@ import { usePlayerStore } from './usePlayer'
 import { useRouter } from 'vue-router'
 import { useTurnStore } from './useTurn'
 import { ETurnState } from '@/enums/ETurnState'
+import { useFeedStore } from './useFeed'
 
 export const useGameStateStore = defineStore('gameState', () => {
     const router = useRouter()
@@ -13,12 +14,15 @@ export const useGameStateStore = defineStore('gameState', () => {
     const playerStore = usePlayerStore()
     const turnStore = useTurnStore()
     const activeGameState = ref<EGameState>(EGameState.Init)
+    const feedStore = useFeedStore()
 
     const updateGameState = async (newState: EGameState) => {
         activeGameState.value = newState
         switch (activeGameState.value) {
             case EGameState.Init: {
                 console.log('GAME STATE: Init')
+                feedStore.resetBattleFeed()
+                feedStore.resetTravelFeed()
                 if (playerStore.player) {
                     updateGameState(EGameState.StartGame)
                     break
@@ -70,8 +74,6 @@ export const useGameStateStore = defineStore('gameState', () => {
             }
             case EGameState.PlayerDead: {
                 console.log('GAME STATE: Player dead')
-                turnStore.updateTurnStateMachine(ETurnState.Disabled)
-                updateGameState(EGameState.Init)
                 break
             }
             case EGameState.Playing: {

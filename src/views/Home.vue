@@ -12,6 +12,7 @@ import { useGameStateStore } from '@/stores/useGameStateManager'
 import { usePlayerStore } from '@/stores/usePlayer'
 import { useTurnStore } from '@/stores/useTurn'
 import LayoutInterfaceLoot from '@/components/layout/LayoutInterfaceLoot.vue'
+import PlayerDead from '@/components/PlayerDead.vue'
 
 const sceneManger = useSceneManagerStore()
 const gameStateStore = useGameStateStore()
@@ -40,5 +41,6 @@ watch(
         <LayoutInterfaceCombat v-if="gameStateStore.activeGameState === EGameState.Battle" />
         <LayoutInterfaceLoot v-else-if="gameStateStore.activeGameState === EGameState.Loot" />
         <LayoutInterfaceTravel v-else />
+        <PlayerDead v-if="gameStateStore.activeGameState === EGameState.PlayerDead" />
     </div>
 </template>

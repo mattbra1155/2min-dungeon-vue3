@@ -1,29 +1,22 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
 import { EGameState } from '@/enums/EGameState'
-import { useFeedStore } from '@/stores/useFeed'
 import { useTurnStore } from '@/stores/useTurn'
 import { useGameStateStore } from '@/stores/useGameStateManager'
 import { usePlayerStore } from '@/stores/usePlayer'
+import { ETurnState } from '@/enums/ETurnState'
+import { useSceneManagerStore } from '@/stores/useSceneManager'
 
 const playerStore = usePlayerStore()
-const router = useRouter()
-const feedStore = useFeedStore()
 const turnStore = useTurnStore()
 const gameStateStore = useGameStateStore()
-
-const init = () => {
-    playerStore.deadPlayer()
-    gameStateStore.updateGameState(EGameState.PlayerDead)
-    feedStore.resetBattleFeed()
-}
+const sceneMangerStore = useSceneManagerStore()
 
 const closeView = () => {
-    turnStore.resetTurn()
-    router.push({ name: 'characterCreation' })
+    playerStore.resetPlayer()
+    turnStore.updateTurnStateMachine(ETurnState.Disabled)
+    gameStateStore.updateGameState(EGameState.Init)
+    sceneMangerStore.resetRoomList()
 }
-
-init()
 </script>
 
 <template>

@@ -20,12 +20,6 @@ const routes: Array<RouteRecordRaw> = [
         props: { default: false },
     },
     {
-        path: '/player-dead',
-        name: 'playerDead',
-        component: () => import('../views/PlayerDead.vue'),
-        props: { default: false },
-    },
-    {
         path: '/town',
         name: 'town',
         component: () => import('../views/Town.vue'),

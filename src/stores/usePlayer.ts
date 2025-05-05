@@ -118,10 +118,6 @@ export const usePlayerStore = defineStore('player', () => {
     }
 
     const resetPlayer = async () => {
-        if (!player.value) {
-            console.error('No Player')
-            return
-        }
         player.value = undefined
     }
 
