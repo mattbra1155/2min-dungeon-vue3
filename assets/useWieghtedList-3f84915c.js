@@ -1,1 +1,0 @@
-const n=()=>({getWeightedItem:r=>{let e;const t=[r[0].probability];for(e=1;e<r.length;e++)t[e]=r[e].probability+t[e-1];const g=Math.random()*t[t.length-1];for(e=0;e<t.length&&!(t[e]>g);e++);return console.log(t,g),r[e].item}});export{n as u};
