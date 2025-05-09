@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { usePlayer } from '@/composables/usePlayer'
-import { Blacksmith, Merchant } from '@/assets/models/shopModel'
+import { Blacksmith } from '@/assets/models/shopModel'
 import { diceRollK10 } from '@/helpers/diceRoll'
 import { onMounted, reactive, ref } from 'vue'
 import { useShop } from '@/composables/useShop'
-import localforage from 'localforage'
 import { AllItemTypes } from '@/interfaces/IItem'
+import { usePlayerStore } from '@/stores/usePlayer'
 // import { writeAnimation } from '@/utils/writeAnimation'
 const playerStore = usePlayerStore()
 const { setActiveShop } = useShop()
@@ -53,6 +52,9 @@ const playerSellitem = (item: AllItemTypes) => {
 }
 
 const playerBuyItem = (item: AllItemTypes) => {
+    if (!playerStore.player) {
+        return
+    }
     if (playerStore.player.inventory.gold < item.price) {
         writeAnimation(`You don't have enough gold for ${item.name}`)
         console.log('SHOP: Player doesnt have enough gold')
@@ -71,7 +73,7 @@ onMounted(() => {
     <div class="o-merchant">
         <div class="o-merchant__header">
             <h1 class="o-merchant__title">Blacksmith</h1>
-            Your Gold: {{ player.inventory.gold }} <br />
+            Your Gold: {{ playerStore.player?.inventory.gold }} <br />
 
             Blacksmith's Gold: {{ blacksmith.gold }} GC
             <p class="a-text o-merchant__talk">{{ words }}</p>
@@ -81,7 +83,7 @@ onMounted(() => {
             <div class="o-merchant__itemList">
                 SELL:
                 <template
-                    v-for="item in player.inventory.inventory.filter(
+                    v-for="item in playerStore.player?.inventory.inventory.filter(
                         (invItem) =>
                             invItem.category === 'armor' ||
                             invItem.category === 'weapon' ||

@@ -31,7 +31,7 @@
         "type": "entry",
         "isDark": false,
         "x": 19,
-        "y": 20,
+        "y": 22,
         "roomObjects": [
             {
                 "type": "chest",
