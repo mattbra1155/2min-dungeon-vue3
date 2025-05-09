@@ -42,7 +42,7 @@ export const useGameStateStore = defineStore('gameState', () => {
                 // if (!location) {
                 //     return
                 // }
-                sceneManager.moveToLocation(11, 11)
+                sceneManager.moveToLocation(19, 23)
                 // sceneManager.setActiveLocation()
                 updateGameState(EGameState.Travel)
                 break

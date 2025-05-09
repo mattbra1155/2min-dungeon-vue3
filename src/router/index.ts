@@ -28,7 +28,7 @@ const routes: Array<RouteRecordRaw> = [
 ]
 
 const router = createRouter({
-    history: createWebHistory('/'),
+    history: createWebHistory('/2min-dungeon-vue3/'),
     routes,
 })
 
