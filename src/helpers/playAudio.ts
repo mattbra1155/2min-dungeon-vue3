@@ -1,3 +1,5 @@
+// THIS NEEDS TO BE REMOVED AND USEAUDIO USED INSTEAD
+
 export const playAudio = async (fileNameList: string[]) => {
     // NOTE TO SELF: this could be a audio STORE with array of audi play one after another
     // let file = fileNameList[Math.floor(Math.random() * fileNameList.length)]
