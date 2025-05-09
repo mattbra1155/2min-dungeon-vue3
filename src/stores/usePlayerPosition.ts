@@ -1,14 +1,14 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 interface coords {
-    x: number | undefined
-    y: number | undefined
+    x: number
+    y: number
 }
 
 export const usePlayerPositionStore = defineStore('playerPosition', () => {
     const coords = ref<coords>({
-        x: undefined,
-        y: undefined,
+        x: 0,
+        y: 0,
     })
 
     const updateCoords = (x: number, y: number) => {
