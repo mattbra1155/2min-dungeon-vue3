@@ -2164,8 +2164,8 @@
   },
   {
     "name": "Castle Drakenhof",
-    "x": "",
-    "y": "",
+    "x": 15,
+    "y": 7,
     "id": "castle_drakenhof",
     "description": "A scary castle on a cliff overlooking a forest.",
     "image": "empty",
@@ -2500,8 +2500,8 @@
   },
   {
     "name": "Old Shrine",
-    "x": "",
-    "y": "",
+    "x": 19,
+    "y": 8,
     "id": "old_shrine",
     "description": "A old shrine",
     "image": "empty",
@@ -6349,8 +6349,8 @@
   },
   {
     "name": "Abandoned Farmsted",
-    "x": "",
-    "y": "",
+    "x": 21,
+    "y": 21,
     "id": "abandoned_farmsted",
     "description": "Burned down ruins",
     "image": "empty",
