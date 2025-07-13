@@ -8,8 +8,6 @@
         "lootList": [],
         "type": "entry",
         "isDark": false,
-        "x": 111,
-        "y": 222,
         "roomObjects": [
             {
                 "type": "chest",
@@ -30,8 +28,6 @@
         "lootList": [],
         "type": "entry",
         "isDark": false,
-        "x": 19,
-        "y": 22,
         "roomObjects": [
             {
                 "type": "chest",
@@ -54,8 +50,6 @@
         "lootList": "",
         "type": "monster",
         "isDark": false,
-        "x": "",
-        "y": "",
         "roomObjects": [
             {
                 "type": "chest",
@@ -71,8 +65,6 @@
         "entityList": [],
         "lootList": "",
         "isDark": false,
-        "x": "",
-        "y": "",
         "roomObjects": [
             {
                 "type": "chest",
@@ -92,8 +84,6 @@
         "entityList": [],
         "lootList": "",
         "isDark": false,
-        "x": "",
-        "y": "",
         "roomObjects": [
             {
                 "type": "chest",
