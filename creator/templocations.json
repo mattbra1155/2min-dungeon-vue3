@@ -54,8 +54,8 @@
         "lootList": "",
         "type": "monster",
         "isDark": false,
-        "x": "",
-        "y": "",
+        "x": 19,
+        "y": 8,
         "roomObjects": [
             {
                 "type": "chest",
@@ -71,8 +71,8 @@
         "entityList": [],
         "lootList": "",
         "isDark": false,
-        "x": "",
-        "y": "",
+        "x": 15,
+        "y": 7,
         "roomObjects": [
             {
                 "type": "chest",
@@ -92,17 +92,14 @@
         "entityList": [],
         "lootList": "",
         "isDark": false,
-        "x": "",
-        "y": "",
+        "x": 21,
+        "y": 21,
         "roomObjects": [
             {
                 "type": "chest",
                 "isLocked": true
             }
         ],
-        "connectedLocation": {
-            "id": "castle_drakenhof",
-            "entryId": "gate"
-        }
+        "connectedLocation": {}
     }
 ]

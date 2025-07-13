@@ -53,7 +53,7 @@
     "x": 7,
     "y": 0,
     "id": "road",
-    "description": "An old, overgrown road winds its way through the landscape..."
+    "description": "An old, overgrown road winds its way through the landscape, its once smooth surface now cracked and weathered. Thick vegetation encroaches from all sides, reclaiming the path inch by inch. Nature's relentless advance has transformed the road into a forgotten trail, a relic of a bygone era."
   },
   {
     "name": "dark forest",
@@ -70,10 +70,10 @@
     "description": "The foothills sprawl at the base of the towering mountains, their gentle slopes a transition between lowlands and peaks. Dappled with patches of verdant greenery and scattered with boulders, they offer a prelude to the grandeur above. Here, the land undulates in harmony, teasing with the promise of higher heights."
   },
   {
-    "name": "",
+    "name": "door",
     "x": 10,
     "y": 0,
-    "id": "",
+    "id": "door",
     "description": ""
   },
   {
@@ -438,14 +438,14 @@
     "x": 20,
     "y": 1,
     "id": "road",
-    "description": "An old, overgrown road winds its way through the landscape..."
+    "description": "An old, overgrown road winds its way through the landscape, its once smooth surface now cracked and weathered. Thick vegetation encroaches from all sides, reclaiming the path inch by inch. Nature's relentless advance has transformed the road into a forgotten trail, a relic of a bygone era."
   },
   {
     "name": "road",
     "x": 21,
     "y": 1,
     "id": "road",
-    "description": "An old, overgrown road winds its way through the landscape..."
+    "description": "An old, overgrown road winds its way through the landscape, its once smooth surface now cracked and weathered. Thick vegetation encroaches from all sides, reclaiming the path inch by inch. Nature's relentless advance has transformed the road into a forgotten trail, a relic of a bygone era."
   },
   {
     "name": "grassland",
@@ -732,7 +732,7 @@
     "x": 20,
     "y": 2,
     "id": "road",
-    "description": "An old, overgrown road winds its way through the landscape..."
+    "description": "An old, overgrown road winds its way through the landscape, its once smooth surface now cracked and weathered. Thick vegetation encroaches from all sides, reclaiming the path inch by inch. Nature's relentless advance has transformed the road into a forgotten trail, a relic of a bygone era."
   },
   {
     "name": "grassland",
@@ -1026,7 +1026,7 @@
     "x": 20,
     "y": 3,
     "id": "road",
-    "description": "An old, overgrown road winds its way through the landscape..."
+    "description": "An old, overgrown road winds its way through the landscape, its once smooth surface now cracked and weathered. Thick vegetation encroaches from all sides, reclaiming the path inch by inch. Nature's relentless advance has transformed the road into a forgotten trail, a relic of a bygone era."
   },
   {
     "name": "grassland",
@@ -1320,7 +1320,7 @@
     "x": 20,
     "y": 4,
     "id": "road",
-    "description": "An old, overgrown road winds its way through the landscape..."
+    "description": "An old, overgrown road winds its way through the landscape, its once smooth surface now cracked and weathered. Thick vegetation encroaches from all sides, reclaiming the path inch by inch. Nature's relentless advance has transformed the road into a forgotten trail, a relic of a bygone era."
   },
   {
     "name": "grassland",
@@ -1614,7 +1614,7 @@
     "x": 20,
     "y": 5,
     "id": "road",
-    "description": "An old, overgrown road winds its way through the landscape..."
+    "description": "An old, overgrown road winds its way through the landscape, its once smooth surface now cracked and weathered. Thick vegetation encroaches from all sides, reclaiming the path inch by inch. Nature's relentless advance has transformed the road into a forgotten trail, a relic of a bygone era."
   },
   {
     "name": "grassland",
@@ -1908,7 +1908,7 @@
     "x": 20,
     "y": 6,
     "id": "road",
-    "description": "An old, overgrown road winds its way through the landscape..."
+    "description": "An old, overgrown road winds its way through the landscape, its once smooth surface now cracked and weathered. Thick vegetation encroaches from all sides, reclaiming the path inch by inch. Nature's relentless advance has transformed the road into a forgotten trail, a relic of a bygone era."
   },
   {
     "name": "grassland",
@@ -2164,8 +2164,8 @@
   },
   {
     "name": "Castle Drakenhof",
-    "x": "",
-    "y": "",
+    "x": 15,
+    "y": 7,
     "id": "castle_drakenhof",
     "description": "A scary castle on a cliff overlooking a forest.",
     "image": "empty",
@@ -2216,7 +2216,7 @@
     "x": 20,
     "y": 7,
     "id": "road",
-    "description": "An old, overgrown road winds its way through the landscape..."
+    "description": "An old, overgrown road winds its way through the landscape, its once smooth surface now cracked and weathered. Thick vegetation encroaches from all sides, reclaiming the path inch by inch. Nature's relentless advance has transformed the road into a forgotten trail, a relic of a bygone era."
   },
   {
     "name": "grassland",
@@ -2471,11 +2471,11 @@
     "description": "Entering the grassland, you're surrounded by a vast expanse of undulating golden - green.The landscape stretches out before you, a sea of swaying blades of grass punctuated by colorful wildflowers."
   },
   {
-    "name": "road",
+    "name": "door",
     "x": 15,
     "y": 8,
-    "id": "road",
-    "description": "An old, overgrown road winds its way through the landscape..."
+    "id": "door",
+    "description": ""
   },
   {
     "name": "Old Battlefiend",
@@ -2489,19 +2489,19 @@
     "x": 17,
     "y": 8,
     "id": "road",
-    "description": "An old, overgrown road winds its way through the landscape..."
+    "description": "An old, overgrown road winds its way through the landscape, its once smooth surface now cracked and weathered. Thick vegetation encroaches from all sides, reclaiming the path inch by inch. Nature's relentless advance has transformed the road into a forgotten trail, a relic of a bygone era."
   },
   {
     "name": "road",
     "x": 18,
     "y": 8,
     "id": "road",
-    "description": "An old, overgrown road winds its way through the landscape..."
+    "description": "An old, overgrown road winds its way through the landscape, its once smooth surface now cracked and weathered. Thick vegetation encroaches from all sides, reclaiming the path inch by inch. Nature's relentless advance has transformed the road into a forgotten trail, a relic of a bygone era."
   },
   {
     "name": "Old Shrine",
-    "x": "",
-    "y": "",
+    "x": 19,
+    "y": 8,
     "id": "old_shrine",
     "description": "A old shrine",
     "image": "empty",
@@ -2523,7 +2523,7 @@
     "x": 20,
     "y": 8,
     "id": "road",
-    "description": "An old, overgrown road winds its way through the landscape..."
+    "description": "An old, overgrown road winds its way through the landscape, its once smooth surface now cracked and weathered. Thick vegetation encroaches from all sides, reclaiming the path inch by inch. Nature's relentless advance has transformed the road into a forgotten trail, a relic of a bygone era."
   },
   {
     "name": "grassland",
@@ -2810,7 +2810,7 @@
     "x": 19,
     "y": 9,
     "id": "road",
-    "description": "An old, overgrown road winds its way through the landscape..."
+    "description": "An old, overgrown road winds its way through the landscape, its once smooth surface now cracked and weathered. Thick vegetation encroaches from all sides, reclaiming the path inch by inch. Nature's relentless advance has transformed the road into a forgotten trail, a relic of a bygone era."
   },
   {
     "name": "grassland",
@@ -3104,7 +3104,7 @@
     "x": 19,
     "y": 10,
     "id": "road",
-    "description": "An old, overgrown road winds its way through the landscape..."
+    "description": "An old, overgrown road winds its way through the landscape, its once smooth surface now cracked and weathered. Thick vegetation encroaches from all sides, reclaiming the path inch by inch. Nature's relentless advance has transformed the road into a forgotten trail, a relic of a bygone era."
   },
   {
     "name": "grassland",
@@ -3398,7 +3398,7 @@
     "x": 19,
     "y": 11,
     "id": "road",
-    "description": "An old, overgrown road winds its way through the landscape..."
+    "description": "An old, overgrown road winds its way through the landscape, its once smooth surface now cracked and weathered. Thick vegetation encroaches from all sides, reclaiming the path inch by inch. Nature's relentless advance has transformed the road into a forgotten trail, a relic of a bygone era."
   },
   {
     "name": "grassland",
@@ -3692,7 +3692,7 @@
     "x": 19,
     "y": 12,
     "id": "road",
-    "description": "An old, overgrown road winds its way through the landscape..."
+    "description": "An old, overgrown road winds its way through the landscape, its once smooth surface now cracked and weathered. Thick vegetation encroaches from all sides, reclaiming the path inch by inch. Nature's relentless advance has transformed the road into a forgotten trail, a relic of a bygone era."
   },
   {
     "name": "grassland",
@@ -3982,11 +3982,11 @@
     "description": "The forest looms ahead, a dense thicket of trees and underbrush. The air is thick with the scent of damp earth and foliage, and the sounds of rustling leaves and distant animal calls fill the air."
   },
   {
-    "name": "road / forest",
+    "name": "forest road",
     "x": 19,
     "y": 13,
-    "id": "road_/_forest",
-    "description": ""
+    "id": "forest_road",
+    "description": "The forest road winds its way through the trees, a narrow path barely visible beneath the thick underbrush. The air is cool and damp, and the sounds of rustling leaves and distant animal calls fill the air."
   },
   {
     "name": "forest",
@@ -4276,11 +4276,11 @@
     "description": "The forest looms ahead, a dense thicket of trees and underbrush. The air is thick with the scent of damp earth and foliage, and the sounds of rustling leaves and distant animal calls fill the air."
   },
   {
-    "name": "road / forest",
+    "name": "forest road",
     "x": 19,
     "y": 14,
-    "id": "road_/_forest",
-    "description": ""
+    "id": "forest_road",
+    "description": "The forest road winds its way through the trees, a narrow path barely visible beneath the thick underbrush. The air is cool and damp, and the sounds of rustling leaves and distant animal calls fill the air."
   },
   {
     "name": "forest",
@@ -5746,11 +5746,11 @@
     "description": "The forest looms ahead, a dense thicket of trees and underbrush. The air is thick with the scent of damp earth and foliage, and the sounds of rustling leaves and distant animal calls fill the air."
   },
   {
-    "name": "road / forest",
+    "name": "forest road",
     "x": 19,
     "y": 19,
-    "id": "road_/_forest",
-    "description": ""
+    "id": "forest_road",
+    "description": "The forest road winds its way through the trees, a narrow path barely visible beneath the thick underbrush. The air is cool and damp, and the sounds of rustling leaves and distant animal calls fill the air."
   },
   {
     "name": "forest",
@@ -6044,7 +6044,7 @@
     "x": 19,
     "y": 20,
     "id": "road",
-    "description": "An old, overgrown road winds its way through the landscape..."
+    "description": "An old, overgrown road winds its way through the landscape, its once smooth surface now cracked and weathered. Thick vegetation encroaches from all sides, reclaiming the path inch by inch. Nature's relentless advance has transformed the road into a forgotten trail, a relic of a bygone era."
   },
   {
     "name": "fields",
@@ -6338,19 +6338,19 @@
     "x": 19,
     "y": 21,
     "id": "road",
-    "description": "An old, overgrown road winds its way through the landscape..."
+    "description": "An old, overgrown road winds its way through the landscape, its once smooth surface now cracked and weathered. Thick vegetation encroaches from all sides, reclaiming the path inch by inch. Nature's relentless advance has transformed the road into a forgotten trail, a relic of a bygone era."
   },
   {
     "name": "road",
     "x": 20,
     "y": 21,
     "id": "road",
-    "description": "An old, overgrown road winds its way through the landscape..."
+    "description": "An old, overgrown road winds its way through the landscape, its once smooth surface now cracked and weathered. Thick vegetation encroaches from all sides, reclaiming the path inch by inch. Nature's relentless advance has transformed the road into a forgotten trail, a relic of a bygone era."
   },
   {
     "name": "Abandoned Farmsted",
-    "x": "",
-    "y": "",
+    "x": 21,
+    "y": 21,
     "id": "abandoned_farmsted",
     "description": "Burned down ruins",
     "image": "empty",

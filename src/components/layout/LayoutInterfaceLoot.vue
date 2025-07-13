@@ -4,7 +4,11 @@ import { useGameStateStore } from '@/stores/useGameStateManager'
 
 const gameStateStore = useGameStateStore()
 const close = () => {
-    gameStateStore.updateGameState(EGameState.Travel)
+    if (gameStateStore.isStory) {
+        gameStateStore.updateGameState(EGameState.Story)
+    } else {
+        gameStateStore.updateGameState(EGameState.Travel)
+    }
 }
 </script>
 

@@ -15,6 +15,7 @@ export const useGameStateStore = defineStore('gameState', () => {
     const turnStore = useTurnStore()
     const activeGameState = ref<EGameState>(EGameState.Init)
     const feedStore = useFeedStore()
+    const isStory = ref<boolean>(false)
 
     const updateGameState = async (newState: EGameState) => {
         activeGameState.value = newState
@@ -42,7 +43,7 @@ export const useGameStateStore = defineStore('gameState', () => {
                 // if (!location) {
                 //     return
                 // }
-                sceneManager.moveToLocation(19, 23)
+                sceneManager.moveToLocation(19, 8)
                 // sceneManager.setActiveLocation()
                 updateGameState(EGameState.Travel)
                 break
@@ -80,6 +81,11 @@ export const useGameStateStore = defineStore('gameState', () => {
                 console.log('GAME STATE: Playing')
                 break
             }
+            case EGameState.Story: {
+                console.log('GAME STATE: Story')
+                isStory.value = true
+                break
+            }
             default: {
                 console.log('GAME STATE: unset')
                 break
@@ -89,5 +95,6 @@ export const useGameStateStore = defineStore('gameState', () => {
     return {
         updateGameState,
         activeGameState,
+        isStory,
     }
 })
