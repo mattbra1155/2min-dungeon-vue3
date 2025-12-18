@@ -1,3 +1,5 @@
+// THIS NEEDS TO BE REMOVED AND USEAUDIO USED INSTEAD
+
 export const playAudio = async (fileNameList: string[]) => {
     // NOTE TO SELF: this could be a audio STORE with array of audi play one after another
     // let file = fileNameList[Math.floor(Math.random() * fileNameList.length)]
@@ -5,12 +7,14 @@ export const playAudio = async (fileNameList: string[]) => {
 
     let index = 0
 
-    audio.src = `sounds/${fileNameList[index]}`
+    console.log(fileNameList)
+
+    audio.src = `/sounds/${fileNameList[index]}`
     audio.play()
     index++
     audio.onended = function () {
         if (index < fileNameList.length) {
-            audio.src = `sounds/${fileNameList[index]}`
+            audio.src = `/sounds/${fileNameList[index]}`
             audio.play()
             index++
         }
@@ -20,6 +24,6 @@ export const playAudio = async (fileNameList: string[]) => {
 export const playRandomAudio = async (fileNameList: string[]) => {
     const audio = new Audio()
     const file = fileNameList[Math.floor(Math.random() * fileNameList.length)]
-    audio.src = `sounds/${file}`
+    audio.src = `/sounds/${file}`
     audio.play()
 }

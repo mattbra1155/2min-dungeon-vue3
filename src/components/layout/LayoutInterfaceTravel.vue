@@ -51,127 +51,81 @@ const addKeybindings = () => {
     })
 }
 
-// const getLocationName = (locationId: string) => {
-//     let locationName = undefined
-//     if (instanceManager.isActive) {
-//         locationName = instances.find((scene) => scene.id === locationId.toString())?.name
-//     } else {
-//         locationName = locations.find((scene) => scene.id === locationId.toString())?.name
-//     }
+type DirectionData = {
+    dx: number
+    dy: number
+    msg: string
+}
 
-//     if (locationName) {
-//         return locationName
-//     } else {
-//         return 'Error - no Name'
-//     }
-// }
+const directionMap = new Map<EDirections, DirectionData>([
+    [EDirections.North, { dx: 0, dy: -1, msg: 'You move north' }],
+    [EDirections.East, { dx: 1, dy: 0, msg: 'You move east' }],
+    [EDirections.South, { dx: 0, dy: 1, msg: 'You move south' }],
+    [EDirections.West, { dx: -1, dy: 0, msg: 'You move west' }],
+])
 
 const move = async (index: number) => {
     if (!sceneManager || playerPosition.coords.x === undefined || playerPosition.coords.y === undefined) {
         return
     }
+
+    const direction = directionMap.get(index)
+    if (!direction) return
+
+    const { dx, dy, msg } = direction
+    const oldCoords = structuredClone(toRaw(playerPosition.coords))
+    const newX = oldCoords.x + dx
+    const newY = oldCoords.y + dy
+
     globalStore.isMoving = true
     sceneManager.loadingArea = true
-    let newPlayerPosition = {
-        x: 0,
-        y: 0,
-    }
-    const savedPlayerPosition = structuredClone(toRaw(playerPosition.coords))
-    const footstepsOne = [
-        'footsteps/Steps_dirt-001.ogg',
-        'footsteps/Steps_dirt-002.ogg',
-        'footsteps/Steps_dirt-003.ogg',
-    ]
-    const footstepsTwo = [
-        'footsteps/Steps_dirt-004.ogg',
-        'footsteps/Steps_dirt-005.ogg',
-        'footsteps/Steps_dirt-006.ogg',
-    ]
 
-    const location = sceneManager.getLocationData(playerPosition.coords.x, playerPosition.coords.y)
-    const footstpes = Math.random() <= 0.5 ? footstepsOne : footstepsTwo
+    const footsteps =
+        Math.random() <= 0.5
+            ? ['footsteps/Steps_dirt-001.ogg', 'footsteps/Steps_dirt-002.ogg', 'footsteps/Steps_dirt-003.ogg']
+            : ['footsteps/Steps_dirt-004.ogg', 'footsteps/Steps_dirt-005.ogg', 'footsteps/Steps_dirt-006.ogg']
 
-    playAudio(footstpes)
-
+    playAudio(footsteps)
     feedStore.resetTravelFeed()
+    feedStore.setTravelFeedItem(msg)
 
-    if (index === EDirections.North) {
-        newPlayerPosition = {
-            x: playerPosition.coords.x,
-            y: playerPosition.coords.y - 1,
-        }
-        feedStore.setTravelFeedItem(`You move north`)
-    } else if (index === EDirections.East) {
-        newPlayerPosition = {
-            x: playerPosition.coords.x + 1,
-            y: playerPosition.coords.y,
-        }
-        feedStore.setTravelFeedItem(`You move east`)
-    } else if (index === EDirections.South) {
-        newPlayerPosition = {
-            x: playerPosition.coords.x,
-            y: playerPosition.coords.y + 1,
-        }
-        feedStore.setTravelFeedItem(`You move south`)
-    } else if (index === EDirections.West) {
-        newPlayerPosition = {
-            x: playerPosition.coords.x - 1,
-            y: playerPosition.coords.y,
-        }
-        feedStore.setTravelFeedItem(`You move west`)
-    }
-    playerPosition.updateCoords(newPlayerPosition.x, newPlayerPosition.y)
+    playerPosition.updateCoords(newX, newY)
 
-    const isChangeRoomPossible = await sceneManager.checkIfChangeRoomIsPossible(
-        playerPosition.coords.x,
-        playerPosition.coords.y
-    )
+    const canChangeRoom = await sceneManager.checkIfChangeRoomIsPossible(newX, newY)
 
-    if (!isChangeRoomPossible) {
-        // if cant move to the next tile return the player to the previous place
+    if (!canChangeRoom) {
         console.error('No current Room')
-        if (savedPlayerPosition.x === undefined || savedPlayerPosition.y === undefined) {
+        if (oldCoords.x === undefined || oldCoords.y === undefined) {
             console.error('No previous player position')
             return
         }
 
-        playerPosition.updateCoords(savedPlayerPosition.x, savedPlayerPosition.y)
-        await sceneManager.checkIfChangeRoomIsPossible(playerPosition.coords.x, playerPosition.coords.y)
+        playerPosition.updateCoords(oldCoords.x, oldCoords.y)
+        await sceneManager.checkIfChangeRoomIsPossible(oldCoords.x, oldCoords.y)
         feedStore.setTravelFeedItem(`You travel back.`)
+        console.log('rr')
+
+        return
     }
 
+    const location = sceneManager.getLocationData(newX, newY)
     if (location) {
-        // check if there is a monster here
         randomEncounters.rollEncounter(location.id as ELocationTypes)
     }
 
     feedStore.setTravelFeedItem(`You have entered ${sceneManager.activeRoom?.name}.`)
     feedStore.setTravelFeedItem(`${sceneManager.activeRoom?.description}`)
 
-    // Get closes tiles names
     sceneManager.getClosestTiles()
+    await sceneManager.saveScene({ x: newX, y: newY }, sceneManager.sceneList)
 
-    await sceneManager.saveScene({ x: playerPosition.coords.x, y: playerPosition.coords.y }, sceneManager.sceneList)
     setTimeout(() => {
         sceneManager.loadingArea = false
         globalStore.isMoving = false
     }, 800)
 }
 
-const directionButton = (index: number) => {
-    let destination = undefined
-    if (index === EDirections.North) {
-        destination = Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
-    } else if (index === EDirections.East) {
-        destination = Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
-    } else if (index === EDirections.South) {
-        destination = Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
-    } else if (index === EDirections.West) {
-        destination = Object.entries(EDirections).find((dir) => dir[0] === index.toString())?.[1]
-    }
-
-    return destination
-}
+const directionButton = (index: number) => Object.entries(EDirections).find(([key]) => key === index.toString())?.[1]
 
 const searchRoom = () => {
     if (!sceneManager.activeRoom || !sceneManager.activeRoom) {
@@ -206,11 +160,6 @@ const enterInstance = async (instanceId: string, entryId: string) => {
         return
     }
 
-    console.log('start creating locations')
-    console.time('tt')
-    // await sceneManager.createInstanceLocations(instanceId, entryId)
-    console.timeEnd('tt')
-    console.log('end creating locations')
     feedStore.resetTravelFeed()
     feedStore.setTravelFeedItem(`You have entered ${sceneManager.activeRoom?.name}`)
     feedStore.setTravelFeedItem(`${sceneManager.activeRoom?.description}`)

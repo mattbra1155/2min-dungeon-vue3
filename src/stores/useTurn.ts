@@ -91,43 +91,63 @@ export const useTurnStore = defineStore('turn', () => {
             }
             case ETurnState.EnemyAttack: {
                 console.log('TURN STATE:', ETurnState.EnemyAttack)
-                const isCleared = !turnOrder.value.find((enemy) => enemy.isAlive)
 
-                if (isCleared) {
+                const aliveEnemies = turnOrder.value.filter((enemy) => enemy.isAlive)
+
+                if (aliveEnemies.length === 0) {
                     console.log('No enemies left')
                     gameStateStore.updateGameState(EGameState.Loot)
-                    return
+                    break
                 }
-                const enemyAttack = () => {
-                    turnOrder.value.forEach((enemy, index) => {
-                        globalStore.isAttacking = true
-                        setTimeout(() => {
-                            if (!playerStore.player?.isAlive) {
-                                console.log('Player is dead')
-                                return
-                            }
-                            if (!enemy.isAlive) {
-                                console.log(`${enemy.name}`)
-                                return
-                            }
 
-                            enemy.status.updateStatusList(enemy, turnNumber.value)
-                            checkIfDead()
-                            activeCharacter.value = enemy
-                            console.log(`${enemy.name} attacks`)
-                            activeCharacter.value.attack(playerStore.player)
-                            checkIfDead()
-                            globalStore.isAttacking = false
-                        }, 1000 * (index + 1))
-                    })
+                globalStore.isAttacking = true
+
+                // Inline async function to handle enemy attack logic
+                const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+
+                const attackEnemies = async () => {
+                    for (const enemy of aliveEnemies) {
+                        if (!playerStore.player?.isAlive) {
+                            console.log('Player is dead, stopping attacks')
+                            break
+                        }
+
+                        await wait(1000)
+
+                        enemy.status.updateStatusList(enemy, turnNumber.value)
+                        checkIfDead()
+
+                        if (!enemy.isAlive) {
+                            console.log(`${enemy.name} died from status effects. Stopping further enemy actions.`)
+                            break
+                        }
+
+                        activeCharacter.value = enemy
+                        console.log(`${enemy.name} attacks`)
+                        activeCharacter.value.attack(playerStore.player)
+
+                        checkIfDead()
+
+                        if (!playerStore.player?.isAlive) {
+                            console.log('Player died after attack')
+                            break
+                        }
+                    }
+                    if (aliveEnemies.length === 0) {
+                        console.log('No enemies left')
+                        gameStateStore.updateGameState(EGameState.Loot)
+                    }
+                    globalStore.isAttacking = false
+
                     updateTurnStateMachine(ETurnState.EndTurn)
                 }
 
-                enemyAttack()
-                console.log(globalStore.isAttacking)
+                // Fire the async logic, no await here
+                attackEnemies()
 
                 break
             }
+
             case ETurnState.CalculateDamage: {
                 console.log('TURN STATE:', ETurnState.CalculateDamage)
                 break
