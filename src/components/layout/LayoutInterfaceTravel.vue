@@ -103,6 +103,8 @@ const move = async (index: number) => {
         playerPosition.updateCoords(oldCoords.x, oldCoords.y)
         await sceneManager.checkIfChangeRoomIsPossible(oldCoords.x, oldCoords.y)
         feedStore.setTravelFeedItem(`You travel back.`)
+        console.log('rr')
+
         return
     }
 
